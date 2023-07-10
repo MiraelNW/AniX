@@ -11,13 +11,14 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".AniXApplication"
         android:networkSecurityConfig="@xml/network_conf"
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AniX"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainScreen.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AniX">
