@@ -1,8 +1,5 @@
 package com.miraelDev.anix.navigation
 
-import android.util.Log
-import com.miraelDev.anix.domain.models.AnimeInfo
-
 sealed class Screen(val route : String){
 
     object Home:Screen(ROUTE_HOME)
@@ -10,6 +7,7 @@ sealed class Screen(val route : String){
     object SearchAndFilter:Screen(ROUTE_SEARCH_AND_FILTER)
 
     object HomeAndSettings:Screen(ROUTE_HOME_AND_SETTINGS)
+    object AnimeDetailAndVideoView:Screen(ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW)
 
     object DifferentSettings:Screen(ROUTE_DIFFERENT_SETTINGS)
 
@@ -39,6 +37,16 @@ sealed class Screen(val route : String){
 
     }
 
+    object VideoView:Screen(ROUTE_VIDEO_VIEW){
+
+        private const val ROUTE_FOR_ARGS = "video_view"
+
+        fun getRouteWithArgs(animeId: Int): String {
+            return "$ROUTE_FOR_ARGS/$animeId"
+        }
+
+    }
+
     companion object{
 
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
@@ -46,6 +54,7 @@ sealed class Screen(val route : String){
         private const val ROUTE_SEARCH_AND_FILTER = "search_and_filter"
         private const val ROUTE_HOME_AND_SETTINGS = "home_and_settings"
         private const val ROUTE_DIFFERENT_SETTINGS = "different_settings"
+        private const val ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW = "anime_detail_and_video_view"
 
         private const val ROUTE_HOME = "home"
         private const val ROUTE_LIBRARY = "library"
@@ -57,6 +66,7 @@ sealed class Screen(val route : String){
         private const val ROUTE_PRIVACY_POLICY = "privacy_policy"
         private const val ROUTE_COLOR_PALETTE = "color_palette"
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
+        private const val ROUTE_VIDEO_VIEW = "video_view/{$KEY_ANIME_DETAIL_ID}"
 
     }
 }

@@ -10,7 +10,7 @@ import com.miraelDev.anix.data.local.models.FavouriteAnimeDbModel
 import com.miraelDev.anix.data.local.models.SearchAnimeDbModel
 
 @Database(entities = [SearchAnimeDbModel::class,FavouriteAnimeDbModel::class], version = 1, exportSchema = false)
-abstract class AppDataBase : RoomDatabase() {
+abstract class  AppDataBase : RoomDatabase() {
     companion object {
         private const val DB_NAME = "AppDatabase"
         private val lock = Any()

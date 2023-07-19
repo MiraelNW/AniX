@@ -1,35 +1,47 @@
 package com.miraelDev.anix.di
 
-import androidx.lifecycle.ViewModel
-import com.miraelDev.anix.presentation.AnimeListScreen.AnimeListViewModel
-import com.miraelDev.anix.presentation.FavouriteListScreen.FavouriteAnimeViewModel
-import com.miraelDev.anix.presentation.SearchAimeScreen.FilterScreen.FilterViewModel
-import com.miraelDev.anix.presentation.SearchAimeScreen.SearchAnimeViewModel
-import dagger.Binds
+import android.app.Application
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
-interface ViewModelModule {
+@InstallIn(ViewModelComponent::class)
+object ViewModelModule {
 
-    @IntoMap
-    @Binds
-    @ViewModelKey(SearchAnimeViewModel::class)
-    fun bindSearchAnimeViewModel(viewModel: SearchAnimeViewModel): ViewModel
-
-    @IntoMap
-    @Binds
-    @ViewModelKey(AnimeListViewModel::class)
-    fun bindAnimeListViewModel(viewModel: AnimeListViewModel): ViewModel
-
-    @IntoMap
-    @Binds
-    @ViewModelKey(FavouriteAnimeViewModel::class)
-    fun bindFavouriteAnimeViewModel(viewModel: FavouriteAnimeViewModel): ViewModel
-
-    @IntoMap
-    @Binds
-    @ViewModelKey(FilterViewModel::class)
-    fun bindFilterViewModel(viewModel: FilterViewModel): ViewModel
+    private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L // 5 seconds
+    private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
+    @Provides
+    @ViewModelScoped
+    fun provideVideoPlayer(application: Application): ExoPlayer {
+        return ExoPlayer.Builder(application)
+            .apply {
+                setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
+                setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
+            }
+            .build()
+            .apply {
+                setMediaItem(
+                    MediaItem.Builder()
+                        .apply {
+                            setUri(
+                                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                            )
+                            setMediaMetadata(
+                                MediaMetadata.Builder()
+                                    .setDisplayTitle("My Video")
+                                    .build()
+                            )
+                        }
+                        .build(),
+                )
+                prepare()
+            }
+    }
 
 }

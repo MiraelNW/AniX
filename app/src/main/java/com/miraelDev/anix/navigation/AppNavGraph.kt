@@ -20,6 +20,7 @@ fun AppNavGraph(
     privacyPolicyScreenContent: @Composable () -> Unit,
     colorPaletteScreenContent: @Composable () -> Unit,
     animeDetailScreenContent: @Composable (Int) -> Unit,
+    videoViewScreenContent: @Composable (Int) -> Unit,
 ) {
     NavHost(
         navController = navHosController,
@@ -40,16 +41,9 @@ fun AppNavGraph(
         composable(Screen.Library.route) {
             libraryScreenContent()
         }
-        composable(
-            route = Screen.AnimeDetail.route,
-            arguments = listOf(
-                navArgument(name = Screen.KEY_ANIME_DETAIL_ID){
-                    type = NavType.IntType
-                }
-            )
-        ) {
-            val animeDetailId = it.arguments?.getInt(Screen.KEY_ANIME_DETAIL_ID) ?: 0
-            animeDetailScreenContent(animeDetailId)
-        }
+        animeDetailAndVideoView(
+            animeDetailScreenContent = animeDetailScreenContent,
+            videoViewScreenContent = videoViewScreenContent
+        )
     }
 }

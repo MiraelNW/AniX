@@ -14,29 +14,25 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.miraelDev.anix.ViewModelFactory
 import com.miraelDev.anix.domain.models.AnimeInfo
 import com.miraelDev.anix.entensions.pressClickEffect
-import com.miraelDev.anix.getApplicationComponent
 import com.miraelDev.anix.presentation.AnimeListScreen.FavouriteSearchView
 
 @Composable
 fun FavouriteListScreen(onAnimeItemClick: (Int) -> Unit) {
 
-    val component = getApplicationComponent()
-    val viewModel: FavouriteAnimeViewModel = viewModel(factory = component.getViewModelFactory())
+
+    val viewModel = hiltViewModel<FavouriteAnimeViewModel>()
 
     val searchTextState by viewModel.searchTextState
 

@@ -16,9 +16,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.miraelDev.anix.domain.models.AnimeInfo
-import com.miraelDev.anix.getApplicationComponent
 import com.miraelDev.anix.presentation.AnimeListScreen.AnimeCard.AnimeCard
 import com.miraelDev.anix.presentation.AnimeListScreen.AnimeCard.LastSearchedAnime
 import com.miraelDev.anix.presentation.AnimeListScreen.AnimeSearchView
@@ -31,8 +30,8 @@ fun SearchAnimeScreen(
     onAnimeItemClick: (Int) -> Unit
 ) {
 
-    val component = getApplicationComponent()
-    val viewModel: SearchAnimeViewModel = viewModel(factory = component.getViewModelFactory())
+
+    val viewModel = hiltViewModel<SearchAnimeViewModel>()
 
     val searchTextState by viewModel.searchTextState
     val filterList by viewModel.filterList.collectAsState(listOf())
