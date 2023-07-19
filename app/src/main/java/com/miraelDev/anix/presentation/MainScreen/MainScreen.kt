@@ -7,7 +7,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.google.android.exoplayer2.ExoPlayer
+
+import androidx.media3.exoplayer.ExoPlayer
+
 import com.miraelDev.anix.domain.models.PlayerWrapper
 import com.miraelDev.anix.navigation.AppNavGraph
 import com.miraelDev.anix.navigation.Screen

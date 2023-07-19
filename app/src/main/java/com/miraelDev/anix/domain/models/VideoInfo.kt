@@ -1,6 +1,8 @@
 package com.miraelDev.anix.domain.models
 
-import com.google.android.exoplayer2.MediaItem
+
+import androidx.media3.common.MediaItem
+
 
 data class VideoInfo(
     val id: Int = 0,
