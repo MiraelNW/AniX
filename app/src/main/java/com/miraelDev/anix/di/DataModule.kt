@@ -1,8 +1,6 @@
 package com.miraelDev.anix.di
 
 import android.app.Application
-import android.content.Context
-import com.google.android.exoplayer2.ExoPlayer
 import com.miraelDev.anix.data.Repository.AnimeListRepositoryImpl
 import com.miraelDev.anix.data.Repository.FilterRepositoryImpl
 import com.miraelDev.anix.data.Repository.SearchAnimeRepositoryImpl
@@ -16,7 +14,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -25,12 +22,15 @@ import javax.inject.Singleton
 abstract class DataModule {
 
     @Binds
+    @Singleton
     abstract fun bindAnimeListRepository(impl: AnimeListRepositoryImpl): AnimeListRepository
 
     @Binds
+    @Singleton
     abstract fun bindSearchAnimeRepository(impl: SearchAnimeRepositoryImpl): SearchAnimeRepository
 
     @Binds
+    @Singleton
     abstract fun bindFilterRepository(impl: FilterRepositoryImpl): FilterAnimeRepository
 
     companion object {

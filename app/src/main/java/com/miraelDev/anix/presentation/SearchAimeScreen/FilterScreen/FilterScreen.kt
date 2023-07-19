@@ -50,108 +50,114 @@ fun FilterScreen(
         }
     ) {
         BackHandler { onBackPressed() }
-        Column(
+        Box(
             modifier = Modifier
-                .padding(it)
-                .padding(16.dp)
                 .fillMaxSize(),
         ) {
-
-            Text(
-                modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                text = "Год выпуска",
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onBackground,
-                fontFamily = FontFamily.SansSerif
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(16.dp)
+                    .fillMaxSize(),
             ) {
 
-                val filterCategoriesYearList = listOf(
-                    "Онгоинг",
-                    "2023",
-                    "2022",
-                    "2021",
-                    "2015-2020",
-                    "2008-2014",
-                    "2000-2007",
-                    "до 2000",
+                Text(
+                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                    text = "Год выпуска",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.onBackground,
+                    fontFamily = FontFamily.SansSerif
                 )
 
-                filterCategoriesYearList.forEach { category ->
-                    CategoryField(category, category == filterYearCategory) {
-                        viewModel.selectCategory(
-                            YEAR_CATEGORIES_ID,
-                            category,
-                            category == filterYearCategory
-                        )
-                    }
-                }
-            }
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
 
-            Text(
-                modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                text = stringResource(R.string.genre),
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onBackground,
-                fontFamily = FontFamily.SansSerif
-            )
+                    val filterCategoriesYearList = listOf(
+                        "Онгоинг",
+                        "2023",
+                        "2022",
+                        "2021",
+                        "2015-2020",
+                        "2008-2014",
+                        "2000-2007",
+                        "до 2000",
+                    )
 
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-
-                filterGenreList.value.forEachIndexed { index, category ->
-                    CategoryField(category.name, category.isSelected) {
-                        viewModel.selectCategory(
-                            index + 4,
-                            category.name,
-                            category.isSelected
-                        )
+                    filterCategoriesYearList.forEach { category ->
+                        CategoryField(category, category == filterYearCategory) {
+                            viewModel.selectCategory(
+                                YEAR_CATEGORIES_ID,
+                                category,
+                                category == filterYearCategory
+                            )
+                        }
                     }
                 }
 
-            }
-
-            Text(
-                modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                text = stringResource(R.string.sortBy),
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onBackground,
-                fontFamily = FontFamily.SansSerif
-            )
-
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-
-                val filterCategoriesSortList = listOf(
-                    "Алфавиту",
-                    "Рейтингу",
-                    "Количеству серий",
-                    "Году выхода",
-                    "Дате добавления",
+                Text(
+                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                    text = stringResource(R.string.genre),
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.onBackground,
+                    fontFamily = FontFamily.SansSerif
                 )
 
-                filterCategoriesSortList.forEach { category ->
-                    CategoryField(category, category == filterSortByCategory) {
-                        viewModel.selectCategory(
-                            SORT_CATEGORIES_ID,
-                            category,
-                            category == filterSortByCategory
-                        )
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+
+                    filterGenreList.value.forEachIndexed { index, category ->
+                        CategoryField(category.name, category.isSelected) {
+                            viewModel.selectCategory(
+                                index + 4,
+                                category.name,
+                                category.isSelected
+                            )
+                        }
                     }
+
                 }
 
-            }
+                Text(
+                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                    text = stringResource(R.string.sortBy),
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.onBackground,
+                    fontFamily = FontFamily.SansSerif
+                )
 
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+
+                    val filterCategoriesSortList = listOf(
+                        "Алфавиту",
+                        "Рейтингу",
+                        "Количеству серий",
+                        "Году выхода",
+                        "Дате добавления",
+                    )
+
+                    filterCategoriesSortList.forEach { category ->
+                        CategoryField(category, category == filterSortByCategory) {
+                            viewModel.selectCategory(
+                                SORT_CATEGORIES_ID,
+                                category,
+                                category == filterSortByCategory
+                            )
+                        }
+                    }
+
+                }
+
+
+            }
             FloatingActionButton(
                 modifier = Modifier
-                    .align(Alignment.End)
+                    .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp),
                 backgroundColor = MaterialTheme.colors.background,
                 onClick = { viewModel.clearAllFilters() }
@@ -176,7 +182,6 @@ fun FilterScreen(
                 }
 
             }
-
         }
     }
 

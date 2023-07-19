@@ -1,15 +1,13 @@
 package com.miraelDev.anix.presentation.VideoView
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.MediaMetadata
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
 import com.miraelDev.anix.domain.models.VideoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,39 +15,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+@UnstableApi
 @HiltViewModel
 class VideoViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val application: Application
-) : AndroidViewModel(application) {
+    val player: ExoPlayer
+) : ViewModel() {
 
 
     private val videoUri = savedStateHandle.getStateFlow(VIDEO_URI, "")
 
-    val exoPlayer = ExoPlayer.Builder(application)
-        .apply {
-            setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
-            setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
-        }
-        .build()
-        .apply {
-            setMediaItem(
-                MediaItem.Builder()
-                    .apply {
-                        setUri(
-                            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                        )
-                        setMediaMetadata(
-                            MediaMetadata.Builder()
-                                .setDisplayTitle("My Video")
-                                .build()
-                        )
-                    }
-                    .build()
-            )
-            prepare()
-            playWhenReady = true
-        }
 //    val videoItem = videoUri.map { uri ->
 //        VideoInfo(
 //            playerUrl = uri,
@@ -67,23 +42,36 @@ class VideoViewModel @Inject constructor(
 //                .build(),
 //        )
 //    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), VideoInfo())
-//
-//    init {
-//        playVideo()
-//    }
-//
+
+    val exoPlayer = player
+    .apply {
+        setMediaItem(
+            MediaItem.Builder()
+                .apply {
+                    setUri(
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    )
+                    setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setDisplayTitle("My Video")
+                            .build()
+                    )
+                }
+                .build()
+        )
+        prepare()
+        playWhenReady = true
+    }
+
 //    fun playVideo() {
-//        exoPlayer.setMediaItem(
+//        player.setMediaItem(
 //            videoItem.value.mediaItem ?: return
 //        )
-//        exoPlayer.prepare()
-//        exoPlayer.playWhenReady = true
 //    }
 
     override fun onCleared() {
         super.onCleared()
-        exoPlayer.release()
-        Log.d("tag","cleared")
+        player.release()
     }
 
 
