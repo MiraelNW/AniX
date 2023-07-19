@@ -60,9 +60,11 @@ dependencies {
     implementation 'androidx.compose.material:material:1.2.0'
 
     //exoplayer
+
     implementation 'androidx.media3:media3-exoplayer:1.0.0-beta02'
     implementation 'androidx.media3:media3-ui:1.0.0-beta02'
 //    implementation 'com.google.android.exoplayer:exoplayer:2.18.5'
+
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
 

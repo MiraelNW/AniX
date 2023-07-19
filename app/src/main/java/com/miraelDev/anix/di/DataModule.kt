@@ -1,6 +1,8 @@
 package com.miraelDev.anix.di
 
 import android.app.Application
+import android.content.Context
+import com.google.android.exoplayer2.ExoPlayer
 import com.miraelDev.anix.data.Repository.AnimeListRepositoryImpl
 import com.miraelDev.anix.data.Repository.FilterRepositoryImpl
 import com.miraelDev.anix.data.Repository.SearchAnimeRepositoryImpl
@@ -31,7 +33,8 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindFilterRepository(impl: FilterRepositoryImpl): FilterAnimeRepository
+    abstract fun bindAnimeListRepository(impl: AnimeListRepositoryImpl): AnimeListRepository
+
 
     companion object {
         @Provides
