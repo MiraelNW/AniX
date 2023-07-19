@@ -11,4 +11,10 @@
     <string name="sortBy">Сортировать по</string>
     <string name="back">Back</string>
     <string name="animeFilter">Anime Filter</string>
+    <string name="play_previous">Play previous</string>
+    <string name="rewind_5_seconds">Rewind 5 seconds</string>
+    <string name="play_button">play button</string>
+    <string name="full_screen_button">full screen button</string>
+    <string name="play_next">Play next</string>
+    <string name="forward_10_seconds">forward 10 seconds</string>
 </resources>

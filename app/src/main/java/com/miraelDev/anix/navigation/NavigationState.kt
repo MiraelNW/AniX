@@ -44,6 +44,10 @@ class NavigationState(
         navHostController.navigate(Screen.AnimeDetail.getRouteWithArgs(animeId)){
         }
     }
+    fun navigateToVideoView(animeId: Int) {
+        navHostController.navigate(Screen.VideoView.getRouteWithArgs(animeId)){
+        }
+    }
 }
 
 @Composable

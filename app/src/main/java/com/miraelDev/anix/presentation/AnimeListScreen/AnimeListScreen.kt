@@ -28,12 +28,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.miraelDev.anix.R
 import com.miraelDev.anix.domain.models.AnimeInfo
 import com.miraelDev.anix.entensions.pressClickEffect
-import com.miraelDev.anix.getApplicationComponent
 import com.miraelDev.anix.ui.theme.Gold
 import kotlinx.coroutines.launch
 
@@ -45,9 +44,7 @@ fun HomeScreen(
 ) {
     Box {
 
-        val component = getApplicationComponent()
-
-        val viewModel: AnimeListViewModel = viewModel(factory = component.getViewModelFactory())
+        val viewModel = hiltViewModel<AnimeListViewModel>()
 
         val screenState = viewModel.screenState.collectAsState(AnimeListScreenState.Initial)
 
@@ -69,7 +66,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun AnimeList(
+fun AnimeList(
     animeList: List<AnimeInfo>,
     onSettingsClick: () -> Unit,
     onThemeButtonClick: () -> Unit,
@@ -147,7 +144,7 @@ fun ScrollableTabWithViewPager(
 
     HorizontalPager(
         modifier = Modifier
-            .padding(top = 8.dp,bottom = 36.dp,start = 4.dp,end = 4.dp)
+            .padding(top = 8.dp, bottom = 36.dp, start = 4.dp, end = 4.dp)
             .systemGestureExclusion(),
         pageCount = categoryList.size,
         state = pagerState

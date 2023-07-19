@@ -6,9 +6,11 @@ import com.miraelDev.anix.domain.usecases.SearchUsecase.AddToFilterListUseCase
 import com.miraelDev.anix.domain.usecases.SearchUsecase.ClearAllFiltersInSearchRepository
 import com.miraelDev.anix.domain.usecases.SearchUsecase.RemoveFromFilterListUseCase
 import com.miraelDev.anix.domain.usecases.filterUsecase.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class FilterViewModel @Inject constructor(
 
     private val getGenreListUseCase: GetGenreListUseCase,

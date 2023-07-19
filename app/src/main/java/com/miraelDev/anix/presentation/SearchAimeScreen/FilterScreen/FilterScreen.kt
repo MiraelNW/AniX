@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,13 +15,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.miraelDev.anix.R
 import com.miraelDev.anix.entensions.pressClickEffect
-import com.miraelDev.anix.getApplicationComponent
 import com.miraelDev.anix.presentation.SearchAimeScreen.FilterScreen.FilterViewModel
 
 
@@ -32,8 +29,8 @@ fun FilterScreen(
     onBackPressed: () -> Unit
 ) {
 
-    val component = getApplicationComponent()
-    val viewModel: FilterViewModel = viewModel(factory = component.getViewModelFactory())
+
+    val viewModel = hiltViewModel<FilterViewModel>()
 
     val filterGenreList = viewModel.genreListFlow.collectAsState(listOf())
 
