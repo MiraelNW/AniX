@@ -1,18 +1,18 @@
 package com.miraelDev.anix.presentation.VideoView
 
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import com.miraelDev.anix.domain.models.VideoInfo
+import com.miraelDev.anix.presentation.VideoView.utilis.formatMinSec
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @UnstableApi
@@ -25,23 +25,8 @@ class VideoViewModel @Inject constructor(
 
     private val videoUri = savedStateHandle.getStateFlow(VIDEO_URI, "")
 
-//    val videoItem = videoUri.map { uri ->
-//        VideoInfo(
-//            playerUrl = uri,
-//            mediaItem = MediaItem.Builder()
-//                .apply {
-//                    setUri(
-//                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-//                    )
-//                    setMediaMetadata(
-//                        MediaMetadata.Builder()
-//                            .setDisplayTitle("My Video")
-//                            .build()
-//                    )
-//                }
-//                .build(),
-//        )
-//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), VideoInfo())
+    val currTime: StateFlow<String> get() = _currTime.asStateFlow()
+    private val _currTime = MutableStateFlow("")
 
     val exoPlayer = player
     .apply {
@@ -61,7 +46,24 @@ class VideoViewModel @Inject constructor(
         )
         prepare()
         playWhenReady = true
+
     }
+    fun startTimer(duration:Long){
+        object : CountDownTimer(duration, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                _currTime.value  = (duration - millisUntilFinished ).formatMinSec()
+//                Log.d("tag",_currTime.value)
+//                Log.d("tag",(duration - millisUntilFinished).formatMinSec())
+            }
+
+            override fun onFinish() {
+            }
+
+        }.start()
+    }
+
+
+
 
 //    fun playVideo() {
 //        player.setMediaItem(

@@ -65,7 +65,7 @@ fun AnimeDetailScreen(
 
         }
     ) {
-        Box {
+        Box{
 
             if (showSeriesDialog) {
                 AnimeSeriesDialog(
@@ -73,7 +73,6 @@ fun AnimeDetailScreen(
                         showSeriesDialog = false
                     },
                     onSeriesClick = {
-                        Log.d("tag","click")
                         onSeriesClick(animeItem.id)
                     }
                 )

@@ -1,17 +1,22 @@
 package com.miraelDev.anix.presentation.VideoView
 
+import android.content.res.Configuration
+import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -20,9 +25,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
+import androidx.media3.common.Player.STATE_READY
+import androidx.media3.common.Timeline
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.miraelDev.anix.domain.models.PlayerWrapper
+import com.miraelDev.anix.presentation.VideoView.utilis.formatMinSec
+import com.miraelDev.anix.presentation.VideoView.utilis.setLandscape
+import com.miraelDev.anix.presentation.VideoView.utilis.setPortrait
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,13 +42,11 @@ private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
 
 @UnstableApi
 @Composable
-fun   VideoView(
+fun VideoView(
     modifier: Modifier = Modifier,
-    playerWrapper: PlayerWrapper,
-//    isFullScreen: Boolean,
-    onTrailerChange: ((Int) -> Unit)? = null,
-    onFullScreenToggle: (isFullScreen: Boolean) -> Unit,
-    navigateBack: () -> Unit
+    onFullScreenToggle: (Boolean) -> Unit,
+    navigateBack: () -> Unit,
+    landscape: Boolean
 ) {
 
     val context = LocalContext.current
@@ -51,24 +59,20 @@ fun   VideoView(
 
     var shouldShowControls by remember { mutableStateOf(false) }
 
-    Log.d("tag",exoPlayer.isPlaying.toString())
-
     var isPlaying by remember { mutableStateOf(exoPlayer.isPlaying) }
 
     var totalDuration by remember { mutableStateOf(0L) }
 
     var currentTime by remember { mutableStateOf(0L) }
 
-    var isFullScreen by remember { mutableStateOf(true) }
-
     var bufferedPercentage by remember { mutableStateOf(0) }
 
     var playbackState by remember { mutableStateOf(exoPlayer.playbackState) }
 
     BackHandler {
-        if (isFullScreen) {
-            isFullScreen = false
-//            onFullScreenToggle(false)
+        if (landscape) {
+            context.setPortrait()
+            onFullScreenToggle(false)
         } else {
             navigateBack()
         }
@@ -89,7 +93,11 @@ fun   VideoView(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize().background(Color.Black)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
 
         var timeOut = Job() as Job
 
@@ -106,7 +114,6 @@ fun   VideoView(
                         bufferedPercentage = player.bufferedPercentage
                         isPlaying = player.isPlaying
                         playbackState = player.playbackState
-
                     }
                 }
 
@@ -116,6 +123,7 @@ fun   VideoView(
                 exoPlayer.removeListener(listener)
             }
         }
+
 
         AndroidView(
             modifier = Modifier
@@ -155,11 +163,13 @@ fun   VideoView(
                         it.player?.pause()
                         isPlaying = false
                     }
+
                     Lifecycle.Event.ON_RESUME -> {
                         it.onResume()
                         it.player?.play()
                         isPlaying = true
                     }
+
                     else -> Unit
                 }
             }
@@ -169,6 +179,7 @@ fun   VideoView(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
             isPlaying = { isPlaying },
+            isFullScreen = landscape,
             title = { exoPlayer.mediaMetadata.displayTitle.toString() },
             playbackState = { playbackState },
             onReplayClick = { exoPlayer.seekBack() },
@@ -181,7 +192,7 @@ fun   VideoView(
                     }
 
                     exoPlayer.isPlaying.not() &&
-                           exoPlayer.playbackState == STATE_ENDED -> {
+                            exoPlayer.playbackState == STATE_ENDED -> {
                         exoPlayer.seekTo(0)
                         exoPlayer.playWhenReady = true
                     }
@@ -196,12 +207,18 @@ fun   VideoView(
             },
             totalDuration = { totalDuration },
             currentTime = { currentTime },
+//            currTime = currTime,
             bufferedPercentage = { bufferedPercentage },
             onSeekChanged = { timeMs: Float ->
                 exoPlayer.seekTo(timeMs.toLong())
             },
-            onChangeScreenConfig = {
-                isFullScreen = !isFullScreen
+            onFullScreenToggle ={
+                onFullScreenToggle(it)
+                if(it){
+                    context.setLandscape()
+                }else{
+                    context.setPortrait()
+                }
             }
         )
     }

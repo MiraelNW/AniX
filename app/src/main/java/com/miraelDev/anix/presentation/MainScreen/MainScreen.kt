@@ -7,6 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.media3.common.util.UnstableApi
 
 import androidx.media3.exoplayer.ExoPlayer
 
@@ -29,8 +30,11 @@ import com.miraelDev.anix.presentation.VideoView.VideoView
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(
-    onThemeButtonClick: () -> Unit
+@UnstableApi
+fun  MainScreen(
+    onThemeButtonClick: () -> Unit,
+    onFullScreenToggle: (Boolean) -> Unit,
+    landscape : Boolean
 ) {
 
     var shouldShowBottomBar by remember {
@@ -169,7 +173,6 @@ fun MainScreen(
                         navigationState.navigateToAnimeDetail(animeIdNavArg)
                     },
                     onSeriesClick = { animeIdNavArg ->
-                        Log.d("tag", animeIdNavArg.toString())
                         navigationState.navigateToVideoView(animeIdNavArg)
                     }
                 )
@@ -178,11 +181,8 @@ fun MainScreen(
                 shouldShowBottomBar = false
                 VideoView(
                     modifier = Modifier.fillMaxSize(),
-                    playerWrapper = PlayerWrapper(
-                        exoPlayer = ExoPlayer.Builder(LocalContext.current).build()
-                    ),
-//                    isFullScreen = false,
-                    onFullScreenToggle = {},
+                    onFullScreenToggle = onFullScreenToggle,
+                    landscape = landscape,
                     navigateBack = {
                         navigationState.navHostController.popBackStack()
                     }
