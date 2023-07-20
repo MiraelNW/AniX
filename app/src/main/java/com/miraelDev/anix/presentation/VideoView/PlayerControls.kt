@@ -30,10 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-
 import androidx.media3.common.Player.STATE_ENDED
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
 import com.miraelDev.anix.R
 import com.miraelDev.anix.presentation.VideoView.utilis.formatMinSec
 
@@ -44,26 +42,20 @@ fun PlayerControls(
     modifier: Modifier = Modifier,
     isVisible: () -> Boolean,
     isPlaying: () -> Boolean,
+    isFullScreen: Boolean,
     title: () -> String,
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
-    onChangeScreenConfig: () -> Unit,
     onPauseToggle: () -> Unit,
     totalDuration: () -> Long,
     currentTime: () -> Long,
+//    currTime: String,
     bufferedPercentage: () -> Int,
     playbackState: () -> Int,
-    onSeekChanged: (timeMs: Float) -> Unit
+    onSeekChanged: (timeMs: Float) -> Unit,
+    onFullScreenToggle: (Boolean) -> Unit
 ) {
-
-    val systemUiController = rememberSystemUiController()
-
     val visible = remember(isVisible()) { isVisible() }
-
-    systemUiController.isStatusBarVisible = visible
-    systemUiController.setSystemBarsColor(
-        color = Color.Transparent
-    )
 
     AnimatedVisibility(
         modifier = modifier,
@@ -116,9 +108,11 @@ fun PlayerControls(
                     ),
                 totalDuration = totalDuration,
                 currentTime = currentTime,
+                isFullScreen = isFullScreen,
+//                currTime = currTime,
                 bufferedPercentage = bufferedPercentage,
                 onSeekChanged = onSeekChanged,
-                onChangeScreenConfig = onChangeScreenConfig
+                onFullScreenToggle = onFullScreenToggle
             )
         }
     }
@@ -197,9 +191,11 @@ private fun BottomControls(
     modifier: Modifier = Modifier,
     totalDuration: () -> Long,
     currentTime: () -> Long,
+    isFullScreen: Boolean,
+//    currTime: String,
     bufferedPercentage: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit,
-    onChangeScreenConfig: () -> Unit,
+    onFullScreenToggle: (Boolean) -> Unit
 ) {
 
     val duration = remember(totalDuration()) { totalDuration() }
@@ -242,15 +238,28 @@ private fun BottomControls(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = duration.formatMinSec(),
-                color = MaterialTheme.colors.primary
-            )
+            Row {
+//                Text(
+//                    modifier = Modifier.padding(horizontal = 16.dp),
+//                    text = currTime,
+//                    color = MaterialTheme.colors.primary
+//                )
+                Text(
+                    text = "/",
+                    color = MaterialTheme.colors.primary
+                )
+                Text(
+                    text = duration.formatMinSec(),
+                    color = MaterialTheme.colors.primary
+                )
+            }
+
 
             IconButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = { onChangeScreenConfig()}
+                onClick = {
+                    onFullScreenToggle(isFullScreen.not())
+                }
             ) {
                 Icon(
                     modifier = Modifier.size(24.dp),

@@ -15,7 +15,7 @@
         android:networkSecurityConfig="@xml/network_conf"
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AniX"
+        android:theme="@style/Theme.Anix.SplashTheme"
         tools:targetApi="31">
         <activity
             android:name=".presentation.MainScreen.MainActivity"

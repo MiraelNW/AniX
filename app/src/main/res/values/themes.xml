@@ -2,6 +2,12 @@
 <resources>
 
     <style name="Theme.AniX" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+
+    <style name="Theme.Anix.SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/teal_200</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.AniX</item>
     </style>
 </resources>
