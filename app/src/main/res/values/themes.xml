@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AniX" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.Hikari" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">#C9FFFFFF</item>
     </style>
 
-    <style name="Theme.Anix.SplashTheme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FDFDFD</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
-        <item name="postSplashScreenTheme">@style/Theme.AniX</item>
+    <style name="Theme.Hikari.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
+             animated drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon_inset</item>
+        <!-- Required for animated icons -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <!-- Required -->
+        <item name="postSplashScreenTheme">@style/Theme.Hikari</item>
     </style>
 </resources>

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "AniX"
+rootProject.name = "Hikari"
 include ':app'
