@@ -1,5 +1,8 @@
 package com.miraelDev.hikari.presentation.VideoView
 
+import android.content.res.Configuration
+import android.os.CountDownTimer
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
@@ -9,8 +12,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -21,20 +26,23 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.miraelDev.hikari.presentation.VideoView.utilis.setAutoOrientation
 import com.miraelDev.hikari.presentation.VideoView.utilis.setLandscape
 import com.miraelDev.hikari.presentation.VideoView.utilis.setPortrait
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private const val PORTRAIT = 0
+private const val LANDSCAPE = 1
+
 @UnstableApi
 @Composable
 fun VideoView(
     modifier: Modifier = Modifier,
-    onFullScreenToggle: (Boolean) -> Unit,
+    onFullScreenToggle: (Int) -> Unit,
     navigateBack: () -> Unit,
-    landscape: Boolean
+    landscape: Int
 ) {
 
     val context = LocalContext.current
@@ -43,7 +51,7 @@ fun VideoView(
 
     val exoPlayer = viewModel.exoPlayer
 
-    val scope = rememberCoroutineScope()
+    val timeOutScope = rememberCoroutineScope()
 
     var shouldShowControls by remember { mutableStateOf(false) }
 
@@ -57,11 +65,31 @@ fun VideoView(
 
     var playbackState by remember { mutableStateOf(exoPlayer.playbackState) }
 
+    var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
+
+    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
+    val configuration = LocalConfiguration.current
+
+    LaunchedEffect(configuration) {
+        snapshotFlow { configuration.orientation }
+            .collect { orientation = it }
+    }
+
+    when (orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            onFullScreenToggle(LANDSCAPE)
+        }
+        else -> {
+            onFullScreenToggle(PORTRAIT)
+        }
+    }
+
     BackHandler {
-        if (landscape) {
+        if (landscape == LANDSCAPE) {
             context.setPortrait()
-            onFullScreenToggle(false)
+            onFullScreenToggle(PORTRAIT)
         } else {
+            context.setAutoOrientation()
             navigateBack()
         }
     }
@@ -70,6 +98,7 @@ fun VideoView(
         mutableStateOf(Lifecycle.Event.ON_CREATE)
     }
     val lifecycleOwner = LocalLifecycleOwner.current
+
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             lifecycle = event
@@ -78,6 +107,14 @@ fun VideoView(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    if (onToggleButtonCLick) {
+        LaunchedEffect(key1 = Unit) {
+            delay(8000)
+            context.setAutoOrientation()
+            onToggleButtonCLick =false
         }
     }
 
@@ -121,9 +158,10 @@ fun VideoView(
                     interactionSource = MutableInteractionSource(),
                     indication = null
                 ) {
+                    Log.d("tag","click")
                     shouldShowControls = shouldShowControls.not()
                     if (shouldShowControls) {
-                        timeOut = scope.launch {
+                        timeOut = timeOutScope.launch {
                             delay(3000)
                             shouldShowControls = false
                         }
@@ -175,7 +213,6 @@ fun VideoView(
             onPauseToggle = {
                 when {
                     exoPlayer.isPlaying -> {
-                        // pause the video
                         exoPlayer.pause()
                     }
 
@@ -186,8 +223,6 @@ fun VideoView(
                     }
 
                     else -> {
-                        // play the video
-                        // it's already paused
                         exoPlayer.play()
                     }
                 }
@@ -200,17 +235,23 @@ fun VideoView(
             onSeekChanged = { timeMs: Float ->
                 exoPlayer.seekTo(timeMs.toLong())
             },
-            onFullScreenToggle = {
-                onFullScreenToggle(it)
-                if (it) {
+            onFullScreenToggle = { orientation ->
+
+                onToggleButtonCLick = true
+                onFullScreenToggle(orientation)
+                if (orientation == LANDSCAPE) {
                     context.setLandscape()
                 } else {
                     context.setPortrait()
                 }
+
             },
             onBackIconClick = {
+                context.setAutoOrientation()
                 navigateBack()
-            }
+            },
+            onNextVideoClick = {},
+            onPreviousVideoClick = {}
         )
     }
 }

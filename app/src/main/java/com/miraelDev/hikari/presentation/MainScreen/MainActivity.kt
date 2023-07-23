@@ -45,7 +45,9 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(isSystemDark)
             }
 
-            var landscape by rememberSaveable { mutableStateOf(false) }
+            var landscape by rememberSaveable { mutableStateOf(0) }
+
+            var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
             AniXTheme(darkTheme) {
                 var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
@@ -66,25 +68,28 @@ class MainActivity : ComponentActivity() {
                     },
                     onFullScreenToggle = {
                         landscape = it
-
                     },
-                    onVideoViewClick = {
-                        if(!darkTheme) {
+                    onVideoViewClick = { isVideoViewOpen ->
+                        if (!darkTheme) {
                             useDarkIcons = !useDarkIcons
                         }
+                        when (isVideoViewOpen) {
+                            BACK -> shouldShowSystemBars = true
+                            ON_VIDEO_VIEW -> shouldShowSystemBars = false
+                        }
+
                     }
                 )
             }
 
-            observeState(landscape)
+            observeState(isFullScreen = landscape, shouldShowSystemBars = shouldShowSystemBars)
         }
     }
 
-    private fun observeState(isFullScreen: Boolean) {
-        Log.d("tag",isFullScreen.toString())
+    private fun observeState(isFullScreen: Int, shouldShowSystemBars: Boolean) {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                if (isFullScreen) {
+                if (isFullScreen == 1 && !shouldShowSystemBars) {
                     hideSystemBars()
                 } else {
                     showSystemBars()
@@ -106,6 +111,11 @@ class MainActivity : ComponentActivity() {
     private fun showSystemBars() {
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+    }
+
+    companion object {
+        private const val BACK = 0
+        private const val ON_VIDEO_VIEW = 1
     }
 }
 
