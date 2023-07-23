@@ -22,14 +22,17 @@ import com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen
 import com.miraelDev.hikari.presentation.SearchAnimeScreen
 import com.miraelDev.hikari.presentation.VideoView.VideoView
 
+private const val BACK = 0
+private const val ON_VIDEO_VIEW = 1
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 @UnstableApi
 fun MainScreen(
     onThemeButtonClick: () -> Unit,
-    onFullScreenToggle: (Boolean) -> Unit,
-    onVideoViewClick: () -> Unit,
-    landscape: Boolean
+    onFullScreenToggle: (Int) -> Unit,
+    onVideoViewClick: (Int) -> Unit,
+    landscape: Int
 ) {
 
     var shouldShowBottomBar by remember {
@@ -168,7 +171,7 @@ fun MainScreen(
                         navigationState.navigateToAnimeDetail(animeIdNavArg)
                     },
                     onSeriesClick = { animeIdNavArg ->
-                        onVideoViewClick()
+                        onVideoViewClick(ON_VIDEO_VIEW)
                         navigationState.navigateToVideoView(animeIdNavArg)
                     }
                 )
@@ -180,7 +183,7 @@ fun MainScreen(
                     onFullScreenToggle = onFullScreenToggle,
                     landscape = landscape,
                     navigateBack = {
-                        onVideoViewClick()
+                        onVideoViewClick(BACK)
                         navigationState.navHostController.popBackStack()
                     }
                 )
