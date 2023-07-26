@@ -41,7 +41,7 @@ import com.miraelDev.hikari.entensions.pressClickEffect
 @Composable
 fun AnimeSeriesDialog(
     onDismiss: () -> Unit,
-    onSeriesClick:()->Unit
+    onSeriesClick:(Int)->Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -94,8 +94,7 @@ fun AnimeSeriesDialog(
                                             interactionSource = interactionSource,
                                             indication = null
                                         ) {
-                                            Log.d("tag","click")
-                                            onSeriesClick()
+                                            onSeriesClick(it)
                                         }
                                         .padding(
                                             start = 8.dp,

@@ -1,34 +1,34 @@
 package com.miraelDev.hikari.navigation
 
-sealed class Screen(val route : String){
+sealed class Screen(val route: String) {
 
-    object Splash:Screen(ROUTE_SPLASH)
-    object Home:Screen(ROUTE_HOME)
+    object Splash : Screen(ROUTE_SPLASH)
+    object Home : Screen(ROUTE_HOME)
 
-    object SearchAndFilter:Screen(ROUTE_SEARCH_AND_FILTER)
+    object SearchAndFilter : Screen(ROUTE_SEARCH_AND_FILTER)
 
-    object HomeAndSettings:Screen(ROUTE_HOME_AND_SETTINGS)
-    object AnimeDetailAndVideoView:Screen(ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW)
+    object HomeAndSettings : Screen(ROUTE_HOME_AND_SETTINGS)
+    object AnimeDetailAndVideoView : Screen(ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW)
 
-    object DifferentSettings:Screen(ROUTE_DIFFERENT_SETTINGS)
+    object DifferentSettings : Screen(ROUTE_DIFFERENT_SETTINGS)
 
-    object Library:Screen(ROUTE_LIBRARY)
+    object Library : Screen(ROUTE_LIBRARY)
 
-    object Filter:Screen(ROUTE_FILTER)
+    object Filter : Screen(ROUTE_FILTER)
 
-    object Search:Screen(ROUTE_SEARCH)
+    object Search : Screen(ROUTE_SEARCH)
 
-    object Settings:Screen(ROUTE_SETTINGS)
+    object Settings : Screen(ROUTE_SETTINGS)
 
-    object Notifications:Screen(ROUTE_NOTIFICATIONS)
+    object Notifications : Screen(ROUTE_NOTIFICATIONS)
 
-    object Language:Screen(ROUTE_LANGUAGE)
+    object Language : Screen(ROUTE_LANGUAGE)
 
-    object PrivacyPolicy:Screen(ROUTE_PRIVACY_POLICY)
+    object PrivacyPolicy : Screen(ROUTE_PRIVACY_POLICY)
 
-    object ColorPalette:Screen(ROUTE_COLOR_PALETTE)
+    object ColorPalette : Screen(ROUTE_COLOR_PALETTE)
 
-    object AnimeDetail:Screen(ROUTE_ANIME_DETAIL){
+    object AnimeDetail : Screen(ROUTE_ANIME_DETAIL) {
 
         private const val ROUTE_FOR_ARGS = "anime_detail"
 
@@ -38,19 +38,20 @@ sealed class Screen(val route : String){
 
     }
 
-    object VideoView:Screen(ROUTE_VIDEO_VIEW){
+    object VideoView : Screen(ROUTE_VIDEO_VIEW) {
 
         private const val ROUTE_FOR_ARGS = "video_view"
 
-        fun getRouteWithArgs(animeId: Int): String {
-            return "$ROUTE_FOR_ARGS/$animeId"
+        fun getRouteWithArgs(animeId: Int, videoId: Int): String {
+            return "$ROUTE_FOR_ARGS/$animeId/$videoId"
         }
 
     }
 
-    companion object{
+    companion object {
 
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
+        const val KEY_VIDEO_ID = "video_id"
 
         private const val ROUTE_SEARCH_AND_FILTER = "search_and_filter"
         private const val ROUTE_HOME_AND_SETTINGS = "home_and_settings"
@@ -68,7 +69,7 @@ sealed class Screen(val route : String){
         private const val ROUTE_PRIVACY_POLICY = "privacy_policy"
         private const val ROUTE_COLOR_PALETTE = "color_palette"
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
-        private const val ROUTE_VIDEO_VIEW = "video_view/{$KEY_ANIME_DETAIL_ID}"
+        private const val ROUTE_VIDEO_VIEW = "video_view/{$KEY_ANIME_DETAIL_ID}/{$KEY_VIDEO_ID}"
 
     }
 }

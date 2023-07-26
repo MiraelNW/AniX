@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,6 +27,8 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
+import com.miraelDev.hikari.domain.models.AnimeInfo
+import com.miraelDev.hikari.entensions.noRippleEffectClick
 import com.miraelDev.hikari.presentation.VideoView.utilis.setAutoOrientation
 import com.miraelDev.hikari.presentation.VideoView.utilis.setLandscape
 import com.miraelDev.hikari.presentation.VideoView.utilis.setPortrait
@@ -40,6 +43,8 @@ private const val LANDSCAPE = 1
 @Composable
 fun VideoView(
     modifier: Modifier = Modifier,
+    animeId: Int,
+    videoId: Int,
     onFullScreenToggle: (Int) -> Unit,
     navigateBack: () -> Unit,
     landscape: Int
@@ -49,13 +54,16 @@ fun VideoView(
 
     val viewModel = hiltViewModel<VideoViewModel>()
 
-    val exoPlayer = viewModel.exoPlayer
+    SideEffect {
+        viewModel.getAnimeDetail(animeId)
+        viewModel.setUrl(videoId)
+    }
 
-    val timeOutScope = rememberCoroutineScope()
+    val exoPlayer = viewModel.player
 
     var shouldShowControls by remember { mutableStateOf(false) }
 
-    var isPlaying by remember { mutableStateOf(exoPlayer.isPlaying) }
+    var isPlaying by rememberSaveable { mutableStateOf(exoPlayer.isPlaying) }
 
     var totalDuration by remember { mutableStateOf(0L) }
 
@@ -67,6 +75,12 @@ fun VideoView(
 
     var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
 
+    var alphaValue by remember {
+        mutableStateOf(0f)
+    }
+
+    val alpha by animateFloatAsState(targetValue = alphaValue)
+
     var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
     val configuration = LocalConfiguration.current
 
@@ -75,14 +89,18 @@ fun VideoView(
             .collect { orientation = it }
     }
 
-    when (orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            onFullScreenToggle(LANDSCAPE)
-        }
-        else -> {
-            onFullScreenToggle(PORTRAIT)
+    SideEffect {
+        when (orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                onFullScreenToggle(LANDSCAPE)
+            }
+
+            else -> {
+                onFullScreenToggle(PORTRAIT)
+            }
         }
     }
+
 
     BackHandler {
         if (landscape == LANDSCAPE) {
@@ -114,7 +132,18 @@ fun VideoView(
         LaunchedEffect(key1 = Unit) {
             delay(8000)
             context.setAutoOrientation()
-            onToggleButtonCLick =false
+            onToggleButtonCLick = false
+        }
+    }
+
+    LaunchedEffect(key1 = shouldShowControls) {
+        if (shouldShowControls) {
+            alphaValue = 1f
+            delay(3000)
+            shouldShowControls = false
+            alphaValue = 0f
+        } else {
+            alphaValue = 0f
         }
     }
 
@@ -123,8 +152,6 @@ fun VideoView(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-
-        var timeOut = Job() as Job
 
         DisposableEffect(key1 = Unit) {
             val listener =
@@ -154,21 +181,7 @@ fun VideoView(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black)
-                .clickable(
-                    interactionSource = MutableInteractionSource(),
-                    indication = null
-                ) {
-                    Log.d("tag","click")
-                    shouldShowControls = shouldShowControls.not()
-                    if (shouldShowControls) {
-                        timeOut = timeOutScope.launch {
-                            delay(3000)
-                            shouldShowControls = false
-                        }
-                    } else {
-                        timeOut.cancel()
-                    }
-                },
+                .noRippleEffectClick(MutableInteractionSource()) {},
             factory = {
                 PlayerView(context).apply {
                     player = exoPlayer
@@ -190,12 +203,6 @@ fun VideoView(
                         isPlaying = false
                     }
 
-                    Lifecycle.Event.ON_RESUME -> {
-                        it.onResume()
-                        it.player?.play()
-                        isPlaying = true
-                    }
-
                     else -> Unit
                 }
             }
@@ -206,6 +213,8 @@ fun VideoView(
             isVisible = { shouldShowControls },
             isPlaying = { isPlaying },
             isFullScreen = landscape,
+            orientation = orientation,
+            alpha = alpha,
             title = { exoPlayer.mediaMetadata.displayTitle.toString() },
             playbackState = { playbackState },
             onReplayClick = { exoPlayer.seekBack() },
@@ -250,8 +259,17 @@ fun VideoView(
                 context.setAutoOrientation()
                 navigateBack()
             },
-            onNextVideoClick = {},
-            onPreviousVideoClick = {}
+            onNextVideoClick = { viewModel.loadNextVideo() },
+            onPreviousVideoClick = { viewModel.loadPreviousVideo() },
+            onEpisodeItemClick = { episodeId ->
+                viewModel.loadSpecificEpisode(episodeId)
+            },
+            changeVisibleState = {
+                shouldShowControls = shouldShowControls.not()
+            },
+            onMenuItemClick = { qualityItem ->
+                viewModel.loadVideoSelectedQuality( qualityItem.text)
+            }
         )
     }
 }

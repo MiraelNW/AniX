@@ -33,6 +33,17 @@ fun String.encode(): String {
     return Uri.encode(this)
 }
 
+fun Modifier.noRippleEffectClick(
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit
+) :Modifier{
+    return this.clickable(
+        interactionSource = interactionSource,
+        indication = null,
+        onClick = onClick
+    )
+}
+
 enum class ButtonState { Pressed, Idle }
 
 fun Modifier.pressClickEffect() = composed {
@@ -46,7 +57,7 @@ fun Modifier.pressClickEffect() = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = {  }
+            onClick = { }
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {

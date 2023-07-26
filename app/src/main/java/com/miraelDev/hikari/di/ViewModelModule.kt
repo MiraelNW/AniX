@@ -18,8 +18,8 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 object ViewModelModule {
 
-    private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L // 5 seconds
-    private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
+    private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L
+    private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L
     @Provides
     @ViewModelScoped
     fun provideVideoPlayer(application: Application): ExoPlayer {
@@ -29,23 +29,6 @@ object ViewModelModule {
                 setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
             }
             .build()
-            .apply {
-                setMediaItem(
-                    MediaItem.Builder()
-                        .apply {
-                            setUri(
-                                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                            )
-                            setMediaMetadata(
-                                MediaMetadata.Builder()
-                                    .setDisplayTitle("My Video")
-                                    .build()
-                            )
-                        }
-                        .build(),
-                )
-                prepare()
-            }
     }
 
 }
