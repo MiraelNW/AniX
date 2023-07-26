@@ -170,17 +170,19 @@ fun MainScreen(
                     onAnimeItemClick = { animeIdNavArg ->
                         navigationState.navigateToAnimeDetail(animeIdNavArg)
                     },
-                    onSeriesClick = { animeIdNavArg ->
+                    onSeriesClick = { animeIdNavArg, videoId ->
                         onVideoViewClick(ON_VIDEO_VIEW)
-                        navigationState.navigateToVideoView(animeIdNavArg)
+                        navigationState.navigateToVideoView(animeIdNavArg,videoId)
                     }
                 )
             },
-            videoViewScreenContent = { animeId ->
+            videoViewScreenContent = { animeId, videoId ->
                 shouldShowBottomBar = false
                 VideoView(
                     modifier = Modifier.fillMaxSize(),
                     onFullScreenToggle = onFullScreenToggle,
+                    animeId = animeId,
+                    videoId = videoId,
                     landscape = landscape,
                     navigateBack = {
                         onVideoViewClick(BACK)

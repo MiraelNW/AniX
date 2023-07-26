@@ -18,7 +18,7 @@ fun AppNavGraph(
     privacyPolicyScreenContent: @Composable () -> Unit,
     colorPaletteScreenContent: @Composable () -> Unit,
     animeDetailScreenContent: @Composable (Int) -> Unit,
-    videoViewScreenContent: @Composable (Int) -> Unit,
+    videoViewScreenContent: @Composable (Int,Int) -> Unit,
 ) {
     NavHost(
         navController = navHosController,

@@ -20,7 +20,7 @@ fun AnimeDetailScreen(
     animeId: Int,
     onBackPressed: () -> Unit,
     onAnimeItemClick: (Int) -> Unit,
-    onSeriesClick:(Int)->Unit
+    onSeriesClick:(Int,Int)->Unit
 ) {
     BackHandler { onBackPressed() }
 
@@ -52,8 +52,8 @@ fun AnimeDetailScreen(
                     onDismiss = {
                         showSeriesDialog = false
                     },
-                    onSeriesClick = {
-                        onSeriesClick(animeItem.id)
+                    onSeriesClick = {videoId ->
+                        onSeriesClick(animeItem.id, videoId)
                     }
                 )
             }
