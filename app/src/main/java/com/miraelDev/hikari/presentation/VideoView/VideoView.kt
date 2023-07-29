@@ -90,6 +90,20 @@ fun VideoView(
 
     val alpha by animateFloatAsState(targetValue = alphaValue)
 
+    val stopTimer: () -> Unit = remember { { viewModel.stopTimer() } }
+
+    val startTimer: () -> Unit = remember { { viewModel.startTimer() } }
+
+    val loadNextVideo: () -> Unit = remember { { viewModel.loadNextVideo() } }
+
+    val loadPreviousVideo: () -> Unit = remember { { viewModel.loadPreviousVideo() } }
+
+    val loadVideoSelectedQuality: (String) -> Unit =
+        remember { { viewModel.loadVideoSelectedQuality(it) } }
+
+    val seekToChangeCurrTime: (String) -> Unit =
+        remember { { viewModel.seekToChangeCurrTime(it) } }
+
     var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
     val configuration = LocalConfiguration.current
 
@@ -151,14 +165,16 @@ fun VideoView(
             alphaValue = 1f
             delay(3000)
             shouldShowControls = false
-            alphaValue = 1f
+            alphaValue = 0f
         } else if (clickOnPlayerControls) {
             alphaValue = 1f
             shouldShowControls = true
         } else {
-            alphaValue = 1f
+            alphaValue = 0f
         }
     }
+
+    Log.d("tag",totalDuration.toString())
 
     Box(
         modifier = modifier
@@ -220,9 +236,9 @@ fun VideoView(
 
         LaunchedEffect(key1 = playbackState) {
             if (autoLoadNextVideo && playbackState == STATE_ENDED) {
-                viewModel.stopTimer()
-                viewModel.loadNextVideo()
-                viewModel.startTimer()
+                stopTimer()
+                loadNextVideo()
+                startTimer()
             }
         }
 
@@ -244,7 +260,7 @@ fun VideoView(
                 when {
                     exoPlayer.isPlaying -> {
                         exoPlayer.pause()
-                        viewModel.stopTimer()
+                        stopTimer()
                         clickOnPlayerControls = true
                     }
 
@@ -257,7 +273,7 @@ fun VideoView(
 
                     else -> {
                         exoPlayer.play()
-                        viewModel.startTimer()
+                        startTimer()
                         clickOnPlayerControls = false
                     }
                 }
@@ -269,7 +285,7 @@ fun VideoView(
             bufferedPercentage = { bufferedPercentage },
             onSeekChanged = { timeMs: Float ->
                 exoPlayer.seekTo(timeMs.toLong())
-                viewModel.seekToChangeCurrTime(timeMs.formatMinSec())
+                seekToChangeCurrTime(timeMs.formatMinSec())
                 clickOnPlayerControls = true
             },
             onValueChangeFinished = {
@@ -291,14 +307,14 @@ fun VideoView(
                 navigateBack()
             },
             onNextVideoClick = {
-                viewModel.stopTimer()
-                viewModel.loadNextVideo()
-                viewModel.startTimer()
+                stopTimer()
+                loadNextVideo()
+                startTimer()
             },
             onPreviousVideoClick = {
-                viewModel.stopTimer()
-                viewModel.loadPreviousVideo()
-                viewModel.startTimer()
+                stopTimer()
+                loadPreviousVideo()
+                startTimer()
             },
             onEpisodeIconClick = {
                 clickOnPlayerControls = true
@@ -306,15 +322,13 @@ fun VideoView(
             onCloseEpisodeList = {
                 clickOnPlayerControls = false
             },
-            onEpisodeItemClick = { episodeId ->
-                viewModel.loadSpecificEpisode(episodeId)
-            },
+            onEpisodeItemClick = viewModel::loadSpecificEpisode,
             changeVisibleState = {
                 shouldShowControls = shouldShowControls.not()
             },
             onMenuItemClick = { qualityItem ->
                 clickOnPlayerControls = false
-                viewModel.loadVideoSelectedQuality(qualityItem.text)
+                loadVideoSelectedQuality(qualityItem.text)
             },
             onOpenQualityMenu = {
                 clickOnPlayerControls = !clickOnPlayerControls

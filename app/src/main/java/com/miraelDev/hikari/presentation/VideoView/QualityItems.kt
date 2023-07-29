@@ -10,12 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -23,7 +19,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.google.common.collect.ImmutableList
 
+@Stable
 data class DropItem(
     val text: String
 )
@@ -31,7 +29,7 @@ data class DropItem(
 @Composable
 fun QualityItems(
     quality: String,
-    dropdownItems: List<DropItem>,
+     dropdownItems: ImmutableList<DropItem>,
     modifier: Modifier = Modifier,
     onMenuItemClick: (DropItem) -> Unit,
     onOpenQualityMenu: () -> Unit
@@ -95,7 +93,7 @@ fun QualityItems(
                     onMenuItemClick(it)
                     isContextMenuVisible = false
                 }) {
-                    Text( text = it.text, color = Color.White)
+                    Text(text = it.text, color = Color.White)
                 }
             }
         }

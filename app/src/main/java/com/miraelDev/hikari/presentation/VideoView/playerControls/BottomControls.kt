@@ -22,11 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.common.collect.ImmutableList
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.presentation.VideoView.DropItem
 import com.miraelDev.hikari.presentation.VideoView.QualityItems
 import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import com.miraelDev.hikari.ui.theme.DirtyWhite
+import okhttp3.internal.immutableListOf
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
@@ -119,7 +121,7 @@ private fun QualityButtonWithFullScreenButton(
     Row(verticalAlignment = Alignment.CenterVertically) {
         QualityItems(
             quality = quality,
-            dropdownItems = listOf(
+            dropdownItems = ImmutableList.of(
                 DropItem("480"),
                 DropItem("720"),
                 DropItem("1080")
@@ -149,10 +151,10 @@ private fun QualityButtonWithFullScreenButton(
 @Composable
 private fun TimeLineRow(
     duration: Long,
-    currTime :String,
+    currTime: String,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-       Text(
+        Text(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = currTime,
             color = DirtyWhite

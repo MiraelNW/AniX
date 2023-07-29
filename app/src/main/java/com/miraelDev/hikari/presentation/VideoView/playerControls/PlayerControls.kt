@@ -55,7 +55,7 @@ fun PlayerControls(
 ) {
 
     val visible = remember(isVisible()) {
-        true
+        isVisible()
     }
 
     var quality by rememberSaveable {
@@ -150,39 +150,39 @@ fun PlayerControls(
 
 
 
-        CenterControls(
-            modifier = modifier
-                .fillMaxHeight(0.5f)
-                .align(Alignment.Center),
+//        CenterControls(
+//            modifier = modifier
+//                .fillMaxHeight(0.5f)
+//                .align(Alignment.Center),
+//
+//            isPlaying = isPlaying,
+//            onReplayClick = onReplayClick,
+//            onForwardClick = onForwardClick,
+//            playbackState = playbackState,
+//            changeVisibleState = changeVisibleState
+//        )
 
-            isPlaying = isPlaying,
-            onReplayClick = onReplayClick,
-            onForwardClick = onForwardClick,
-            playbackState = playbackState,
-            changeVisibleState = changeVisibleState
-        )
-
-        PrevNextPausePlayButtons(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .align(
-                    if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-                        Alignment.BottomCenter
-                    else
-                        Alignment.Center
-                )
-                .padding(bottom = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 16.dp else 0.dp),
-            alpha = alpha,
-            visible = visible,
-            isFirstEpisode = isFirstEpisode,
-            isLastEpisode = isLastEpisode,
-            playerState = playerState,
-            isVideoPlaying = isVideoPlaying,
-            onPauseToggle = onPauseToggle,
-            onNextVideoClick = onNextVideoClick,
-            onPreviousVideoClick = onPreviousVideoClick,
-            changeVisibleState = changeVisibleState,
-        )
+//        PrevNextPausePlayButtons(
+//            modifier = Modifier
+//                .fillMaxWidth(0.5f)
+//                .align(
+//                    if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+//                        Alignment.BottomCenter
+//                    else
+//                        Alignment.Center
+//                )
+//                .padding(bottom = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 16.dp else 0.dp),
+//            alpha = alpha,
+//            visible = visible,
+//            isFirstEpisode = isFirstEpisode,
+//            isLastEpisode = isLastEpisode,
+//            playerState = playerState,
+//            isVideoPlaying = isVideoPlaying,
+//            onPauseToggle = onPauseToggle,
+//            onNextVideoClick = onNextVideoClick,
+//            onPreviousVideoClick = onPreviousVideoClick,
+//            changeVisibleState = changeVisibleState,
+//        )
 
         EpisodeList(
             modifier = modifier,

@@ -1,9 +1,11 @@
 package com.miraelDev.hikari.domain.models
 
 
+import androidx.compose.runtime.Stable
 import androidx.media3.common.MediaItem
 
 
+@Stable
 data class VideoInfo(
     val id: Int = 0,
     val imageUrl: String = "",

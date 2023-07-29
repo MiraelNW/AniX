@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.VideoView.playerControls
 
+import android.util.Log
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ fun PrevNextPausePlayButtons(
     onPreviousVideoClick: () -> Unit,
     changeVisibleState: () -> Unit,
 ) {
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,

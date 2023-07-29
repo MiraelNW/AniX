@@ -35,6 +35,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + project.buildDir.absolutePath + "/compose_metrics"]
+        freeCompilerArgs += [
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="  + project.buildDir.absolutePath + "/compose_metrics"]
     }
     buildFeatures {
         compose true
@@ -114,6 +120,8 @@ dependencies {
     //accompanist pager
     implementation "com.google.accompanist:accompanist-pager:0.27.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.27.1"
+}
 
-
+kapt {
+    correctErrorTypes = true
 }
