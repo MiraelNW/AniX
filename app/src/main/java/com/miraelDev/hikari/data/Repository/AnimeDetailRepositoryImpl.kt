@@ -3,7 +3,6 @@ package com.miraelDev.hikari.data.Repository
 import com.miraelDev.hikari.data.mapper.Mapper
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
-import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -14,6 +13,9 @@ class AnimeDetailRepositoryImpl @Inject constructor(
 ) : AnimeDetailRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val _animeDetail = MutableStateFlow<AnimeInfo>(AnimeInfo(0))
+    private val _videoId = MutableStateFlow(0)
 
     private val animeList = listOf(
         AnimeInfo(1),
@@ -30,9 +32,18 @@ class AnimeDetailRepositoryImpl @Inject constructor(
         AnimeInfo(12),
         AnimeInfo(13),
     )
-    override fun getAnimeDetail(id: Int): AnimeInfo {
-        return animeList.find { it.id == id } ?: AnimeInfo(0)
+
+    override fun getAnimeDetail(): StateFlow<AnimeInfo> = _animeDetail.asStateFlow()
+
+    override fun loadAnimeDetail(animeId: Int) {
+        _animeDetail.value = animeList.find { it.id == animeId } ?: AnimeInfo(0)
     }
+
+    override fun loadVideoId(videoId: Int) {
+        _videoId.value = videoId
+    }
+
+    override fun getVideoId(): StateFlow<Int> = _videoId.asStateFlow()
 
 
 }

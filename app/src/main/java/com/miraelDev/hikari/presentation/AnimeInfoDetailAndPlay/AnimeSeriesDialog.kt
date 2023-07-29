@@ -109,7 +109,7 @@ fun AnimeSeriesDialog(
                                 ) {
                                     Text(
                                         modifier = Modifier.widthIn(max = 100.dp),
-                                        text = "Серия $it",
+                                        text = "Серия ${it+1}",
                                         fontSize = 16.sp
                                     )
                                     Row(verticalAlignment = Alignment.CenterVertically) {

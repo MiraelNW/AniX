@@ -35,11 +35,13 @@ fun String.encode(): String {
 
 fun Modifier.noRippleEffectClick(
     interactionSource: MutableInteractionSource,
+    enabled :Boolean = true,
     onClick: () -> Unit
 ) :Modifier{
     return this.clickable(
         interactionSource = interactionSource,
         indication = null,
+        enabled = enabled,
         onClick = onClick
     )
 }

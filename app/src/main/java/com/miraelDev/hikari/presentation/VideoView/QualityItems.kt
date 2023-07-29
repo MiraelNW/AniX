@@ -7,10 +7,8 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,7 +33,8 @@ fun QualityItems(
     quality: String,
     dropdownItems: List<DropItem>,
     modifier: Modifier = Modifier,
-    onMenuItemClick: (DropItem) -> Unit
+    onMenuItemClick: (DropItem) -> Unit,
+    onOpenQualityMenu: () -> Unit
 ) {
 
     var isContextMenuVisible by rememberSaveable {
@@ -65,23 +64,26 @@ fun QualityItems(
     ) {
         Text(
             modifier = Modifier
-                .indication(interactionSource, LocalIndication.current)
-                .pointerInput(true) {
-                    detectTapGestures(
-                        onPress = {
-                            isContextMenuVisible = true
-                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
-                        },
-                    )
-                }
+//                .indication(interactionSource, LocalIndication.current)
+//                .pointerInput(true) {
+//                    detectTapGestures(
+//                        onPress = {
+//                            isContextMenuVisible = true
+//                            onOpenQualityMenu()
+//                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
+//                        },
+//                    )
+//                }
                 .padding(8.dp),
             text = quality,
-            color = MaterialTheme.colors.primary)
+            color = Color.White
+        )
         DropdownMenu(
             modifier = Modifier.background(Color.Black.copy(alpha = 0.85f)),
             expanded = isContextMenuVisible,
             onDismissRequest = {
                 isContextMenuVisible = false
+                onOpenQualityMenu()
             },
             offset = pressOffset.copy(
                 y = (pressOffset.y - itemHeight),

@@ -9,7 +9,7 @@ import androidx.navigation.navigation
 
 fun NavGraphBuilder.animeDetailAndVideoView(
     animeDetailScreenContent: @Composable (Int) -> Unit,
-    videoViewScreenContent: @Composable (Int,Int) -> Unit,
+    videoViewScreenContent: @Composable () -> Unit,
 ) {
     navigation(
         startDestination = Screen.AnimeDetail.route,
@@ -30,19 +30,9 @@ fun NavGraphBuilder.animeDetailAndVideoView(
         }
 
         composable(
-            route = Screen.VideoView.route,
-            arguments = listOf(
-                navArgument(name = Screen.KEY_ANIME_DETAIL_ID){
-                    type = NavType.IntType
-                },
-                navArgument(name = Screen.KEY_VIDEO_ID){
-                    type = NavType.IntType
-                },
-            )
+            route = Screen.VideoView.route
         ) {
-            val animeDetailId = it.arguments?.getInt(Screen.KEY_ANIME_DETAIL_ID) ?: 0
-            val videoId = it.arguments?.getInt(Screen.KEY_VIDEO_ID) ?: 0
-            videoViewScreenContent(animeDetailId,videoId)
+            videoViewScreenContent()
         }
     }
 }

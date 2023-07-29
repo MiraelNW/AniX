@@ -41,8 +41,8 @@ class NavigationState(
         }
     }
 
-    fun navigateToVideoView(animeId: Int, videoId: Int) {
-        navHostController.navigate(Screen.VideoView.getRouteWithArgs(animeId, videoId)) {
+    fun navigateToVideoView() {
+        navHostController.navigate(Screen.VideoView.route) {
         }
     }
 }

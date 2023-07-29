@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.coroutines.launch
 
@@ -20,17 +21,21 @@ fun AnimeDetailScreen(
     animeId: Int,
     onBackPressed: () -> Unit,
     onAnimeItemClick: (Int) -> Unit,
-    onSeriesClick:(Int,Int)->Unit
+    onSeriesClick:()->Unit
 ) {
     BackHandler { onBackPressed() }
+
+    val viewModel = hiltViewModel<AnimeDetailViewModel>()
+
+    viewModel.loadAnimeDetailUseCase(animeId)
+
+    val animeDetail by viewModel.animeDetail.collectAsState()
 
     val list = mutableListOf<AnimeInfo>().apply {
         repeat(20) {
             add(AnimeInfo(it))
         }
     }
-
-    val animeItem = AnimeInfo(animeId)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -53,7 +58,8 @@ fun AnimeDetailScreen(
                         showSeriesDialog = false
                     },
                     onSeriesClick = {videoId ->
-                        onSeriesClick(animeItem.id, videoId)
+                        viewModel.loadVideoIdUseCase(videoId)
+                        onSeriesClick()
                     }
                 )
             }
@@ -63,11 +69,11 @@ fun AnimeDetailScreen(
                     .navigationBarsPadding(),
             ) {
 
-                item { TopAnimeImage(animeItem = animeItem) }
+                item { TopAnimeImage(animeItem = animeDetail) }
 
                 item {
                     AnimeNameAndShareButton(
-                        animeItem = animeItem,
+                        animeItem = animeDetail,
                         onShareButtonClick = {
                             coroutineScope.launch {
                                 modalSheetState.show()
@@ -82,11 +88,11 @@ fun AnimeDetailScreen(
                     }
                 }
 
-                item { RatingAndCategoriesRow(animeItem = animeItem) }
+                item { RatingAndCategoriesRow(animeItem = animeDetail) }
 
-                item { GenreRow(animeItem = animeItem) }
+                item { GenreRow(animeItem = animeDetail) }
 
-                item { ExpandableDescription(text = animeItem.description) }
+                item { ExpandableDescription(text = animeDetail.description) }
 
                 item {
                     Text(

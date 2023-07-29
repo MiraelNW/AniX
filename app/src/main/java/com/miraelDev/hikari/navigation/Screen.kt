@@ -38,20 +38,11 @@ sealed class Screen(val route: String) {
 
     }
 
-    object VideoView : Screen(ROUTE_VIDEO_VIEW) {
-
-        private const val ROUTE_FOR_ARGS = "video_view"
-
-        fun getRouteWithArgs(animeId: Int, videoId: Int): String {
-            return "$ROUTE_FOR_ARGS/$animeId/$videoId"
-        }
-
-    }
+    object VideoView : Screen(ROUTE_VIDEO_VIEW)
 
     companion object {
 
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
-        const val KEY_VIDEO_ID = "video_id"
 
         private const val ROUTE_SEARCH_AND_FILTER = "search_and_filter"
         private const val ROUTE_HOME_AND_SETTINGS = "home_and_settings"
@@ -69,7 +60,7 @@ sealed class Screen(val route: String) {
         private const val ROUTE_PRIVACY_POLICY = "privacy_policy"
         private const val ROUTE_COLOR_PALETTE = "color_palette"
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
-        private const val ROUTE_VIDEO_VIEW = "video_view/{$KEY_ANIME_DETAIL_ID}/{$KEY_VIDEO_ID}"
+        private const val ROUTE_VIDEO_VIEW = "video_view"
 
     }
 }

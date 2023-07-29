@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AnimeDetailRepository {
 
-    fun getAnimeDetail(id:Int):AnimeInfo
+    fun getAnimeDetail():StateFlow<AnimeInfo>
+    fun loadAnimeDetail(animeId:Int)
+    fun loadVideoId(videoId:Int)
+    fun getVideoId():StateFlow<Int>
 
 }

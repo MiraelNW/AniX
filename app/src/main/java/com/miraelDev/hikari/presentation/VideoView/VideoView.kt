@@ -1,19 +1,28 @@
 package com.miraelDev.hikari.presentation.VideoView
 
 import android.content.res.Configuration
-import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -27,14 +36,13 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
-import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.entensions.noRippleEffectClick
+import com.miraelDev.hikari.presentation.VideoView.playerControls.PlayerControls
+import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import com.miraelDev.hikari.presentation.VideoView.utilis.setAutoOrientation
 import com.miraelDev.hikari.presentation.VideoView.utilis.setLandscape
 import com.miraelDev.hikari.presentation.VideoView.utilis.setPortrait
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
@@ -43,8 +51,6 @@ private const val LANDSCAPE = 1
 @Composable
 fun VideoView(
     modifier: Modifier = Modifier,
-    animeId: Int,
-    videoId: Int,
     onFullScreenToggle: (Int) -> Unit,
     navigateBack: () -> Unit,
     landscape: Int
@@ -54,14 +60,17 @@ fun VideoView(
 
     val viewModel = hiltViewModel<VideoViewModel>()
 
-    SideEffect {
-        viewModel.getAnimeDetail(animeId)
-        viewModel.setUrl(videoId)
-    }
+    val exoPlayer = remember { viewModel.player }
 
-    val exoPlayer = viewModel.player
+    val isFirstEpisode by viewModel.isFirstEpisode.collectAsState()
+
+    val isLastEpisode by viewModel.isLastEpisode.collectAsState()
 
     var shouldShowControls by remember { mutableStateOf(false) }
+
+    var clickOnPlayerControls by remember { mutableStateOf(false) }
+
+    var autoLoadNextVideo by remember { mutableStateOf(false) }
 
     var isPlaying by rememberSaveable { mutableStateOf(exoPlayer.isPlaying) }
 
@@ -71,13 +80,13 @@ fun VideoView(
 
     var bufferedPercentage by remember { mutableStateOf(0) }
 
+    val currTime by viewModel.currTime.collectAsState()
+
     var playbackState by remember { mutableStateOf(exoPlayer.playbackState) }
 
     var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
 
-    var alphaValue by remember {
-        mutableStateOf(0f)
-    }
+    var alphaValue by remember { mutableStateOf(1f) }
 
     val alpha by animateFloatAsState(targetValue = alphaValue)
 
@@ -108,6 +117,7 @@ fun VideoView(
             onFullScreenToggle(PORTRAIT)
         } else {
             context.setAutoOrientation()
+            exoPlayer.pause()
             navigateBack()
         }
     }
@@ -136,14 +146,17 @@ fun VideoView(
         }
     }
 
-    LaunchedEffect(key1 = shouldShowControls) {
-        if (shouldShowControls) {
+    LaunchedEffect(key1 = shouldShowControls, key2 = clickOnPlayerControls) {
+        if (shouldShowControls && !clickOnPlayerControls) {
             alphaValue = 1f
             delay(3000)
             shouldShowControls = false
-            alphaValue = 0f
+            alphaValue = 1f
+        } else if (clickOnPlayerControls) {
+            alphaValue = 1f
+            shouldShowControls = true
         } else {
-            alphaValue = 0f
+            alphaValue = 1f
         }
     }
 
@@ -168,14 +181,12 @@ fun VideoView(
                         playbackState = player.playbackState
                     }
                 }
-
             exoPlayer.addListener(listener)
 
             onDispose {
                 exoPlayer.removeListener(listener)
             }
         }
-
 
         AndroidView(
             modifier = Modifier
@@ -195,7 +206,6 @@ fun VideoView(
                 }
             },
             update = {
-
                 when (lifecycle) {
                     Lifecycle.Event.ON_PAUSE -> {
                         it.onPause()
@@ -208,12 +218,23 @@ fun VideoView(
             }
         )
 
+        LaunchedEffect(key1 = playbackState) {
+            if (autoLoadNextVideo && playbackState == STATE_ENDED) {
+                viewModel.stopTimer()
+                viewModel.loadNextVideo()
+                viewModel.startTimer()
+            }
+        }
+
+
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
             isPlaying = { isPlaying },
             isFullScreen = landscape,
             orientation = orientation,
+            isFirstEpisode = isFirstEpisode,
+            isLastEpisode = isLastEpisode,
             alpha = alpha,
             title = { exoPlayer.mediaMetadata.displayTitle.toString() },
             playbackState = { playbackState },
@@ -223,26 +244,36 @@ fun VideoView(
                 when {
                     exoPlayer.isPlaying -> {
                         exoPlayer.pause()
+                        viewModel.stopTimer()
+                        clickOnPlayerControls = true
                     }
 
                     exoPlayer.isPlaying.not() &&
                             exoPlayer.playbackState == STATE_ENDED -> {
+
                         exoPlayer.seekTo(0)
                         exoPlayer.playWhenReady = true
                     }
 
                     else -> {
                         exoPlayer.play()
+                        viewModel.startTimer()
+                        clickOnPlayerControls = false
                     }
                 }
                 isPlaying = isPlaying.not()
             },
             totalDuration = { totalDuration },
             currentTime = { currentTime },
-//            currTime = currTime,
+            currTime = currTime,
             bufferedPercentage = { bufferedPercentage },
             onSeekChanged = { timeMs: Float ->
                 exoPlayer.seekTo(timeMs.toLong())
+                viewModel.seekToChangeCurrTime(timeMs.formatMinSec())
+                clickOnPlayerControls = true
+            },
+            onValueChangeFinished = {
+                clickOnPlayerControls = false
             },
             onFullScreenToggle = { orientation ->
 
@@ -259,8 +290,22 @@ fun VideoView(
                 context.setAutoOrientation()
                 navigateBack()
             },
-            onNextVideoClick = { viewModel.loadNextVideo() },
-            onPreviousVideoClick = { viewModel.loadPreviousVideo() },
+            onNextVideoClick = {
+                viewModel.stopTimer()
+                viewModel.loadNextVideo()
+                viewModel.startTimer()
+            },
+            onPreviousVideoClick = {
+                viewModel.stopTimer()
+                viewModel.loadPreviousVideo()
+                viewModel.startTimer()
+            },
+            onEpisodeIconClick = {
+                clickOnPlayerControls = true
+            },
+            onCloseEpisodeList = {
+                clickOnPlayerControls = false
+            },
             onEpisodeItemClick = { episodeId ->
                 viewModel.loadSpecificEpisode(episodeId)
             },
@@ -268,7 +313,14 @@ fun VideoView(
                 shouldShowControls = shouldShowControls.not()
             },
             onMenuItemClick = { qualityItem ->
-                viewModel.loadVideoSelectedQuality( qualityItem.text)
+                clickOnPlayerControls = false
+                viewModel.loadVideoSelectedQuality(qualityItem.text)
+            },
+            onOpenQualityMenu = {
+                clickOnPlayerControls = !clickOnPlayerControls
+            },
+            onAutoNextVideoClick = { autoLoadVideo ->
+                autoLoadNextVideo = autoLoadVideo
             }
         )
     }
