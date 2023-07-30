@@ -50,11 +50,12 @@ private const val LANDSCAPE = 1
 @UnstableApi
 @Composable
 fun VideoView(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     onFullScreenToggle: (Int) -> Unit,
     navigateBack: () -> Unit,
     landscape: Int
 ) {
+
 
     val context = LocalContext.current
 
@@ -86,9 +87,11 @@ fun VideoView(
 
     var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
 
+    val title = remember { exoPlayer.mediaMetadata.displayTitle.toString() }
+
     var alphaValue by remember { mutableStateOf(1f) }
 
-    val alpha by animateFloatAsState(targetValue = alphaValue)
+    val alpha by animateFloatAsState(targetValue = alphaValue, label = "prevNext buttons animation")
 
     val stopTimer: () -> Unit = remember { { viewModel.stopTimer() } }
 
@@ -174,8 +177,6 @@ fun VideoView(
         }
     }
 
-    Log.d("tag",totalDuration.toString())
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -221,17 +222,17 @@ fun VideoView(
 
                 }
             },
-            update = {
-                when (lifecycle) {
-                    Lifecycle.Event.ON_PAUSE -> {
-                        it.onPause()
-                        it.player?.pause()
-                        isPlaying = false
-                    }
-
-                    else -> Unit
-                }
-            }
+//            update = {
+//                when (lifecycle) {
+//                    Lifecycle.Event.ON_PAUSE -> {
+//                        it.onPause()
+//                        it.player?.pause()
+//                        isPlaying = false
+//                    }
+//
+//                    else -> Unit
+//                }
+//            }
         )
 
         LaunchedEffect(key1 = playbackState) {
@@ -245,14 +246,14 @@ fun VideoView(
 
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
-            isVisible = { shouldShowControls },
+            isVisible = shouldShowControls,
             isPlaying = { isPlaying },
             isFullScreen = landscape,
             orientation = orientation,
             isFirstEpisode = isFirstEpisode,
             isLastEpisode = isLastEpisode,
             alpha = alpha,
-            title = { exoPlayer.mediaMetadata.displayTitle.toString() },
+            title = title,
             playbackState = { playbackState },
             onReplayClick = { exoPlayer.seekBack() },
             onForwardClick = { exoPlayer.seekForward() },
@@ -273,7 +274,7 @@ fun VideoView(
 
                     else -> {
                         exoPlayer.play()
-                        startTimer()
+//                        startTimer()
                         clickOnPlayerControls = false
                     }
                 }
@@ -324,7 +325,7 @@ fun VideoView(
             },
             onEpisodeItemClick = viewModel::loadSpecificEpisode,
             changeVisibleState = {
-                shouldShowControls = shouldShowControls.not()
+                shouldShowControls = !shouldShowControls
             },
             onMenuItemClick = { qualityItem ->
                 clickOnPlayerControls = false

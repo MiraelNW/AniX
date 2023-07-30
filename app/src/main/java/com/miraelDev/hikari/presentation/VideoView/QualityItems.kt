@@ -62,16 +62,16 @@ fun QualityItems(
     ) {
         Text(
             modifier = Modifier
-//                .indication(interactionSource, LocalIndication.current)
-//                .pointerInput(true) {
-//                    detectTapGestures(
-//                        onPress = {
-//                            isContextMenuVisible = true
-//                            onOpenQualityMenu()
-//                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
-//                        },
-//                    )
-//                }
+                .indication(interactionSource, LocalIndication.current)
+                .pointerInput(true) {
+                    detectTapGestures(
+                        onPress = {
+                            isContextMenuVisible = true
+                            onOpenQualityMenu()
+                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
+                        },
+                    )
+                }
                 .padding(8.dp),
             text = quality,
             color = Color.White

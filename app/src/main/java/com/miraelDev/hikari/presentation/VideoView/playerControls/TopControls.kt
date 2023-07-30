@@ -2,15 +2,15 @@ package com.miraelDev.hikari.presentation.VideoView.playerControls
 
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -27,7 +27,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -37,15 +36,18 @@ import com.miraelDev.hikari.ui.theme.Green
 
 @Composable
 fun TopControl(
-    modifier: Modifier = Modifier,
-    title: () -> String,
+    title: String,
     onBackIconClick: () -> Unit,
     onEpisodeIconClick: () -> Unit,
     onAutoLoadNextVideoClick: (Boolean) -> Unit,
 ) {
-    val videoTitle = remember(title()) { title() }
+
+    val videoTitle = remember(title) { title }
 
     var autoLoadNextVideo by rememberSaveable { mutableStateOf(false) }
+
+    val onBackIconClickSaved = remember { { onBackIconClick() } }
+
     val color = remember { Animatable(DirtyWhite) }
 
     LaunchedEffect(autoLoadNextVideo) {
@@ -57,17 +59,19 @@ fun TopControl(
     }
 
     Row(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .navigationBarsPadding(),
+            .systemBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
             IconButton(
                 modifier = Modifier.size(24.dp),
-                onClick = onBackIconClick
+                onClick = onBackIconClickSaved
             ) {
+
                 Icon(
                     modifier = Modifier.fillMaxSize(),
                     imageVector = Icons.Filled.ArrowBack,
@@ -82,7 +86,7 @@ fun TopControl(
                 color = DirtyWhite
             )
         }
-
+//
         Row {
             IconButton(
                 modifier = Modifier

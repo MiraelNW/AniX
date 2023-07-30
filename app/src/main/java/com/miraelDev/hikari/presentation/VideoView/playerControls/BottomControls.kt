@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.VideoView.playerControls
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,11 +38,11 @@ private const val LANDSCAPE = 1
 fun BottomControls(
     modifier: Modifier,
     quality: String,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
+    totalDuration:() -> Long,
+    currentTime:() -> Long,
     isFullScreen: Int,
     currTime: String,
-    bufferedPercentage: () -> Int,
+    bufferedPercentage:() -> Int,
     onValueChangeFinished: () -> Unit,
     onSeekChanged: (timeMs: Float) -> Unit,
     onFullScreenToggle: (Int) -> Unit,
@@ -54,6 +55,10 @@ fun BottomControls(
     val videoTime = remember(currentTime()) { currentTime() }
 
     val buffer = remember(bufferedPercentage()) { bufferedPercentage() }
+
+    val onFullScreenToggleSaved: (Int) -> Unit = remember { { onFullScreenToggle(it) } }
+
+    val isFullScreenSaved = remember { isFullScreen }
     Column(
         modifier = modifier
             .padding(bottom = 16.dp, start = 24.dp, end = 16.dp)
@@ -99,8 +104,8 @@ fun BottomControls(
 
 
             QualityButtonWithFullScreenButton(
-                isFullScreen = isFullScreen,
-                onFullScreenToggle = onFullScreenToggle,
+                isFullScreen = isFullScreenSaved,
+                onFullScreenToggle = { onFullScreenToggleSaved(it) },
                 quality = quality,
                 onMenuItemClick = onMenuItemClick,
                 onOpenQualityMenu = onOpenQualityMenu
@@ -118,6 +123,7 @@ private fun QualityButtonWithFullScreenButton(
     onMenuItemClick: (DropItem) -> Unit,
     onOpenQualityMenu: () -> Unit,
 ) {
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         QualityItems(
             quality = quality,

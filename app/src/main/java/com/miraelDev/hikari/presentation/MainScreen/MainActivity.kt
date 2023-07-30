@@ -49,6 +49,8 @@ class MainActivity : ComponentActivity() {
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
+            val onFullScreenToggle: (Int)->Unit = remember { { landscape = it }  }
+
             AniXTheme(darkTheme) {
                 var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
 
@@ -66,9 +68,7 @@ class MainActivity : ComponentActivity() {
                         darkTheme = !darkTheme
                         useDarkIcons = !useDarkIcons
                     },
-                    onFullScreenToggle = {
-                        landscape = it
-                    },
+                    onFullScreenToggle = onFullScreenToggle,
                     onVideoViewClick = { isVideoViewOpen ->
                         if (!darkTheme) {
                             useDarkIcons = !useDarkIcons
