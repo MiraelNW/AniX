@@ -49,36 +49,36 @@ class MainActivity : ComponentActivity() {
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
-            val onFullScreenToggle: (Int)->Unit = remember { { landscape = it }  }
+            val onFullScreenToggle: (Int) -> Unit = remember { { landscape = it } }
 
             AniXTheme(darkTheme) {
                 var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
 
                 DisposableEffect(systemUiController, useDarkIcons) {
                     systemUiController.setSystemBarsColor(
-                        color = Color.Transparent,
-                        darkIcons = !useDarkIcons
+                            color = Color.Transparent,
+                            darkIcons = !useDarkIcons
                     )
                     onDispose {}
                 }
 
                 MainScreen(
-                    landscape = landscape,
-                    onThemeButtonClick = {
-                        darkTheme = !darkTheme
-                        useDarkIcons = !useDarkIcons
-                    },
-                    onFullScreenToggle = onFullScreenToggle,
-                    onVideoViewClick = { isVideoViewOpen ->
-                        if (!darkTheme) {
+                        landscape = landscape,
+                        onThemeButtonClick = {
+                            darkTheme = !darkTheme
                             useDarkIcons = !useDarkIcons
-                        }
-                        when (isVideoViewOpen) {
-                            BACK -> shouldShowSystemBars = true
-                            ON_VIDEO_VIEW -> shouldShowSystemBars = false
-                        }
+                        },
+                        onFullScreenToggle = onFullScreenToggle,
+                        onVideoViewClick = { isVideoViewOpen ->
+                            if (!darkTheme) {
+                                useDarkIcons = !useDarkIcons
+                            }
+                            when (isVideoViewOpen) {
+                                BACK -> shouldShowSystemBars = true
+                                ON_VIDEO_VIEW -> shouldShowSystemBars = false
+                            }
 
-                    }
+                        }
                 )
             }
 
@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
         // Configure the behavior of the hidden system bars
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         // Hide both the status bar and the navigation bar
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }

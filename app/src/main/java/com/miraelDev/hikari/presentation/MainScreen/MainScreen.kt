@@ -123,10 +123,10 @@ fun MainScreen(
                 shouldShowBottomBar = false
                 PrivacyPolicyScreen(
                     onBackPressed = {
-                        navigationState.navHostController.popBackStack(
-                            route = Screen.Settings.route,
-                            inclusive = false
-                        )
+//                        navigationState.navHostController.popBackStack(
+//                            route = Screen.Settings.route,
+//                            inclusive = false
+//                        )
                     }
                 )
             },
@@ -179,8 +179,7 @@ fun MainScreen(
             videoViewScreenContent = {
                 shouldShowBottomBar = false
                 VideoView(
-                    modifier = Modifier.fillMaxSize(),
-                    onFullScreenToggle = onFullScreenToggle,
+                    onFullScreenToggle = {},
                     landscape = landscape,
                     navigateBack = {
                         onVideoViewClick(BACK)
