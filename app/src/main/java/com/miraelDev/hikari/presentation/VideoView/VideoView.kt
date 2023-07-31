@@ -122,13 +122,11 @@ fun VideoView(
             Configuration.ORIENTATION_LANDSCAPE -> {
                 onFullScreenToggle(LANDSCAPE)
             }
-
             else -> {
                 onFullScreenToggle(PORTRAIT)
             }
         }
     }
-
 
     BackHandler {
         if (landscape == LANDSCAPE) {
@@ -197,10 +195,17 @@ fun VideoView(
         }
     }
 
+    LaunchedEffect(key1 = isControlsVisible) {
+        if (isControlsVisible){
+            delay(3000)
+            isControlsVisible = false
+        }
+    }
+
     Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black)
+                .fillMaxSize()
+                .background(Color.Black)
     ) {
 
 
@@ -218,7 +223,6 @@ fun VideoView(
                 orientation = orientation,
                 isFirstEpisode = isFirstEpisode,
                 isLastEpisode = isLastEpisode,
-                alpha = 1f,
                 title = title,
                 playbackState = { playbackState },
                 onReplayClick = onReplayClickSaved,
@@ -275,7 +279,7 @@ fun VideoView(
                 },
                 onNextVideoClick = {
                     stopTimer()
-                    loadNextVideo()
+                    viewModel.loadNextVideo()
                     startTimer()
                 },
                 onPreviousVideoClick = {
@@ -317,13 +321,13 @@ private fun VideoPlayer(
 
     Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black)
+                .fillMaxSize()
+                .background(Color.Black)
     ) {
         AndroidView(
                 modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black),
+                    .fillMaxSize()
+                    .background(Color.Black),
                 factory = {
                     PlayerView(context).apply {
                         player = exoPlayer

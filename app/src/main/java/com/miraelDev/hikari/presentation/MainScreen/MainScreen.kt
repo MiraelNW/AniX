@@ -179,7 +179,7 @@ fun MainScreen(
             videoViewScreenContent = {
                 shouldShowBottomBar = false
                 VideoView(
-                    onFullScreenToggle = {},
+                    onFullScreenToggle = onFullScreenToggle,
                     landscape = landscape,
                     navigateBack = {
                         onVideoViewClick(BACK)

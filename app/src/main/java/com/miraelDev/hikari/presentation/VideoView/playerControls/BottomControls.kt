@@ -38,11 +38,11 @@ private const val LANDSCAPE = 1
 fun BottomControls(
     modifier: Modifier,
     quality: String,
-    totalDuration:() -> Long,
-    currentTime:() -> Long,
+    totalDuration: () -> Long,
+    currentTime: () -> Long,
     isFullScreen: Int,
     currTime: String,
-    bufferedPercentage:() -> Int,
+    bufferedPercentage: () -> Int,
     onValueChangeFinished: () -> Unit,
     onSeekChanged: (timeMs: Float) -> Unit,
     onFullScreenToggle: (Int) -> Unit,
@@ -105,7 +105,7 @@ fun BottomControls(
 
             QualityButtonWithFullScreenButton(
                 isFullScreen = isFullScreenSaved,
-                onFullScreenToggle = { onFullScreenToggleSaved(it) },
+                onFullScreenToggle = onFullScreenToggleSaved,
                 quality = quality,
                 onMenuItemClick = onMenuItemClick,
                 onOpenQualityMenu = onOpenQualityMenu
