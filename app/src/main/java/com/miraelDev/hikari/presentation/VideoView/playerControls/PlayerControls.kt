@@ -79,8 +79,6 @@ fun PlayerControls(
 
     val playerState = remember(playbackState()) { playbackState() }
 
-    val isFullScreenSaved = remember() { isFullScreen }
-
     val onBackIconClickSaved: () -> Unit = remember { { onBackIconClick() } }
 
     val onEpisodeIconClickSaved: () -> Unit = remember { { onEpisodeIconClick() } }
@@ -161,15 +159,15 @@ fun PlayerControls(
             }
         }
 
-//        CenterControls(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight(0.5f)
-//                .align(Alignment.Center),
-//            onReplayClick = onReplayClick,
-//            onForwardClick = onForwardClick,
-//            changeVisibleState = changeVisibleState
-//        )
+        CenterControls(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.5f)
+                .align(Alignment.Center),
+            onReplayClick =onReplayClick,
+            onForwardClick = onForwardClick,
+            changeVisibleState = changeVisibleState
+        )
 
         Row(
             modifier = Modifier
@@ -198,35 +196,35 @@ fun PlayerControls(
                     }
                     .size(32.dp)
                     .weight(1f),
-                tint = if (isFirstEpisode) DirtyWhite.copy(alpha = 1f)
-                else DirtyWhite.copy(alpha = 1f),
+                tint = if (isFirstEpisode) DirtyWhite.copy(alpha = alpha)
+                else DirtyWhite.copy(alpha = alpha),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_previous_video),
                 contentDescription = "next video"
             )
 
             Icon(
                 modifier = Modifier
-                    .noRippleEffectClick(interactionSource = MutableInteractionSource()) {
-//                        onPauseToggle()
-//                        changeVisibleState()
-                    }
                     .size(42.dp)
-                    .weight(1f),
-                tint = DirtyWhite.copy(alpha = 1f),
-                painter = painterResource(id = R.drawable.ic_pause),
-//                when {
-//                    isVideoPlaying -> {
-//                        painterResource(id = R.drawable.ic_pause)
-//                    }
-//
-//                    isVideoPlaying.not() && playerState == Player.STATE_ENDED -> {
-//                        painterResource(id = R.drawable.ic_replay)
-//                    }
-//
-//                    else -> {
-//                        painterResource(id = R.drawable.ic_play)
-//                    }
-//                },
+                    .weight(1f)
+                    .noRippleEffectClick(interactionSource = MutableInteractionSource()) {
+                        onPauseToggle()
+                        changeVisibleState()
+                    },
+                tint = DirtyWhite.copy(alpha = alpha),
+                imageVector =
+                when {
+                    isVideoPlaying -> {
+                        ImageVector.vectorResource(id = R.drawable.ic_pause)
+                    }
+
+                    isVideoPlaying.not() && playerState == Player.STATE_ENDED -> {
+                        ImageVector.vectorResource(id = R.drawable.ic_replay)
+                    }
+
+                    else -> {
+                        ImageVector.vectorResource(id = R.drawable.ic_play)
+                    }
+                },
                 contentDescription = "Play/pause"
             )
 
@@ -243,8 +241,8 @@ fun PlayerControls(
                     }
                     .size(32.dp)
                     .weight(1f),
-                tint = if (isLastEpisode) LightGreen.copy(alpha = 1f)
-                else DirtyWhite.copy(alpha = 1f),
+                tint = if (isLastEpisode) LightGreen.copy(alpha = alpha)
+                else DirtyWhite.copy(alpha = alpha),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_next_video),
                 contentDescription = "next video"
             )

@@ -6,9 +6,11 @@ import android.os.Looper
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -107,6 +109,12 @@ fun VideoView(
     val seekToChangeCurrTime: (String) -> Unit =
         remember { { viewModel.seekToChangeCurrTime(it) } }
 
+    val onReplayClickSaved: () -> Unit = remember { { exoPlayer.seekBack() } }
+
+    val onForwardClickSaved: () -> Unit = remember { { exoPlayer.seekForward() } }
+
+    val interactionSource = remember { MutableInteractionSource() }
+
     var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
     val configuration = LocalConfiguration.current
 
@@ -177,39 +185,39 @@ fun VideoView(
         }
     }
 
+    DisposableEffect(key1 = Unit) {
+        val listener =
+            object : Player.Listener {
+                override fun onEvents(
+                    player: Player,
+                    events: Player.Events
+                ) {
+                    super.onEvents(player, events)
+                    totalDuration = player.duration.coerceAtLeast(0L)
+                    currentTime = player.currentPosition.coerceAtLeast(0L)
+                    bufferedPercentage = player.bufferedPercentage
+                    isPlaying = player.isPlaying
+                    playbackState = player.playbackState
+                }
+            }
+        exoPlayer.addListener(listener)
+
+        onDispose {
+            exoPlayer.removeListener(listener)
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
 
-        DisposableEffect(key1 = Unit) {
-            val listener =
-                object : Player.Listener {
-                    override fun onEvents(
-                        player: Player,
-                        events: Player.Events
-                    ) {
-                        super.onEvents(player, events)
-                        totalDuration = player.duration.coerceAtLeast(0L)
-                        currentTime = player.currentPosition.coerceAtLeast(0L)
-                        bufferedPercentage = player.bufferedPercentage
-                        isPlaying = player.isPlaying
-                        playbackState = player.playbackState
-                    }
-                }
-            exoPlayer.addListener(listener)
-
-            onDispose {
-                exoPlayer.removeListener(listener)
-            }
-        }
 
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
-                .noRippleEffectClick(MutableInteractionSource()) {},
+                .background(Color.Black),
             factory = {
                 PlayerView(context).apply {
                     player = exoPlayer
@@ -222,17 +230,17 @@ fun VideoView(
 
                 }
             },
-//            update = {
-//                when (lifecycle) {
-//                    Lifecycle.Event.ON_PAUSE -> {
-//                        it.onPause()
-//                        it.player?.pause()
-//                        isPlaying = false
-//                    }
-//
-//                    else -> Unit
-//                }
-//            }
+            update = {
+                when (lifecycle) {
+                    Lifecycle.Event.ON_PAUSE -> {
+                        it.onPause()
+                        it.player?.pause()
+                        isPlaying = false
+                    }
+
+                    else -> Unit
+                }
+            }
         )
 
         LaunchedEffect(key1 = playbackState) {
@@ -255,8 +263,8 @@ fun VideoView(
             alpha = alpha,
             title = title,
             playbackState = { playbackState },
-            onReplayClick = { exoPlayer.seekBack() },
-            onForwardClick = { exoPlayer.seekForward() },
+            onReplayClick = onReplayClickSaved,
+            onForwardClick = onForwardClickSaved,
             onPauseToggle = {
                 when {
                     exoPlayer.isPlaying -> {
