@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.entensions.pressClickEffect
+import com.miraelDev.hikari.exntensions.pressClickEffect
 
 @Composable
 fun OtherAnimes(

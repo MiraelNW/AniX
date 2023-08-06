@@ -30,7 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.hikari.R
-import com.miraelDev.hikari.entensions.pressClickEffect
+import com.miraelDev.hikari.exntensions.pressClickEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

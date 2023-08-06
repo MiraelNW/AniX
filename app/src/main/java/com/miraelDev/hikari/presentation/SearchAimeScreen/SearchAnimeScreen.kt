@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.extractor.BinarySearchSeeker.TimestampSearchResult
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.AnimeCard
 import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.LastSearchedAnime
 import com.miraelDev.hikari.presentation.AnimeListScreen.AnimeSearchView
 import com.miraelDev.hikari.presentation.SearchAimeScreen.SearchAnimeViewModel
+import com.miraelDev.hikari.presentation.shimmerList.ShimmerList
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -35,6 +37,7 @@ fun SearchAnimeScreen(
 
     val searchTextState by viewModel.searchTextState
     val filterList by viewModel.filterList.collectAsState(listOf())
+    val searchResults by viewModel.animeBySearch.collectAsState()
 
     Column(
         modifier = Modifier
@@ -64,9 +67,10 @@ fun SearchAnimeScreen(
             onClearText = {
                 openSearchHistory = true
             },
-            onSearchClicked = {
+            onSearchClicked = { animeName ->
                 openSearchHistory = false
                 showSearchResult = true
+                viewModel.searchAnimeByName(animeName)
 //                TODO("viewModel function to load")
 //                TODO("viewModel function to save in database search")
             },
@@ -104,7 +108,10 @@ fun SearchAnimeScreen(
         if (showSearchResult) {
             Column {
                 Filters(filterList, filterListState)
-                SearchResult(onAnimeItemClick = onAnimeItemClick)
+                SearchResult(
+                    searchResults = searchResults,
+                    onAnimeItemClick = onAnimeItemClick
+                )
             }
         }
     }
@@ -174,7 +181,10 @@ private fun SearchHistory() {
 }
 
 @Composable
-private fun SearchResult(onAnimeItemClick: (Int) -> Unit) {
+private fun SearchResult(
+    searchResults: List<AnimeInfo>,
+    onAnimeItemClick: (Int) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -186,10 +196,11 @@ private fun SearchResult(onAnimeItemClick: (Int) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
 
         ) {
-        repeat(10) {
-            item {
-                AnimeCard(onAnimeItemClick = onAnimeItemClick)
-            }
+        items(items = searchResults, key = { it.id }) {
+            AnimeCard(
+                item = it,
+                onAnimeItemClick = onAnimeItemClick
+            )
         }
     }
 }

@@ -6,8 +6,6 @@ sealed class AnimeListScreenState {
 
     object Loading : AnimeListScreenState()
 
-    object Initial : AnimeListScreenState()
-
     data class AnimeList(val animes: List<AnimeInfo>) : AnimeListScreenState()
 
 }

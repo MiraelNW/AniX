@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList
 
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -34,6 +35,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
@@ -48,14 +51,18 @@ import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.entensions.pressClickEffect
+import com.miraelDev.hikari.exntensions.pressClickEffect
+import com.miraelDev.hikari.presentation.shimmerList.ShimmerList
 import com.miraelDev.hikari.ui.theme.Gold
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScrollableTabWithViewPager(
-    animeList: List<AnimeInfo>,
+    screenStateNewAnimeList: State<AnimeListScreenState>,
+    screenStateFilmsAnimeList: State<AnimeListScreenState>,
+    screenStatePopularAnimeList: State<AnimeListScreenState>,
+    screenStateNameAnimeList: State<AnimeListScreenState>,
     viewModel: AnimeListViewModel,
     onAnimeItemClick: (Int) -> Unit
 ) {
@@ -109,45 +116,77 @@ fun ScrollableTabWithViewPager(
         state = pagerState
     ) { page ->
 
-        LaunchedEffect(Unit) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                when (page) {
-                    0 -> {
-                        viewModel.loadAnimeBtCategory(0)
+        when (page) {
+            0 -> {
+                NewAnimeList(
+                    screenState = screenStateNewAnimeList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+            }
+
+            1 -> {
+                NewAnimeList(
+                    screenState = screenStatePopularAnimeList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+            }
+
+            2 -> {
+                NewAnimeList(
+                    screenState = screenStateNameAnimeList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+            }
+
+            3 -> {
+                NewAnimeList(
+                    screenState = screenStateFilmsAnimeList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+            }
+
+            else -> {
+                NewAnimeList(
+                    screenState = screenStateNewAnimeList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+            }
+        }
+    }
+
+
+}
+
+@Composable
+private fun NewAnimeList(
+    screenState: State<AnimeListScreenState>,
+    onAnimeItemClick: (Int) -> Unit
+) {
+    when (val currentState = screenState.value) {
+
+        is AnimeListScreenState.Loading -> {
+            ShimmerList()
+        }
+
+        is AnimeListScreenState.AnimeList -> {
+            Box(Modifier.fillMaxSize()) {
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        top = 4.dp,
+                        bottom = 8.dp,
+                        start = 4.dp,
+                        end = 4.dp
+                    ),
+                    state = rememberLazyListState(),
+                    modifier = Modifier.navigationBarsPadding(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(items = currentState.animes, key = { it.id }) {
+                        AnimeCard(animeItem = it, onAnimeItemClick = onAnimeItemClick)
                     }
-                    1 -> {
-                        viewModel.loadAnimeBtCategory(1)
-                    }
-                    2 -> {
-                        viewModel.loadAnimeBtCategory(2)
-                    }
-                    3 -> {
-                        viewModel.loadAnimeBtCategory(3)
-                    }
-                    else -> {}
                 }
             }
         }
-
-
-        Box(Modifier.fillMaxSize()) {
-            LazyColumn(
-                contentPadding = PaddingValues(
-                    top = 4.dp,
-                    bottom = 8.dp,
-                    start = 4.dp,
-                    end = 4.dp
-                ),
-                state = rememberLazyListState(),
-                modifier = Modifier.navigationBarsPadding(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(items = animeList, key = { it.id }) {
-                    AnimeCard(animeItem = it, onAnimeItemClick = onAnimeItemClick)
-                }
-            }
-        }
-
     }
 }
 

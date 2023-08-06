@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -120,6 +121,13 @@ dependencies {
     //accompanist pager
     implementation "com.google.accompanist:accompanist-pager:0.27.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.27.1"
+
+    //ktor
+//    implementation "io.ktor:ktor-client-core:1.5.0"
+    implementation 'io.ktor:ktor-client-android:1.5.0'
+    implementation 'io.ktor:ktor-client-serialization:1.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation 'io.ktor:ktor-client-logging-jvm:1.5.0'
 }
 
 kapt {

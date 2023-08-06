@@ -24,6 +24,10 @@ import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.miraelDev.hikari.ui.theme.AniXTheme
 import dagger.hilt.android.AndroidEntryPoint
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @UnstableApi

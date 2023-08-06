@@ -2,42 +2,14 @@
 
 package com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.entensions.pressClickEffect
-import com.miraelDev.hikari.ui.theme.Gold
-import kotlinx.coroutines.launch
+import com.miraelDev.hikari.presentation.shimmerList.ShimmerList
 
 @Composable
 fun HomeScreen(
@@ -49,28 +21,37 @@ fun HomeScreen(
 
         val viewModel = hiltViewModel<AnimeListViewModel>()
 
-        val screenState = viewModel.screenState.collectAsState(AnimeListScreenState.Initial)
+        val screenStateNewAnimeList =
+            viewModel.screenStateNewAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
-        when (val currentState = screenState.value) {
-            is AnimeListScreenState.Loading -> {}
-            is AnimeListScreenState.AnimeList -> {
-                AnimeList(
-                    animeList = currentState.animes,
-                    onSettingsClick = onSettingsClick,
-                    onThemeButtonClick = onThemeButtonClick,
-                    viewModel = viewModel,
-                    onAnimeItemClick = onAnimeItemClick
-                )
-            }
-            is AnimeListScreenState.Initial -> {}
-        }
+        val screenStateFilmsAnimeList =
+            viewModel.screenStateFilmsAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
+        val screenStatePopularAnimeList =
+            viewModel.screenStatePopularAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+
+        val screenStateNameAnimeList =
+            viewModel.screenStateNameAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+
+        AnimeList(
+            screenStateNewAnimeList = screenStateNewAnimeList,
+            screenStateFilmsAnimeList = screenStateFilmsAnimeList,
+            screenStatePopularAnimeList = screenStatePopularAnimeList,
+            screenStateNameAnimeList = screenStateNameAnimeList,
+            onSettingsClick = onSettingsClick,
+            onThemeButtonClick = onThemeButtonClick,
+            viewModel = viewModel,
+            onAnimeItemClick = onAnimeItemClick
+        )
     }
 }
 
 @Composable
 fun AnimeList(
-    animeList: List<AnimeInfo>,
+    screenStateNewAnimeList: State<AnimeListScreenState>,
+    screenStateFilmsAnimeList: State<AnimeListScreenState>,
+    screenStatePopularAnimeList: State<AnimeListScreenState>,
+    screenStateNameAnimeList: State<AnimeListScreenState>,
     onSettingsClick: () -> Unit,
     onThemeButtonClick: () -> Unit,
     viewModel: AnimeListViewModel,
@@ -93,7 +74,14 @@ fun AnimeList(
             darkTheme = darkTheme
         )
 
-        ScrollableTabWithViewPager(animeList, viewModel, onAnimeItemClick)
+        ScrollableTabWithViewPager(
+            screenStateNewAnimeList = screenStateNewAnimeList,
+            screenStateFilmsAnimeList = screenStateFilmsAnimeList,
+            screenStatePopularAnimeList = screenStatePopularAnimeList,
+            screenStateNameAnimeList = screenStateNameAnimeList,
+            viewModel = viewModel,
+            onAnimeItemClick = onAnimeItemClick
+        )
     }
 }
 

@@ -66,7 +66,7 @@ class VideoViewModel @Inject constructor(
         savedStateHandle[VIDEO_URI] = url
         player.prepare()
 
-//        startTimer()
+        startTimer()
     }
 
     fun startTimer() {

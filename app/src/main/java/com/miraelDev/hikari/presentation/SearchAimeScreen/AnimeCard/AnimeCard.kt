@@ -18,12 +18,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.entensions.pressClickEffect
+import com.miraelDev.hikari.exntensions.pressClickEffect
 import com.miraelDev.hikari.ui.theme.Gold
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AnimeCard(onAnimeItemClick:(Int)->Unit) {
+fun AnimeCard(
+    item: AnimeInfo,
+    onAnimeItemClick: (Int) -> Unit
+) {
 
     val animatedProgress = remember { Animatable(initialValue = 0f) }
     LaunchedEffect(Unit) {
@@ -34,13 +37,13 @@ fun AnimeCard(onAnimeItemClick:(Int)->Unit) {
     }
     val animatedModifier = Modifier.alpha(animatedProgress.value)
 
-    val item = AnimeInfo(1)
-
     Card(
         onClick = { onAnimeItemClick(item.id) },
         shape = RoundedCornerShape(16.dp),
         backgroundColor = MaterialTheme.colors.background,
-        modifier = Modifier.fillMaxWidth().pressClickEffect(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .pressClickEffect(),
         elevation = 4.dp
     ) {
         Row(modifier = animatedModifier) {

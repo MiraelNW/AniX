@@ -1,4 +1,4 @@
-package com.miraelDev.hikari.entensions
+package com.miraelDev.hikari.exntensions
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource

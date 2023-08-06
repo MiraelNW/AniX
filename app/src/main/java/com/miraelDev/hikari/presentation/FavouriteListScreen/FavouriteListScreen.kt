@@ -31,7 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.entensions.pressClickEffect
+import com.miraelDev.hikari.exntensions.pressClickEffect
 import com.miraelDev.hikari.presentation.AnimeListScreen.FavouriteSearchView
 
 @Composable

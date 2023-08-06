@@ -1,14 +1,17 @@
 package com.miraelDev.hikari.data.Repository
 
 import com.miraelDev.hikari.data.mapper.Mapper
+import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
+import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class SearchAnimeRepositoryImpl @Inject constructor(
-    mapper: Mapper
+    private val mapper: Mapper,
+    private val searchApiService: SearchApiService,
 ) : SearchAnimeRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -17,6 +20,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()
 
     private val _filterListFlow = MutableStateFlow<List<String>>(listOf())
+
+    private val searchResults = MutableStateFlow<List<AnimeInfo>>(listOf())
 
 
     override fun getFilterList(): StateFlow<List<String>> = _filterListFlow.asStateFlow()
@@ -41,6 +46,13 @@ class SearchAnimeRepositoryImpl @Inject constructor(
         _filterMap = mutableMapOf<Int, String>()
         _filterListFlow.value = listOf()
     }
+
+    override suspend fun searchAnimeByName(name: String) {
+        searchResults.value =
+            mapper.mapAnimeListDtoToListAnimeInfo(searchApiService.searchAnimeByName(name))
+    }
+
+    override fun getAnimeBySearch(): StateFlow<List<AnimeInfo>> = searchResults.asStateFlow()
 
 
 }

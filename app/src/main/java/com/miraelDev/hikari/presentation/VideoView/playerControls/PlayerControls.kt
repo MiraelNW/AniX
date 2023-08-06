@@ -2,7 +2,6 @@ package com.miraelDev.hikari.presentation.VideoView.playerControls
 
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,12 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
 import com.miraelDev.hikari.R
-import com.miraelDev.hikari.entensions.noRippleEffectClick
+import com.miraelDev.hikari.exntensions.noRippleEffectClick
 import com.miraelDev.hikari.presentation.VideoView.DropItem
 import com.miraelDev.hikari.ui.theme.DirtyWhite
 import com.miraelDev.hikari.ui.theme.LightGreen
@@ -62,7 +60,7 @@ fun PlayerControls(
 ) {
 
 
-    val visible = remember(isVisible) { isVisible }
+    val visible = remember(isVisible) { true }
 
     var quality by rememberSaveable {
         mutableStateOf("480")

@@ -3,9 +3,10 @@ package com.miraelDev.hikari.data.Repository
 import com.miraelDev.hikari.data.mapper.Mapper
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
-import com.miraelDev.hikari.entensions.mergeWith
+import com.miraelDev.hikari.exntensions.mergeWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,40 +35,20 @@ class AnimeListRepositoryImpl @Inject constructor(
         AnimeInfo(4),
     )
 
-    private val initialAnimeList = flow { emit(newCategoryList) }
-    private val animeListByCategory = MutableSharedFlow<List<AnimeInfo>>()
+    private val newAnimeList = flowOf(newCategoryList)
 
-    private val animeList = initialAnimeList
-        .mergeWith(animeListByCategory)
-        .stateIn(
-            scope,
-            SharingStarted.Lazily,
-            newCategoryList
-        )
+    private val popularAnimeList = flowOf(popularCategoryList)
 
-    override fun getAnimeListByCategory(category: Int) {
-        val list = when (category) {
-            0 -> {
-                newCategoryList
-            }
-            1 -> {
-                popularCategoryList
-            }
-            2 -> {
-                nameCategoryList
-            }
-            3 -> {
-                filmsCategoryList
-            }
-            else -> {
-                newCategoryList
-            }
-        }
-        scope.launch {
-            animeListByCategory.emit(list)
-        }
-    }
+    private val nameAnimeList = flowOf(nameCategoryList)
 
-    override fun getAnimeList() = animeList
+    private val filmsAnimeList = flowOf(filmsCategoryList)
+
+    override fun getNewAnimeList() = newAnimeList
+
+    override fun getPopularAnimeList(): Flow<List<AnimeInfo>> = popularAnimeList
+
+    override fun getNameAnimeList(): Flow<List<AnimeInfo>> = nameAnimeList
+
+    override fun getFilmsAnimeList(): Flow<List<AnimeInfo>> = filmsAnimeList
 
 }

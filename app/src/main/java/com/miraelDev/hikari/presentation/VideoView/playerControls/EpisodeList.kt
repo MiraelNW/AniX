@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miraelDev.hikari.entensions.noRippleEffectClick
+import com.miraelDev.hikari.exntensions.noRippleEffectClick
 import com.miraelDev.hikari.ui.theme.DarkGray
 import com.miraelDev.hikari.ui.theme.DarkWhite
 
