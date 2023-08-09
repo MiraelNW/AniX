@@ -22,70 +22,72 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.miraelDev.hikari.ui.theme.QuickSand1
 
 @Composable
 fun ExpandableDescription(
-    modifier: Modifier = Modifier,
-    textModifier: Modifier = Modifier,
-    style: TextStyle = LocalTextStyle.current,
-    fontStyle: FontStyle? = null,
-    text: String,
-    collapsedMaxLine: Int = 3,
-    showMoreText: String = "... Show More",
-    showMoreStyle: SpanStyle = SpanStyle(fontWeight = FontWeight.W500),
-    showLessText: String = " Show Less",
-    showLessStyle: SpanStyle = showMoreStyle,
-    textAlign: TextAlign? = null
+        modifier: Modifier = Modifier,
+        textModifier: Modifier = Modifier,
+        style: TextStyle = LocalTextStyle.current,
+        fontStyle: FontStyle? = null,
+        text: String,
+        collapsedMaxLine: Int = 3,
+        showMoreText: String = "... Show More",
+        showMoreStyle: SpanStyle = SpanStyle(fontWeight = FontWeight.W500),
+        showLessText: String = " Show Less",
+        showLessStyle: SpanStyle = showMoreStyle,
+        textAlign: TextAlign? = null
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     var clickable by remember { mutableStateOf(false) }
     var lastCharIndex by remember { mutableStateOf(0) }
     Box(modifier = Modifier
-        .padding(8.dp)
-        .clickable(clickable) {
-            isExpanded = !isExpanded
-        }
-        .then(modifier)
+            .padding(8.dp)
+            .clickable(clickable) {
+                isExpanded = !isExpanded
+            }
+            .then(modifier)
     ) {
         Text(
-            modifier = textModifier
-                .fillMaxWidth()
-                .animateContentSize(),
-            text = buildAnnotatedString {
-                if (clickable) {
-                    if (isExpanded) {
-                        append(text)
-                        withStyle(style = showLessStyle.copy(MaterialTheme.colors.primary)) {
-                            append(
-                                showLessText
-                            )
+                modifier = textModifier
+                        .fillMaxWidth()
+                        .animateContentSize(),
+                text = buildAnnotatedString {
+                    if (clickable) {
+                        if (isExpanded) {
+                            append(text)
+                            withStyle(style = showLessStyle.copy(MaterialTheme.colors.primary)) {
+                                append(
+                                        showLessText
+                                )
+                            }
+                        } else {
+                            val adjustText =
+                                    text.substring(startIndex = 0, endIndex = lastCharIndex)
+                                            .dropLast(showMoreText.length)
+                                            .dropLastWhile { Character.isWhitespace(it) || it == '.' }
+                            append(adjustText)
+                            withStyle(style = showMoreStyle.copy(MaterialTheme.colors.primary)) {
+                                append(
+                                        showMoreText
+                                )
+                            }
                         }
                     } else {
-                        val adjustText =
-                            text.substring(startIndex = 0, endIndex = lastCharIndex)
-                                .dropLast(showMoreText.length)
-                                .dropLastWhile { Character.isWhitespace(it) || it == '.' }
-                        append(adjustText)
-                        withStyle(style = showMoreStyle.copy(MaterialTheme.colors.primary)) {
-                            append(
-                                showMoreText
-                            )
-                        }
+                        append(text)
                     }
-                } else {
-                    append(text)
-                }
-            },
-            maxLines = if (isExpanded) Int.MAX_VALUE else collapsedMaxLine,
-            fontStyle = fontStyle,
-            onTextLayout = { textLayoutResult ->
-                if (!isExpanded && textLayoutResult.hasVisualOverflow) {
-                    clickable = true
-                    lastCharIndex = textLayoutResult.getLineEnd(collapsedMaxLine - 1)
-                }
-            },
-            style = style,
-            textAlign = textAlign
+                },
+                maxLines = if (isExpanded) Int.MAX_VALUE else collapsedMaxLine,
+                fontStyle = fontStyle,
+                fontFamily = QuickSand1,
+                onTextLayout = { textLayoutResult ->
+                    if (!isExpanded && textLayoutResult.hasVisualOverflow) {
+                        clickable = true
+                        lastCharIndex = textLayoutResult.getLineEnd(collapsedMaxLine - 1)
+                    }
+                },
+                style = style,
+                textAlign = textAlign
         )
     }
 

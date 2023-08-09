@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.common.collect.ImmutableList
 import com.miraelDev.hikari.navigation.NavigationState
 
 @Composable
@@ -26,7 +27,7 @@ fun BottomBar(navigationState: NavigationState) {
     val backStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
 
     val items =
-        listOf(
+        ImmutableList.of(
             NavigationItem.Home,
             NavigationItem.Search,
             NavigationItem.Library
@@ -61,7 +62,7 @@ fun RowScope.AddItem(
 ) {
 
     val background =
-        if (selected) MaterialTheme.colors.primary.copy(alpha = 0.6f) else Color.Transparent
+        if (selected) MaterialTheme.colors.primary else Color.Transparent
 
     val contentColor =
         if (selected) Color.White else MaterialTheme.colors.onBackground

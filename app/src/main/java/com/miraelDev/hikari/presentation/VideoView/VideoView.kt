@@ -32,6 +32,7 @@ import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.miraelDev.hikari.presentation.MainScreen.LocalOrientation
 import com.miraelDev.hikari.presentation.VideoView.playerControls.PlayerControls
 import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import com.miraelDev.hikari.presentation.VideoView.utilis.setAutoOrientation
@@ -47,13 +48,14 @@ private const val LANDSCAPE = 1
 fun VideoView(
         onFullScreenToggle: (Int) -> Unit,
         navigateBack: () -> Unit,
-        landscape: Int
 ) {
     val context = LocalContext.current
 
+    val landscape = LocalOrientation.current
+
     val viewModel = hiltViewModel<VideoViewModel>()
 
-    val exoPlayer = remember { viewModel.player }
+    val exoPlayer by  viewModel.playerFlow.collectAsState()
 
     val isFirstEpisode by viewModel.isFirstEpisode.collectAsState()
 
@@ -73,28 +75,14 @@ fun VideoView(
 
     var bufferedPercentage by remember { mutableStateOf(0) }
 
-    val currTime by viewModel.currTime.collectAsState()
-
     var playbackState by remember { mutableStateOf(exoPlayer.playbackState) }
 
     var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
 
     val title = remember { exoPlayer.mediaMetadata.displayTitle.toString() }
 
-
-    val stopTimer: () -> Unit = remember { { viewModel.stopTimer() } }
-
-    val startTimer: () -> Unit = remember { { viewModel.startTimer() } }
-
-    val loadNextVideo: () -> Unit = remember { { viewModel.loadNextVideo() } }
-
-    val loadPreviousVideo: () -> Unit = remember { { viewModel.loadPreviousVideo() } }
-
     val loadVideoSelectedQuality: (String) -> Unit =
             remember { { viewModel.loadVideoSelectedQuality(it) } }
-
-    val seekToChangeCurrTime: (String) -> Unit =
-            remember { { viewModel.seekToChangeCurrTime(it) } }
 
     val onReplayClickSaved: () -> Unit = remember { { exoPlayer.seekBack() } }
 
@@ -178,14 +166,6 @@ fun VideoView(
         }
     }
 
-    LaunchedEffect(key1 = playbackState) {
-        if (autoLoadNextVideo && playbackState == STATE_ENDED) {
-            stopTimer()
-            loadNextVideo()
-            startTimer()
-        }
-    }
-
     LaunchedEffect(key1 = isControlsVisible) {
         if (isControlsVisible){
             delay(3000)
@@ -195,8 +175,8 @@ fun VideoView(
 
     Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
+                    .fillMaxSize()
+                    .background(Color.Black)
     ) {
 
 
@@ -214,7 +194,7 @@ fun VideoView(
                 orientation = orientation,
                 isFirstEpisode = isFirstEpisode,
                 isLastEpisode = isLastEpisode,
-                title = title,
+                title = { title },
                 playbackState = { playbackState },
                 onReplayClick = onReplayClickSaved,
                 onForwardClick = onForwardClickSaved,
@@ -222,7 +202,6 @@ fun VideoView(
                     when {
                         exoPlayer.isPlaying -> {
                             exoPlayer.pause()
-                            stopTimer()
                             clickOnPlayerControls = true
                         }
 
@@ -235,7 +214,6 @@ fun VideoView(
 
                         else -> {
                             exoPlayer.play()
-                            startTimer()
                             clickOnPlayerControls = false
                         }
                     }
@@ -243,11 +221,10 @@ fun VideoView(
                 },
                 totalDuration = { totalDuration },
                 currentTime = { currentTime },
-                currTime = currTime,
+                videoTimer = { currentTime },
                 bufferedPercentage = { bufferedPercentage },
                 onSeekChanged = { timeMs: Float ->
                     exoPlayer.seekTo(timeMs.toLong())
-                    seekToChangeCurrTime(timeMs.formatMinSec())
                     clickOnPlayerControls = true
                 },
                 onValueChangeFinished = {
@@ -268,16 +245,8 @@ fun VideoView(
                     context.setAutoOrientation()
                     navigateBack()
                 },
-                onNextVideoClick = {
-                    stopTimer()
-                    loadNextVideo()
-                    startTimer()
-                },
-                onPreviousVideoClick = {
-                    stopTimer()
-                    loadPreviousVideo()
-                    startTimer()
-                },
+                onNextVideoClick = viewModel::loadNextVideo,
+                onPreviousVideoClick = viewModel::loadPreviousVideo,
                 onEpisodeIconClick = {
                     clickOnPlayerControls = true
                 },
@@ -312,13 +281,13 @@ private fun VideoPlayer(
 
     Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
+                    .fillMaxSize()
+                    .background(Color.Black)
     ) {
         AndroidView(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
+                        .fillMaxSize()
+                        .background(Color.Black),
                 factory = {
                     PlayerView(context).apply {
                         player = exoPlayer

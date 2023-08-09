@@ -1,18 +1,13 @@
 package com.miraelDev.hikari.data.local.Dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+
 import com.miraelDev.hikari.data.local.models.SearchAnimeDbModel
+import hikari.searchDb.SearchHistory
 import kotlinx.coroutines.flow.Flow
 
-@Dao
+
 interface SearchAnimeDao {
+    fun getSearchHistoryList(): Flow<List<String>>
 
-    @Query("SELECT * FROM SearchAnimeTable")
-    fun getAnimeList(): Flow<List<SearchAnimeDbModel>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAnimeInfo(searchAnimeDbModel: SearchAnimeDbModel)
+    suspend fun insertSearchItem(searchItem: String)
 }

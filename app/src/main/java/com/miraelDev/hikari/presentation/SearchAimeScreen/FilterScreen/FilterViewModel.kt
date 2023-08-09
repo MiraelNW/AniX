@@ -2,9 +2,9 @@ package com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.AddToFilterListUseCase
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.ClearAllFiltersInSearchRepository
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.RemoveFromFilterListUseCase
+import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.AddToFilterListUseCase
+import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.ClearAllFiltersInSearchRepository
+import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.RemoveFromFilterListUseCase
 import com.miraelDev.hikari.domain.usecases.filterUsecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,17 +13,17 @@ import javax.inject.Inject
 @HiltViewModel
 class FilterViewModel @Inject constructor(
 
-    private val getGenreListUseCase: GetGenreListUseCase,
-    private val getSortByCategoryUseCase: GetSortByCategoryUseCase,
-    private val getYearCategoryUseCase: GetYearCategoryUseCase,
+        private val getGenreListUseCase: GetGenreListUseCase,
+        private val getSortByCategoryUseCase: GetSortByCategoryUseCase,
+        private val getYearCategoryUseCase: GetYearCategoryUseCase,
 
-    private val addToFilterListUseCase: AddToFilterListUseCase,
-    private val removeFromFilterListUseCase: RemoveFromFilterListUseCase,
+        private val addToFilterListUseCase: AddToFilterListUseCase,
+        private val removeFromFilterListUseCase: RemoveFromFilterListUseCase,
 
-    private val selectCategoryUseCase: SelectCategoryUseCase,
+        private val selectCategoryUseCase: SelectCategoryUseCase,
 
-    private val clearAllFiltersInFilterRepository: ClearAllFiltersInFilterRepository,
-    private val clearAllFiltersInSearchRepository: ClearAllFiltersInSearchRepository
+        private val clearAllFiltersInFilterRepository: ClearAllFiltersInFilterRepository,
+        private val clearAllFiltersInSearchRepository: ClearAllFiltersInSearchRepository
 
 ) : ViewModel() {
 

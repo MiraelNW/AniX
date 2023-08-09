@@ -1,6 +1,6 @@
 package com.miraelDev.hikari.domain.repository
 
-import com.miraelDev.hikari.domain.models.AnimeInfo
+import com.miraelDev.hikari.domain.result.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,6 +16,10 @@ interface SearchAnimeRepository {
 
     suspend fun searchAnimeByName(name: String)
 
-    fun getAnimeBySearch(): Flow<List<AnimeInfo>>
+    suspend fun saveNameInAnimeSearchHistory(name: String)
+
+    fun getSearchHistoryList():Flow<List<String>>
+
+    fun getAnimeBySearch(): Flow<Result>
 
 }

@@ -1,11 +1,10 @@
 package com.miraelDev.hikari.data.local.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "SearchAnimeTable")
+
+//@Entity(tableName = "SearchAnimeTable")
 data class SearchAnimeDbModel(
-    @PrimaryKey
+//    @PrimaryKey
     val id : Int,
     val nameEn: String = "Kimetsu No Yaiba",
     val nameRu: String = "Истерибитель демонов",

@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.SearchAimeScreen
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -18,15 +19,17 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.common.collect.ImmutableList
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.exntensions.pressClickEffect
 import com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen.FilterViewModel
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FilterScreen(
-    onBackPressed: () -> Unit
+        onBackPressed: () -> Unit
 ) {
 
 
@@ -39,145 +42,141 @@ fun FilterScreen(
     val filterSortByCategory by viewModel.sortByCategoryFlow.collectAsState(INITIAL)
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
-        topBar = {
-            Toolbar(
-                onBackPressed = onBackPressed,
-                onClearAllClick = { viewModel.clearAllFilters() }
-            )
-        }
-    ) {
-        BackHandler { onBackPressed() }
-        Box(
             modifier = Modifier
-                .fillMaxSize(),
+                    .fillMaxSize()
+                    .systemBarsPadding(),
+            topBar = {
+                Toolbar(
+                        onBackPressed = onBackPressed,
+                )
+            }
+    ) {
+        BackHandler(onBack = onBackPressed)
+        Box(
+                modifier = Modifier
+                        .fillMaxSize(),
         ) {
             Column(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(16.dp)
-                    .fillMaxSize(),
+                    modifier = Modifier
+                            .padding(it)
+                            .padding(16.dp)
+                            .fillMaxSize(),
             ) {
 
                 Text(
-                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                    text = "Год выпуска",
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif
+                        modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                        text = "Год выпуска",
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = FontFamily.SansSerif
                 )
 
                 FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
 
-                    val filterCategoriesYearList = listOf(
-                        "Онгоинг",
-                        "2023",
-                        "2022",
-                        "2021",
-                        "2015-2020",
-                        "2008-2014",
-                        "2000-2007",
-                        "до 2000",
+                    val filterCategoriesYearList = ImmutableList.of(
+                            "Онгоинг",
+                            "2023",
+                            "2022",
+                            "2021",
+                            "2015-2020",
+                            "2008-2014",
+                            "2000-2007",
+                            "до 2000",
                     )
 
                     filterCategoriesYearList.forEach { category ->
                         CategoryField(category, category == filterYearCategory) {
                             viewModel.selectCategory(
-                                YEAR_CATEGORIES_ID,
-                                category,
-                                category == filterYearCategory
+                                    YEAR_CATEGORIES_ID,
+                                    category,
+                                    category == filterYearCategory
                             )
                         }
                     }
                 }
 
                 Text(
-                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                    text = stringResource(R.string.genre),
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif
+                        modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                        text = stringResource(R.string.genre),
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = FontFamily.SansSerif
                 )
 
                 FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
 
                     filterGenreList.value.forEachIndexed { index, category ->
                         CategoryField(category.name, category.isSelected) {
                             viewModel.selectCategory(
-                                index + 4,
-                                category.name,
-                                category.isSelected
+                                    index + 4,
+                                    category.name,
+                                    category.isSelected
                             )
                         }
                     }
-
                 }
 
                 Text(
-                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                    text = stringResource(R.string.sortBy),
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif
+                        modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
+                        text = stringResource(R.string.sortBy),
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = FontFamily.SansSerif
                 )
 
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
 
-                    val filterCategoriesSortList = listOf(
-                        "Алфавиту",
-                        "Рейтингу",
-                        "Количеству серий",
-                        "Году выхода",
-                        "Дате добавления",
+                    val filterCategoriesSortList = ImmutableList.of(
+                            "Алфавиту",
+                            "Рейтингу",
+                            "Количеству серий",
+                            "Году выхода",
+                            "Дате добавления",
                     )
 
                     filterCategoriesSortList.forEach { category ->
                         CategoryField(category, category == filterSortByCategory) {
                             viewModel.selectCategory(
-                                SORT_CATEGORIES_ID,
-                                category,
-                                category == filterSortByCategory
+                                    SORT_CATEGORIES_ID,
+                                    category,
+                                    category == filterSortByCategory
                             )
                         }
                     }
-
                 }
-
-
             }
+
             FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 16.dp),
-                backgroundColor = MaterialTheme.colors.background,
-                onClick = { viewModel.clearAllFilters() }
+                    modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(bottom = 16.dp, end = 8.dp),
+                    backgroundColor = MaterialTheme.colors.background,
+                    onClick = viewModel::clearAllFilters
             ) {
                 Row(
-                    modifier = Modifier.padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
 
                 ) {
                     Icon(
-                        modifier = Modifier.size(24.dp),
-                        tint = MaterialTheme.colors.primary,
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_bin),
-                        contentDescription = "clear"
+                            modifier = Modifier.size(24.dp),
+                            tint = MaterialTheme.colors.primary,
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_bin),
+                            contentDescription = "clear"
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Очистить",
-                        color = MaterialTheme.colors.primary,
-                        fontSize = 14.sp
+                            text = "Очистить",
+                            color = MaterialTheme.colors.primary,
+                            fontSize = 14.sp
                     )
                 }
 
@@ -189,37 +188,36 @@ fun FilterScreen(
 
 @Composable
 private fun Toolbar(
-    onBackPressed: () -> Unit,
-    onClearAllClick: () -> Unit,
+        onBackPressed: () -> Unit,
 ) {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onBackPressed() }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
                     )
                 }
                 Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
+                        modifier = Modifier
+                                .height(1.dp)
+                                .width(8.dp)
                 )
                 Text(
-                    text = "Фильтр",
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
+                        text = "Фильтр",
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = FontFamily.SansSerif,
                 )
             }
 
@@ -229,31 +227,31 @@ private fun Toolbar(
 
 @Composable
 private fun CategoryField(
-    text: String,
-    selected: Boolean,
-    onCategoryClick: () -> Unit
+        text: String,
+        selected: Boolean,
+        onCategoryClick: () -> Unit
 ) {
 
     OutlinedButton(
-        modifier = Modifier.pressClickEffect(),
-        onClick = { onCategoryClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults
-            .buttonColors(
-                backgroundColor = if (selected) MaterialTheme.colors.primary
-                else MaterialTheme.colors.background
+            modifier = Modifier.pressClickEffect(),
+            onClick = onCategoryClick,
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults
+                    .buttonColors(
+                            backgroundColor = if (selected) MaterialTheme.colors.primary
+                            else MaterialTheme.colors.background
+                    ),
+            elevation = ButtonDefaults.elevation(3.dp),
+            border = BorderStroke(
+                    1.dp, color = MaterialTheme.colors.primary.copy(alpha = 0.9f)
             ),
-        elevation = ButtonDefaults.elevation(3.dp),
-        border = BorderStroke(
-            1.dp, color = MaterialTheme.colors.primary.copy(alpha = 0.9f)
-        ),
     ) {
         Text(
-            text = text,
-            color = if (selected) Color.White
-            else MaterialTheme.colors.primary,
-            maxLines = 1,
-            fontSize = 16.sp
+                text = text,
+                color = if (selected) Color.White
+                else MaterialTheme.colors.primary,
+                maxLines = 1,
+                fontSize = 16.sp
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -35,11 +34,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -52,19 +49,19 @@ import coil.compose.AsyncImage
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.exntensions.pressClickEffect
-import com.miraelDev.hikari.presentation.shimmerList.ShimmerList
+import com.miraelDev.hikari.presentation.ShimmerList.ShimmerList
 import com.miraelDev.hikari.ui.theme.Gold
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScrollableTabWithViewPager(
-    screenStateNewAnimeList: State<AnimeListScreenState>,
-    screenStateFilmsAnimeList: State<AnimeListScreenState>,
-    screenStatePopularAnimeList: State<AnimeListScreenState>,
-    screenStateNameAnimeList: State<AnimeListScreenState>,
-    viewModel: AnimeListViewModel,
-    onAnimeItemClick: (Int) -> Unit
+        screenStateNewAnimeList: State<AnimeListScreenState>,
+        screenStateFilmsAnimeList: State<AnimeListScreenState>,
+        screenStatePopularAnimeList: State<AnimeListScreenState>,
+        screenStateNameAnimeList: State<AnimeListScreenState>,
+        viewModel: AnimeListViewModel,
+        onAnimeItemClick: (Int) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -109,58 +106,56 @@ fun ScrollableTabWithViewPager(
     }
 
     HorizontalPager(
-        modifier = Modifier
-            .padding(top = 8.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)
-            .systemGestureExclusion(),
-        pageCount = categoryList.size,
-        state = pagerState
+            modifier = Modifier
+                    .padding(top = 8.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)
+                    .systemGestureExclusion(),
+            pageCount = categoryList.size,
+            state = pagerState
     ) { page ->
 
         when (page) {
             0 -> {
-                NewAnimeList(
-                    screenState = screenStateNewAnimeList,
-                    onAnimeItemClick = onAnimeItemClick
+                AnimeList(
+                        screenState = screenStateNewAnimeList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
 
             1 -> {
-                NewAnimeList(
-                    screenState = screenStatePopularAnimeList,
-                    onAnimeItemClick = onAnimeItemClick
+                AnimeList(
+                        screenState = screenStatePopularAnimeList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
 
             2 -> {
-                NewAnimeList(
-                    screenState = screenStateNameAnimeList,
-                    onAnimeItemClick = onAnimeItemClick
+                AnimeList(
+                        screenState = screenStateNameAnimeList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
 
             3 -> {
-                NewAnimeList(
-                    screenState = screenStateFilmsAnimeList,
-                    onAnimeItemClick = onAnimeItemClick
+                AnimeList(
+                        screenState = screenStateFilmsAnimeList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
 
             else -> {
-                NewAnimeList(
-                    screenState = screenStateNewAnimeList,
-                    onAnimeItemClick = onAnimeItemClick
+                AnimeList(
+                        screenState = screenStateNewAnimeList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
         }
     }
-
-
 }
 
 @Composable
-private fun NewAnimeList(
-    screenState: State<AnimeListScreenState>,
-    onAnimeItemClick: (Int) -> Unit
+private fun AnimeList(
+        screenState: State<AnimeListScreenState>,
+        onAnimeItemClick: (Int) -> Unit
 ) {
     when (val currentState = screenState.value) {
 
@@ -168,18 +163,22 @@ private fun NewAnimeList(
             ShimmerList()
         }
 
+        is AnimeListScreenState.Failure -> {
+            ShimmerList()
+        }
+
         is AnimeListScreenState.AnimeList -> {
             Box(Modifier.fillMaxSize()) {
                 LazyColumn(
-                    contentPadding = PaddingValues(
-                        top = 4.dp,
-                        bottom = 8.dp,
-                        start = 4.dp,
-                        end = 4.dp
-                    ),
-                    state = rememberLazyListState(),
-                    modifier = Modifier.navigationBarsPadding(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                        contentPadding = PaddingValues(
+                                top = 4.dp,
+                                bottom = 8.dp,
+                                start = 4.dp,
+                                end = 4.dp
+                        ),
+                        state = rememberLazyListState(),
+                        modifier = Modifier.navigationBarsPadding(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(items = currentState.animes, key = { it.id }) {
                         AnimeCard(animeItem = it, onAnimeItemClick = onAnimeItemClick)

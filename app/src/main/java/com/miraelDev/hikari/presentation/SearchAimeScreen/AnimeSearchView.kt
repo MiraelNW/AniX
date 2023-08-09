@@ -80,9 +80,7 @@ fun AnimeSearchView(
                 .height(animatedHeightState)
                 .focusRequester(focusRequester),
             value = text,
-            onValueChange = {
-                onTextChange(it)
-            },
+            onValueChange = onTextChange,
             enabled = true,
             singleLine = true,
             interactionSource = source,

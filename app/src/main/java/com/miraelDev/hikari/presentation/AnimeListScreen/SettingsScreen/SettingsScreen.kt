@@ -1,6 +1,7 @@
 package com.miraelDev.hikari.presentation.AnimeListScreen.SettingsScreen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,41 +23,51 @@ import com.miraelDev.hikari.R
 
 @Composable
 fun SettingsScreen(
-    onBackPressed: () -> Unit,
-    onSettingItemClick: (Int) -> Unit
+        onBackPressed: () -> Unit,
+        onSettingItemClick: (Int) -> Unit
 ) {
 
     BackHandler { onBackPressed() }
 
     Column(
-        modifier = Modifier.systemBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Toolbar(onBackPressed = onBackPressed)
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(Icons.Filled.Person, contentDescription = "Logo", Modifier.size(128.dp))
+            Icon(
+                    modifier = Modifier
+                            .size(128.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(MaterialTheme.colors.primary.copy(0.1f))
+                            .size(116.dp)
+                    ,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_brand_icon),
+                    contentDescription = "Logo",
+                    tint = MaterialTheme.colors.primary
+            )
             Text(
-                modifier = Modifier.padding(bottom = 16.dp),
-                text = "Anix",
-                fontSize = 48.sp,
-                color = MaterialTheme.colors.primary
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    text = stringResource(id = R.string.app_name),
+                    fontSize = 48.sp,
+                    color = MaterialTheme.colors.primary
             )
         }
 
         val settingsItems = listOf(
-            "Уведомления" to Icons.Filled.Notifications,
-            "Язык" to Icons.Filled.Person,
-            "Политика сообщества" to Icons.Filled.Settings,
-            "Цветовая палитра" to Icons.Filled.Settings
+                "Уведомления" to Icons.Filled.Notifications,
+                "Язык" to Icons.Filled.Person,
+                "Политика сообщества" to Icons.Filled.Settings,
+                "Цветовая палитра" to Icons.Filled.Settings
         )
 
         Column() {
             settingsItems.forEachIndexed { index, textWithIconId ->
                 SettingItem(
-                    index = index,
-                    text = textWithIconId.first,
-                    icon = textWithIconId.second,
-                    onSettingItemClick = onSettingItemClick
+                        index = index,
+                        text = textWithIconId.first,
+                        icon = textWithIconId.second,
+                        onSettingItemClick = onSettingItemClick
                 )
             }
         }
@@ -65,77 +77,77 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingItem(
-    index: Int,
-    text: String,
-    icon: ImageVector,
-    onSettingItemClick: (Int) -> Unit
+        index: Int,
+        text: String,
+        icon: ImageVector,
+        onSettingItemClick: (Int) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .clickable { onSettingItemClick(index) }
-            .padding(8.dp)
-            .border(0.dp,MaterialTheme.colors.background)
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { onSettingItemClick(index) }
+                    .padding(8.dp)
+                    .border(0.dp, MaterialTheme.colors.background)
+                    .padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = icon,
-                contentDescription = text,
-                tint = MaterialTheme.colors.primary
+                    modifier = Modifier.size(24.dp),
+                    imageVector = icon,
+                    contentDescription = text,
+                    tint = MaterialTheme.colors.primary
             )
             Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = text,
-                fontSize = 18.sp
+                    text = text,
+                    fontSize = 18.sp
             )
         }
 
         Icon(
-            imageVector = Icons.Filled.ArrowForward,
-            contentDescription = "Show",
-            tint = MaterialTheme.colors.primary
+                imageVector = Icons.Filled.ArrowForward,
+                contentDescription = "Show",
+                tint = MaterialTheme.colors.primary
         )
     }
 }
 
 @Composable
 private fun Toolbar(
-    onBackPressed: () -> Unit,
+        onBackPressed: () -> Unit,
 ) {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { onBackPressed() }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
                     )
                 }
                 Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
+                        modifier = Modifier
+                                .height(1.dp)
+                                .width(8.dp)
                 )
                 Text(
-                    text = "Настройки",
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
+                        text = "Настройки",
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = FontFamily.SansSerif,
                 )
             }
 

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.miraelDev.hikari.domain.models.AnimeInfo
 
 @Composable
-fun LastSearchedAnime(animeInfo: AnimeInfo) {
+fun LastSearchedAnime(searchName: String,onSearchItemClick: (String) -> Unit) {
 
     val animatedProgress = remember { Animatable(initialValue = 300f) }
     val opacityProgress = remember { Animatable(initialValue = 0f) }
@@ -43,7 +43,7 @@ fun LastSearchedAnime(animeInfo: AnimeInfo) {
         modifier = animatedModifier
             .clip(shape = RoundedCornerShape(16.dp))
             .background(MaterialTheme.colors.background)
-            .clickable { }
+            .clickable { onSearchItemClick(searchName) }
             .fillMaxWidth(),
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
@@ -58,7 +58,7 @@ fun LastSearchedAnime(animeInfo: AnimeInfo) {
                     .width(16.dp)
             )
             Text(
-                text = animeInfo.nameEn,
+                text = searchName,
                 color = MaterialTheme.colors.onBackground
             )
         }

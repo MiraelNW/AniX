@@ -24,52 +24,53 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.hikari.R
+import com.miraelDev.hikari.ui.theme.QuickSand
 
 @Composable
 fun Toolbar(
-    onSettingsClick: () -> Unit,
-    onThemeButtonClick: () -> Unit,
-    darkTheme: Boolean
+        onSettingsClick: () -> Unit,
+        onThemeButtonClick: () -> Unit,
+        darkTheme: Boolean
 ) {
     TopAppBar(
-        modifier = Modifier.statusBarsPadding(),
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
+            modifier = Modifier.statusBarsPadding(),
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
-            ){
+                    verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
-                        .size(32.dp)
-                    ,
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
-                    contentDescription ="brand icon",
-                    tint = MaterialTheme.colors.primary
+                        modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
+                                .size(32.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
+                        contentDescription = "brand icon",
+                        tint = MaterialTheme.colors.primary
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = stringResource(id = R.string.app_name),
-                    color = MaterialTheme.colors.primary,
-                    fontSize = 24.sp
+                        text = stringResource(id = R.string.app_name),
+                        color = MaterialTheme.colors.primary,
+                        fontFamily = QuickSand,
+                        fontSize = 24.sp
                 )
             }
 
 
             SettingsAndThemeButtons(
-                onSettingsClick = onSettingsClick,
-                onThemeButtonClick = onThemeButtonClick,
-                darkTheme = darkTheme
+                    onSettingsClick = onSettingsClick,
+                    onThemeButtonClick = onThemeButtonClick,
+                    darkTheme = darkTheme
             )
 
         }

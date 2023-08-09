@@ -1,13 +1,15 @@
 package com.miraelDev.hikari.di
 
 import android.app.Application
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.miraelDev.database.AppDatabase
 import com.miraelDev.hikari.data.Repository.AnimeDetailRepositoryImpl
 import com.miraelDev.hikari.data.Repository.AnimeListRepositoryImpl
 import com.miraelDev.hikari.data.Repository.FilterRepositoryImpl
 import com.miraelDev.hikari.data.Repository.SearchAnimeRepositoryImpl
-import com.miraelDev.hikari.data.local.AppDataBase
-import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
+import com.miraelDev.hikari.data.local.Dao.SearchAnimeDaoImpl
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
 import com.miraelDev.hikari.domain.repository.FilterAnimeRepository
@@ -38,17 +40,28 @@ abstract class DataModule {
     @Singleton
     abstract fun bindAnimeDetailRepository(impl: AnimeDetailRepositoryImpl): AnimeDetailRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindSearchAnimeDao(impl: SearchAnimeDaoImpl): SearchAnimeDao
+
 
     companion object {
         @Provides
-        fun provideSearchAnimeDao(application: Application): SearchAnimeDao {
-            return AppDataBase.getInstance(application).searchAnimeDao()
+        @Singleton
+        fun provideSqlDriver(app: Application): SqlDriver {
+            return AndroidSqliteDriver(
+                    schema = AppDatabase.Schema,
+                    context = app,
+                    name = "app_database"
+            )
         }
 
         @Provides
-        fun provideFavouriteAnimeDao(application: Application): FavouriteAnimeDao {
-            return AppDataBase.getInstance(application).favouriteAnimeDao()
+        @Singleton
+        fun provideDatabase(driver: SqlDriver): AppDatabase {
+            return AppDatabase(driver)
         }
+
     }
 
 }

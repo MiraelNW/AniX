@@ -1,0 +1,12 @@
+CREATE TABLE searchHistory(
+    name TEXT NOT NULL PRIMARY KEY
+);
+
+getSearchHistory:
+SELECT *
+FROM searchHistory;
+
+insertSearchHistoryItem:
+INSERT OR REPLACE
+INTO searchHistory
+VALUES (?);

@@ -43,7 +43,7 @@ class AnimeListRepositoryImpl @Inject constructor(
 
     private val filmsAnimeList = flowOf(filmsCategoryList)
 
-    override fun getNewAnimeList() = newAnimeList
+    override fun getNewAnimeList() =  newAnimeList
 
     override fun getPopularAnimeList(): Flow<List<AnimeInfo>> = popularAnimeList
 
