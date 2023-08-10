@@ -1,6 +1,7 @@
 package com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -25,10 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.miraelDev.hikari.domain.models.AnimeInfo
+import com.miraelDev.hikari.domain.result.Result
+import com.miraelDev.hikari.presentation.SearchAimeScreen.SearchAnimeScreenState
+import com.miraelDev.hikari.presentation.ShimmerList.ShimmerList
+import com.miraelDev.hikari.presentation.ShimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun AnimeDetailScreen(
         animeId: Int,
@@ -40,15 +46,48 @@ fun AnimeDetailScreen(
 
     val viewModel = hiltViewModel<AnimeDetailViewModel>()
 
-    viewModel.loadAnimeDetailUseCase(animeId)
-
-    val animeDetail by viewModel.animeDetail.collectAsState()
-
-    val list = mutableListOf<AnimeInfo>().apply {
-        repeat(20) {
-            add(AnimeInfo(it))
-        }
+    LaunchedEffect(Unit) {
+        viewModel.loadAnimeDetailUseCase(animeId)
     }
+
+    val screenState by viewModel.animeDetail.collectAsState(AnimeDetailScreenState.Initial)
+
+    when (val results = screenState) {
+
+        is AnimeDetailScreenState.SearchResult -> {
+            DetailScreen(
+                    animeDetail = results.result.first(),
+                    onBackPressed = onBackPressed,
+                    onAnimeItemClick = onAnimeItemClick,
+                    onSeriesClick = { videoId ->
+                        viewModel.loadVideoIdUseCase(videoId)
+                        onSeriesClick()
+                    }
+            )
+        }
+
+        is AnimeDetailScreenState.SearchFailure -> {
+            Log.d("tag", "failure")
+        }
+
+        is AnimeDetailScreenState.Loading -> {
+            Log.d("tag", "load")
+            ShimmerListAnimeDetail()
+        }
+
+        is AnimeDetailScreenState.Initial -> {}
+    }
+
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun DetailScreen(
+        animeDetail: AnimeInfo,
+        onBackPressed: () -> Unit,
+        onSeriesClick: (Int) -> Unit,
+        onAnimeItemClick:(Int)->Unit
+) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -58,6 +97,12 @@ fun AnimeDetailScreen(
 
     var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
     val configuration = LocalConfiguration.current
+
+    val list = mutableListOf<AnimeInfo>().apply {
+        repeat(20) {
+            add(AnimeInfo(it))
+        }
+    }
 
     LaunchedEffect(configuration) {
         snapshotFlow { configuration.orientation }
@@ -79,10 +124,7 @@ fun AnimeDetailScreen(
                         onDismiss = {
                             showSeriesDialog = false
                         },
-                        onSeriesClick = { videoId ->
-                            viewModel.loadVideoIdUseCase(videoId)
-                            onSeriesClick()
-                        }
+                        onSeriesClick = onSeriesClick
                 )
             }
 
@@ -129,7 +171,6 @@ fun AnimeDetailScreen(
             BackIcon(onBackPressed = onBackPressed)
         }
     }
-
 }
 
 

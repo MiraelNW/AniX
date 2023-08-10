@@ -37,9 +37,8 @@ fun SearchAnimeScreen(
 
     val searchTextState by viewModel.searchTextState
     val filterList by viewModel.filterList.collectAsState(listOf())
-    val searchState by viewModel.animeBySearch.collectAsState()
+    val searchState by viewModel.animeBySearch.collectAsState(SearchAnimeScreenState.Initial)
     val searchHistory by viewModel.searchHistory.collectAsState()
-
     Column(
             modifier = Modifier
                     .systemBarsPadding()
@@ -53,14 +52,23 @@ fun SearchAnimeScreen(
         var openSearchHistory by rememberSaveable {
             mutableStateOf(false)
         }
+
         var showSearchResult by rememberSaveable {
             mutableStateOf(false)
+        }
+        var isSearchHistoryItemClick by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        var animeList by remember {
+            mutableStateOf(listOf<AnimeInfo>())
         }
 
         val filterListState = rememberLazyListState()
 
         AnimeSearchView(
                 text = searchTextState,
+                isSearchHistoryItemClick = isSearchHistoryItemClick,
                 showFilter = openSearchHistory || showSearchResult,
                 onTextChange = {
                     viewModel.updateSearchTextState(it)
@@ -72,6 +80,7 @@ fun SearchAnimeScreen(
                     openSearchHistory = false
                     showSearchResult = true
                     viewModel.searchAnimeByName(name = it)
+                    isSearchHistoryItemClick = false
                 },
                 clickOnSearchView = {
                     openSearchHistory = true
@@ -104,7 +113,7 @@ fun SearchAnimeScreen(
                         searchHistory = searchHistory,
                         onSearchItemClick = {
                             viewModel.updateSearchTextState(it)
-                            viewModel.searchAnimeByName(it)
+                            isSearchHistoryItemClick = true
                         }
                 )
             }
@@ -116,16 +125,19 @@ fun SearchAnimeScreen(
                 when (val results = searchState) {
 
                     is SearchAnimeScreenState.SearchResult -> {
+                        animeList = results.result
                         SearchResult(
-                                searchResults = results.result,
+                                searchResults = animeList,
                                 onAnimeItemClick = onAnimeItemClick
                         )
                     }
 
                     is SearchAnimeScreenState.SearchFailure -> {
+                        Log.d("tag", "failure")
                     }
 
                     is SearchAnimeScreenState.Loading -> {
+                        Log.d("tag", "load")
                         ShimmerList()
                     }
 

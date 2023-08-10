@@ -4,20 +4,26 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.Glide.init
 import com.miraelDev.hikari.domain.models.AnimeInfo
+import com.miraelDev.hikari.domain.result.Result
 import com.miraelDev.hikari.domain.usecases.GetAnimeDetailUseCase
 import com.miraelDev.hikari.domain.usecases.GetVideoIdUseCase
 import com.miraelDev.hikari.domain.usecases.LoadVideoIdUseCase
+import com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay.AnimeDetailScreenState
 import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
@@ -31,6 +37,7 @@ class VideoViewModel @Inject constructor(
     val player: ExoPlayer
 ) : ViewModel() {
 
+    private lateinit var animeDetail : AnimeInfo
 
     private val videoUrlState = savedStateHandle.getStateFlow(VIDEO_URI, "")
 
@@ -49,7 +56,31 @@ class VideoViewModel @Inject constructor(
     val currTime: StateFlow<String> get() = _currTime.asStateFlow()
     private val _currTime = MutableStateFlow("")
 
-    private val animeDetail = getAnimeDetailUseCase().value
+    private val screenState = getAnimeDetailUseCase()
+            .map {
+                when (val res = it) {
+
+                    is Result.Success -> {
+                        animeDetail = res.animeList[0]
+                        AnimeDetailScreenState.SearchResult(result = res.animeList) as AnimeDetailScreenState
+                    }
+
+                    is Result.Failure -> {
+                        AnimeDetailScreenState.SearchFailure(failure = res.failureCause)as AnimeDetailScreenState
+                    }
+
+                    else -> {
+                        AnimeDetailScreenState.Loading as AnimeDetailScreenState
+                    }
+
+                }
+            }
+            .stateIn(
+                    viewModelScope,
+                    SharingStarted.Lazily,
+                    AnimeInfo(0)
+            )
+
     private val videoId = getVideoIdUseCase()
 
     val isFirstEpisode = MutableStateFlow(videoId.value == 0)

@@ -1,6 +1,7 @@
 package com.miraelDev.hikari.di
 
 import android.app.Application
+import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.miraelDev.database.AppDatabase
@@ -10,6 +11,7 @@ import com.miraelDev.hikari.data.Repository.FilterRepositoryImpl
 import com.miraelDev.hikari.data.Repository.SearchAnimeRepositoryImpl
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDaoImpl
+import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
 import com.miraelDev.hikari.domain.repository.FilterAnimeRepository
@@ -18,6 +20,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -36,6 +39,7 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindFilterRepository(impl: FilterRepositoryImpl): FilterAnimeRepository
+
     @Binds
     @Singleton
     abstract fun bindAnimeDetailRepository(impl: AnimeDetailRepositoryImpl): AnimeDetailRepository
@@ -61,6 +65,12 @@ abstract class DataModule {
         fun provideDatabase(driver: SqlDriver): AppDatabase {
             return AppDatabase(driver)
         }
+
+//        @Provides
+//        @Singleton
+//        fun provideNetworkHandler(@ApplicationContext context: Context): NetworkHandler {
+//            return NetworkHandler(context)
+//        }
 
     }
 

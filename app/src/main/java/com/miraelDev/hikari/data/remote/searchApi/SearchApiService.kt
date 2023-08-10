@@ -4,4 +4,6 @@ interface SearchApiService {
 
     suspend fun searchAnimeByName(name: String): ApiResult
 
+    suspend fun getAnimeById(id:Int):ApiResult
+
 }
