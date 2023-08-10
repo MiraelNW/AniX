@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:name=".HikariApplication"
         android:networkSecurityConfig="@xml/network_conf"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hikari.Starting"
         tools:targetApi="31">

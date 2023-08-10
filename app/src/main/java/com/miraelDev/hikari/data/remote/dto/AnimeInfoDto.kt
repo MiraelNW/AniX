@@ -12,6 +12,8 @@ data class AnimeInfoDto(
 
     @SerialName("russian") val russianName : String,
 
+    @SerialName("image") val image : String,
+
     @SerialName("kind") val kind : String,
 
     @SerialName("score") val score : Float,

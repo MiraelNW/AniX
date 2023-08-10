@@ -9,15 +9,16 @@ class Mapper @Inject constructor() {
     fun mapAnimeListDtoToListAnimeInfo(animes: List<AnimeInfoDto>): List<AnimeInfo> {
         return animes.map {
             AnimeInfo(
-                id = it.id,
-                nameEn = it.name,
-                nameRu = it.russianName,
-                kind = it.kind,
-                description = it.description,
-                episodes = it.episodes,
-                score = it.score,
-                status = it.status,
-                rating = it.rating,
+                    id = it.id,
+                    nameEn = it.name,
+                    nameRu = it.russianName,
+                    kind = it.kind,
+                    description = it.description,
+                    episodes = it.episodes,
+                    image = it.image,
+                    score = it.score,
+                    status = it.status,
+                    rating = it.rating,
             )
         }
     }
