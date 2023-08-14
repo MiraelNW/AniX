@@ -18,17 +18,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 object ViewModelModule {
 
-    private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L
-    private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L
-    @Provides
-    @ViewModelScoped
-    fun provideVideoPlayer(application: Application): ExoPlayer {
-        return ExoPlayer.Builder(application)
-            .apply {
-                setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
-                setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
-            }
-            .build()
-    }
+
 
 }

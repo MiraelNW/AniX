@@ -30,10 +30,13 @@ import com.miraelDev.hikari.ui.theme.ColorPallet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+val LocalOrientation = compositionLocalOf<Int> { error("no provide value") }
+val LocalColor = compositionLocalOf<ColorPallet> { error("no provide value") }
+
+
 @UnstableApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,37 +54,55 @@ class MainActivity : ComponentActivity() {
 
             var landscape by rememberSaveable { mutableStateOf(0) }
 
+            var colorPallet by rememberSaveable { mutableStateOf(ColorPallet.GREEN) }
+
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
-            HikariTheme(darkTheme) {
-                var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
+            CompositionLocalProvider(
+                    LocalOrientation provides landscape,
+                    LocalColor provides colorPallet
+            ) {
+                HikariTheme(darkTheme) {
+                    var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
 
-                DisposableEffect(systemUiController, useDarkIcons) {
-                    systemUiController.setSystemBarsColor(
-                            color = Color.Transparent,
-                            darkIcons = !useDarkIcons
-                    )
-                    onDispose {}
-                }
+                    DisposableEffect(systemUiController, useDarkIcons) {
+                        systemUiController.setSystemBarsColor(
+                                color = Color.Transparent,
+                                darkIcons = !useDarkIcons
+                        )
+                        onDispose {}
+                    }
 
-                MainScreen(
-                        onThemeButtonClick = {
-                            darkTheme = !darkTheme
-                            useDarkIcons = !useDarkIcons
-                        },
-                        onFullScreenToggle = { landscape = it },
-                        onVideoViewClick = { isVideoViewOpen ->
-                            if (!darkTheme) {
+                    MainScreen(
+                            onThemeButtonClick = {
+                                darkTheme = !darkTheme
                                 useDarkIcons = !useDarkIcons
+                            },
+                            onFullScreenToggle = { landscape = it },
+                            onVideoViewClick = { isVideoViewOpen ->
+                                if (!darkTheme) {
+                                    useDarkIcons = !useDarkIcons
+                                }
+                                when (isVideoViewOpen) {
+                                    BACK -> shouldShowSystemBars = true
+                                    ON_VIDEO_VIEW -> shouldShowSystemBars = false
+                                }
+                            },
+                            onColorThemeChoose = { color ->
+                                when (color) {
+                                    0 -> {
+                                        colorPallet = ColorPallet.GREEN
+                                    }
+
+                                    1 -> {
+                                        colorPallet = ColorPallet.RED
+                                    }
+                                }
                             }
-                            when (isVideoViewOpen) {
-                                BACK -> shouldShowSystemBars = true
-                                ON_VIDEO_VIEW -> shouldShowSystemBars = false
-                            }
-                        },
-                        onColorThemeChoose = {}
-                )
+                    )
+                }
             }
+
 
             observeState(isFullScreen = landscape, shouldShowSystemBars = shouldShowSystemBars)
         }

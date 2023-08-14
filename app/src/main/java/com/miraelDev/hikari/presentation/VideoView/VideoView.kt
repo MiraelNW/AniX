@@ -1,6 +1,7 @@
 package com.miraelDev.hikari.presentation.VideoView
 
 import android.content.res.Configuration
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
@@ -34,7 +35,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.miraelDev.hikari.presentation.MainScreen.LocalOrientation
 import com.miraelDev.hikari.presentation.VideoView.playerControls.PlayerControls
-import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import com.miraelDev.hikari.presentation.VideoView.utilis.setAutoOrientation
 import com.miraelDev.hikari.presentation.VideoView.utilis.setLandscape
 import com.miraelDev.hikari.presentation.VideoView.utilis.setPortrait
@@ -45,21 +45,61 @@ private const val LANDSCAPE = 1
 
 @UnstableApi
 @Composable
-fun VideoView(
+fun VideoViewScreen(
         onFullScreenToggle: (Int) -> Unit,
         navigateBack: () -> Unit,
+) {
+    val viewModel = hiltViewModel<VideoViewModel>()
+
+    val playerWrapper by viewModel.screenState.collectAsState()
+
+//    when (val res = screenState.value) {
+//
+//        is VideoViewScreenState.Result -> {
+//            val playerWrapper = res.result
+    VideoView(
+            exoPlayer = playerWrapper.exoPlayer,
+            isFirstEpisode = playerWrapper.isFirstEpisode,
+            isLastEpisode = playerWrapper.isLastEpisode,
+            title = playerWrapper.title,
+            onFullScreenToggle = onFullScreenToggle,
+            navigateBack = navigateBack,
+            onNextVideoClick = viewModel::loadNextVideo,
+            onPreviousVideoClick = viewModel::loadPreviousVideo,
+            onEpisodeItemClick = viewModel::loadSpecificEpisode,
+            loadVideoSelectedQuality = viewModel::loadVideoSelectedQuality
+    )
+//        }
+
+//        is VideoViewScreenState.Failure -> {
+//
+//        }
+//
+//        is VideoViewScreenState.Loading -> {
+//
+//        }
+//
+//        is VideoViewScreenState.Initial -> {}
+//
+//    }
+}
+
+@Composable
+private fun VideoView(
+        exoPlayer: ExoPlayer,
+        isFirstEpisode: Boolean,
+        isLastEpisode: Boolean,
+        title: String,
+        onFullScreenToggle: (Int) -> Unit,
+        navigateBack: () -> Unit,
+        onNextVideoClick: () -> Unit,
+        onPreviousVideoClick: () -> Unit,
+        onEpisodeItemClick: (Int) -> Unit,
+        loadVideoSelectedQuality: (String) -> Unit,
 ) {
     val context = LocalContext.current
 
     val landscape = LocalOrientation.current
-
-    val viewModel = hiltViewModel<VideoViewModel>()
-
-    val exoPlayer by  viewModel.playerFlow.collectAsState()
-
-    val isFirstEpisode by viewModel.isFirstEpisode.collectAsState()
-
-    val isLastEpisode by viewModel.isLastEpisode.collectAsState()
 
     var clickOnPlayerControls by remember { mutableStateOf(false) }
 
@@ -73,16 +113,13 @@ fun VideoView(
 
     var currentTime by remember { mutableStateOf(0L) }
 
+    var videoTime by rememberSaveable { mutableStateOf(0L) }
+
     var bufferedPercentage by remember { mutableStateOf(0) }
 
     var playbackState by remember { mutableStateOf(exoPlayer.playbackState) }
 
     var onToggleButtonCLick by rememberSaveable { mutableStateOf(false) }
-
-    val title = remember { exoPlayer.mediaMetadata.displayTitle.toString() }
-
-    val loadVideoSelectedQuality: (String) -> Unit =
-            remember { { viewModel.loadVideoSelectedQuality(it) } }
 
     val onReplayClickSaved: () -> Unit = remember { { exoPlayer.seekBack() } }
 
@@ -101,6 +138,7 @@ fun VideoView(
             Configuration.ORIENTATION_LANDSCAPE -> {
                 onFullScreenToggle(LANDSCAPE)
             }
+
             else -> {
                 onFullScreenToggle(PORTRAIT)
             }
@@ -142,8 +180,6 @@ fun VideoView(
         }
     }
 
-
-
     DisposableEffect(key1 = Unit) {
         val listener =
                 object : Player.Listener {
@@ -167,7 +203,7 @@ fun VideoView(
     }
 
     LaunchedEffect(key1 = isControlsVisible) {
-        if (isControlsVisible){
+        if (isControlsVisible) {
             delay(3000)
             isControlsVisible = false
         }
@@ -194,7 +230,7 @@ fun VideoView(
                 orientation = orientation,
                 isFirstEpisode = isFirstEpisode,
                 isLastEpisode = isLastEpisode,
-                title = { title },
+                title = title,
                 playbackState = { playbackState },
                 onReplayClick = onReplayClickSaved,
                 onForwardClick = onForwardClickSaved,
@@ -207,8 +243,8 @@ fun VideoView(
 
                         exoPlayer.isPlaying.not() &&
                                 exoPlayer.playbackState == STATE_ENDED -> {
-
                             exoPlayer.seekTo(0)
+                            videoTime = 0
                             exoPlayer.playWhenReady = true
                         }
 
@@ -220,8 +256,7 @@ fun VideoView(
                     isPlaying = isPlaying.not()
                 },
                 totalDuration = { totalDuration },
-                currentTime = { currentTime },
-                videoTimer = { currentTime },
+                currentTime = currentTime,
                 bufferedPercentage = { bufferedPercentage },
                 onSeekChanged = { timeMs: Float ->
                     exoPlayer.seekTo(timeMs.toLong())
@@ -245,15 +280,15 @@ fun VideoView(
                     context.setAutoOrientation()
                     navigateBack()
                 },
-                onNextVideoClick = viewModel::loadNextVideo,
-                onPreviousVideoClick = viewModel::loadPreviousVideo,
+                onNextVideoClick = onNextVideoClick,
+                onPreviousVideoClick = onPreviousVideoClick,
                 onEpisodeIconClick = {
                     clickOnPlayerControls = true
                 },
                 onCloseEpisodeList = {
                     clickOnPlayerControls = false
                 },
-                onEpisodeItemClick = viewModel::loadSpecificEpisode,
+                onEpisodeItemClick = onEpisodeItemClick,
                 changeVisibleState = {
                     isControlsVisible = !isControlsVisible
                 },

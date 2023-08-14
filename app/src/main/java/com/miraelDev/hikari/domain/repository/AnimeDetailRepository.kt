@@ -9,7 +9,5 @@ interface AnimeDetailRepository {
 
     fun getAnimeDetail():Flow<Result>
     suspend fun loadAnimeDetail(animeId:Int)
-    fun loadVideoId(videoId:Int)
-    fun getVideoId(): StateFlow<Int>
 
 }

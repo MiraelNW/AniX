@@ -1,12 +1,11 @@
 package com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraelDev.hikari.domain.result.Result
 import com.miraelDev.hikari.domain.usecases.GetAnimeDetailUseCase
 import com.miraelDev.hikari.domain.usecases.LoadAnimeDetailUseCase
-import com.miraelDev.hikari.domain.usecases.LoadVideoIdUseCase
+import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadVideoIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map

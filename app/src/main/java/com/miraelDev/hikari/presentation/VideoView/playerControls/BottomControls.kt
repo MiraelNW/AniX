@@ -1,6 +1,5 @@
 package com.miraelDev.hikari.presentation.VideoView.playerControls
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,12 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,86 +33,82 @@ import com.miraelDev.hikari.presentation.VideoView.DropItem
 import com.miraelDev.hikari.presentation.VideoView.QualityItems
 import com.miraelDev.hikari.presentation.VideoView.utilis.formatMinSec
 import com.miraelDev.hikari.ui.theme.DirtyWhite
-import okhttp3.internal.immutableListOf
+import kotlinx.coroutines.delay
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
 
 @Composable
 fun BottomControls(
-    modifier: Modifier,
-    quality: String,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
-    isFullScreen: Int,
-    currTime: String,
-    bufferedPercentage: () -> Int,
-    onValueChangeFinished: () -> Unit,
-    onSeekChanged: (timeMs: Float) -> Unit,
-    onFullScreenToggle: (Int) -> Unit,
-    onMenuItemClick: (DropItem) -> Unit,
-    onOpenQualityMenu: () -> Unit,
+        modifier: Modifier,
+        quality: String,
+        totalDuration: () -> Long,
+        currentTime: Long,
+        isFullScreen: Int,
+        bufferedPercentage: () -> Int,
+        onValueChangeFinished: () -> Unit,
+        onSeekChanged: (timeMs: Float) -> Unit,
+        onFullScreenToggle: (Int) -> Unit,
+        onMenuItemClick: (DropItem) -> Unit,
+        onOpenQualityMenu: () -> Unit,
 ) {
 
     val duration = remember(totalDuration()) { totalDuration() }
-
-    val videoTime = remember(currentTime()) { currentTime() }
 
     val buffer = remember(bufferedPercentage()) { bufferedPercentage() }
 
     val onFullScreenToggleSaved: (Int) -> Unit = remember { { onFullScreenToggle(it) } }
 
     val isFullScreenSaved = remember { isFullScreen }
+
     Column(
-        modifier = modifier
-            .padding(bottom = 16.dp, start = 24.dp, end = 16.dp)
-            .navigationBarsPadding()
+            modifier = modifier
+                    .padding(bottom = 16.dp, start = 24.dp, end = 16.dp)
+                    .navigationBarsPadding()
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Slider(
-                value = buffer.toFloat(),
-                enabled = false,
-                onValueChange = { /*do nothing*/ },
-                valueRange = 0f..100f,
-                colors =
-                SliderDefaults.colors(
-                    disabledThumbColor = Color.Transparent,
-                    disabledActiveTrackColor = Color.Gray
-                )
+                    value = buffer.toFloat(),
+                    enabled = false,
+                    onValueChange = { /*do nothing*/ },
+                    valueRange = 0f..100f,
+                    colors =
+                    SliderDefaults.colors(
+                            disabledThumbColor = Color.Transparent,
+                            disabledActiveTrackColor = Color.Gray
+                    )
             )
 
             Slider(
-                modifier = Modifier.fillMaxWidth(),
-                value = videoTime.toFloat(),
-                onValueChange = onSeekChanged,
-                onValueChangeFinished = onValueChangeFinished,
-                valueRange = 0f..duration.toFloat(),
-                colors =
-                SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colors.primary,
-                    inactiveTrackColor = DirtyWhite.copy(alpha = 0.5f),
-                    activeTickColor = MaterialTheme.colors.primary
-                )
+                    modifier = Modifier.fillMaxWidth(),
+                    value = currentTime.toFloat(),
+                    onValueChange = onSeekChanged,
+                    onValueChangeFinished = onValueChangeFinished,
+                    valueRange = 0f..duration.toFloat(),
+                    colors =
+                    SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colors.primary,
+                            inactiveTrackColor = DirtyWhite.copy(alpha = 0.5f),
+                            activeTickColor = MaterialTheme.colors.primary
+                    )
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
         ) {
 
-            TimeLineRow(currTime = currTime, duration = duration)
-
-
+            TimeLineRow(currTime = currentTime.formatMinSec(), duration = duration)
 
             QualityButtonWithFullScreenButton(
-                isFullScreen = isFullScreenSaved,
-                onFullScreenToggle = onFullScreenToggleSaved,
-                quality = quality,
-                onMenuItemClick = onMenuItemClick,
-                onOpenQualityMenu = onOpenQualityMenu
+                    isFullScreen = isFullScreenSaved,
+                    onFullScreenToggle = onFullScreenToggleSaved,
+                    quality = quality,
+                    onMenuItemClick = onMenuItemClick,
+                    onOpenQualityMenu = onOpenQualityMenu
             )
 
         }
@@ -117,38 +117,38 @@ fun BottomControls(
 
 @Composable
 private fun QualityButtonWithFullScreenButton(
-    quality: String,
-    isFullScreen: Int,
-    onFullScreenToggle: (Int) -> Unit,
-    onMenuItemClick: (DropItem) -> Unit,
-    onOpenQualityMenu: () -> Unit,
+        quality: String,
+        isFullScreen: Int,
+        onFullScreenToggle: (Int) -> Unit,
+        onMenuItemClick: (DropItem) -> Unit,
+        onOpenQualityMenu: () -> Unit,
 ) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         QualityItems(
-            quality = quality,
-            dropdownItems = ImmutableList.of(
-                DropItem("480"),
-                DropItem("720"),
-                DropItem("1080")
-            ),
-            onOpenQualityMenu = onOpenQualityMenu,
-            onMenuItemClick = onMenuItemClick
+                quality = quality,
+                dropdownItems = ImmutableList.of(
+                        DropItem("480"),
+                        DropItem("720"),
+                        DropItem("1080")
+                ),
+                onOpenQualityMenu = onOpenQualityMenu,
+                onMenuItemClick = onMenuItemClick
         )
 
         IconButton(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .size(24.dp),
-            onClick = {
-                onFullScreenToggle(if (isFullScreen == LANDSCAPE) PORTRAIT else LANDSCAPE)
-            }
+                modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .size(24.dp),
+                onClick = {
+                    onFullScreenToggle(if (isFullScreen == LANDSCAPE) PORTRAIT else LANDSCAPE)
+                }
         ) {
             Icon(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(id = R.drawable.ic_fullscreen),
-                contentDescription = "Enter/Exit fullscreen",
-                tint = DirtyWhite
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource(id = R.drawable.ic_fullscreen),
+                    contentDescription = "Enter/Exit fullscreen",
+                    tint = DirtyWhite
             )
         }
     }
@@ -156,23 +156,23 @@ private fun QualityButtonWithFullScreenButton(
 
 @Composable
 private fun TimeLineRow(
-    duration: Long,
-    currTime: String,
+        duration: Long,
+        currTime: String,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = currTime,
-            color = DirtyWhite
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = currTime,
+                color = DirtyWhite
         )
         Text(
-            text = "/",
-            color = DirtyWhite
+                text = "/",
+                color = DirtyWhite
         )
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = duration.formatMinSec(),
-            color = DirtyWhite
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = duration.formatMinSec(),
+                color = DirtyWhite
         )
     }
 }

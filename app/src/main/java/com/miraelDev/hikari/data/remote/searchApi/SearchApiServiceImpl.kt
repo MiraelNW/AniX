@@ -14,11 +14,9 @@ import javax.inject.Inject
 
 class SearchApiServiceImpl @Inject constructor(
         private val client: HttpClient,
-        private val context: Context
+        private val networkHandler: NetworkHandler,
+
 ) : SearchApiService {
-
-    private val networkHandler = NetworkHandler(context)
-
 
     override suspend fun searchAnimeByName(name: String): ApiResult {
 

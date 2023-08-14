@@ -46,35 +46,34 @@ private const val LANDSCAPE = 1
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PlayerControls(
-    modifier: Modifier,
-    isVisible: Boolean,
-    isPlaying: () -> Boolean,
-    isFirstEpisode: Boolean,
-    isLastEpisode: Boolean,
-    isFullScreen: Int,
-    orientation: Int,
-    title: String,
-    onReplayClick: () -> Unit,
-    onForwardClick: () -> Unit,
-    onPauseToggle: () -> Unit,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
-    currTime: String,
-    bufferedPercentage: () -> Int,
-    onBackIconClick: () -> Unit,
-    playbackState: () -> Int,
-    onSeekChanged: (timeMs: Float) -> Unit,
-    onValueChangeFinished: () -> Unit,
-    onFullScreenToggle: (Int) -> Unit,
-    onNextVideoClick: () -> Unit,
-    onPreviousVideoClick: () -> Unit,
-    onEpisodeItemClick: (Int) -> Unit,
-    onEpisodeIconClick: () -> Unit,
-    onCloseEpisodeList: () -> Unit,
-    changeVisibleState: () -> Unit,
-    onMenuItemClick: (DropItem) -> Unit,
-    onOpenQualityMenu: () -> Unit,
-    onAutoNextVideoClick: (Boolean) -> Unit,
+        modifier: Modifier,
+        isVisible: Boolean,
+        isPlaying: () -> Boolean,
+        isFirstEpisode: Boolean,
+        isLastEpisode: Boolean,
+        isFullScreen: Int,
+        orientation: Int,
+        title: String,
+        onReplayClick: () -> Unit,
+        onForwardClick: () -> Unit,
+        onPauseToggle: () -> Unit,
+        totalDuration: () -> Long,
+        currentTime: Long,
+        bufferedPercentage: () -> Int,
+        onBackIconClick: () -> Unit,
+        playbackState: () -> Int,
+        onSeekChanged: (timeMs: Float) -> Unit,
+        onValueChangeFinished: () -> Unit,
+        onFullScreenToggle: (Int) -> Unit,
+        onNextVideoClick: () -> Unit,
+        onPreviousVideoClick: () -> Unit,
+        onEpisodeItemClick: (Int) -> Unit,
+        onEpisodeIconClick: () -> Unit,
+        onCloseEpisodeList: () -> Unit,
+        changeVisibleState: () -> Unit,
+        onMenuItemClick: (DropItem) -> Unit,
+        onOpenQualityMenu: () -> Unit,
+        onAutoNextVideoClick: (Boolean) -> Unit,
 ) {
 
 
@@ -92,147 +91,167 @@ fun PlayerControls(
 
     val playerState = remember(playbackState()) { playbackState() }
 
+    var videoTime by rememberSaveable { mutableStateOf(currentTime) }
+
     val onBackIconClickSaved: () -> Unit = remember { { onBackIconClick() } }
 
     val onEpisodeIconClickSaved: () -> Unit = remember { { onEpisodeIconClick() } }
 
     val onAutoNextVideoClickSaved: (Boolean) -> Unit = remember { { onAutoNextVideoClick(it) } }
 
-    val titleSaved = remember { title }
+    LaunchedEffect(key1 = videoTime, key2 = isVideoPlaying, key3 = currentTime) {
+        if (isVideoPlaying) {
+            delay(1000)
+            videoTime += 1000
+        }
+    }
 
     Box(modifier = modifier) {
 
         Box(modifier = modifier.noRippleEffectClick(MutableInteractionSource()) { changeVisibleState() }) {
 
             AnimatedVisibility(
-                modifier = modifier,
-                visible = visible,
-                enter = fadeIn(),
-                exit = fadeOut(),
+                    modifier = modifier,
+                    visible = visible,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
             ) {
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
-                        .background(Color.Black.copy(alpha = 0.3f))
+                        modifier = Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center)
+                                .background(Color.Black.copy(alpha = 0.3f))
                 ) {
 
                     TopControl(
-                        title = titleSaved,
-                        onBackIconClick = onBackIconClickSaved,
-                        onEpisodeIconClick = {
-                            shouldShowEpisodeList = true
-                            onEpisodeIconClickSaved()
-                        },
-                        onAutoLoadNextVideoClick = onAutoNextVideoClickSaved
+                            title = title,
+                            onBackIconClick = onBackIconClickSaved,
+                            onEpisodeIconClick = {
+                                shouldShowEpisodeList = true
+                                onEpisodeIconClickSaved()
+                            },
+                            onAutoLoadNextVideoClick = onAutoNextVideoClickSaved
                     )
 
                     BottomControls(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .navigationBarsPadding()
-                            .padding(
-                                start = if (isFullScreen == LANDSCAPE) 24.dp else 8.dp
-                            )
-                            .animateEnterExit(
-                                enter =
-                                slideInVertically(
-                                    initialOffsetY = { fullHeight: Int ->
-                                        fullHeight
-                                    }
-                                ),
-                                exit =
-                                slideOutVertically(
-                                    targetOffsetY = { fullHeight: Int ->
-                                        fullHeight
-                                    }
-                                )
-                            ),
-                        quality = quality,
-                        currTime = currTime,
-                        totalDuration = totalDuration,
-                        currentTime = currentTime,
-                        isFullScreen = isFullScreen,
-                        bufferedPercentage = bufferedPercentage,
-                        onSeekChanged = onSeekChanged,
-                        onFullScreenToggle = onFullScreenToggle,
-                        onValueChangeFinished = onValueChangeFinished,
-                        onMenuItemClick = { dropItem ->
-                            quality = dropItem.text
-                            onMenuItemClick(dropItem)
-                        },
-                        onOpenQualityMenu = onOpenQualityMenu
+                            modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .fillMaxWidth()
+                                    .navigationBarsPadding()
+                                    .padding(
+                                            start = if (isFullScreen == LANDSCAPE) 24.dp else 8.dp
+                                    )
+                                    .animateEnterExit(
+                                            enter =
+                                            slideInVertically(
+                                                    initialOffsetY = { fullHeight: Int ->
+                                                        fullHeight
+                                                    }
+                                            ),
+                                            exit =
+                                            slideOutVertically(
+                                                    targetOffsetY = { fullHeight: Int ->
+                                                        fullHeight
+                                                    }
+                                            )
+                                    ),
+                            quality = quality,
+                            totalDuration = totalDuration,
+                            currentTime = videoTime,
+                            isFullScreen = isFullScreen,
+                            bufferedPercentage = bufferedPercentage,
+                            onSeekChanged = {
+                                videoTime = it.toLong()
+                                onSeekChanged(it)
+                            },
+                            onFullScreenToggle = onFullScreenToggle,
+                            onValueChangeFinished = onValueChangeFinished,
+                            onMenuItemClick = { dropItem ->
+                                quality = dropItem.text
+                                onMenuItemClick(dropItem)
+                            },
+                            onOpenQualityMenu = onOpenQualityMenu
                     )
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
+                            modifier = Modifier
+                                    .fillMaxWidth(0.5f)
 
-                            .align(
-                                if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-                                    Alignment.BottomCenter
-                                else
-                                    Alignment.Center
-                            )
-                            .padding(bottom = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 24.dp else 0.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                                    .align(
+                                            if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+                                                Alignment.BottomCenter
+                                            else
+                                                Alignment.Center
+                                    )
+                                    .padding(bottom = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 24.dp else 0.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
                     ) {
 
                         Icon(
-                            modifier = Modifier
-                                .noRippleEffectClick(
-                                    interactionSource = MutableInteractionSource(),
-                                    enabled = !isFirstEpisode,
-                                    onClick = onPreviousVideoClick
-                                )
-                                .size(32.dp)
-                                .weight(1f),
-                            tint = if (isFirstEpisode) DirtyWhite else DirtyWhite,
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_previous_video),
-                            contentDescription = "next video"
+                                modifier = Modifier
+                                        .noRippleEffectClick(
+                                                interactionSource = MutableInteractionSource(),
+                                                enabled = !isFirstEpisode,
+                                                onClick = {
+                                                    videoTime = 0
+                                                    onPreviousVideoClick()
+                                                }
+                                        )
+                                        .size(32.dp)
+                                        .weight(1f),
+                                tint = if (isFirstEpisode) DirtyWhite.copy(alpha = 0.4f) else DirtyWhite,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_previous_video),
+                                contentDescription = "next video"
                         )
 
                         Icon(
-                            modifier = Modifier
-                                .size(42.dp)
-                                .weight(1f)
-                                .noRippleEffectClick(
-                                    interactionSource = MutableInteractionSource(),
-                                    onClick = onPauseToggle
-                                ),
-                            tint = DirtyWhite,
-                            imageVector =
-                            when {
-                                isVideoPlaying -> {
-                                    ImageVector.vectorResource(id = R.drawable.ic_pause)
-                                }
+                                modifier = Modifier
+                                        .size(42.dp)
+                                        .weight(1f)
+                                        .noRippleEffectClick(
+                                                interactionSource = MutableInteractionSource(),
+                                                onClick = {
+                                                    if (isVideoPlaying.not() && playerState == Player.STATE_ENDED) {
+                                                        videoTime = 0
+                                                    }
+                                                    onPauseToggle()
+                                                }
+                                        ),
+                                tint = DirtyWhite,
+                                imageVector =
+                                when {
+                                    isVideoPlaying -> {
+                                        ImageVector.vectorResource(id = R.drawable.ic_pause)
+                                    }
 
-                                isVideoPlaying.not() && playerState == Player.STATE_ENDED -> {
-                                    ImageVector.vectorResource(id = R.drawable.ic_replay)
-                                }
+                                    isVideoPlaying.not() && playerState == Player.STATE_ENDED -> {
+                                        ImageVector.vectorResource(id = R.drawable.ic_replay)
+                                    }
 
-                                else -> {
-                                    ImageVector.vectorResource(id = R.drawable.ic_play)
-                                }
-                            },
-                            contentDescription = "Play/pause"
+                                    else -> {
+                                        ImageVector.vectorResource(id = R.drawable.ic_play)
+                                    }
+                                },
+                                contentDescription = "Play/pause"
                         )
 
                         Icon(
-                            modifier = Modifier
-                                .noRippleEffectClick(
-                                    interactionSource = MutableInteractionSource(),
-                                    enabled = !isLastEpisode,
-                                    onClick = onNextVideoClick
-                                )
-                                .size(32.dp)
-                                .weight(1f),
-                            tint = if (isLastEpisode) LightGreen else DirtyWhite,
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_next_video),
-                            contentDescription = "next video"
+                                modifier = Modifier
+                                        .noRippleEffectClick(
+                                                interactionSource = MutableInteractionSource(),
+                                                enabled = !isLastEpisode,
+                                                onClick = {
+                                                    videoTime = 0
+                                                    onNextVideoClick()
+                                                }
+                                        )
+                                        .size(32.dp)
+                                        .weight(1f),
+                                tint = if (isLastEpisode) DirtyWhite.copy(alpha = 0.4f) else DirtyWhite,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_next_video),
+                                contentDescription = "next video"
                         )
 
 
@@ -242,28 +261,28 @@ fun PlayerControls(
         }
 
         CenterControls(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f)
-                .align(Alignment.Center),
-            onReplayClick = onReplayClick,
-            onForwardClick = onForwardClick,
-            changeVisibleState = changeVisibleState
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f)
+                        .align(Alignment.Center),
+                onReplayClick = onReplayClick,
+                onForwardClick = onForwardClick,
+                changeVisibleState = changeVisibleState
         )
 
 
         EpisodeList(
-            modifier = modifier,
-            shouldShowEpisodeList = shouldShowEpisodeList,
-            orientation = orientation,
-            onCloseEpisodeList = {
-                shouldShowEpisodeList = false
-                onCloseEpisodeList()
-            },
-            onEpisodeItemClick = { episodeId ->
-                onEpisodeItemClick(episodeId)
-                onCloseEpisodeList()
-            }
+                modifier = modifier,
+                shouldShowEpisodeList = shouldShowEpisodeList,
+                orientation = orientation,
+                onCloseEpisodeList = {
+                    shouldShowEpisodeList = false
+                    onCloseEpisodeList()
+                },
+                onEpisodeItemClick = { episodeId ->
+                    onEpisodeItemClick(episodeId)
+                    onCloseEpisodeList()
+                }
         )
     }
 }

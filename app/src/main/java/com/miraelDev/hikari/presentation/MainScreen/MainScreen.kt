@@ -1,11 +1,8 @@
 package com.miraelDev.hikari.presentation.MainScreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.util.UnstableApi
 import com.miraelDev.hikari.navigation.AppNavGraph
 import com.miraelDev.hikari.navigation.Screen
@@ -21,7 +18,7 @@ import com.miraelDev.hikari.presentation.FavouriteListScreen.FavouriteListScreen
 import com.miraelDev.hikari.presentation.MainScreen.navigation.BottomBar
 import com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen
 import com.miraelDev.hikari.presentation.SearchAnimeScreen
-import com.miraelDev.hikari.presentation.VideoView.VideoView
+import com.miraelDev.hikari.presentation.VideoView.VideoViewScreen
 
 private const val BACK = 0
 private const val ON_VIDEO_VIEW = 1
@@ -180,7 +177,7 @@ fun MainScreen(
                 },
                 videoViewScreenContent = {
                     shouldShowBottomBar = false
-                    VideoView(
+                    VideoViewScreen(
                             onFullScreenToggle = onFullScreenToggle,
                             navigateBack = {
                                 onVideoViewClick(BACK)

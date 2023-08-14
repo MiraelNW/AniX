@@ -1,13 +1,11 @@
 package com.miraelDev.hikari.domain.models
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
-
-import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 
 
-@Immutable
-@Stable
 data class PlayerWrapper(
-    val exoPlayer: Player
+        val exoPlayer: ExoPlayer,
+        val title: String,
+        val isFirstEpisode: Boolean,
+        val isLastEpisode: Boolean
 )

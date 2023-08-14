@@ -98,6 +98,7 @@ private fun ShimmerAnimeImage() {
                 modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
+                        .clip(RoundedCornerShape(bottomEnd = 24.dp, bottomStart = 24.dp))
                         .shimmerEffect(),
         )
     }
@@ -116,10 +117,12 @@ private fun ShimmerAnimeNameAndShareButton() {
             Spacer(modifier = Modifier
                     .height(16.dp)
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(24.dp))
                     .shimmerEffect())
             Spacer(modifier = Modifier
                     .height(16.dp)
                     .fillMaxWidth(0.8f)
+                    .clip(RoundedCornerShape(24.dp))
                     .shimmerEffect())
 
         }
@@ -127,6 +130,7 @@ private fun ShimmerAnimeNameAndShareButton() {
         Spacer(modifier = Modifier
                 .height(24.dp)
                 .width(24.dp)
+                .clip(RoundedCornerShape(24.dp))
                 .shimmerEffect()
         )
     }
@@ -139,6 +143,7 @@ private fun ShimmerPlayButton() {
                     .fillMaxWidth()
                     .height(72.dp)
                     .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                    .clip(RoundedCornerShape(24.dp))
                     .shimmerEffect()
     )
 }
@@ -160,6 +165,7 @@ private fun ShimmerRatingAndCategoriesRow() {
             Spacer(modifier = Modifier
                     .width(48.dp)
                     .height(24.dp)
+                    .clip(RoundedCornerShape(24.dp))
                     .shimmerEffect()
             )
 
@@ -173,6 +179,7 @@ private fun ShimmerRatingAndCategoriesRow() {
             Spacer(modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(24.dp)
+                    .clip(RoundedCornerShape(24.dp))
                     .shimmerEffect()
             )
         }
@@ -188,6 +195,7 @@ private fun ShimmerGenreRow() {
         Spacer(modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .height(24.dp)
+                .clip(RoundedCornerShape(24.dp))
                 .shimmerEffect())
     }
 }
@@ -200,6 +208,7 @@ private fun ShimmerExpandableDescription() {
         Spacer(modifier = Modifier
                 .fillMaxWidth()
                 .height(156.dp)
+                .clip(RoundedCornerShape(24.dp))
                 .shimmerEffect())
     }
 }
@@ -212,6 +221,7 @@ private fun ShimmerOtherAnimeText() {
         Spacer(modifier = Modifier
                 .fillMaxWidth(0.4f)
                 .height(24.dp)
+                .clip(RoundedCornerShape(24.dp))
                 .shimmerEffect())
     }
 }
@@ -245,7 +255,7 @@ private fun AnimeCard() {
                 modifier = Modifier
                         .height(250.dp)
                         .width(200.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .shimmerEffect(),
         )
 
@@ -254,6 +264,7 @@ private fun AnimeCard() {
                         .fillMaxWidth()
                         .height(16.dp)
                         .padding(4.dp)
+                        .clip(RoundedCornerShape(24.dp))
                         .shimmerEffect()
         )
     }

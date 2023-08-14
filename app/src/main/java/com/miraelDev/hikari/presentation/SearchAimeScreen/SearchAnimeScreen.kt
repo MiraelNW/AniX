@@ -18,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.AnimeCard
 import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.LastSearchedAnime
@@ -133,6 +137,7 @@ fun SearchAnimeScreen(
                     }
 
                     is SearchAnimeScreenState.SearchFailure -> {
+                        LostInternetAnimation()
                         Log.d("tag", "failure")
                     }
 
@@ -147,6 +152,15 @@ fun SearchAnimeScreen(
             }
         }
     }
+}
+
+@Composable
+private fun LostInternetAnimation(){
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lost_internet))
+
+    LottieAnimation(composition = composition, iterations = 4)
+
 }
 
 @Composable

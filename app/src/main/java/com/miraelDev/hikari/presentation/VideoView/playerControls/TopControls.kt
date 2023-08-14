@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.VideoView.playerControls
 
+import android.util.Log
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement

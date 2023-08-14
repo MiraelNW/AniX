@@ -19,13 +19,4 @@ abstract class ApiServiceModule {
     @Binds
     abstract fun bindSearchApiService(impl: SearchApiServiceImpl): SearchApiService
 
-    companion object {
-
-        @Provides
-        fun provideSearchApiServiceImpl(@ApplicationContext context: Context, httpClient: HttpClient): SearchApiServiceImpl {
-            return SearchApiServiceImpl(httpClient, context)
-        }
-
-    }
-
 }
