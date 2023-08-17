@@ -1,0 +1,38 @@
+import kotlin.Float;
+import kotlin.Int;
+import kotlin.String;
+import kotlin.collections.List;
+
+CREATE TABLE FavouriteAnimeEntity (
+    id  INTEGER PRIMARY KEY NOT NULL,
+    name_ru TEXT NOT NULL,
+    name_en TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    status TEXT NOT NULL,
+    rating TEXT NOT NULL,
+    episodes INTEGER AS Int NOT NULL,
+    duration INTEGER AS Int NOT NULL,
+    description TEXT NOT NULL,
+    genres TEXT AS List<String> NOT NULL,
+    score REAL AS Float NOT NULL,
+    image_url TEXT NOT NULL
+);
+
+getFavouriteAnimeList:
+SELECT *
+FROM FavouriteAnimeEntity;
+
+getFavouriteAnimeItemByName:
+SELECT *
+FROM FavouriteAnimeEntity
+WHERE name_en LIKE ('%' || :name || '%') OR name_ru LIKE ('%' || :name || '%');
+
+insertFavouriteAnimeItem:
+INSERT OR REPLACE
+INTO FavouriteAnimeEntity
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
+
+deleteFavouriteAnimeItem:
+DELETE
+FROM FavouriteAnimeEntity
+WHERE id = ?;

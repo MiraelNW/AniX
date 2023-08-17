@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Hikari" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#C9FFFFFF</item>
+        <item name="android:statusBarColor">#C9e0e0e0</item>
     </style>
 
     <style name="Theme.Hikari.Starting" parent="Theme.SplashScreen">

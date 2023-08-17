@@ -1,12 +1,11 @@
 package com.miraelDev.hikari.data.Repository
 
-import android.util.Log
-import com.miraelDev.hikari.data.local.Dao.SearchAnimeDaoImpl
-import com.miraelDev.hikari.domain.result.Result
+import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
 import com.miraelDev.hikari.data.mapper.Mapper
 import com.miraelDev.hikari.data.remote.searchApi.ApiResult
 import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
+import com.miraelDev.hikari.domain.result.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -22,7 +21,7 @@ import javax.inject.Inject
 class SearchAnimeRepositoryImpl @Inject constructor(
         private val mapper: Mapper,
         private val searchApiService: SearchApiService,
-        private val searchAnimeDaoImpl: SearchAnimeDaoImpl
+        private val searchAnimeDao: SearchAnimeDao
 ) : SearchAnimeRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -77,9 +76,9 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) =
-            searchAnimeDaoImpl.insertSearchItem(name)
+            searchAnimeDao.insertSearchItem(name)
 
-    override fun getSearchHistoryList(): Flow<List<String>> = searchAnimeDaoImpl.getSearchHistoryList()
+    override fun getSearchHistoryList(): Flow<List<String>> = searchAnimeDao.getSearchHistoryList()
 
     override fun getAnimeBySearch(): SharedFlow<Result> = searchResults.asSharedFlow()
 

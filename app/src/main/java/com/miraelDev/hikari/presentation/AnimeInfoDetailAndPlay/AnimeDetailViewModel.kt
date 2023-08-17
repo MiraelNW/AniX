@@ -2,22 +2,26 @@ package com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.result.Result
-import com.miraelDev.hikari.domain.usecases.GetAnimeDetailUseCase
-import com.miraelDev.hikari.domain.usecases.LoadAnimeDetailUseCase
+import com.miraelDev.hikari.domain.usecases.animeDetailUseCase.GetAnimeDetailUseCase
+import com.miraelDev.hikari.domain.usecases.animeDetailUseCase.LoadAnimeDetailUseCase
+import com.miraelDev.hikari.domain.usecases.animeDetailUseCase.SelectAnimeItemUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadVideoIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AnimeDetailViewModel @Inject constructor(
         private val getAnimeDetailUseCase: GetAnimeDetailUseCase,
-        val loadVideoIdUseCase: LoadVideoIdUseCase,
-        val loadAnimeDetailUseCase: LoadAnimeDetailUseCase,
+        private val selectAnimeItemUseCase: SelectAnimeItemUseCase,
+        private val loadVideoIdUseCase: LoadVideoIdUseCase,
+        private val loadAnimeDetailUseCase: LoadAnimeDetailUseCase,
 ) : ViewModel() {
 
     val animeDetail = getAnimeDetailUseCase()
@@ -39,9 +43,28 @@ class AnimeDetailViewModel @Inject constructor(
                 }
             }
             .onStart { emit(AnimeDetailScreenState.Loading) }
-            .shareIn(
+            .stateIn(
                     viewModelScope,
-                    SharingStarted.Lazily
+                    SharingStarted.Lazily,
+                    AnimeDetailScreenState.Loading
             )
+
+    fun loadVideoId(id:Int){
+        viewModelScope.launch {
+            loadVideoIdUseCase(id)
+        }
+    }
+
+    fun loadAnimeDetail(id:Int){
+        viewModelScope.launch {
+            loadAnimeDetailUseCase(id)
+        }
+    }
+
+    fun selectAnimeItem(isSelected: Boolean,animeInfo:AnimeInfo) {
+        viewModelScope.launch {
+            selectAnimeItemUseCase(isSelected, animeInfo)
+        }
+    }
 
 }

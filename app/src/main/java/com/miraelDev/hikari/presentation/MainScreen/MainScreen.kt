@@ -53,12 +53,8 @@ fun MainScreen(
                     shouldShowBottomBar = true
                     HomeScreen(
                             onThemeButtonClick = onThemeButtonClick,
-                            onSettingsClick = {
-                                navigationState.navigateToSettingsScreen()
-                            },
-                            onAnimeItemClick = { animeId ->
-                                navigationState.navigateToAnimeDetail(animeId)
-                            }
+                            onSettingsClick = navigationState::navigateToSettingsScreen,
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail
                     )
                 },
 
@@ -130,12 +126,10 @@ fun MainScreen(
                     )
                 },
 
-                libraryScreenContent = {
+                favouriteScreenContent = {
                     shouldShowBottomBar = true
                     FavouriteListScreen(
-                            onAnimeItemClick = { animeId ->
-                                navigationState.navigateToAnimeDetail(animeId)
-                            }
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail
                     )
                 },
 
@@ -151,12 +145,8 @@ fun MainScreen(
                 searchScreenContent = {
                     shouldShowBottomBar = true
                     SearchAnimeScreen(
-                            onFilterClicked = {
-                                navigationState.navigateToFilterScreen()
-                            },
-                            onAnimeItemClick = { animeId ->
-                                navigationState.navigateToAnimeDetail(animeId)
-                            }
+                            onFilterClicked = navigationState::navigateToFilterScreen,
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail
                     )
                 },
                 animeDetailScreenContent = { animeId ->
@@ -166,9 +156,7 @@ fun MainScreen(
                             onBackPressed = {
                                 navigationState.navHostController.popBackStack()
                             },
-                            onAnimeItemClick = { animeIdNavArg ->
-                                navigationState.navigateToAnimeDetail(animeIdNavArg)
-                            },
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail,
                             onSeriesClick = {
                                 onVideoViewClick(ON_VIDEO_VIEW)
                                 navigationState.navigateToVideoView()

@@ -1,10 +1,11 @@
 package com.miraelDev.hikari.data.remote.searchApi
 
+import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.dto.AnimeInfoDto
 
-sealed class ApiResult(animeList: List<AnimeInfoDto> = emptyList(), failureCause: Int = -1) {
+sealed class ApiResult {
 
-    class Success(val animeList: List<AnimeInfoDto>) : ApiResult(animeList = animeList)
+    class Success(val animeList: List<AnimeInfoDto>) : ApiResult()
 
-    class Failure(val failureCause: Int) : ApiResult(failureCause = failureCause)
+    class Failure(val failureCause: FailureCauses) : ApiResult()
 }

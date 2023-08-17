@@ -2,6 +2,7 @@ package com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.miraelDev.hikari.exntensions.noRippleEffectClick
 import com.miraelDev.hikari.ui.theme.QuickSand1
 
 @Composable
@@ -43,7 +45,10 @@ fun ExpandableDescription(
     var lastCharIndex by remember { mutableStateOf(0) }
     Box(modifier = Modifier
             .padding(8.dp)
-            .clickable(clickable) {
+            .noRippleEffectClick(
+                    interactionSource = remember { MutableInteractionSource() },
+                    enabled = clickable
+            ) {
                 isExpanded = !isExpanded
             }
             .then(modifier)

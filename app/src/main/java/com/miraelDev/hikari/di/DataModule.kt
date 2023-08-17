@@ -9,14 +9,18 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.miraelDev.database.AppDatabase
 import com.miraelDev.hikari.data.Repository.AnimeDetailRepositoryImpl
 import com.miraelDev.hikari.data.Repository.AnimeListRepositoryImpl
+import com.miraelDev.hikari.data.Repository.FavouriteAnimeRepositoryImpl
 import com.miraelDev.hikari.data.Repository.FilterRepositoryImpl
 import com.miraelDev.hikari.data.Repository.SearchAnimeRepositoryImpl
 import com.miraelDev.hikari.data.Repository.VideoPlayerRepositoryImpl
+import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
+import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDaoImpl
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDaoImpl
 import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
+import com.miraelDev.hikari.domain.repository.FavouriteAnimeRepository
 import com.miraelDev.hikari.domain.repository.FilterAnimeRepository
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
 import com.miraelDev.hikari.domain.repository.VideoPlayerRepository
@@ -49,13 +53,14 @@ abstract class DataModule {
     @Singleton
     abstract fun bindAnimeDetailRepository(impl: AnimeDetailRepositoryImpl): AnimeDetailRepository
 
-    @Binds
-    @Singleton
-    abstract fun bindSearchAnimeDao(impl: SearchAnimeDaoImpl): SearchAnimeDao
 
     @Binds
     @Singleton
     abstract fun bindVideoPlayerRepository(impl: VideoPlayerRepositoryImpl): VideoPlayerRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFavouriteAnimeRepository(impl: FavouriteAnimeRepositoryImpl): FavouriteAnimeRepository
 
 
     @UnstableApi
@@ -63,22 +68,6 @@ abstract class DataModule {
 
         private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L
         private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L
-
-        @Provides
-        @Singleton
-        fun provideSqlDriver(app: Application): SqlDriver {
-            return AndroidSqliteDriver(
-                    schema = AppDatabase.Schema,
-                    context = app,
-                    name = "app_database"
-            )
-        }
-
-        @Provides
-        @Singleton
-        fun provideDatabase(driver: SqlDriver): AppDatabase {
-            return AppDatabase(driver)
-        }
 
         @Provides
         @Singleton
@@ -90,13 +79,6 @@ abstract class DataModule {
                     }
                     .build()
         }
-
-        @Provides
-        @Singleton
-        fun provideNetworkHandler(@ApplicationContext context: Context): NetworkHandler {
-            return NetworkHandler(context)
-        }
-
     }
 
 }

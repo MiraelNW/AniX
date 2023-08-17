@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class SearchAnimeDaoImpl @Inject constructor (
+class SearchAnimeDaoImpl @Inject constructor(
         private val db: AppDatabase
 ) : SearchAnimeDao {
 
@@ -21,12 +21,14 @@ class SearchAnimeDaoImpl @Inject constructor (
     override suspend fun insertSearchItem(searchItem: String) {
 
         val searchList = queries.getSearchHistory().executeAsList()
-        val mutableSearchList = searchList.toMutableList()
+        val mutableSearchList = ArrayDeque(searchList)
+        mutableSearchList.remove(searchItem)
 
-        if(searchList.size == 20){
-            mutableSearchList[19] = searchItem
-        }else{
-           mutableSearchList.add(searchItem)
+        if (searchList.size == 20) {
+            mutableSearchList.addFirst(searchItem)
+            mutableSearchList.removeLast()
+        } else {
+            mutableSearchList.addFirst(searchItem)
         }
 
         mutableSearchList.forEach {

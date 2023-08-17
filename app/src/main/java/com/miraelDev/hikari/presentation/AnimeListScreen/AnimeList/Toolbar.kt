@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -24,6 +26,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.hikari.R
+import com.miraelDev.hikari.presentation.MainScreen.LocalOrientation
 import com.miraelDev.hikari.ui.theme.QuickSand
 
 @Composable
@@ -32,8 +35,12 @@ fun Toolbar(
         onThemeButtonClick: () -> Unit,
         darkTheme: Boolean
 ) {
+
+    val orientation = LocalOrientation.current
+
     TopAppBar(
-            modifier = Modifier.statusBarsPadding(),
+            modifier = if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+                Modifier.systemBarsPadding() else Modifier.statusBarsPadding(),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 0.dp
     ) {

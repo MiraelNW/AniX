@@ -3,6 +3,7 @@ package com.miraelDev.hikari.data.remote.searchApi
 import android.content.Context
 import android.util.Log
 import com.miraelDev.hikari.data.remote.ApiRoutes
+import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.data.remote.dto.AnimeInfoDto
 import io.ktor.client.HttpClient
@@ -14,71 +15,63 @@ import javax.inject.Inject
 
 class SearchApiServiceImpl @Inject constructor(
         private val client: HttpClient,
-        private val networkHandler: NetworkHandler,
-
+        private val networkHandler: NetworkHandler
 ) : SearchApiService {
 
     override suspend fun searchAnimeByName(name: String): ApiResult {
 
         if (networkHandler.isConnected.value) {
-            try {
-                return ApiResult.Success(animeList =
-                client.get<Array<AnimeInfoDto>>("${ApiRoutes.SEARCH_URL_ANIME_LIST}$name").toList())
+            return try {
+                val resultList = client
+                        .get<Array<AnimeInfoDto>>("${ApiRoutes.SEARCH_URL_ANIME_LIST}$name")
+                        .toList()
+                if (resultList.isEmpty()) {
+                    ApiResult.Failure(failureCause = FailureCauses.NotFound)
+                } else {
+                    ApiResult.Success(animeList = resultList)
+                }
 
             } catch (exception: Exception) {
-
-                return when (exception) {
-                    is RedirectResponseException -> {
-                        ApiResult.Failure(failureCause = 300)
-                    }
-
-                    is ClientRequestException -> {
-                        ApiResult.Failure(failureCause = 400)
-                    }
-
-                    is ServerResponseException -> {
-                        ApiResult.Failure(failureCause = 500)
-                    }
-
-                    else -> {
-                        ApiResult.Failure(failureCause = 100)
-                    }
-                }
+                exceptionHandler(exception)
             }
         } else {
-            return ApiResult.Failure(100)
+            return ApiResult.Failure(failureCause = FailureCauses.NoInternet)
         }
 
     }
 
     override suspend fun getAnimeById(id: Int): ApiResult {
         if (networkHandler.isConnected.value) {
-            try {
-                return ApiResult.Success(animeList =
+            return try {
+                ApiResult.Success(animeList =
                 client.get<Array<AnimeInfoDto>>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id?format=json").toList())
 
             } catch (exception: Exception) {
 
-                return when (exception) {
-                    is RedirectResponseException -> {
-                        ApiResult.Failure(failureCause = 300)
-                    }
-
-                    is ClientRequestException -> {
-                        ApiResult.Failure(failureCause = 400)
-                    }
-
-                    is ServerResponseException -> {
-                        ApiResult.Failure(failureCause = 500)
-                    }
-
-                    else -> {
-                        ApiResult.Failure(failureCause = 100)
-                    }
-                }
+                exceptionHandler(exception)
             }
         } else {
-            return ApiResult.Failure(100)
+            return ApiResult.Failure(FailureCauses.NoInternet)
+        }
+    }
+
+    private fun exceptionHandler(exception: Exception): ApiResult {
+        return when (exception) {
+            is RedirectResponseException -> {
+                ApiResult.Failure(failureCause = FailureCauses.RedirectResponse)
+            }
+
+            is ClientRequestException -> {
+                ApiResult.Failure(failureCause = FailureCauses.BadClient)
+            }
+
+            is ServerResponseException -> {
+                ApiResult.Failure(failureCause = FailureCauses.BadServer)
+            }
+
+            else -> {
+                ApiResult.Failure(failureCause = FailureCauses.UnknownProblem(exception))
+            }
         }
     }
 }

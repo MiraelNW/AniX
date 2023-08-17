@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.MainScreen
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,14 +8,16 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,8 +28,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.guru.composecookbook.theme.HikariTheme
-import com.miraelDev.hikari.ui.theme.AppThemeState
 import com.miraelDev.hikari.ui.theme.ColorPallet
+import com.miraelDev.hikari.ui.theme.LightGray
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,9 +51,7 @@ class MainActivity : ComponentActivity() {
 
             val isSystemDark = isSystemInDarkTheme()
 
-            var darkTheme by rememberSaveable {
-                mutableStateOf(isSystemDark)
-            }
+            var darkTheme by rememberSaveable { mutableStateOf(isSystemDark) }
 
             var landscape by rememberSaveable { mutableStateOf(0) }
 
@@ -58,8 +59,16 @@ class MainActivity : ComponentActivity() {
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
+            var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
+            val configuration = LocalConfiguration.current
+
+            LaunchedEffect(configuration) {
+                snapshotFlow { configuration.orientation }
+                        .collect { orientation = it }
+            }
+
             CompositionLocalProvider(
-                    LocalOrientation provides landscape,
+                    LocalOrientation provides orientation,
                     LocalColor provides colorPallet
             ) {
                 HikariTheme(darkTheme) {
@@ -67,7 +76,7 @@ class MainActivity : ComponentActivity() {
 
                     DisposableEffect(systemUiController, useDarkIcons) {
                         systemUiController.setSystemBarsColor(
-                                color = Color.Transparent,
+                                color =  Color.Transparent,
                                 darkIcons = !useDarkIcons
                         )
                         onDispose {}

@@ -1,4 +1,4 @@
-package com.miraelDev.hikari.domain.usecases
+package com.miraelDev.hikari.domain.usecases.animeDetailUseCase
 
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import javax.inject.Inject

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.domain.models.AnimeInfo
@@ -45,6 +46,7 @@ fun SearchAnimeScreen(
     val searchHistory by viewModel.searchHistory.collectAsState()
     Column(
             modifier = Modifier
+                    .fillMaxSize()
                     .systemBarsPadding()
                     .padding(bottom = 48.dp),
     ) {
@@ -107,7 +109,7 @@ fun SearchAnimeScreen(
             SideEffect {
                 viewModel.clearAllFilters()
             }
-            //TODO()
+            SearchAnimation()
         }
 
         if (openSearchHistory) {
@@ -137,6 +139,7 @@ fun SearchAnimeScreen(
                     }
 
                     is SearchAnimeScreenState.SearchFailure -> {
+                        Log.d("tag",results.failure.toString())
                         LostInternetAnimation()
                         Log.d("tag", "failure")
                     }
@@ -155,7 +158,24 @@ fun SearchAnimeScreen(
 }
 
 @Composable
-private fun LostInternetAnimation(){
+private fun SearchAnimation() {
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search))
+    Box(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.75f)) {
+        LottieAnimation(
+                modifier = Modifier
+                        .size(300.dp)
+                        .align(Alignment.BottomCenter),
+                composition = composition,
+                iterations = LottieConstants.IterateForever
+        )
+    }
+}
+
+@Composable
+private fun LostInternetAnimation() {
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lost_internet))
 

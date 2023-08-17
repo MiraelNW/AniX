@@ -1,7 +1,6 @@
 package com.miraelDev.hikari.presentation.VideoView
 
 import android.content.res.Configuration
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
@@ -18,10 +17,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -99,7 +96,7 @@ private fun VideoView(
 ) {
     val context = LocalContext.current
 
-    val landscape = LocalOrientation.current
+    val orientation = LocalOrientation.current
 
     var clickOnPlayerControls by remember { mutableStateOf(false) }
 
@@ -125,13 +122,7 @@ private fun VideoView(
 
     val onForwardClickSaved: () -> Unit = remember { { exoPlayer.seekForward() } }
 
-    var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
-    val configuration = LocalConfiguration.current
-
-    LaunchedEffect(configuration) {
-        snapshotFlow { configuration.orientation }
-                .collect { orientation = it }
-    }
+    val isPlayingClick: (Boolean) -> Unit = remember { {  isPlaying = it  } }
 
     SideEffect {
         when (orientation) {
@@ -146,29 +137,13 @@ private fun VideoView(
     }
 
     BackHandler {
-        if (landscape == LANDSCAPE) {
+        if (orientation == LANDSCAPE) {
             context.setPortrait()
             onFullScreenToggle(PORTRAIT)
         } else {
             context.setAutoOrientation()
             exoPlayer.pause()
             navigateBack()
-        }
-    }
-
-    var lifecycle by remember {
-        mutableStateOf(Lifecycle.Event.ON_CREATE)
-    }
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            lifecycle = event
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -218,15 +193,14 @@ private fun VideoView(
 
         VideoPlayer(
                 exoPlayer = exoPlayer,
-                lifecycle = lifecycle,
-                isPlayingClick = { isPlaying = it }
+                isPlayingClick = isPlayingClick
         )
 
         PlayerControls(
                 modifier = Modifier.fillMaxSize(),
                 isVisible = isControlsVisible,
                 isPlaying = { isPlaying },
-                isFullScreen = landscape,
+                isFullScreen = orientation,
                 orientation = orientation,
                 isFirstEpisode = isFirstEpisode,
                 isLastEpisode = isLastEpisode,
@@ -309,10 +283,25 @@ private fun VideoView(
 @Composable
 private fun VideoPlayer(
         exoPlayer: ExoPlayer,
-        lifecycle: Lifecycle.Event,
         isPlayingClick: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
+
+    var lifecycle by remember {
+        mutableStateOf(Lifecycle.Event.ON_CREATE)
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            lifecycle = event
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Box(
             modifier = Modifier

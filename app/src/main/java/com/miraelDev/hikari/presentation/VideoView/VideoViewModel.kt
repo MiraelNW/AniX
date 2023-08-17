@@ -1,14 +1,8 @@
 package com.miraelDev.hikari.presentation.VideoView
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.domain.models.PlayerWrapper
-import com.miraelDev.hikari.domain.result.Result
-import com.miraelDev.hikari.domain.usecases.GetAnimeDetailUseCase
+import com.miraelDev.hikari.domain.usecases.animeDetailUseCase.GetAnimeDetailUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.GetVideoPlayerUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadNextEpisodeUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadPreviousEpisodeUseCase
@@ -16,11 +10,7 @@ import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadSpecificEpiso
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadVideoIdUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.LoadVideoPlayerUseCase
 import com.miraelDev.hikari.domain.usecases.videoPlayerUseCase.ReleasePlayerUseCase
-import com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay.AnimeDetailScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @UnstableApi

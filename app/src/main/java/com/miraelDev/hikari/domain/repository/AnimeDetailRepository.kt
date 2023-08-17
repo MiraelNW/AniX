@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AnimeDetailRepository {
 
-    fun getAnimeDetail():Flow<Result>
-    suspend fun loadAnimeDetail(animeId:Int)
+    fun getAnimeDetail(): Flow<Result>
+    suspend fun loadAnimeDetail(animeId: Int)
+
+    suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo)
 
 }

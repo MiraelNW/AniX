@@ -7,18 +7,18 @@ import androidx.navigation.compose.composable
 
 @Composable
 fun AppNavGraph(
-    navHosController: NavHostController,
-    homeScreenContent: @Composable () -> Unit,
-    settingsScreenContent: @Composable () -> Unit,
-    libraryScreenContent: @Composable () -> Unit,
-    searchScreenContent: @Composable () -> Unit,
-    filterScreenContent: @Composable () -> Unit,
-    notificationScreenContent: @Composable () -> Unit,
-    languageScreenContent: @Composable () -> Unit,
-    privacyPolicyScreenContent: @Composable () -> Unit,
-    colorPaletteScreenContent: @Composable () -> Unit,
-    animeDetailScreenContent: @Composable (Int) -> Unit,
-    videoViewScreenContent: @Composable () -> Unit,
+        navHosController: NavHostController,
+        homeScreenContent: @Composable () -> Unit,
+        settingsScreenContent: @Composable () -> Unit,
+        favouriteScreenContent: @Composable () -> Unit,
+        searchScreenContent: @Composable () -> Unit,
+        filterScreenContent: @Composable () -> Unit,
+        notificationScreenContent: @Composable () -> Unit,
+        languageScreenContent: @Composable () -> Unit,
+        privacyPolicyScreenContent: @Composable () -> Unit,
+        colorPaletteScreenContent: @Composable () -> Unit,
+        animeDetailScreenContent: @Composable (Int) -> Unit,
+        videoViewScreenContent: @Composable () -> Unit,
 ) {
     NavHost(
         navController = navHosController,
@@ -38,7 +38,7 @@ fun AppNavGraph(
             filterScreenContent = filterScreenContent
         )
         composable(Screen.Library.route) {
-            libraryScreenContent()
+            favouriteScreenContent()
         }
         animeDetailAndVideoView(
             animeDetailScreenContent = animeDetailScreenContent,

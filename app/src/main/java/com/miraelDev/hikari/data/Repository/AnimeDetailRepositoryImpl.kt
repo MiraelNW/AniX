@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.data.Repository
 
+import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
 import com.miraelDev.hikari.data.mapper.Mapper
 import com.miraelDev.hikari.data.remote.searchApi.ApiResult
 import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class AnimeDetailRepositoryImpl @Inject constructor(
         private val mapper: Mapper,
         private val searchApiService: SearchApiService,
-        private val videoPlayerRepository: VideoPlayerRepository
+        private val videoPlayerRepository: VideoPlayerRepository,
+        private val favouriteAnimeDao: FavouriteAnimeDao
 ) : AnimeDetailRepository {
 
     private val _animeDetail = MutableSharedFlow<Result>()
@@ -25,6 +27,7 @@ class AnimeDetailRepositoryImpl @Inject constructor(
 
     override suspend fun loadAnimeDetail(animeId: Int) {
         delay(2000)
+
         when (val apiResult = searchApiService.getAnimeById(animeId)) {
             is ApiResult.Success -> {
                 val animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList)
@@ -42,4 +45,16 @@ class AnimeDetailRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun selectAnimeItem(isSelected: Boolean,animeInfo: AnimeInfo) {
+        if (isSelected) {
+            favouriteAnimeDao.insertFavouriteAnimeItem(
+                    mapper.mapAnimeInfoToFavouriteAnimeDbModel(animeInfo)
+            )
+        } else {
+            favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
+        }
+    }
+
+
 }
