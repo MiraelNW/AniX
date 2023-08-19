@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.AddToFilterListUseCase

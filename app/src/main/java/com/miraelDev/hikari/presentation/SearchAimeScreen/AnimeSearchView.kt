@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.presentation.AnimeListScreen
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -62,8 +63,8 @@ fun AnimeSearchView(
     val source = remember { MutableInteractionSource() }
     var clicked by remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = isSearchHistoryItemClick, key2 =isSearchKeyClick) {
-        if(isSearchHistoryItemClick || isSearchKeyClick){
+    LaunchedEffect(key1 = isSearchHistoryItemClick, key2 = isSearchKeyClick) {
+        if (isSearchHistoryItemClick || isSearchKeyClick) {
             clicked = false
             onSearchClicked(text)
             focusManager.clearFocus()
@@ -71,7 +72,6 @@ fun AnimeSearchView(
             isSearchKeyClick = false
         }
     }
-
 
     if (source.collectIsPressedAsState().value) {
         enabled = false

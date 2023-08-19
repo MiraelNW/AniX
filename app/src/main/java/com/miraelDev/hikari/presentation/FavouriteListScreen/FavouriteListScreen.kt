@@ -1,7 +1,6 @@
 package com.miraelDev.hikari.presentation.FavouriteListScreen
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -26,7 +25,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -58,7 +56,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -73,15 +70,13 @@ import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.exntensions.pressClickEffect
 import com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay.FavouriteIcon
 import com.miraelDev.hikari.presentation.AnimeListScreen.FavouriteSearchView
-import com.miraelDev.hikari.presentation.ShimmerList.ShimmerList
 import com.miraelDev.hikari.presentation.ShimmerList.ShimmerListFavouriteAnime
-import kotlinx.coroutines.delay
 
 @Composable
-fun FavouriteListScreen(onAnimeItemClick: (Int) -> Unit) {
-
-
-    val viewModel = hiltViewModel<FavouriteAnimeViewModel>()
+fun FavouriteListScreen(
+        onAnimeItemClick: (Int) -> Unit,
+        viewModel: FavouriteAnimeViewModel = hiltViewModel(),
+) {
 
     val searchTextState by viewModel.searchTextState
 
@@ -99,22 +94,18 @@ fun FavouriteListScreen(onAnimeItemClick: (Int) -> Unit) {
                 text = searchTextState,
                 onTextChange = viewModel::updateSearchTextState,
                 onSearchClicked = {
-                    if (isResultEmpty) {
-                        //navigate
-                    }
                     resultAfterSearch = true
-                    viewModel.searchAnimeItem(it)
+                    viewModel.searchAnimeItemInDatabase(it)
                 },
-                onCloseSearchView = {
-//                    Log.d("tag","close")
-                    viewModel.loadAnimeList()
-                }
+                onCloseSearchView = viewModel::loadAnimeList
         )
 
         when (val res = screenState) {
 
             is FavouriteListScreenState.Result -> {
-//                Log.d("tag",res.result.toString())
+
+                isResultEmpty = false
+
                 FavouriteList(
                         favouriteAnimeList = res.result,
                         onAnimeItemClick = onAnimeItemClick,
@@ -125,12 +116,15 @@ fun FavouriteListScreen(onAnimeItemClick: (Int) -> Unit) {
 
             is FavouriteListScreenState.Failure -> {
 
-//                Log.d("tag",res.failure.toString())
-                if (res.failure is FailureCauses.NotFound) {
-                    EmptyListAnimation()
-                    ToSearchButton()
-                } else {
+                if (res.failure is FailureCauses.NotFound) isResultEmpty = true
 
+                if (res.failure is FailureCauses.NotFound && resultAfterSearch) {
+                    EmptyListAnimation()
+                    ToSearchButton(
+                            toSearchButtonClick = { viewModel.searchAnimeByName(searchTextState) }
+                    )
+                } else {
+                    EmptyListAnimation()
                 }
 
             }
@@ -177,11 +171,11 @@ private fun EmptyListAnimation() {
 }
 
 @Composable
-private fun ToSearchButton() {
+private fun ToSearchButton(toSearchButtonClick: () -> Unit) {
     OutlinedButton(
             modifier = Modifier
                     .pressClickEffect(),
-            onClick = { /*TODO*/ },
+            onClick = toSearchButtonClick,
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                     backgroundColor = MaterialTheme.colors.primary

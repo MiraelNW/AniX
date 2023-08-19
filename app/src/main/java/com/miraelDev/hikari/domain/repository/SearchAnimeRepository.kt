@@ -18,6 +18,8 @@ interface SearchAnimeRepository {
 
     suspend fun saveNameInAnimeSearchHistory(name: String)
 
+    fun saveSearchText(searchText:String)
+
     fun getSearchHistoryList():Flow<List<String>>
 
     fun getAnimeBySearch(): Flow<Result>

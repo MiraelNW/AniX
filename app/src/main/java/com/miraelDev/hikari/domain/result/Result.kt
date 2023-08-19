@@ -5,9 +5,9 @@ import com.miraelDev.hikari.domain.models.AnimeInfo
 
 sealed class Result() {
 
-    data class  Success  (val  animeList: List<AnimeInfo>) : Result()
+    data class  Success  (val  animeList: List<AnimeInfo>,val searchText:String="") : Result()
 
-    data class Failure(val failureCause: FailureCauses) : Result()
+    data class Failure(val failureCause: FailureCauses,val searchText:String = "") : Result()
 
     object Initial : Result()
 

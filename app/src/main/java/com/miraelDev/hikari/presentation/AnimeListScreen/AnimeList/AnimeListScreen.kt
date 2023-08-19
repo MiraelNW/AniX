@@ -11,74 +11,69 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun HomeScreen(
-    onThemeButtonClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onAnimeItemClick: (Int) -> Unit
+        onThemeButtonClick: () -> Unit,
+        onSettingsClick: () -> Unit,
+        onAnimeItemClick: (Int) -> Unit,
+        viewModel: AnimeListViewModel = hiltViewModel()
 ) {
     Box {
-
-        val viewModel = hiltViewModel<AnimeListViewModel>()
-
         val screenStateNewAnimeList =
-            viewModel.screenStateNewAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+                viewModel.screenStateNewAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
         val screenStateFilmsAnimeList =
-            viewModel.screenStateFilmsAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+                viewModel.screenStateFilmsAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
         val screenStatePopularAnimeList =
-            viewModel.screenStatePopularAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+                viewModel.screenStatePopularAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
         val screenStateNameAnimeList =
-            viewModel.screenStateNameAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
+                viewModel.screenStateNameAnimeList.collectAsState(initial = AnimeListScreenState.Loading)
 
         AnimeList(
-            screenStateNewAnimeList = screenStateNewAnimeList,
-            screenStateFilmsAnimeList = screenStateFilmsAnimeList,
-            screenStatePopularAnimeList = screenStatePopularAnimeList,
-            screenStateNameAnimeList = screenStateNameAnimeList,
-            onSettingsClick = onSettingsClick,
-            onThemeButtonClick = onThemeButtonClick,
-            viewModel = viewModel,
-            onAnimeItemClick = onAnimeItemClick
+                screenStateNewAnimeList = screenStateNewAnimeList,
+                screenStateFilmsAnimeList = screenStateFilmsAnimeList,
+                screenStatePopularAnimeList = screenStatePopularAnimeList,
+                screenStateNameAnimeList = screenStateNameAnimeList,
+                onSettingsClick = onSettingsClick,
+                onThemeButtonClick = onThemeButtonClick,
+                onAnimeItemClick = onAnimeItemClick
         )
     }
 }
 
 @Composable
 fun AnimeList(
-    screenStateNewAnimeList: State<AnimeListScreenState>,
-    screenStateFilmsAnimeList: State<AnimeListScreenState>,
-    screenStatePopularAnimeList: State<AnimeListScreenState>,
-    screenStateNameAnimeList: State<AnimeListScreenState>,
-    onSettingsClick: () -> Unit,
-    onThemeButtonClick: () -> Unit,
-    viewModel: AnimeListViewModel,
-    onAnimeItemClick: (Int) -> Unit
+        screenStateNewAnimeList: State<AnimeListScreenState>,
+        screenStateFilmsAnimeList: State<AnimeListScreenState>,
+        screenStatePopularAnimeList: State<AnimeListScreenState>,
+        screenStateNameAnimeList: State<AnimeListScreenState>,
+        onSettingsClick: () -> Unit,
+        onThemeButtonClick: () -> Unit,
+        onAnimeItemClick: (Int) -> Unit
 ) {
     Column(
-        Modifier
-            .systemGestureExclusion()
-            .padding(bottom = 48.dp)
+            Modifier
+                    .systemGestureExclusion()
+                    .padding(bottom = 48.dp)
     ) {
 
         var darkTheme by remember { mutableStateOf(false) }
 
         Toolbar(
-            onSettingsClick = onSettingsClick,
-            onThemeButtonClick = {
-                darkTheme = !darkTheme
-                onThemeButtonClick()
-            },
-            darkTheme = darkTheme
+                onSettingsClick = onSettingsClick,
+                onThemeButtonClick = {
+                    darkTheme = !darkTheme
+                    onThemeButtonClick()
+                },
+                darkTheme = darkTheme
         )
 
         ScrollableTabWithViewPager(
-            screenStateNewAnimeList = screenStateNewAnimeList,
-            screenStateFilmsAnimeList = screenStateFilmsAnimeList,
-            screenStatePopularAnimeList = screenStatePopularAnimeList,
-            screenStateNameAnimeList = screenStateNameAnimeList,
-            viewModel = viewModel,
-            onAnimeItemClick = onAnimeItemClick
+                screenStateNewAnimeList = screenStateNewAnimeList,
+                screenStateFilmsAnimeList = screenStateFilmsAnimeList,
+                screenStatePopularAnimeList = screenStatePopularAnimeList,
+                screenStateNameAnimeList = screenStateNameAnimeList,
+                onAnimeItemClick = onAnimeItemClick
         )
     }
 }

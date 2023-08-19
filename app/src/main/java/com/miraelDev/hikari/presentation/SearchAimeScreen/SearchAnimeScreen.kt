@@ -44,6 +44,8 @@ fun SearchAnimeScreen(
     val filterList by viewModel.filterList.collectAsState(listOf())
     val searchState by viewModel.animeBySearch.collectAsState(SearchAnimeScreenState.Initial)
     val searchHistory by viewModel.searchHistory.collectAsState()
+
+
     Column(
             modifier = Modifier
                     .fillMaxSize()
@@ -72,13 +74,17 @@ fun SearchAnimeScreen(
 
         val filterListState = rememberLazyListState()
 
+        if( (searchState is SearchAnimeScreenState.SearchResult
+                || searchState is SearchAnimeScreenState.SearchFailure) ){
+            showSearchResult = true
+            showStartAnimation = false
+        }
+
         AnimeSearchView(
                 text = searchTextState,
                 isSearchHistoryItemClick = isSearchHistoryItemClick,
                 showFilter = openSearchHistory || showSearchResult,
-                onTextChange = {
-                    viewModel.updateSearchTextState(it)
-                },
+                onTextChange = viewModel::updateSearchTextState,
                 onClearText = {
                     openSearchHistory = true
                 },
@@ -102,13 +108,10 @@ fun SearchAnimeScreen(
                     keyboardController?.hide()
                     onFilterClicked()
                 }
-
         )
 
         if (showStartAnimation) {
-            SideEffect {
-                viewModel.clearAllFilters()
-            }
+            SideEffect(effect = viewModel::clearAllFilters)
             SearchAnimation()
         }
 
@@ -139,13 +142,11 @@ fun SearchAnimeScreen(
                     }
 
                     is SearchAnimeScreenState.SearchFailure -> {
-                        Log.d("tag",results.failure.toString())
+                        Log.d("tag", results.failure.toString())
                         LostInternetAnimation()
-                        Log.d("tag", "failure")
                     }
 
                     is SearchAnimeScreenState.Loading -> {
-                        Log.d("tag", "load")
                         ShimmerList()
                     }
 

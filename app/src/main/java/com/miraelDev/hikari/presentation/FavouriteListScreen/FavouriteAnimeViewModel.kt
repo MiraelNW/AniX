@@ -1,21 +1,19 @@
 package com.miraelDev.hikari.presentation.FavouriteListScreen
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.domain.models.FavouriteAnimeInfo
 import com.miraelDev.hikari.domain.result.Result
+import com.miraelDev.hikari.domain.usecases.SearchUsecase.SaveSearchTextUseCase
+import com.miraelDev.hikari.domain.usecases.SearchUsecase.SearchAnimeByNameUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.GetFavouriteAnimeListUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.LoadAnimeListUseCase
-import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.SearchAnimeItemUseCase
+import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.SearchAnimeItemInDatabaseUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.SelectAnimeItemUseCase
 import com.miraelDev.hikari.exntensions.mergeWith
-import com.miraelDev.hikari.presentation.SearchAimeScreen.SearchAnimeScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -27,8 +25,10 @@ import javax.inject.Inject
 class FavouriteAnimeViewModel @Inject constructor(
         private val getFavouriteAnimeListUseCase: GetFavouriteAnimeListUseCase,
         private val selectAnimeItemUseCase: SelectAnimeItemUseCase,
-        private val searchAnimeItemUseCase: SearchAnimeItemUseCase,
-        private val loadAnimeListUseCase: LoadAnimeListUseCase
+        private val searchAnimeItemInDatabaseUseCase: SearchAnimeItemInDatabaseUseCase,
+        private val loadAnimeListUseCase: LoadAnimeListUseCase,
+        private val searchAnimeByNameUseCase: SearchAnimeByNameUseCase,
+        private val saveSearchTextUseCase: SaveSearchTextUseCase,
 ) : ViewModel() {
 
     private val loadingFlow = MutableSharedFlow<FavouriteListScreenState.Loading>()
@@ -44,7 +44,6 @@ class FavouriteAnimeViewModel @Inject constructor(
                     }
 
                     is Result.Success -> {
-                        Log.d("tag", res.animeList.toString())
                         FavouriteListScreenState.Result(result = res.animeList) as FavouriteListScreenState
                     }
 
@@ -72,10 +71,10 @@ class FavouriteAnimeViewModel @Inject constructor(
         }
     }
 
-    fun searchAnimeItem(name: String) {
+    fun searchAnimeItemInDatabase(name: String) {
         viewModelScope.launch {
-//            loadingFlow.emit(FavouriteListScreenState.Loading)
-            searchAnimeItemUseCase(name)
+            loadingFlow.emit(FavouriteListScreenState.Loading)
+            searchAnimeItemInDatabaseUseCase(name)
         }
     }
 
@@ -85,4 +84,10 @@ class FavouriteAnimeViewModel @Inject constructor(
         }
     }
 
+    fun searchAnimeByName(name:String) {
+        viewModelScope.launch {
+            searchAnimeByNameUseCase(name)
+            saveSearchTextUseCase(name)
+        }
+    }
 }

@@ -29,11 +29,9 @@ import com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen.FilterVie
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FilterScreen(
-        onBackPressed: () -> Unit
+        onBackPressed: () -> Unit,
+        viewModel : FilterViewModel = hiltViewModel()
 ) {
-
-
-    val viewModel = hiltViewModel<FilterViewModel>()
 
     val filterGenreList = viewModel.genreListFlow.collectAsState(listOf())
 

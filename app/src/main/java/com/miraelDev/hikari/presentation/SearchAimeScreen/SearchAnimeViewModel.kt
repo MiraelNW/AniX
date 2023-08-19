@@ -15,9 +15,7 @@ import com.miraelDev.hikari.domain.usecases.filterUsecase.ClearAllFiltersInFilte
 import com.miraelDev.hikari.exntensions.mergeWith
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
@@ -59,11 +57,22 @@ class SearchAnimeViewModel @Inject constructor(
 
                 when (val res = it) {
                     is Result.Failure -> {
+                        val searchText = res.searchText
+                        Log.d("tag",searchText)
+                        if (searchText.isNotEmpty()) {
+                            searchTextState.value = searchText
+                        }
                         SearchAnimeScreenState.SearchFailure(failure = res.failureCause) as SearchAnimeScreenState
                     }
 
                     is Result.Success -> {
-                        SearchAnimeScreenState.SearchResult(result = res.animeList) as SearchAnimeScreenState
+                        val result = res.animeList
+                        val searchText = res.searchText
+                        Log.d("tag",searchText)
+                        if (searchText.isNotEmpty()) {
+                            searchTextState.value = searchText
+                        }
+                        SearchAnimeScreenState.SearchResult(result = result) as SearchAnimeScreenState
                     }
 
                     is Result.Initial -> {

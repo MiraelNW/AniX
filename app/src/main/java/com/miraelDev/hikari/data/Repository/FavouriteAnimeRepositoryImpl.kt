@@ -27,8 +27,6 @@ class FavouriteAnimeRepositoryImpl @Inject constructor(
         private val favouriteAnimeDao: FavouriteAnimeDao
 ) : FavouriteAnimeRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     private var searchResults = MutableSharedFlow<Result>()
     private var favouriteListIsNeeded = MutableSharedFlow<Unit>(replay = 1)
 
@@ -36,7 +34,6 @@ class FavouriteAnimeRepositoryImpl @Inject constructor(
     private val favouriteResult = flow {
         favouriteListIsNeeded.emit(Unit)
         favouriteListIsNeeded.collect {
-            Log.d("tag","from collector" + favouriteAnimeDao.getFavouriteAnimeList().size.toString())
             val favList = mapper.mapAnimeInfoDbModelListIntoResult(favouriteAnimeDao.getFavouriteAnimeList())
             emit(favList)
         }
@@ -59,11 +56,10 @@ class FavouriteAnimeRepositoryImpl @Inject constructor(
     override fun getFavouriteAnimeList(): Flow<Result> = favouriteResult
 
     override suspend fun loadAnimeList() {
-        Log.d("tag", "emit")
         favouriteListIsNeeded.emit(Unit)
     }
 
-    override suspend fun searchAnimeItem(name: String) {
+    override suspend fun searchAnimeItemInDatabase(name: String) {
 
         searchResults.emit(
                 mapper.mapAnimeInfoDbModelListIntoResult(favouriteAnimeDao.searchAnimeItem(name))

@@ -1,5 +1,6 @@
 package com.miraelDev.hikari.data.Repository
 
+import android.util.Log
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
 import com.miraelDev.hikari.data.mapper.Mapper
 import com.miraelDev.hikari.data.remote.searchApi.ApiResult
@@ -33,6 +34,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
 
     private val searchResults = MutableSharedFlow<Result>()
 
+    private val searchTextFlow = MutableStateFlow("")
+
 
     override fun getFilterList(): StateFlow<List<String>> = _filterListFlow.asStateFlow()
 
@@ -61,8 +64,12 @@ class SearchAnimeRepositoryImpl @Inject constructor(
         delay(2000)
         when (val apiResult = searchApiService.searchAnimeByName(name)) {
             is ApiResult.Success -> {
+                Log.d("tag","api success"+searchTextFlow.value)
                 searchResults.emit(
-                        Result.Success(animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList))
+                        Result.Success(
+                                animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList),
+                                searchText = searchTextFlow.value
+                        )
                 )
             }
 
@@ -77,6 +84,11 @@ class SearchAnimeRepositoryImpl @Inject constructor(
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) =
             searchAnimeDao.insertSearchItem(name)
+
+    override fun saveSearchText(searchText: String) {
+        Log.d("tag","from function"+searchText)
+        searchTextFlow.value = (searchText)
+    }
 
     override fun getSearchHistoryList(): Flow<List<String>> = searchAnimeDao.getSearchHistoryList()
 

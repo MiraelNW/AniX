@@ -3,11 +3,14 @@ package com.miraelDev.hikari.presentation.MainScreen
 import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
 import com.miraelDev.hikari.navigation.AppNavGraph
 import com.miraelDev.hikari.navigation.Screen
 import com.miraelDev.hikari.navigation.rememberNavigationState
 import com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay.AnimeDetailScreen
+import com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList.AnimeListScreenState
+import com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList.AnimeListViewModel
 import com.miraelDev.hikari.presentation.AnimeListScreen.AnimeList.HomeScreen
 import com.miraelDev.hikari.presentation.AnimeListScreen.SettingsScreen.ColorPalette.ColorPaletteScreen
 import com.miraelDev.hikari.presentation.AnimeListScreen.SettingsScreen.LanguageScreen.LanguageScreen
@@ -54,7 +57,7 @@ fun MainScreen(
                     HomeScreen(
                             onThemeButtonClick = onThemeButtonClick,
                             onSettingsClick = navigationState::navigateToSettingsScreen,
-                            onAnimeItemClick = navigationState::navigateToAnimeDetail
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail,
                     )
                 },
 
@@ -129,7 +132,7 @@ fun MainScreen(
                 favouriteScreenContent = {
                     shouldShowBottomBar = true
                     FavouriteListScreen(
-                            onAnimeItemClick = navigationState::navigateToAnimeDetail
+                            onAnimeItemClick = navigationState::navigateToAnimeDetail,
                     )
                 },
 
@@ -149,6 +152,7 @@ fun MainScreen(
                             onAnimeItemClick = navigationState::navigateToAnimeDetail
                     )
                 },
+
                 animeDetailScreenContent = { animeId ->
                     shouldShowBottomBar = false
                     AnimeDetailScreen(
@@ -163,6 +167,7 @@ fun MainScreen(
                             }
                     )
                 },
+
                 videoViewScreenContent = {
                     shouldShowBottomBar = false
                     VideoViewScreen(
@@ -173,6 +178,7 @@ fun MainScreen(
                             }
                     )
                 }
+
         )
     }
 }

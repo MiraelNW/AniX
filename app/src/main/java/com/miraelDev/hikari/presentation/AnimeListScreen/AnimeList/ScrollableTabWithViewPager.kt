@@ -60,7 +60,6 @@ fun ScrollableTabWithViewPager(
         screenStateFilmsAnimeList: State<AnimeListScreenState>,
         screenStatePopularAnimeList: State<AnimeListScreenState>,
         screenStateNameAnimeList: State<AnimeListScreenState>,
-        viewModel: AnimeListViewModel,
         onAnimeItemClick: (Int) -> Unit
 ) {
 
