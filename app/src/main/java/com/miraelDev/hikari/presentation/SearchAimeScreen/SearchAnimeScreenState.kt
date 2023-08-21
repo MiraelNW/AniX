@@ -10,6 +10,8 @@ sealed class SearchAnimeScreenState {
 
     object Initial : SearchAnimeScreenState()
 
+    object SearchHistory : SearchAnimeScreenState()
+
     data class SearchFailure(val failure: FailureCauses) : SearchAnimeScreenState()
 
     data class SearchResult(val result: List<AnimeInfo>) : SearchAnimeScreenState()

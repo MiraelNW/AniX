@@ -75,6 +75,7 @@ import com.miraelDev.hikari.presentation.ShimmerList.ShimmerListFavouriteAnime
 @Composable
 fun FavouriteListScreen(
         onAnimeItemClick: (Int) -> Unit,
+        navigateToSearchScreen: () -> Unit,
         viewModel: FavouriteAnimeViewModel = hiltViewModel(),
 ) {
 
@@ -121,7 +122,10 @@ fun FavouriteListScreen(
                 if (res.failure is FailureCauses.NotFound && resultAfterSearch) {
                     EmptyListAnimation()
                     ToSearchButton(
-                            toSearchButtonClick = { viewModel.searchAnimeByName(searchTextState) }
+                            toSearchButtonClick = {
+                                viewModel.searchAnimeByName(searchTextState)
+                                navigateToSearchScreen()
+                            }
                     )
                 } else {
                     EmptyListAnimation()

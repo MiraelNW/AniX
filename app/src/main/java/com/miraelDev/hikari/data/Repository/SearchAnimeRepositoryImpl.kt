@@ -64,11 +64,9 @@ class SearchAnimeRepositoryImpl @Inject constructor(
         delay(2000)
         when (val apiResult = searchApiService.searchAnimeByName(name)) {
             is ApiResult.Success -> {
-                Log.d("tag","api success"+searchTextFlow.value)
                 searchResults.emit(
                         Result.Success(
                                 animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList),
-                                searchText = searchTextFlow.value
                         )
                 )
             }
@@ -82,11 +80,12 @@ class SearchAnimeRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getSearchName(): Flow<String> = searchTextFlow.asStateFlow()
+
     override suspend fun saveNameInAnimeSearchHistory(name: String) =
             searchAnimeDao.insertSearchItem(name)
 
     override fun saveSearchText(searchText: String) {
-        Log.d("tag","from function"+searchText)
         searchTextFlow.value = (searchText)
     }
 

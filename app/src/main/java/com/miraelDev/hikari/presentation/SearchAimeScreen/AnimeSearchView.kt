@@ -38,27 +38,30 @@ import com.miraelDev.hikari.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AnimeSearchView(
-        text: String,
-        showFilter: Boolean,
-        isSearchHistoryItemClick: Boolean,
-        onTextChange: (String) -> Unit,
-        onSearchClicked: (String) -> Unit,
-        onFilterClicked: (SoftwareKeyboardController?) -> Unit,
-        clickOnSearchView: @Composable () -> Unit,
-        onCloseSearchView: () -> Unit,
-        onClearText: () -> Unit,
+    text: String,
+    showFilter: Boolean,
+    isSearchHistoryItemClick: Boolean,
+    onTextChange: (String) -> Unit,
+    onSearchClicked: (String) -> Unit,
+    open: Boolean,
+    onFilterClicked: (SoftwareKeyboardController?) -> Unit,
+    clickOnSearchView: () -> Unit,
+    onCloseSearchView: () -> Unit,
+    onClearText: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
-    var enabled by rememberSaveable { mutableStateOf(true) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
     var isSearchKeyClick by rememberSaveable { mutableStateOf(false) }
 
-    val animatedHeightState by animateDpAsState(if (enabled) 50.dp else 60.dp)
-    val animatedWidthState by animateFloatAsState(if (enabled) 0.45f else 0.85f)
-    val animatedTextSizeState by animateIntAsState(if (enabled) 14 else 16)
+    expanded = open
+
+    val animatedHeightState by animateDpAsState(if (expanded) 60.dp else 50.dp)
+    val animatedWidthState by animateFloatAsState(if (expanded) 0.85f else 0.45f)
+    val animatedTextSizeState by animateIntAsState(if (expanded) 16 else 14)
 
     val source = remember { MutableInteractionSource() }
     var clicked by remember { mutableStateOf(false) }
@@ -66,15 +69,15 @@ fun AnimeSearchView(
     LaunchedEffect(key1 = isSearchHistoryItemClick, key2 = isSearchKeyClick) {
         if (isSearchHistoryItemClick || isSearchKeyClick) {
             clicked = false
+            isSearchKeyClick = false
             onSearchClicked(text)
             focusManager.clearFocus()
             keyboardController?.hide()
-            isSearchKeyClick = false
         }
     }
 
     if (source.collectIsPressedAsState().value) {
-        enabled = false
+        expanded = true
         clicked = true
     }
 
@@ -83,75 +86,75 @@ fun AnimeSearchView(
     }
 
     Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
     ) {
         OutlinedTextField(
-                modifier = Modifier
-                        .fillMaxWidth(animatedWidthState)
-                        .height(animatedHeightState)
-                        .focusRequester(focusRequester),
-                value = text,
-                onValueChange = onTextChange,
-                enabled = true,
-                singleLine = true,
-                interactionSource = source,
-                placeholder = {
-                    Text(
-                            modifier = Modifier
-                                    .alpha(alpha = ContentAlpha.medium),
+            modifier = Modifier
+                .fillMaxWidth(animatedWidthState)
+                .height(animatedHeightState)
+                .focusRequester(focusRequester),
+            value = text,
+            onValueChange = onTextChange,
+            enabled = true,
+            singleLine = true,
+            interactionSource = source,
+            placeholder = {
+                Text(
+                    modifier = Modifier
+                        .alpha(alpha = ContentAlpha.medium),
 
-                            fontSize = animatedTextSizeState.sp,
-                            color = MaterialTheme.colors.onBackground,
-                            text = "Search anime..."
-                    )
-                },
-                shape = RoundedCornerShape(16.dp),
-                leadingIcon = {
-                    Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon",
-                            tint = MaterialTheme.colors.primary
-                    )
-                },
-                trailingIcon = {
-                    if (!enabled) {
-                        IconButton(onClick = {
-                            if (text.isNotEmpty()) {
-                                onTextChange("")
-                                onClearText()
-                            } else {
-                                enabled = !enabled
-                                clicked = false
-                                onCloseSearchView()
-                                focusManager.clearFocus()
-                                keyboardController?.hide()
-                            }
-                        }) {
-                            Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close Icon",
-                                    tint = Color.Gray
-                            )
-
-                        }
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                        onSearch = {
-                            isSearchKeyClick = true
-                        }
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.background,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color(0xFF302F2F)
+                    fontSize = animatedTextSizeState.sp,
+                    color = MaterialTheme.colors.onBackground,
+                    text = "Search anime..."
                 )
+            },
+            shape = RoundedCornerShape(16.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search Icon",
+                    tint = MaterialTheme.colors.primary
+                )
+            },
+            trailingIcon = {
+                if (expanded) {
+                    IconButton(onClick = {
+                        if (text.isNotEmpty()) {
+                            onTextChange("")
+                            onClearText()
+                        } else {
+                            expanded = !expanded
+                            clicked = false
+                            onCloseSearchView()
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close Icon",
+                            tint = Color.Gray
+                        )
+
+                    }
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    isSearchKeyClick = true
+                }
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.background,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = Color(0xFF302F2F)
+            )
 
         )
         Filter(showFilter, keyboardController, onFilterClicked = onFilterClicked)
@@ -161,19 +164,19 @@ fun AnimeSearchView(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Filter(
-        visible: Boolean,
-        keyboardController: SoftwareKeyboardController?,
-        onFilterClicked: (SoftwareKeyboardController?) -> Unit
+    visible: Boolean,
+    keyboardController: SoftwareKeyboardController?,
+    onFilterClicked: (SoftwareKeyboardController?) -> Unit
 ) {
     AnimatedVisibility(visible = visible) {
         IconButton(
-                modifier = Modifier.size(36.dp),
-                onClick = { onFilterClicked(keyboardController) }
+            modifier = Modifier.size(36.dp),
+            onClick = { onFilterClicked(keyboardController) }
         ) {
             Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
-                    contentDescription = "filter",
-                    tint = MaterialTheme.colors.primary
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
+                contentDescription = "filter",
+                tint = MaterialTheme.colors.primary
             )
         }
     }

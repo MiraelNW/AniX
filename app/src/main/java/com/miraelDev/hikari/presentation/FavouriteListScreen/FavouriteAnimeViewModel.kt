@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.result.Result
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.SaveSearchTextUseCase
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.SearchAnimeByNameUseCase
+import com.miraelDev.hikari.domain.usecases.searchUsecase.SaveSearchTextUseCase
+import com.miraelDev.hikari.domain.usecases.searchUsecase.SearchAnimeByNameUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.GetFavouriteAnimeListUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.LoadAnimeListUseCase
 import com.miraelDev.hikari.domain.usecases.favouriteListUseCase.SearchAnimeItemInDatabaseUseCase
