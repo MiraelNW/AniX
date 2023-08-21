@@ -1,11 +1,10 @@
 package com.miraelDev.hikari.presentation.SearchAimeScreen.FilterScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.AddToFilterListUseCase
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.ClearAllFiltersInSearchRepository
-import com.miraelDev.hikari.domain.usecases.SearchUsecase.filterUsecase.RemoveFromFilterListUseCase
+import com.miraelDev.hikari.domain.usecases.searchUsecase.filterUsecase.AddToFilterListUseCase
+import com.miraelDev.hikari.domain.usecases.searchUsecase.filterUsecase.ClearAllFiltersInSearchRepository
+import com.miraelDev.hikari.domain.usecases.searchUsecase.filterUsecase.RemoveFromFilterListUseCase
 import com.miraelDev.hikari.domain.usecases.filterUsecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

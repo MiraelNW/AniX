@@ -67,7 +67,6 @@ class SearchAnimeRepositoryImpl @Inject constructor(
                 searchResults.emit(
                         Result.Success(
                                 animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList),
-                                searchText = searchTextFlow.value
                         )
                 )
             }
@@ -80,6 +79,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getSearchName(): Flow<String> = searchTextFlow.asStateFlow()
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) =
             searchAnimeDao.insertSearchItem(name)

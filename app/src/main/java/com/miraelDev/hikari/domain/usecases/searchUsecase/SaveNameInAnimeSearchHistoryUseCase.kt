@@ -1,4 +1,4 @@
-package com.miraelDev.hikari.domain.usecases.SearchUsecase
+package com.miraelDev.hikari.domain.usecases.searchUsecase
 
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
 import javax.inject.Inject
