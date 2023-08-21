@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +50,9 @@ import com.guru.composecookbook.theme.HikariTheme
 import com.miraelDev.hikari.R
 import com.miraelDev.hikari.exntensions.noRippleEffectClick
 import com.miraelDev.hikari.presentation.MainScreen.LocalColor
+import com.miraelDev.hikari.ui.theme.Blue
+import com.miraelDev.hikari.ui.theme.ColorPallet
+import com.miraelDev.hikari.ui.theme.Green
 
 @Composable
 fun ColorPaletteScreen(
@@ -90,12 +94,19 @@ private fun ColorRow(
         onColorThemeChoose: (Int) -> Unit
 ) {
 
-    var selectedIndex by rememberSaveable { mutableStateOf(0) }
+    var selectedIndex by remember { mutableStateOf(0) }
 
     val colorList = ImmutableList.of(
-            Color.Green,
-            Color.Red,
+            ColorPallet.GREEN,
+            ColorPallet.ORANGE,
+            ColorPallet.PURPLE,
     )
+
+    colorList.forEachIndexed { index, color ->
+        if (LocalColor.current == color) {
+            selectedIndex = index
+        }
+    }
 
     val scrollState = rememberScrollState()
 
@@ -109,7 +120,7 @@ private fun ColorRow(
     ) {
         colorList.forEachIndexed { index, color ->
             ThemeItem(
-                    color = color,
+                    colorPallet = color,
                     selected = selectedIndex == index,
                     onItemClick = {
                         selectedIndex = index
@@ -135,7 +146,9 @@ private fun ThemePreview() {
                         .height(400.dp),
                 elevation = 4.dp
         ) {
-            AnimeList()
+            HikariTheme(darkTheme = false, colorPallet = LocalColor.current) {
+                AnimeList()
+            }
         }
 
         Card(
@@ -156,10 +169,26 @@ private fun ThemePreview() {
 @Composable
 private fun ThemeItem(
         selected: Boolean,
-        color: Color,
+        colorPallet: ColorPallet,
         onItemClick: () -> Unit
 ) {
     val borderWidth by animateDpAsState(targetValue = 2.dp, animationSpec = spring())
+
+    val color = when(colorPallet){
+
+        ColorPallet.GREEN ->{
+            Color.Green
+        }
+
+        ColorPallet.ORANGE ->{
+            Color.Red
+        }
+
+        ColorPallet.PURPLE ->{
+            Blue
+        }
+
+    }
 
     Card(
             modifier = Modifier

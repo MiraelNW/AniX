@@ -13,6 +13,7 @@ import com.miraelDev.hikari.data.Repository.FavouriteAnimeRepositoryImpl
 import com.miraelDev.hikari.data.Repository.FilterRepositoryImpl
 import com.miraelDev.hikari.data.Repository.SearchAnimeRepositoryImpl
 import com.miraelDev.hikari.data.Repository.VideoPlayerRepositoryImpl
+import com.miraelDev.hikari.data.dataStore.PreferenceManager
 import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
 import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDaoImpl
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
@@ -78,6 +79,12 @@ abstract class DataModule {
                         setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
                     }
                     .build()
+        }
+
+        @Provides
+        @Singleton
+        fun providePreferenceManager(@ApplicationContext context: Context): PreferenceManager {
+            return PreferenceManager(context)
         }
     }
 

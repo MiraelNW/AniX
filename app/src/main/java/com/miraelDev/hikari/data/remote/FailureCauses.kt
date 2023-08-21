@@ -1,7 +1,5 @@
 package com.miraelDev.hikari.data.remote
 
-import com.miraelDev.hikari.data.remote.searchApi.ApiResult
-
 sealed class FailureCauses {
 
     object NoInternet : FailureCauses()

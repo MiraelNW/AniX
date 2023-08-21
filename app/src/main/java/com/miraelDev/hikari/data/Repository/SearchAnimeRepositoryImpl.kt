@@ -3,7 +3,7 @@ package com.miraelDev.hikari.data.Repository
 import android.util.Log
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
 import com.miraelDev.hikari.data.mapper.Mapper
-import com.miraelDev.hikari.data.remote.searchApi.ApiResult
+import com.miraelDev.hikari.data.remote.ApiResult
 import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
 import com.miraelDev.hikari.domain.result.Result
@@ -62,9 +62,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
 
     override suspend fun searchAnimeByName(name: String) {
         delay(2000)
-        when (val apiResult = searchApiService.searchAnimeByName(name)) {
+        when (val apiResult = searchApiService.searchAnimeByName(name.lowercase().trim())) {
             is ApiResult.Success -> {
-                Log.d("tag","api success"+searchTextFlow.value)
                 searchResults.emit(
                         Result.Success(
                                 animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList),
@@ -86,7 +85,6 @@ class SearchAnimeRepositoryImpl @Inject constructor(
             searchAnimeDao.insertSearchItem(name)
 
     override fun saveSearchText(searchText: String) {
-        Log.d("tag","from function"+searchText)
         searchTextFlow.value = (searchText)
     }
 

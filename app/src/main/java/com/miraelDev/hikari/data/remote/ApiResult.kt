@@ -1,6 +1,5 @@
-package com.miraelDev.hikari.data.remote.searchApi
+package com.miraelDev.hikari.data.remote
 
-import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.dto.AnimeInfoDto
 
 sealed class ApiResult {

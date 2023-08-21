@@ -2,6 +2,7 @@ package com.miraelDev.hikari.presentation.MainScreen
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +30,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.guru.composecookbook.theme.HikariTheme
+import com.miraelDev.hikari.navigation.Screen
 import com.miraelDev.hikari.ui.theme.ColorPallet
-import com.miraelDev.hikari.ui.theme.LightGray
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -43,15 +45,24 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val viewModel: MainViewModel by viewModels()
         installSplashScreen().setKeepOnScreenCondition { viewModel.isLoading.value }
+
         setContent {
             val systemUiController = rememberSystemUiController()
 
             val isSystemDark = isSystemInDarkTheme()
 
-            var darkTheme by rememberSaveable { mutableStateOf(isSystemDark) }
+            val darkModeUserChoice by viewModel.isDarkThemeFlow.collectAsState()
+
+            Log.d("tag",darkModeUserChoice.toString())
+
+            var darkTheme by rememberSaveable { mutableStateOf(false) }
+
+            darkTheme = isSystemDark || darkModeUserChoice
 
             var landscape by rememberSaveable { mutableStateOf(0) }
 
@@ -71,12 +82,12 @@ class MainActivity : ComponentActivity() {
                     LocalOrientation provides orientation,
                     LocalColor provides colorPallet
             ) {
-                HikariTheme(darkTheme) {
+                HikariTheme(darkTheme = darkTheme, colorPallet = colorPallet) {
                     var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
 
                     DisposableEffect(systemUiController, useDarkIcons) {
                         systemUiController.setSystemBarsColor(
-                                color =  Color.Transparent,
+                                color = Color.Transparent,
                                 darkIcons = !useDarkIcons
                         )
                         onDispose {}
@@ -85,6 +96,7 @@ class MainActivity : ComponentActivity() {
                     MainScreen(
                             onThemeButtonClick = {
                                 darkTheme = !darkTheme
+                                viewModel.setThemeMode(darkTheme)
                                 useDarkIcons = !useDarkIcons
                             },
                             onFullScreenToggle = { landscape = it },
@@ -98,21 +110,24 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             onColorThemeChoose = { color ->
-                                when (color) {
-                                    0 -> {
-                                        colorPallet = ColorPallet.GREEN
-                                    }
+                                colorPallet = when (color) {
 
                                     1 -> {
-                                        colorPallet = ColorPallet.RED
+                                        ColorPallet.ORANGE
+                                    }
+
+                                    2 -> {
+                                        ColorPallet.PURPLE
+                                    }
+
+                                    else -> {
+                                        ColorPallet.GREEN
                                     }
                                 }
                             }
                     )
                 }
             }
-
-
             observeState(isFullScreen = landscape, shouldShowSystemBars = shouldShowSystemBars)
         }
     }
@@ -147,6 +162,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val BACK = 0
         private const val ON_VIDEO_VIEW = 1
+        private const val IS_DARK_THEME = "is_dark_theme"
     }
 }
 

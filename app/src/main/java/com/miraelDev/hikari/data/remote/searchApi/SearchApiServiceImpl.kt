@@ -1,7 +1,6 @@
 package com.miraelDev.hikari.data.remote.searchApi
 
-import android.content.Context
-import android.util.Log
+import com.miraelDev.hikari.data.remote.ApiResult
 import com.miraelDev.hikari.data.remote.ApiRoutes
 import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.NetworkHandler

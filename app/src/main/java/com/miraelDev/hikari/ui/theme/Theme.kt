@@ -7,26 +7,24 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.miraelDev.hikari.ui.theme.Black
-import com.miraelDev.hikari.ui.theme.BlackDarker
+import com.miraelDev.hikari.ui.theme.Blue
 import com.miraelDev.hikari.ui.theme.ColorPallet
 import com.miraelDev.hikari.ui.theme.Green
-import com.miraelDev.hikari.ui.theme.Grey
-import com.miraelDev.hikari.ui.theme.Purple700
+import com.miraelDev.hikari.ui.theme.Orange
 import com.miraelDev.hikari.ui.theme.Red
 import com.miraelDev.hikari.ui.theme.Shapes
-import com.miraelDev.hikari.ui.theme.Teal200
 import com.miraelDev.hikari.ui.theme.Typography
 
 // dark/light green
-private val LightGreenColorPalette = lightColors(
+private val LightMainColorPalette = lightColors(
         primary = Green,
         background = Color.White,
         onBackground = Color.Black,
 )
 
 
-private val DarkGreenColorPalette = darkColors(
-        primary = Green,
+private val DarkMainColorPalette = darkColors(
+        primary = Red,
         background = Black,
         onBackground = Color.White,
 )
@@ -48,49 +46,29 @@ private val DarkRedColorPalette = darkColors(
 //    dark/light blue
 
 private val LightBlueColorPalette = lightColors(
-        primary = Color.Yellow,
-        primaryVariant = Purple700,
-        secondary = Purple700,
+        primary = Blue,
         background = Color.White,
-        surface = Color.White,
         onBackground = Color.Black,
-        onSurface = Color.Black
 )
 
 private val DarkBlueColorPalette = darkColors(
-        primary = Color.Blue,
-        primaryVariant = Color.Blue,
-        secondary = Teal200,
-        background = Color.Black,
-        surface = Color.Black,
-        onPrimary = Color.Black,
-        onSecondary = Color.White,
+        primary = Blue,
+        background = Black,
         onBackground = Color.White,
-        onSurface = Color.White,
-        error = Color.Red,
 )
 
 
 //  dark/light orange
 private val LightOrangeColorPalette = lightColors(
-        primary = Color.Blue,
-        primaryVariant = Purple700,
-        secondary = Purple700,
+        primary = Orange,
         background = Color.White,
-        surface = Color.White,
         onBackground = Color.Black,
-        onSurface = Color.Black
 )
 
 private val DarkOrangeColorPalette = darkColors(
-        primary = Purple700,
-        primaryVariant = Purple700,
-        secondary = Purple700,
-        background = Color.Black,
-        surface = Color.Black,
+        primary = Orange,
+        background = Black,
         onBackground = Color.White,
-        onSurface = Color.White,
-        error = Color.Red,
 )
 
 @Composable
@@ -100,11 +78,11 @@ fun HikariTheme(
         content: @Composable () -> Unit,
 ) {
     val colors = when (colorPallet) {
-        ColorPallet.GREEN -> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
-        ColorPallet.RED -> if (darkTheme) DarkRedColorPalette else LightRedColorPalette
-//        ColorPallet.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
+        ColorPallet.GREEN -> if (darkTheme) DarkMainColorPalette else LightMainColorPalette
+        ColorPallet.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
+        ColorPallet.PURPLE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
 //        ColorPallet.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
-        else -> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
+        else -> if (darkTheme) DarkMainColorPalette else LightMainColorPalette
     }
 
     MaterialTheme(

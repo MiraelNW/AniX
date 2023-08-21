@@ -2,14 +2,12 @@ package com.miraelDev.hikari.data.Repository
 
 import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
 import com.miraelDev.hikari.data.mapper.Mapper
-import com.miraelDev.hikari.data.remote.searchApi.ApiResult
+import com.miraelDev.hikari.data.remote.ApiResult
 import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import com.miraelDev.hikari.domain.repository.VideoPlayerRepository
 import com.miraelDev.hikari.domain.result.Result
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
