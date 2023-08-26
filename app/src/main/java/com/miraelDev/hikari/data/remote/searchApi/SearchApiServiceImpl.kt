@@ -1,10 +1,12 @@
 package com.miraelDev.hikari.data.remote.searchApi
 
+import android.util.Log
 import com.miraelDev.hikari.data.remote.ApiResult
 import com.miraelDev.hikari.data.remote.ApiRoutes
 import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.data.remote.dto.AnimeInfoDto
+import com.miraelDev.hikari.data.remote.dto.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.features.RedirectResponseException
@@ -17,36 +19,13 @@ class SearchApiServiceImpl @Inject constructor(
         private val networkHandler: NetworkHandler
 ) : SearchApiService {
 
-    override suspend fun searchAnimeByName(name: String): ApiResult {
-
-        if (networkHandler.isConnected.value) {
-            return try {
-                val resultList = client
-                        .get<Array<AnimeInfoDto>>("${ApiRoutes.SEARCH_URL_ANIME_LIST}$name")
-                        .toList()
-                if (resultList.isEmpty()) {
-                    ApiResult.Failure(failureCause = FailureCauses.NotFound)
-                } else {
-                    ApiResult.Success(animeList = resultList)
-                }
-
-            } catch (exception: Exception) {
-                exceptionHandler(exception)
-            }
-        } else {
-            return ApiResult.Failure(failureCause = FailureCauses.NoInternet)
-        }
-
-    }
-
     override suspend fun getAnimeById(id: Int): ApiResult {
         if (networkHandler.isConnected.value) {
             return try {
                 ApiResult.Success(animeList =
-                client.get<Array<AnimeInfoDto>>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id?format=json").toList())
+                client.get<Response>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id?format=json").results)
 
             } catch (exception: Exception) {
-
                 exceptionHandler(exception)
             }
         } else {

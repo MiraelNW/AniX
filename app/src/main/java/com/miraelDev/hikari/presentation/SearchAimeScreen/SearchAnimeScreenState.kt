@@ -1,19 +1,23 @@
 package com.miraelDev.hikari.presentation.SearchAimeScreen
 
-import com.miraelDev.hikari.data.remote.FailureCauses
+import androidx.paging.PagingData
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.domain.result.Result
+import kotlinx.coroutines.flow.Flow
 
 sealed class SearchAnimeScreenState {
 
-    object Loading : SearchAnimeScreenState()
+    object EmptyList : SearchAnimeScreenState()
 
-    object Initial : SearchAnimeScreenState()
+    data class InitialList(
+        val result: Flow<PagingData<AnimeInfo>>,
+        val filterList: List<String> = emptyList()
+    ) : SearchAnimeScreenState()
 
-    object SearchHistory : SearchAnimeScreenState()
+    data class SearchHistory(val filterList: List<String>) : SearchAnimeScreenState()
 
-    data class SearchFailure(val failure: FailureCauses) : SearchAnimeScreenState()
-
-    data class SearchResult(val result: List<AnimeInfo>) : SearchAnimeScreenState()
+    data class SearchResult(
+        val result: Flow<PagingData<AnimeInfo>>,
+        val filterList: List<String> = emptyList()
+    ) : SearchAnimeScreenState()
 
 }

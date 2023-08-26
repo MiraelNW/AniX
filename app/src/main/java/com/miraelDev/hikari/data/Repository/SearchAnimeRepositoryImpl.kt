@@ -1,43 +1,38 @@
 package com.miraelDev.hikari.data.Repository
 
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
-import com.miraelDev.hikari.data.mapper.Mapper
-import com.miraelDev.hikari.data.remote.ApiResult
-import com.miraelDev.hikari.data.remote.searchApi.SearchApiService
+import com.miraelDev.hikari.data.remote.NetworkHandler
+import com.miraelDev.hikari.data.remote.searchApi.SearchPagingDataStore
+import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
-import com.miraelDev.hikari.domain.result.Result
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class SearchAnimeRepositoryImpl @Inject constructor(
-        private val mapper: Mapper,
-        private val searchApiService: SearchApiService,
-        private val searchAnimeDao: SearchAnimeDao
+    private val client: HttpClient,
+    private val networkHandler: NetworkHandler,
+    private val searchAnimeDao: SearchAnimeDao
 ) : SearchAnimeRepository {
-
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var _filterMap = mutableMapOf<Int, String>()
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()
 
-    private val _filterListFlow = MutableStateFlow<List<String>>(listOf())
+    private val _filterListFlow = MutableSharedFlow<List<String>>(replay = 1)
 
-    private val searchResults = MutableSharedFlow<Result>()
+    private val _searchTextFlow = MutableStateFlow("")
 
-    private val searchTextFlow = MutableStateFlow("")
+    override fun getFilterList(): Flow<List<String>> = _filterListFlow.asSharedFlow()
 
-
-    override fun getFilterList(): StateFlow<List<String>> = _filterListFlow.asStateFlow()
 
     override suspend fun addToFilterList(categoryId: Int, category: String) {
         _filterMap[categoryId] = category
@@ -45,7 +40,9 @@ class SearchAnimeRepositoryImpl @Inject constructor(
             addAll(filterMap.values)
         }
         _filterListFlow.emit(filterList)
+
     }
+
 
     override suspend fun removeFromFilterList(categoryId: Int, category: String) {
         _filterMap.remove(categoryId, category)
@@ -53,45 +50,39 @@ class SearchAnimeRepositoryImpl @Inject constructor(
             addAll(filterMap.values)
         }
         _filterListFlow.emit(filterList)
+
     }
 
     override suspend fun clearAllFilters() {
-        _filterMap = mutableMapOf<Int, String>()
-        _filterListFlow.value = listOf()
+        _filterMap = mutableMapOf()
+        _filterListFlow.emit(emptyList())
     }
 
-    override suspend fun searchAnimeByName(name: String) {
-        delay(2000)
-        when (val apiResult = searchApiService.searchAnimeByName(name.lowercase().trim())) {
-            is ApiResult.Success -> {
-                searchResults.emit(
-                        Result.Success(
-                                animeList = mapper.mapAnimeListDtoToListAnimeInfo(apiResult.animeList),
-                        )
+    override suspend fun searchAnimeByName(name: String): Flow<PagingData<AnimeInfo>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 12,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = {
+                SearchPagingDataStore(
+                    name = name,
+                    client = client,
+                    networkHandler = networkHandler
                 )
             }
-
-            is ApiResult.Failure -> {
-                searchResults.emit(
-                        Result.Failure(failureCause = apiResult.failureCause)
-                )
-
-            }
-        }
+        ).flow
     }
 
-    override fun getSearchName(): Flow<String> = searchTextFlow.asStateFlow()
+    override fun getSearchName(): Flow<String> = _searchTextFlow.asStateFlow()
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) =
-            searchAnimeDao.insertSearchItem(name)
+        searchAnimeDao.insertSearchItem(name)
 
     override fun saveSearchText(searchText: String) {
-        searchTextFlow.value = (searchText)
+        _searchTextFlow.value = (searchText)
     }
 
     override fun getSearchHistoryList(): Flow<List<String>> = searchAnimeDao.getSearchHistoryList()
-
-    override fun getAnimeBySearch(): SharedFlow<Result> = searchResults.asSharedFlow()
-
 
 }

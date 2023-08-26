@@ -27,15 +27,12 @@ import com.miraelDev.hikari.exntensions.shimmerEffect
 @Preview(showBackground = true)
 fun ShimmerList() {
 
-    val scrollState = rememberScrollState()
-
     Column(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 4.dp, end = 4.dp)
-                    .navigationBarsPadding()
-                    .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 4.dp, end = 4.dp)
+            .navigationBarsPadding(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         repeat(6) {
             ShimmerAnimeCard()
@@ -45,25 +42,30 @@ fun ShimmerList() {
 }
 
 @Composable
+fun ShimmerItem() {
+    ShimmerAnimeCard()
+}
+
+@Composable
 private fun ShimmerAnimeCard() {
     Card(
-            shape = RoundedCornerShape(16.dp),
-            backgroundColor = MaterialTheme.colors.background,
-            modifier = Modifier.fillMaxWidth(),
-            elevation = 4.dp
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier.fillMaxWidth(),
+        elevation = 4.dp
     ) {
         Row() {
             Spacer(
-                    modifier = Modifier
-                            .height(150.dp)
-                            .width(100.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .shimmerEffect()
+                modifier = Modifier
+                    .height(220.dp)
+                    .width(150.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect()
             )
             Spacer(
-                    modifier = Modifier
-                            .height(150.dp)
-                            .width(16.dp)
+                modifier = Modifier
+                    .height(150.dp)
+                    .width(16.dp)
             )
             AnimePreview()
 
@@ -74,48 +76,54 @@ private fun ShimmerAnimeCard() {
 @Composable
 private fun AnimePreview() {
     Column(
-            Modifier
-                    .padding(top = 4.dp, end = 8.dp)
-                    .fillMaxHeight()
+        Modifier
+            .padding(top = 4.dp, end = 8.dp)
+            .height(220.dp),
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Row(
+        Column {
+
+            Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Spacer(
+            ) {
+                Spacer(
                     modifier = Modifier
-                            .fillMaxWidth(0.6f)
-                            .height(16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .shimmerEffect()
-            )
-            Rating()
-        }
-        Spacer(
-                modifier = Modifier
-                        .height(6.dp)
-                        .fillMaxWidth()
-        )
-        Spacer(
-                modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(12.dp)
+                        .fillMaxWidth(0.6f)
+                        .height(16.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .shimmerEffect()
-        )
-        repeat(5) {
+                )
+                Rating()
+            }
+
             Spacer(
-                    modifier = Modifier
-                            .height(4.dp)
-                            .fillMaxWidth()
+                modifier = Modifier
+                    .height(6.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect()
+            )
+        }
+
+        repeat(3) {
+            Spacer(
+                modifier = Modifier
+                    .height(4.dp)
+                    .fillMaxWidth()
             )
 
             Spacer(
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .height(12.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .shimmerEffect()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect()
             )
         }
     }
@@ -125,19 +133,19 @@ private fun AnimePreview() {
 private fun Rating() {
     Row {
         Spacer(
-                modifier = Modifier
-                        .fillMaxWidth(0.2f)
-                        .clip(RoundedCornerShape(16.dp))
-                        .shimmerEffect()
-                        .height(16.dp)
+            modifier = Modifier
+                .fillMaxWidth(0.2f)
+                .clip(RoundedCornerShape(16.dp))
+                .shimmerEffect()
+                .height(16.dp)
         )
         Spacer(modifier = Modifier.width(2.dp))
         Spacer(
-                modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .clip(RoundedCornerShape(16.dp))
-                        .shimmerEffect()
-                        .height(16.dp)
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .clip(RoundedCornerShape(16.dp))
+                .shimmerEffect()
+                .height(16.dp)
         )
     }
 }

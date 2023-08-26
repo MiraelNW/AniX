@@ -3,21 +3,43 @@ package com.miraelDev.hikari.presentation
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -29,7 +51,11 @@ import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.AnimeCard
 import com.miraelDev.hikari.presentation.SearchAimeScreen.AnimeCard.LastSearchedAnime
 import com.miraelDev.hikari.presentation.SearchAimeScreen.SearchAnimeScreenState
 import com.miraelDev.hikari.presentation.SearchAimeScreen.SearchAnimeViewModel
+import com.miraelDev.hikari.presentation.ShimmerList.ShimmerItem
 import com.miraelDev.hikari.presentation.ShimmerList.ShimmerList
+import com.miraelDev.hikari.presentation.commonComposFunc.Animation.WentWrongAnimation
+import com.miraelDev.hikari.presentation.commonComposFunc.ErrorAppendItem
+import io.ktor.utils.io.errors.IOException
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -41,8 +67,7 @@ fun SearchAnimeScreen(
     val viewModel = hiltViewModel<SearchAnimeViewModel>()
 
     val searchTextState by viewModel.searchTextState
-    val filterList by viewModel.filterList.collectAsState(listOf())
-    val searchScreenState by viewModel.animeBySearch.collectAsState(SearchAnimeScreenState.Initial)
+    val searchScreenState by viewModel.screenState.collectAsState()
     val searchHistory by viewModel.searchHistory.collectAsState()
 
 
@@ -65,7 +90,8 @@ fun SearchAnimeScreen(
 
         val filterListState = rememberLazyListState()
 
-//        Log.d("tag", searchScreenState.toString())
+        Log.d("tag",searchScreenState.toString())
+
 
         AnimeSearchView(
             text = searchTextState,
@@ -90,79 +116,47 @@ fun SearchAnimeScreen(
 
             is SearchAnimeScreenState.SearchResult -> {
                 open = true
-                Filters(filterList, filterListState)
-//                Log.d("tag", "result")
-                animeList = results.result
+                Filters(filterList = results.filterList, filterListState)
+                val resultList = results.result.collectAsLazyPagingItems()
+                Log.d("tag","search res"+resultList.loadState.toString())
                 SearchResult(
-                    searchResults = animeList,
-                    onAnimeItemClick = onAnimeItemClick
+                        searchResults = resultList,
+                        onAnimeItemClick = onAnimeItemClick
                 )
             }
 
-            is SearchAnimeScreenState.SearchFailure -> {
-                open = true
-                Filters(filterList, filterListState)
-//                Log.d("tag", "failure")
-                LostInternetAnimation()
-            }
-
-            is SearchAnimeScreenState.Loading -> {
-                open = true
-//                Log.d("tag", "load")
-                ShimmerList()
-            }
-
-            is SearchAnimeScreenState.Initial -> {
+            is SearchAnimeScreenState.InitialList -> {
                 open = false
-//                Log.d("tag", "initial")
-                SideEffect(effect = viewModel::clearAllFilters)
-                SearchAnimation()
+                val resultList = results.result.collectAsLazyPagingItems()
+                Log.d("tag","initial list"+resultList.loadState.toString())
+                SearchResult(
+                    searchResults = resultList,
+                    onAnimeItemClick = onAnimeItemClick
+                )
+
             }
 
             is SearchAnimeScreenState.SearchHistory -> {
                 open = true
                 Column {
-                    Filters(filterList, filterListState)
+                    Log.d("tag", results.toString())
+                    Filters(filterList = results.filterList, filterListState)
                     SearchHistory(
-                        searchHistory = searchHistory,
-                        onSearchItemClick = {
-                            viewModel.updateSearchTextState(it)
-                            isSearchHistoryItemClick = true
-                        }
+                            searchHistory = searchHistory,
+                            onSearchItemClick = {
+                                viewModel.updateSearchTextState(it)
+                                isSearchHistoryItemClick = true
+                            }
                     )
                 }
             }
+
+            is SearchAnimeScreenState.EmptyList -> {}
         }
     }
 }
 
-@Composable
-private fun SearchAnimation() {
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search))
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.75f)
-    ) {
-        LottieAnimation(
-            modifier = Modifier
-                .size(300.dp)
-                .align(Alignment.BottomCenter),
-            composition = composition,
-            iterations = LottieConstants.IterateForever
-        )
-    }
-}
-
-@Composable
-private fun LostInternetAnimation() {
-
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lost_internet))
-
-    LottieAnimation(composition = composition, iterations = 4)
-
-}
 
 @Composable
 private fun Filters(
@@ -231,7 +225,7 @@ private fun SearchHistory(
 
 @Composable
 private fun SearchResult(
-    searchResults: List<AnimeInfo>,
+    searchResults: LazyPagingItems<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit
 ) {
     LazyColumn(
@@ -245,11 +239,57 @@ private fun SearchResult(
         verticalArrangement = Arrangement.spacedBy(8.dp),
 
         ) {
-        items(items = searchResults, key = { it.id }) {
+        items(count = searchResults.itemCount) { index ->
             AnimeCard(
-                item = it,
+                item = checkNotNull(searchResults[index]),
                 onAnimeItemClick = onAnimeItemClick
             )
+        }
+
+        searchResults.apply {
+            when {
+
+                loadState.refresh is LoadState.Loading -> {
+                    item { ShimmerList() }
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    item { ShimmerItem() }
+                }
+
+                loadState.refresh is LoadState.Error -> {
+                    val e = searchResults.loadState.refresh as LoadState.Error
+                    item {
+                        if (e.error is IOException) {
+                            WentWrongAnimation(
+                                res = R.raw.lost_internet,
+                                onClickRetry = ::retry
+                            )
+                        } else {
+                            Log.d("tag",e.error.message.toString())
+                            WentWrongAnimation(
+                                res = R.raw.smth_went_wrong,
+                                onClickRetry = ::retry
+                            )
+                        }
+                    }
+
+                }
+
+                loadState.append is LoadState.Error -> {
+                    val e = searchResults.loadState.append as LoadState.Error
+                    item {
+                        if (e.error is IOException) {
+                            ErrorAppendItem(
+                                message = "Попробуйте снова",
+                                onClickRetry = ::retry
+                            )
+                        }
+                    }
+
+                }
+
+            }
         }
     }
 }

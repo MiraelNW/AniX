@@ -1,19 +1,19 @@
 package com.miraelDev.hikari.domain.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
 interface AnimeListRepository {
 
-//    fun getAnimeListByCategory(category: Int)
+    fun getNewAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getNewAnimeList(): Flow<List<AnimeInfo>>
+    fun getPopularAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getPopularAnimeList(): Flow<List<AnimeInfo>>
+    fun getNameAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getNameAnimeList(): Flow<List<AnimeInfo>>
-
-    fun getFilmsAnimeList(): Flow<List<AnimeInfo>>
+    fun getFilmsAnimeList(): Flow<PagingData<AnimeInfo>>
 
 }

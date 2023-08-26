@@ -79,7 +79,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
 enum class ButtonState { Pressed, Idle }
 
-fun Modifier.pressClickEffect() = composed {
+fun Modifier.pressClickEffect(onClick: (() -> Unit)? = null) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
     val ty by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0f else -20f)
 
@@ -90,7 +90,7 @@ fun Modifier.pressClickEffect() = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = { }
+            onClick = onClick ?: {}
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {

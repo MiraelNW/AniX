@@ -1,9 +1,12 @@
 package com.miraelDev.hikari.presentation.FavouriteListScreen
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -71,12 +74,13 @@ import com.miraelDev.hikari.exntensions.pressClickEffect
 import com.miraelDev.hikari.presentation.AnimeInfoDetailAndPlay.FavouriteIcon
 import com.miraelDev.hikari.presentation.AnimeListScreen.FavouriteSearchView
 import com.miraelDev.hikari.presentation.ShimmerList.ShimmerListFavouriteAnime
+import kotlinx.coroutines.delay
 
 @Composable
 fun FavouriteListScreen(
-        onAnimeItemClick: (Int) -> Unit,
-        navigateToSearchScreen: () -> Unit,
-        viewModel: FavouriteAnimeViewModel = hiltViewModel(),
+    onAnimeItemClick: (Int) -> Unit,
+    navigateToSearchScreen: () -> Unit,
+    viewModel: FavouriteAnimeViewModel = hiltViewModel(),
 ) {
 
     val searchTextState by viewModel.searchTextState
@@ -87,18 +91,29 @@ fun FavouriteListScreen(
 
     var isResultEmpty by rememberSaveable { mutableStateOf(false) }
 
+    var isSearchButtonClicked by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = isSearchButtonClicked) {
+        if (isSearchButtonClicked) {
+            viewModel.searchAnimeByName(searchTextState)
+            delay(800)
+            navigateToSearchScreen()
+        }
+        isSearchButtonClicked = false
+    }
+
     Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Toolbar(
-                text = searchTextState,
-                onTextChange = viewModel::updateSearchTextState,
-                onSearchClicked = {
-                    resultAfterSearch = true
-                    viewModel.searchAnimeItemInDatabase(it)
-                },
-                onCloseSearchView = viewModel::loadAnimeList
+            text = searchTextState,
+            onTextChange = viewModel::updateSearchTextState,
+            onSearchClicked = {
+                resultAfterSearch = true
+                viewModel.searchAnimeItemInDatabase(it)
+            },
+            onCloseSearchView = viewModel::loadAnimeList
         )
 
         when (val res = screenState) {
@@ -108,9 +123,9 @@ fun FavouriteListScreen(
                 isResultEmpty = false
 
                 FavouriteList(
-                        favouriteAnimeList = res.result,
-                        onAnimeItemClick = onAnimeItemClick,
-                        onFavouriteIconClick = viewModel::selectAnimeItem
+                    favouriteAnimeList = res.result,
+                    onAnimeItemClick = onAnimeItemClick,
+                    onFavouriteIconClick = viewModel::selectAnimeItem
                 )
 
             }
@@ -121,12 +136,7 @@ fun FavouriteListScreen(
 
                 if (res.failure is FailureCauses.NotFound && resultAfterSearch) {
                     EmptyListAnimation()
-                    ToSearchButton(
-                            toSearchButtonClick = {
-                                viewModel.searchAnimeByName(searchTextState)
-                                navigateToSearchScreen()
-                            }
-                    )
+                    ToSearchButton(toSearchButtonClick = { isSearchButtonClicked = true })
                 } else {
                     EmptyListAnimation()
                 }
@@ -149,7 +159,10 @@ private fun EmptyListAnimation() {
 
     var scaleValue by rememberSaveable { mutableStateOf(0f) }
 
-    val scale by animateFloatAsState(targetValue = scaleValue, animationSpec = tween(durationMillis = 300))
+    val scale by animateFloatAsState(
+        targetValue = scaleValue,
+        animationSpec = tween(durationMillis = 300)
+    )
 
     DisposableEffect(key1 = Unit) {
 
@@ -159,17 +172,18 @@ private fun EmptyListAnimation() {
     }
 
 
-    Box(modifier = Modifier
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.65f)
             .scale(scale)
     ) {
         LottieAnimation(
-                modifier = Modifier
-                        .size(300.dp)
-                        .align(Alignment.BottomCenter),
-                composition = composition,
-                iterations = LottieConstants.IterateForever
+            modifier = Modifier
+                .size(300.dp)
+                .align(Alignment.BottomCenter),
+            composition = composition,
+            iterations = LottieConstants.IterateForever
         )
     }
 }
@@ -177,29 +191,29 @@ private fun EmptyListAnimation() {
 @Composable
 private fun ToSearchButton(toSearchButtonClick: () -> Unit) {
     OutlinedButton(
-            modifier = Modifier
-                    .pressClickEffect(),
-            onClick = toSearchButtonClick,
-            shape = RoundedCornerShape(24.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                    backgroundColor = MaterialTheme.colors.primary
-            )
+        modifier = Modifier
+            .pressClickEffect(),
+        onClick = toSearchButtonClick,
+        shape = RoundedCornerShape(24.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor = MaterialTheme.colors.primary
+        )
     ) {
         Text(
-                modifier = Modifier.padding(6.dp),
-                text = "Найти аниме",
-                fontSize = 18.sp,
-                color = Color.White
+            modifier = Modifier.padding(6.dp),
+            text = "Найти аниме",
+            fontSize = 18.sp,
+            color = Color.White
         )
     }
 }
 
 @Composable
 private fun Toolbar(
-        text: String,
-        onTextChange: (String) -> Unit,
-        onSearchClicked: (String) -> Unit,
-        onCloseSearchView: () -> Unit,
+    text: String,
+    onTextChange: (String) -> Unit,
+    onSearchClicked: (String) -> Unit,
+    onCloseSearchView: () -> Unit,
 ) {
 
     var shouldShowSearchView by remember {
@@ -207,72 +221,72 @@ private fun Toolbar(
     }
 
     TopAppBar(
-            modifier = Modifier.statusBarsPadding(),
-            backgroundColor = MaterialTheme.colors.background,
-            elevation = 0.dp
+        modifier = Modifier.statusBarsPadding(),
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 0.dp
     ) {
         if (shouldShowSearchView) {
             FavouriteSearchView(
-                    text = text,
-                    onTextChange = onTextChange,
-                    onSearchClicked = onSearchClicked,
-                    onCloseSearchView = {
-                        shouldShowSearchView = false
-                        onCloseSearchView()
-                    }
+                text = text,
+                onTextChange = onTextChange,
+                onSearchClicked = onSearchClicked,
+                onCloseSearchView = {
+                    shouldShowSearchView = false
+                    onCloseSearchView()
+                }
             )
         } else {
 
             Row(
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                            modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
-                                    .size(32.dp),
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
-                            contentDescription = "brand icon",
-                            tint = MaterialTheme.colors.primary
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
+                            .size(32.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
+                        contentDescription = "brand icon",
+                        tint = MaterialTheme.colors.primary
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                            text = stringResource(id = R.string.app_name),
-                            color = MaterialTheme.colors.primary,
-                            fontSize = 24.sp
+                        text = stringResource(id = R.string.app_name),
+                        color = MaterialTheme.colors.primary,
+                        fontSize = 24.sp
                     )
                 }
                 Row {
 
                     IconButton(
-                            modifier = Modifier
-                                    .size(28.dp)
-                                    .padding(2.dp),
-                            onClick = {
-                                shouldShowSearchView = true
-                            }
+                        modifier = Modifier
+                            .size(28.dp)
+                            .padding(2.dp),
+                        onClick = {
+                            shouldShowSearchView = true
+                        }
 
                     ) {
                         Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Search",
-                                tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.fillMaxSize(),
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search",
+                            tint = MaterialTheme.colors.primary,
+                            modifier = Modifier.fillMaxSize(),
                         )
                     }
 
                     Spacer(
-                            modifier = Modifier
-                                    .height(24.dp)
-                                    .width(12.dp)
+                        modifier = Modifier
+                            .height(24.dp)
+                            .width(12.dp)
                     )
                 }
 
@@ -283,9 +297,9 @@ private fun Toolbar(
 
 @Composable
 private fun FavouriteList(
-        favouriteAnimeList: List<AnimeInfo>,
-        onAnimeItemClick: (Int) -> Unit,
-        onFavouriteIconClick: (Boolean, AnimeInfo) -> Unit
+    favouriteAnimeList: List<AnimeInfo>,
+    onAnimeItemClick: (Int) -> Unit,
+    onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
 
     val configuration = LocalConfiguration.current
@@ -296,19 +310,19 @@ private fun FavouriteList(
     }
 
     LazyVerticalGrid(
-            columns = GridCells.Fixed(gridCells),
-            contentPadding = PaddingValues(4.dp),
-            modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(bottom = 48.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        modifier = Modifier
+            .navigationBarsPadding()
+            .padding(bottom = 48.dp),
+        columns = GridCells.Fixed(gridCells),
+        contentPadding = PaddingValues(4.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         items(items = favouriteAnimeList, key = { it.id }) {
             AnimeCard(
-                    item = it,
-                    onAnimeItemClick = onAnimeItemClick,
-                    onFavouriteIconClick = onFavouriteIconClick
+                item = it,
+                onAnimeItemClick = onAnimeItemClick,
+                onFavouriteIconClick = onFavouriteIconClick
             )
         }
     }
@@ -317,50 +331,66 @@ private fun FavouriteList(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AnimeCard(
-        item: AnimeInfo,
-        onAnimeItemClick: (Int) -> Unit,
-        onFavouriteIconClick: (Boolean, AnimeInfo) -> Unit
+    item: AnimeInfo,
+    onAnimeItemClick: (Int) -> Unit,
+    onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
 
     val animatedProgress = remember { Animatable(initialValue = 0f) }
     LaunchedEffect(Unit) {
         animatedProgress.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(700)
+            targetValue = 1f,
+            animationSpec = tween(700)
         )
+    }
+
+    var unSelectedItem by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(unSelectedItem) {
+        if (unSelectedItem) {
+            delay(400)
+            onFavouriteIconClick(item)
+        }
     }
     val animatedModifier = Modifier.alpha(animatedProgress.value)
 
-    Card(
+    AnimatedVisibility(
+        visible = !unSelectedItem,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        Card(
             onClick = { onAnimeItemClick(item.id) },
             shape = RoundedCornerShape(16.dp),
             backgroundColor = MaterialTheme.colors.background,
             modifier = Modifier
-                    .fillMaxWidth()
-                    .pressClickEffect(),
+                .fillMaxWidth()
+                .pressClickEffect(),
             elevation = 4.dp
-    ) {
-        Box(modifier = animatedModifier) {
-            AsyncImage(
+        ) {
+            Box(modifier = animatedModifier) {
+                AsyncImage(
                     model = item.image,
                     contentDescription = item.nameRu,
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
-                            .clip(RoundedCornerShape(16.dp))
-            )
-            FavouriteIcon(
+                        .height(300.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                )
+                FavouriteIcon(
                     modifier = animatedModifier
-                            .align(Alignment.TopEnd)
-                            .padding(end = 8.dp, top = 8.dp),
+                        .align(Alignment.TopEnd)
+                        .padding(end = 8.dp, top = 8.dp),
                     size = 24,
                     selected = true,
-                    onFavouriteIconClick = { isSelected ->
-                        onFavouriteIconClick(isSelected, item)
+                    onFavouriteIconClick = { _ ->
+                        unSelectedItem = true
                     }
-            )
+                )
+            }
         }
     }
+
+
 }
 

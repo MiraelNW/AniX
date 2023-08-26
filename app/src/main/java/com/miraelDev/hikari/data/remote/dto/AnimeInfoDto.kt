@@ -1,28 +1,51 @@
 package com.miraelDev.hikari.data.remote.dto
 
+import com.google.common.collect.ImmutableList
+import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AnimeInfoDto(
 
-    @SerialName("id") val id : Int,
+        @SerialName("id") val id: Int,
 
-    @SerialName("name") val name : String,
+        @SerialName("name") val name: String,
 
-    @SerialName("russian") val russianName : String,
+        @SerialName("russian") val russianName: String,
 
-    @SerialName("image") val image : String,
+        @SerialName("image") val image: String,
 
-    @SerialName("kind") val kind : String,
+        @SerialName("kind") val kind: String,
 
-    @SerialName("score") val score : Float,
+        @SerialName("score") val score: Float,
 
-    @SerialName("status") val status : String,
+        @SerialName("aired_on") val airedOn: String,
 
-    @SerialName("episodes") val episodes : Int,
+        @SerialName("status") val status: String,
 
-    @SerialName("rating") val rating : String,
+        @SerialName("episodes") val episodes: Int,
 
-    @SerialName("description") val description : String,
+        @SerialName("rating") val rating: String,
+
+        @SerialName("description") val description: String?,
+
+        @SerialName("genres") val genres: List<String>,
 )
+
+internal fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
+    return AnimeInfo(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = ImmutableList.copyOf(this.genres),
+            episodes = this.episodes,
+            image = this.image,
+    )
+}

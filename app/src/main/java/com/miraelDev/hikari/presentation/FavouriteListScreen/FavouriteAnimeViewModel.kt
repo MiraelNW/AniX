@@ -65,9 +65,9 @@ class FavouriteAnimeViewModel @Inject constructor(
         _searchTextState.value = value
     }
 
-    fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo) {
+    fun selectAnimeItem(animeInfo: AnimeInfo) {
         viewModelScope.launch {
-            selectAnimeItemUseCase(isSelected, animeInfo)
+            selectAnimeItemUseCase(false, animeInfo)
         }
     }
 

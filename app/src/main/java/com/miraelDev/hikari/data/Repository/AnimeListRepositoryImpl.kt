@@ -1,54 +1,74 @@
 package com.miraelDev.hikari.data.Repository
 
-import com.miraelDev.hikari.data.mapper.Mapper
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.miraelDev.hikari.data.remote.categoriesLists.FilmsCategoryPagingDataStore
+import com.miraelDev.hikari.data.remote.categoriesLists.NameCategoryPagingDataStore
+import com.miraelDev.hikari.data.remote.categoriesLists.NewCategoryPagingDataStore
+import com.miraelDev.hikari.data.remote.categoriesLists.PopularCategoryPagingDataStore
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
-import com.miraelDev.hikari.exntensions.mergeWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class AnimeListRepositoryImpl @Inject constructor(
-    mapper: Mapper
+    private val newCategoryPagingDataStore: NewCategoryPagingDataStore,
+    private val nameCategoryPagingDataStore: NameCategoryPagingDataStore,
+    private val filmsCategoryPagingDataStore: FilmsCategoryPagingDataStore,
+    private val popularCategoryPagingDataStore: PopularCategoryPagingDataStore,
 ) : AnimeListRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    override fun getNewAnimeList(): Flow<PagingData<AnimeInfo>> {
 
-    private val newCategoryList = listOf(
-        AnimeInfo(0),
-        AnimeInfo(1),
-    )
-    private val popularCategoryList = listOf(
-        AnimeInfo(0), AnimeInfo(1), AnimeInfo(2)
-    )
-    private val nameCategoryList = listOf(
-        AnimeInfo(0), AnimeInfo(1), AnimeInfo(2), AnimeInfo(3),
-    )
-    private val filmsCategoryList = listOf(
-        AnimeInfo(0),
-        AnimeInfo(1),
-        AnimeInfo(2),
-        AnimeInfo(3),
-        AnimeInfo(4),
-    )
+        return Pager(
+            config = PagingConfig(
+                pageSize = 12,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { newCategoryPagingDataStore }
+        ).flow
 
-    private val newAnimeList = flowOf(newCategoryList)
+    }
 
-    private val popularAnimeList = flowOf(popularCategoryList)
 
-    private val nameAnimeList = flowOf(nameCategoryList)
+    override fun getPopularAnimeList(): Flow<PagingData<AnimeInfo>> {
 
-    private val filmsAnimeList = flowOf(filmsCategoryList)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 12,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { popularCategoryPagingDataStore }
+        ).flow
 
-    override fun getNewAnimeList() =  newAnimeList
+    }
 
-    override fun getPopularAnimeList(): Flow<List<AnimeInfo>> = popularAnimeList
+    override fun getNameAnimeList(): Flow<PagingData<AnimeInfo>> {
 
-    override fun getNameAnimeList(): Flow<List<AnimeInfo>> = nameAnimeList
+        return Pager(
+            config = PagingConfig(
+                pageSize = 12,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { nameCategoryPagingDataStore }
+        ).flow
 
-    override fun getFilmsAnimeList(): Flow<List<AnimeInfo>> = filmsAnimeList
+    }
+
+    override fun getFilmsAnimeList(): Flow<PagingData<AnimeInfo>> {
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 12,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { filmsCategoryPagingDataStore }
+        ).flow
+
+    }
 
 }

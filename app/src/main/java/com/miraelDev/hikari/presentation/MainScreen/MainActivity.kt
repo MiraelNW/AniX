@@ -58,8 +58,6 @@ class MainActivity : ComponentActivity() {
 
             val darkModeUserChoice by viewModel.isDarkThemeFlow.collectAsState()
 
-            Log.d("tag",darkModeUserChoice.toString())
-
             var darkTheme by rememberSaveable { mutableStateOf(false) }
 
             darkTheme = isSystemDark || darkModeUserChoice
@@ -84,7 +82,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 HikariTheme(darkTheme = darkTheme, colorPallet = colorPallet) {
                     var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
-
+                    useDarkIcons = darkTheme
                     DisposableEffect(systemUiController, useDarkIcons) {
                         systemUiController.setSystemBarsColor(
                                 color = Color.Transparent,

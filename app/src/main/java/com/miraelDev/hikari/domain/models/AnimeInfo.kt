@@ -14,6 +14,7 @@ data class AnimeInfo(
     val score: Float = 8.51f,
     val status: String = "released",
     val rating: String = "r_plus",
+    val airedOn: String = "2022",
     val episodes: Int = 26,
     val duration: Int = 23,
     val description: String = "Действие происходит в эпоху Тайсё. Ещё с древних времён ходят слухи о том, что в лесу обитают человекоподобные демоны, которые питаются людьми и ходят по ночам, ища новую жертву. Но... это же просто легенда, ведь так?..\n" +
