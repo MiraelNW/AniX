@@ -4,9 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import app.cash.sqldelight.db.SqlDriver
-import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import com.miraelDev.database.AppDatabase
 import com.miraelDev.hikari.data.Repository.AnimeDetailRepositoryImpl
 import com.miraelDev.hikari.data.Repository.AnimeListRepositoryImpl
 import com.miraelDev.hikari.data.Repository.FavouriteAnimeRepositoryImpl
@@ -14,11 +11,6 @@ import com.miraelDev.hikari.data.Repository.FilterRepositoryImpl
 import com.miraelDev.hikari.data.Repository.SearchAnimeRepositoryImpl
 import com.miraelDev.hikari.data.Repository.VideoPlayerRepositoryImpl
 import com.miraelDev.hikari.data.dataStore.PreferenceManager
-import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
-import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDaoImpl
-import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
-import com.miraelDev.hikari.data.local.Dao.SearchAnimeDaoImpl
-import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.domain.repository.AnimeDetailRepository
 import com.miraelDev.hikari.domain.repository.AnimeListRepository
 import com.miraelDev.hikari.domain.repository.FavouriteAnimeRepository
@@ -30,7 +22,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

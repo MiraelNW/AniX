@@ -24,6 +24,6 @@ interface SearchAnimeRepository {
 
     fun saveSearchText(searchText:String)
 
-    fun getSearchHistoryList():Flow<List<String>>
+    fun getSearchHistoryListFlow():Flow<List<String>>
 
 }

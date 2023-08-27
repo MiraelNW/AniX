@@ -82,13 +82,14 @@ class SearchAnimeViewModel @Inject constructor(
     fun searchAnimeByName(name: String) {
         viewModelScope.launch {
 
+            saveNameInAnimeSearchHistoryUseCase(name)
+
             searchResult.emit(
                 SearchAnimeScreenState.SearchResult(
                     result = searchAnimeByNameUseCase(name).cachedIn(viewModelScope)
                 )
             )
 
-            saveNameInAnimeSearchHistoryUseCase(name)
         }
     }
 

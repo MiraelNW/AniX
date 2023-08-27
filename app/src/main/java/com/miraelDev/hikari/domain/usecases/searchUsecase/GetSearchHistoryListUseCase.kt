@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class GetSearchHistoryListUseCase @Inject constructor(val repository: SearchAnimeRepository) {
 
-    operator fun invoke() = repository.getSearchHistoryList()
+    operator fun invoke() = repository.getSearchHistoryListFlow()
 
 }

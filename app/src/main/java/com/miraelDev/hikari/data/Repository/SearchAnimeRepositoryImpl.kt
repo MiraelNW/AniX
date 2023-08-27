@@ -1,10 +1,10 @@
 package com.miraelDev.hikari.data.Repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.miraelDev.hikari.data.local.Dao.SearchAnimeDao
+import com.miraelDev.hikari.data.local.Dao.SearchHistoryAnimeDao
+import com.miraelDev.hikari.data.local.models.SearchHistoryDbModel
 import com.miraelDev.hikari.data.remote.NetworkHandler
 import com.miraelDev.hikari.data.remote.searchApi.SearchPagingDataStore
 import com.miraelDev.hikari.domain.models.AnimeInfo
@@ -15,12 +15,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SearchAnimeRepositoryImpl @Inject constructor(
     private val client: HttpClient,
     private val networkHandler: NetworkHandler,
-    private val searchAnimeDao: SearchAnimeDao
+    private val searchAnimeDao: SearchHistoryAnimeDao
 ) : SearchAnimeRepository {
 
     private var _filterMap = mutableMapOf<Int, String>()
@@ -77,7 +78,7 @@ class SearchAnimeRepositoryImpl @Inject constructor(
                 SearchPagingDataStore(
                     name = name,
                     yearFilter = yearFilter,
-                    sortFilter =sortFilter,
+                    sortFilter = sortFilter,
                     genreListFilter = genreListFilter,
                     client = client,
                     networkHandler = networkHandler
@@ -88,13 +89,37 @@ class SearchAnimeRepositoryImpl @Inject constructor(
 
     override fun getSearchName(): Flow<String> = _searchTextFlow.asStateFlow()
 
-    override suspend fun saveNameInAnimeSearchHistory(name: String) =
-        searchAnimeDao.insertSearchItem(name)
+    override suspend fun saveNameInAnimeSearchHistory(name: String) {
+
+        val searchHistoryDbModel = SearchHistoryDbModel(name)
+
+        val searchList = searchAnimeDao.getSearchHistoryList()
+
+        val mutableSearchList = ArrayDeque(searchList)
+        mutableSearchList.remove(searchHistoryDbModel)
+
+        if (searchList.size == 20) {
+            mutableSearchList.addFirst(searchHistoryDbModel)
+            mutableSearchList.removeLast()
+        } else {
+            mutableSearchList.addFirst(searchHistoryDbModel)
+        }
+
+        mutableSearchList.forEach {
+            searchAnimeDao.insertSearchItem(it)
+        }
+    }
 
     override fun saveSearchText(searchText: String) {
         _searchTextFlow.value = (searchText)
     }
 
-    override fun getSearchHistoryList(): Flow<List<String>> = searchAnimeDao.getSearchHistoryList()
+    override fun getSearchHistoryListFlow(): Flow<List<String>> =
+        searchAnimeDao.getSearchHistoryListFlow()
+            .map {
+                it.map { model ->
+                    model.searchHistoryItem
+                }
+            }
 
 }
