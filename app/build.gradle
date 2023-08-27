@@ -125,10 +125,17 @@ dependencies {
     implementation 'io.ktor:ktor-client-logging-jvm:1.5.0'
 
     // SQL Delight
-    implementation "app.cash.sqldelight:runtime:2.0.0"
-    implementation "app.cash.sqldelight:android-driver:2.0.0"
-    implementation "app.cash.sqldelight:coroutines-extensions-jvm:2.0.0"
-    implementation("app.cash.sqldelight:primitive-adapters:2.0.0")
+//    implementation "app.cash.sqldelight:runtime:2.0.0"
+//    implementation "app.cash.sqldelight:android-driver:2.0.0"
+//    implementation "app.cash.sqldelight:coroutines-extensions-jvm:2.0.0"
+//    implementation("app.cash.sqldelight:primitive-adapters:2.0.0")
+
+
+    //room 
+    def room_version = "2.5.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
 
     //lottie animations
     def lottieVersion = "6.0.0"
@@ -142,13 +149,13 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
 
-sqldelight {
-    databases{
-        AppDatabase{
-            packageName = "com.miraelDev.database"
-        }
-    }
-}
+//sqldelight {
+//    databases{
+//        AppDatabase{
+//            packageName = "com.miraelDev.database"
+//        }
+//    }
+//}
 
 kapt {
     correctErrorTypes = true
