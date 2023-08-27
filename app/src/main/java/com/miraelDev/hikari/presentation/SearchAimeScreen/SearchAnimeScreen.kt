@@ -3,6 +3,8 @@ package com.miraelDev.hikari.presentation
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -69,7 +73,7 @@ fun SearchAnimeScreen(
     val searchTextState by viewModel.searchTextState
     val searchScreenState by viewModel.screenState.collectAsState()
     val searchHistory by viewModel.searchHistory.collectAsState()
-
+    val filterList by viewModel.filterList.collectAsState()
 
     Column(
         modifier = Modifier
@@ -89,9 +93,6 @@ fun SearchAnimeScreen(
         }
 
         val filterListState = rememberLazyListState()
-
-        Log.d("tag",searchScreenState.toString())
-
 
         AnimeSearchView(
             text = searchTextState,
@@ -116,19 +117,20 @@ fun SearchAnimeScreen(
 
             is SearchAnimeScreenState.SearchResult -> {
                 open = true
-                Filters(filterList = results.filterList, filterListState)
                 val resultList = results.result.collectAsLazyPagingItems()
-                Log.d("tag","search res"+resultList.loadState.toString())
-                SearchResult(
+                Column{
+                    Filters(filterList = filterList, filterListState)
+                    SearchResult(
                         searchResults = resultList,
                         onAnimeItemClick = onAnimeItemClick
-                )
+                    )
+                }
+
             }
 
             is SearchAnimeScreenState.InitialList -> {
                 open = false
                 val resultList = results.result.collectAsLazyPagingItems()
-                Log.d("tag","initial list"+resultList.loadState.toString())
                 SearchResult(
                     searchResults = resultList,
                     onAnimeItemClick = onAnimeItemClick
@@ -139,8 +141,7 @@ fun SearchAnimeScreen(
             is SearchAnimeScreenState.SearchHistory -> {
                 open = true
                 Column {
-                    Log.d("tag", results.toString())
-                    Filters(filterList = results.filterList, filterListState)
+                    Filters(filterList = filterList, filterListState)
                     SearchHistory(
                             searchHistory = searchHistory,
                             onSearchItemClick = {
@@ -183,17 +184,16 @@ private fun CategoryField(
     text: String
 ) {
 
-    OutlinedButton(
-        onClick = { },
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary
-        ),
-        border = BorderStroke(2.dp, color = MaterialTheme.colors.primary),
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colors.primary)
     ) {
         Text(
+            modifier = Modifier.padding(10.dp),
             text = text,
             color = MaterialTheme.colors.background,
+            fontWeight = FontWeight.Bold,
             maxLines = 1,
             fontSize = 14.sp
         )

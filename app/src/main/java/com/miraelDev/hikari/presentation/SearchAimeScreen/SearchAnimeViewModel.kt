@@ -1,6 +1,5 @@
 package com.miraelDev.hikari.presentation.SearchAimeScreen
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import com.miraelDev.hikari.domain.usecases.searchUsecase.filterUsecase.GetFilte
 import com.miraelDev.hikari.exntensions.mergeWith
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -32,43 +30,27 @@ class SearchAnimeViewModel @Inject constructor(
     private val getSearchNameUseCase: GetSearchNameUseCase
 ) : ViewModel() {
 
-
-    private val filterList = getFilterListUseCase()
-        .stateIn(
-            viewModelScope,
-            SharingStarted.Lazily,
-            listOf()
-        )
-
     private val _searchTextState = mutableStateOf("")
     val searchTextState = _searchTextState
 
-    private val showStartAnimationFlow = MutableSharedFlow<SearchAnimeScreenState>()
-
     private val showSearchHistoryFlow = MutableSharedFlow<SearchAnimeScreenState>()
 
-    private val searchResult =
-        MutableSharedFlow<SearchAnimeScreenState>()
+    private val searchResult = MutableSharedFlow<SearchAnimeScreenState>()
 
-    val searchHistory = getSearchHistoryListUseCase()
-        .stateIn(
-            viewModelScope,
-            SharingStarted.Lazily,
-            listOf()
-        )
+    val filterList = getFilterListUseCase()
+        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
+     val searchHistory = getSearchHistoryListUseCase()
+        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 
     val screenState = searchResult
         .onStart {
             emit(
                 SearchAnimeScreenState.InitialList(
-                    result = searchAnimeByNameUseCase(
-                        INITIAL_REQUEST
-                    )
-                        .cachedIn(viewModelScope)
+                    result = searchAnimeByNameUseCase(INITIAL_REQUEST).cachedIn(viewModelScope)
                 )
             )
         }
-        .mergeWith(showStartAnimationFlow)
         .mergeWith(showSearchHistoryFlow)
         .stateIn(
             viewModelScope,
@@ -88,6 +70,11 @@ class SearchAnimeViewModel @Inject constructor(
         viewModelScope.launch {
             getSearchNameUseCase().collect { name ->
                 updateSearchTextState(name)
+                searchResult.emit(
+                    SearchAnimeScreenState.SearchResult(
+                        result = searchAnimeByNameUseCase(name).cachedIn(viewModelScope)
+                    )
+                )
             }
         }
     }
@@ -107,7 +94,7 @@ class SearchAnimeViewModel @Inject constructor(
 
     fun showSearchHistory() {
         viewModelScope.launch {
-            showSearchHistoryFlow.emit(SearchAnimeScreenState.SearchHistory(filterList.value))
+            showSearchHistoryFlow.emit(SearchAnimeScreenState.SearchHistory())
         }
     }
 

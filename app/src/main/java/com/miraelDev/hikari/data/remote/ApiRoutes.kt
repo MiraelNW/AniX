@@ -1,7 +1,7 @@
 package com.miraelDev.hikari.data.remote
 
 object ApiRoutes {
-//    http://158.160.112.4/api/v1/search/?multi=
+
     private const val BASE_URL = "http://158.160.112.4/api/v1"
 
     const val SEARCH_URL_ANIME_LIST = "$BASE_URL/search/?multi="

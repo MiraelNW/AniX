@@ -10,7 +10,6 @@ import com.miraelDev.hikari.data.remote.searchApi.SearchPagingDataStore
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import com.miraelDev.hikari.domain.repository.SearchAnimeRepository
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,14 +58,27 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchAnimeByName(name: String): Flow<PagingData<AnimeInfo>> {
+
+        val yearFilter = filterMap[1]
+        val sortFilter = filterMap[2]
+        val genreListFilter = mutableListOf<String>()
+        filterMap.keys
+            .filter { it != 1 && it != 2 }
+            .forEach { filterMap[it]?.let { str -> genreListFilter.add(str) } }
+
+
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = {
+            pagingSourceFactory =
+            {
                 SearchPagingDataStore(
                     name = name,
+                    yearFilter = yearFilter,
+                    sortFilter =sortFilter,
+                    genreListFilter = genreListFilter,
                     client = client,
                     networkHandler = networkHandler
                 )

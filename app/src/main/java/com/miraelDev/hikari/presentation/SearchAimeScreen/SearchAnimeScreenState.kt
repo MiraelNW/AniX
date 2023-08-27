@@ -13,7 +13,9 @@ sealed class SearchAnimeScreenState {
         val filterList: List<String> = emptyList()
     ) : SearchAnimeScreenState()
 
-    data class SearchHistory(val filterList: List<String>) : SearchAnimeScreenState()
+    data class SearchHistory(
+        val filterList: List<String> = emptyList()
+    ) : SearchAnimeScreenState()
 
     data class SearchResult(
         val result: Flow<PagingData<AnimeInfo>>,

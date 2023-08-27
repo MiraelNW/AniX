@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.HttpTimeout
+import io.ktor.client.features.cache.HttpCache
 import io.ktor.client.features.json.JsonFeature
 import kotlinx.serialization.json.Json
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -35,6 +36,8 @@ object HttpClientModule {
             install(JsonFeature) {
                 serializer = KotlinxSerializer(createJson())
             }
+
+            install(HttpCache)
 
             install(Logging) {
                 logger = Logger.ANDROID
