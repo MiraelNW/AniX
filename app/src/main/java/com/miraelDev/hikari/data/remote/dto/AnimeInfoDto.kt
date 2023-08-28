@@ -1,6 +1,10 @@
 package com.miraelDev.hikari.data.remote.dto
 
 import com.google.common.collect.ImmutableList
+import com.miraelDev.hikari.data.local.models.newCategory.FilmCategoryAnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.newCategory.NameCategoryAnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.newCategory.NewCategoryAnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.newCategory.PopularCategoryAnimeInfoDbModel
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,6 +34,8 @@ data class AnimeInfoDto(
 
         @SerialName("description") val description: String?,
 
+        @SerialName("duration") val duration: Int,
+
         @SerialName("genres") val genres: List<String>,
 )
 
@@ -47,5 +53,80 @@ internal fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
             genres = ImmutableList.copyOf(this.genres),
             episodes = this.episodes,
             image = this.image,
+    )
+}
+
+internal fun AnimeInfoDto.mapToNewCategoryModel(): NewCategoryAnimeInfoDbModel {
+    return NewCategoryAnimeInfoDbModel(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = this.genres,
+            episodes = this.episodes,
+            image = this.image,
+            duration = this.duration,
+            page = 0
+    )
+}
+
+internal fun AnimeInfoDto.mapToPopularCategoryModel(): PopularCategoryAnimeInfoDbModel {
+    return PopularCategoryAnimeInfoDbModel(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = this.genres,
+            episodes = this.episodes,
+            image = this.image,
+            duration = this.duration,
+            page = 0
+    )
+}
+internal fun AnimeInfoDto.mapToFilmCategoryModel(): FilmCategoryAnimeInfoDbModel {
+    return FilmCategoryAnimeInfoDbModel(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = this.genres,
+            episodes = this.episodes,
+            image = this.image,
+            duration = this.duration,
+            page = 0
+    )
+}
+
+internal fun AnimeInfoDto.mapToNameCategoryModel(): NameCategoryAnimeInfoDbModel {
+    return NameCategoryAnimeInfoDbModel(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = this.genres,
+            episodes = this.episodes,
+            image = this.image,
+            duration = this.duration,
+            page = 0
     )
 }

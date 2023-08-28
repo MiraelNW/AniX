@@ -80,10 +80,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScrollableTabWithViewPager(
-    newCategoryList: LazyPagingItems<AnimeInfo>,
-    filmsAnimeList: LazyPagingItems<AnimeInfo>,
+//    newCategoryList: LazyPagingItems<AnimeInfo>,
+//    filmsAnimeList: LazyPagingItems<AnimeInfo>,
     popularAnimeList: LazyPagingItems<AnimeInfo>,
-    nameAnimeList: LazyPagingItems<AnimeInfo>,
+//    nameAnimeList: LazyPagingItems<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit
 ) {
 
@@ -97,12 +97,26 @@ fun ScrollableTabWithViewPager(
 
     var scrollEnable by rememberSaveable { mutableStateOf(true) }
 
+    var shouldRetry by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = shouldRetry){
+        if(shouldRetry){
+//            newCategoryList.retry()
+            popularAnimeList.retry()
+//            filmsAnimeList.retry()
+//            nameAnimeList.retry()
+            shouldRetry = false
+        }
+    }
+
     val categoryList = listOf(
         stringResource(R.string.new_str),
         stringResource(R.string.popular),
         stringResource(R.string.name),
         stringResource(R.string.films)
     )
+
+
 
     ScrollableTabRow(
         modifier = Modifier.height(50.dp),
@@ -141,43 +155,41 @@ fun ScrollableTabWithViewPager(
     ) { page ->
 
         when (page) {
-            0 -> {
-                AnimeList(
-                    categoryList = newCategoryList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it }
-                )
-            }
 
-            1 -> {
-                AnimeList(
-                    categoryList = popularAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it }
-                )
-            }
-
-            2 -> {
-                AnimeList(
-                    categoryList = nameAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it }
-                )
-            }
-
-            3 -> {
-                AnimeList(
-                    categoryList = filmsAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it }
-                )
-            }
+//            1 -> {
+//
+//                AnimeList(
+//                    categoryList = popularAnimeList,
+//                    onAnimeItemClick = onAnimeItemClick,
+//                    changeScrollPossibility = { scrollEnable = it },
+//                    onClickRetry = { shouldRetry = true }
+//                )
+//            }
+//
+//            2 -> {
+//                AnimeList(
+//                    categoryList = nameAnimeList,
+//                    onAnimeItemClick = onAnimeItemClick,
+//                    changeScrollPossibility = { scrollEnable = it },
+//                    onClickRetry = { shouldRetry = true }
+//                )
+//            }
+//
+//            3 -> {
+//                AnimeList(
+//                    categoryList = filmsAnimeList,
+//                    onAnimeItemClick = onAnimeItemClick,
+//                    changeScrollPossibility = { scrollEnable = it },
+//                    onClickRetry = { shouldRetry = true }
+//                )
+//            }
 
             else -> {
                 AnimeList(
-                    categoryList = newCategoryList,
+                    categoryList = popularAnimeList,
                     onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it }
+                    changeScrollPossibility = { scrollEnable = it },
+                    onClickRetry = { shouldRetry = true }
                 )
             }
         }
@@ -188,7 +200,8 @@ fun ScrollableTabWithViewPager(
 private fun AnimeList(
     categoryList: LazyPagingItems<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit,
-    changeScrollPossibility: (Boolean) -> Unit
+    changeScrollPossibility: (Boolean) -> Unit,
+    onClickRetry: () -> Unit
 ) {
 
     Box(Modifier.fillMaxSize()) {
@@ -209,10 +222,13 @@ private fun AnimeList(
         ) {
             items(count = categoryList.itemCount) { index ->
                 changeScrollPossibility(true)
-                AnimeCard(
-                    animeItem = checkNotNull(categoryList[index]),
-                    onAnimeItemClick = onAnimeItemClick
-                )
+                categoryList[index]?.let {
+                    AnimeCard(
+                        animeItem = it,
+                        onAnimeItemClick = onAnimeItemClick
+                    )
+                }
+
             }
 
             categoryList.apply {
@@ -235,13 +251,12 @@ private fun AnimeList(
                             if (e.error is IOException) {
                                 WentWrongAnimation(
                                     res = R.raw.lost_internet,
-                                    onClickRetry = ::retry
+                                    onClickRetry = onClickRetry
                                 )
                             } else {
-                                Log.d("tag",e.error.message.toString())
                                 WentWrongAnimation(
                                     res = R.raw.smth_went_wrong,
-                                    onClickRetry = ::retry
+                                    onClickRetry = onClickRetry
                                 )
                             }
                         }
@@ -254,7 +269,7 @@ private fun AnimeList(
                             if (e.error is IOException) {
                                 ErrorAppendItem(
                                     message = "Попробуйте снова",
-                                    onClickRetry = ::retry
+                                    onClickRetry = onClickRetry
                                 )
                             }
                         }

@@ -1,6 +1,7 @@
 package com.miraelDev.hikari.data.local
 
 import androidx.room.TypeConverter
+import com.google.common.collect.ImmutableList
 import com.miraelDev.hikari.domain.models.VideoInfo
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString

@@ -20,23 +20,23 @@ fun HomeScreen(
     viewModel: AnimeListViewModel = hiltViewModel()
 ) {
     Box {
-        val newCategoryList =
-            viewModel.newAnimeList.collectAsLazyPagingItems()
+//        val newCategoryList =
+//            viewModel.newAnimeList.collectAsLazyPagingItems()
 
-        val filmsAnimeList =
-            viewModel.filmsAnimeList.collectAsLazyPagingItems()
-
+//        val filmsAnimeList =
+//            viewModel.filmsAnimeList.collectAsLazyPagingItems()
+//
         val popularAnimeList =
             viewModel.popularAnimeList.collectAsLazyPagingItems()
-
-        val nameAnimeList =
-            viewModel.nameAnimeList.collectAsLazyPagingItems()
+//
+//        val nameAnimeList =
+//            viewModel.nameAnimeList.collectAsLazyPagingItems()
 
         AnimeList(
-            newCategoryList = newCategoryList,
-            filmsAnimeList = filmsAnimeList,
+//            newCategoryList = newCategoryList,
+//            filmsAnimeList = filmsAnimeList,
             popularAnimeList = popularAnimeList,
-            nameAnimeList = nameAnimeList,
+//            nameAnimeList = nameAnimeList,
             onSettingsClick = onSettingsClick,
             onThemeButtonClick = onThemeButtonClick,
             onAnimeItemClick = onAnimeItemClick
@@ -46,10 +46,10 @@ fun HomeScreen(
 
 @Composable
 fun AnimeList(
-    newCategoryList: LazyPagingItems<AnimeInfo>,
-    filmsAnimeList: LazyPagingItems<AnimeInfo>,
+//    newCategoryList: LazyPagingItems<AnimeInfo>,
+//    filmsAnimeList: LazyPagingItems<AnimeInfo>,
     popularAnimeList: LazyPagingItems<AnimeInfo>,
-    nameAnimeList: LazyPagingItems<AnimeInfo>,
+//    nameAnimeList: LazyPagingItems<AnimeInfo>,
     onSettingsClick: () -> Unit,
     onThemeButtonClick: () -> Unit,
     onAnimeItemClick: (Int) -> Unit
@@ -72,10 +72,10 @@ fun AnimeList(
         )
 
         ScrollableTabWithViewPager(
-            newCategoryList = newCategoryList,
-            filmsAnimeList = filmsAnimeList,
+//            newCategoryList = newCategoryList,
+//            filmsAnimeList = filmsAnimeList,
             popularAnimeList = popularAnimeList,
-            nameAnimeList = nameAnimeList,
+//            nameAnimeList = nameAnimeList,
             onAnimeItemClick = onAnimeItemClick
         )
     }

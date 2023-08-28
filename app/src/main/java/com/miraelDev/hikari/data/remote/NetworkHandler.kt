@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-class NetworkHandler @Inject constructor(private val context: Context) {
+class NetworkHandler(private val context: Context) {
 
     private val connectivityManager: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -28,11 +28,6 @@ class NetworkHandler @Inject constructor(private val context: Context) {
         updateNetworkConnection()
         connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback())
     }
-
-//    override fun onInactive() {
-//        super.onInactive()
-//        connectivityManager.unregisterNetworkCallback(connectivityManagerCallback())
-//    }
 
     private fun connectivityManagerCallback(): ConnectivityManager.NetworkCallback {
 

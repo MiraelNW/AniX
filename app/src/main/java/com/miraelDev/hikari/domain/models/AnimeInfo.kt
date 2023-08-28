@@ -1,10 +1,6 @@
 package com.miraelDev.hikari.domain.models
 
-import androidx.compose.runtime.Stable
-import com.google.common.collect.ImmutableList
-import okhttp3.internal.immutableListOf
 
-@Stable
 data class AnimeInfo(
     val id: Int,
     val nameEn: String = "Kimetsu No Yaiba",
@@ -21,7 +17,7 @@ data class AnimeInfo(
             "Тандзиро Камадо — старший сын в семье, потерявший своего отца и взявший на себя заботу о своих родных. Однажды он уходит в соседний город, чтобы продать древесный уголь. Вернувшись утром, парень обнаруживает перед собой страшную картину: вся родня была зверски убита, а единственной выжившей является Нэдзуко — обращённая в демона, но пока не потерявшая всю человечность младшая сестра.\n" +
             "С этого момента для Тандзиро и Нэдзуко начинается долгое и опасное путешествие, в котором мальчик намерен разыскать убийцу и узнать способ исцеления для своей сестры. Но в состоянии ли дети преодолеть все трудности и вернуться домой?",
     val videoUrls: VideoInfo = VideoInfo(),
-    val genres: ImmutableList<String> = ImmutableList.of(
+    val genres: List<String> = listOf(
         "Comedy",
         "Fantasy",
         "Triller",
