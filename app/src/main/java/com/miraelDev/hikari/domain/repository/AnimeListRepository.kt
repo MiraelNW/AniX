@@ -1,11 +1,8 @@
 package com.miraelDev.hikari.domain.repository
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
-import com.miraelDev.hikari.data.local.models.newCategory.PopularCategoryAnimeInfoDbModel
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 
 interface AnimeListRepository {
 

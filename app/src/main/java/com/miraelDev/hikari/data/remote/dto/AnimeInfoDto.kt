@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList
 import com.miraelDev.hikari.data.local.models.newCategory.FilmCategoryAnimeInfoDbModel
 import com.miraelDev.hikari.data.local.models.newCategory.NameCategoryAnimeInfoDbModel
 import com.miraelDev.hikari.data.local.models.newCategory.NewCategoryAnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.initialSearch.InitialSearchAnimeInfoDbModel
 import com.miraelDev.hikari.data.local.models.newCategory.PopularCategoryAnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.newCategory.PopularCategoryRemoteKeys
 import com.miraelDev.hikari.domain.models.AnimeInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -114,6 +116,25 @@ internal fun AnimeInfoDto.mapToFilmCategoryModel(): FilmCategoryAnimeInfoDbModel
 
 internal fun AnimeInfoDto.mapToNameCategoryModel(): NameCategoryAnimeInfoDbModel {
     return NameCategoryAnimeInfoDbModel(
+            id = this.id,
+            nameRu = this.russianName,
+            nameEn = this.name,
+            description = this.description ?: "",
+            rating = this.rating,
+            score = this.score,
+            airedOn = this.airedOn,
+            status = this.status,
+            kind = this.kind,
+            genres = this.genres,
+            episodes = this.episodes,
+            image = this.image,
+            duration = this.duration,
+            page = 0
+    )
+}
+
+internal fun AnimeInfoDto.mapToInitialSearchModel(): InitialSearchAnimeInfoDbModel {
+    return InitialSearchAnimeInfoDbModel(
             id = this.id,
             nameRu = this.russianName,
             nameEn = this.name,

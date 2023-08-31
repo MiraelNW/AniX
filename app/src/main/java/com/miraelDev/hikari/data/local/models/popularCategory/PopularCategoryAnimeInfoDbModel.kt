@@ -24,5 +24,5 @@ data class PopularCategoryAnimeInfoDbModel(
     val description: String,
     val videoUrls: VideoInfo = VideoInfo(),
     val genres: List<String>,
-    var page: Int
+    var page: Int,
 )

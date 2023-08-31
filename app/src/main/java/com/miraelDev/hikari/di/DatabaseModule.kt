@@ -3,16 +3,18 @@ package com.miraelDev.hikari.di
 import android.content.Context
 import androidx.room.Room
 import com.miraelDev.hikari.data.local.AppDatabase
-import com.miraelDev.hikari.data.local.Dao.FavouriteAnimeDao
-import com.miraelDev.hikari.data.local.Dao.SearchHistoryAnimeDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.FilmCategoryDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.FilmCategoryRemoteKeysDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.NameCategoryDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.NameCategoryRemoteKeysDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.NewCategoryDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.NewCategoryRemoteKeysDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.PopularCategoryDao
-import com.miraelDev.hikari.data.local.Dao.newCategory.PopularCategoryRemoteKeysDao
+import com.miraelDev.hikari.data.local.dao.FavouriteAnimeDao
+import com.miraelDev.hikari.data.local.dao.SearchHistoryAnimeDao
+import com.miraelDev.hikari.data.local.dao.newCategory.FilmCategoryDao
+import com.miraelDev.hikari.data.local.dao.newCategory.FilmCategoryRemoteKeysDao
+import com.miraelDev.hikari.data.local.dao.initialSearch.InitialSearchDao
+import com.miraelDev.hikari.data.local.dao.initialSearch.InitialSearchRemoteKeysDao
+import com.miraelDev.hikari.data.local.dao.newCategory.NameCategoryDao
+import com.miraelDev.hikari.data.local.dao.newCategory.NameCategoryRemoteKeysDao
+import com.miraelDev.hikari.data.local.dao.newCategory.NewCategoryDao
+import com.miraelDev.hikari.data.local.dao.newCategory.NewCategoryRemoteKeysDao
+import com.miraelDev.hikari.data.local.dao.popularCategory.PopularCategoryDao
+import com.miraelDev.hikari.data.local.dao.popularCategory.PopularCategoryRemoteKeysDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -103,6 +105,18 @@ object DatabaseModule {
     @Singleton
     fun provideNameCategoryRemoteKeysDao(database: AppDatabase): NameCategoryRemoteKeysDao {
         return database.nameCategoryRemoteKeys()
+    }
+
+    @Provides
+    @Singleton
+    fun provideInitialSearchDao(database: AppDatabase): InitialSearchDao {
+        return database.initialSearchDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideInitialSearchRemoteKeysDao(database: AppDatabase): InitialSearchRemoteKeysDao {
+        return database.initialSearchRemoteKeysDao()
     }
 
 }

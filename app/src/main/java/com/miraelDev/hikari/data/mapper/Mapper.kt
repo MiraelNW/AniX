@@ -1,11 +1,10 @@
 package com.miraelDev.hikari.data.mapper
 
 import com.google.common.collect.ImmutableList
-import com.miraelDev.hikari.data.local.models.AnimeInfoDbModel
+import com.miraelDev.hikari.data.local.models.favourite.AnimeInfoDbModel
 import com.miraelDev.hikari.data.remote.FailureCauses
 import com.miraelDev.hikari.data.remote.dto.AnimeInfoDto
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.domain.models.FavouriteAnimeInfo
 import com.miraelDev.hikari.domain.result.Result
 import javax.inject.Inject
 
@@ -45,6 +44,7 @@ class Mapper @Inject constructor() {
             episodes = animeInfo.episodes,
             duration = animeInfo.duration,
             image = animeInfo.image,
+            page = 0
         )
 
     fun mapAnimeInfoDbModelListIntoResult(list: List<AnimeInfoDbModel>): Result {

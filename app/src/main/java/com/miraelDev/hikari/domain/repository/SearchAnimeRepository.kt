@@ -2,9 +2,7 @@ package com.miraelDev.hikari.domain.repository
 
 import androidx.paging.PagingData
 import com.miraelDev.hikari.domain.models.AnimeInfo
-import com.miraelDev.hikari.domain.result.Result
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface SearchAnimeRepository {
 
@@ -18,6 +16,8 @@ interface SearchAnimeRepository {
 
     suspend fun searchAnimeByName(name: String): Flow<PagingData<AnimeInfo>>
 
+    fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>>
+
     fun getSearchName():Flow<String>
 
     suspend fun saveNameInAnimeSearchHistory(name: String)
@@ -25,5 +25,7 @@ interface SearchAnimeRepository {
     fun saveSearchText(searchText:String)
 
     fun getSearchHistoryListFlow():Flow<List<String>>
+
+    suspend fun loadInitialList()
 
 }

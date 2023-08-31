@@ -14,9 +14,9 @@ class NavigationState(
         navHostController.navigate(route) {
             launchSingleTop = true
             popUpTo(navHostController.graph.findStartDestination().id) {
-//                saveState = true
+                saveState = true
             }
-//            restoreState = true
+            restoreState = true
         }
     }
 
