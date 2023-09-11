@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Hikari"
+rootProject.name = "Vauma"
 include ':app'

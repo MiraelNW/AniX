@@ -4,16 +4,15 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'app.cash.sqldelight'
     id 'kotlinx-serialization'
 }
 
 android {
-    namespace 'com.miraelDev.hikari'
+    namespace 'com.miraelDev.vauma'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.miraelDev.hikari"
+        applicationId "com.miraelDev.vauma"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -61,7 +60,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation "androidx.compose.ui:ui-util:1.3.1"
@@ -124,12 +123,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
     implementation 'io.ktor:ktor-client-logging-jvm:1.5.0'
 
-    // SQL Delight
-//    implementation "app.cash.sqldelight:runtime:2.0.0"
-//    implementation "app.cash.sqldelight:android-driver:2.0.0"
-//    implementation "app.cash.sqldelight:coroutines-extensions-jvm:2.0.0"
-//    implementation("app.cash.sqldelight:primitive-adapters:2.0.0")
-
 
     //room 
     def room_version = "2.5.2"
@@ -149,14 +142,6 @@ dependencies {
     //data store
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
-
-//sqldelight {
-//    databases{
-//        AppDatabase{
-//            packageName = "com.miraelDev.database"
-//        }
-//    }
-//}
 
 kapt {
     correctErrorTypes = true
