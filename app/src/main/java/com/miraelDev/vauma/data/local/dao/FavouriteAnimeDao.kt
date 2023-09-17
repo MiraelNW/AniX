@@ -6,13 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraelDev.vauma.data.local.models.favourite.AnimeInfoDbModel
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface FavouriteAnimeDao {
 
     @Query("SELECT * FROM favList LIMIT 10 OFFSET :offset")
-    suspend fun getFavouriteAnimeList(offset:Int=0): List<AnimeInfoDbModel>
+    fun getFavouriteAnimeList(offset:Int=0): Flow<List<AnimeInfoDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavouriteAnimeItem(animeItem: AnimeInfoDbModel)

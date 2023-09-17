@@ -2,9 +2,11 @@
 
 package com.miraelDev.vauma.presentation.animeListScreen.animeList
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,7 +61,7 @@ fun AnimeList(
             .systemGestureExclusion()
     ) {
 
-        var darkTheme by remember { mutableStateOf(false) }
+        var darkTheme by rememberSaveable { mutableStateOf(false) }
 
         Toolbar(
             onSettingsClick = onSettingsClick,

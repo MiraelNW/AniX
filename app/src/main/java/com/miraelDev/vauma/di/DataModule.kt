@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -71,11 +72,12 @@ abstract class DataModule {
         @Singleton
         fun provideVideoPlayer(application: Application): ExoPlayer {
             return ExoPlayer.Builder(application)
-                    .apply {
-                        setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
-                        setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
-                    }
-                    .build()
+                .apply {
+                    setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
+                    setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
+                }
+                .build()
+            
         }
 
         @Provides

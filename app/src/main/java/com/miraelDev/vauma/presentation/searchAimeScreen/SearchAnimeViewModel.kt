@@ -1,8 +1,11 @@
 package com.miraelDev.vauma.presentation.searchAimeScreen
 
+import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.miraelDev.vauma.domain.usecases.filterUsecase.ClearAllFiltersInFilterRepositoryUseCase
 import com.miraelDev.vauma.domain.usecases.searchUsecase.GetSearchHistoryListUseCase
@@ -17,8 +20,10 @@ import com.miraelDev.vauma.exntensions.mergeWith
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.cache
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -44,7 +49,9 @@ class SearchAnimeViewModel @Inject constructor(
     private val getSearchNameUseCase: GetSearchNameUseCase,
 ) : ViewModel() {
 
-    val searchTextState = mutableStateOf("")
+    private val _searchTextState = mutableStateOf("")
+
+    val searchTextState: State<String> = _searchTextState
 
     private val searchResult = MutableSharedFlow<SearchAnimeScreenState>(replay = 1)
 
@@ -52,7 +59,8 @@ class SearchAnimeViewModel @Inject constructor(
 
     private val initialState = getSearchResults()
         .map {
-            SearchAnimeScreenState.InitialList(result = it) as SearchAnimeScreenState
+            val result = it.cachedIn(viewModelScope)
+            SearchAnimeScreenState.InitialList(result = result) as SearchAnimeScreenState
         }
 
     val filterList = getFilterListUseCase()
@@ -75,12 +83,13 @@ class SearchAnimeViewModel @Inject constructor(
             SearchAnimeScreenState.EmptyList
         )
 
+
     init {
         getSearchName()
     }
 
     fun updateSearchTextState(value: String) {
-        searchTextState.value = value
+        _searchTextState.value = value
     }
 
     private fun getSearchName() {

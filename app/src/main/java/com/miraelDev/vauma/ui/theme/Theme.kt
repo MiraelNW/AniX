@@ -30,64 +30,14 @@ private val DarkMainColorPalette = darkColors(
         onBackground = Color.White,
 )
 
-//    dark/light purple
-
-private val LightRedColorPalette = lightColors(
-        primary = Red,
-        background = Color.White,
-        onBackground = Color.Black,
-)
-
-private val DarkRedColorPalette = darkColors(
-        primary = Red,
-        background = Black,
-        onBackground = Color.White,
-)
-
-//    dark/light blue
-
-private val LightBlueColorPalette = lightColors(
-        primary = Blue,
-        background = Color.White,
-        onBackground = Color.Black,
-)
-
-private val DarkBlueColorPalette = darkColors(
-        primary = Blue,
-        background = Black,
-        onBackground = Color.White,
-)
-
-
-//  dark/light orange
-private val LightOrangeColorPalette = lightColors(
-        primary = Orange,
-        background = Color.White,
-        onBackground = Color.Black,
-)
-
-private val DarkOrangeColorPalette = darkColors(
-        primary = Orange,
-        background = Black,
-        onBackground = Color.White,
-)
-
 @Composable
 fun HikariTheme(
         darkTheme: Boolean = isSystemInDarkTheme(),
-        colorPallet: ColorPallet = ColorPallet.GREEN,
         content: @Composable () -> Unit,
 ) {
-    val colors = when (colorPallet) {
-        ColorPallet.GREEN -> if (darkTheme) DarkMainColorPalette else LightMainColorPalette
-        ColorPallet.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
-        ColorPallet.PURPLE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
-//        ColorPallet.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
-        else -> if (darkTheme) DarkMainColorPalette else LightMainColorPalette
-    }
 
     MaterialTheme(
-            colors = colors,
+            colors = if (darkTheme) DarkMainColorPalette else LightMainColorPalette,
             shapes = Shapes,
             typography = Typography,
             content = content

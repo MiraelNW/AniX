@@ -2,7 +2,6 @@ package com.miraelDev.vauma.navigation
 
 sealed class Screen(val route: String) {
 
-    object Splash : Screen(ROUTE_SPLASH)
     object Home : Screen(ROUTE_HOME)
 
     object SearchAndFilter : Screen(ROUTE_SEARCH_AND_FILTER)
@@ -12,7 +11,7 @@ sealed class Screen(val route: String) {
 
     object DifferentSettings : Screen(ROUTE_DIFFERENT_SETTINGS)
 
-    object Library : Screen(ROUTE_LIBRARY)
+    object Favourite : Screen(ROUTE_FAVOURITE)
 
     object Filter : Screen(ROUTE_FILTER)
 
@@ -49,9 +48,8 @@ sealed class Screen(val route: String) {
         private const val ROUTE_DIFFERENT_SETTINGS = "different_settings"
         private const val ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW = "anime_detail_and_video_view"
 
-        private const val ROUTE_SPLASH = "splash"
         private const val ROUTE_HOME = "home"
-        private const val ROUTE_LIBRARY = "library"
+        private const val ROUTE_FAVOURITE = "favourite"
         private const val ROUTE_SEARCH = "search"
         private const val ROUTE_FILTER = "filter"
         private const val ROUTE_SETTINGS = "settings"

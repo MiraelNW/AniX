@@ -1,7 +1,10 @@
 package com.miraelDev.vauma.presentation.videoView
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import com.miraelDev.vauma.domain.models.PlayerWrapper
 import com.miraelDev.vauma.domain.usecases.animeDetailUseCase.GetAnimeDetailUseCase
 import com.miraelDev.vauma.domain.usecases.videoPlayerUseCase.GetVideoPlayerUseCase
 import com.miraelDev.vauma.domain.usecases.videoPlayerUseCase.LoadNextEpisodeUseCase
@@ -11,19 +14,18 @@ import com.miraelDev.vauma.domain.usecases.videoPlayerUseCase.LoadVideoIdUseCase
 import com.miraelDev.vauma.domain.usecases.videoPlayerUseCase.LoadVideoPlayerUseCase
 import com.miraelDev.vauma.domain.usecases.videoPlayerUseCase.ReleasePlayerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @UnstableApi
 @HiltViewModel
 class VideoViewModel @Inject constructor(
-        private val getAnimeDetailUseCase: GetAnimeDetailUseCase,
-        private val loadVideoIdUseCase: LoadVideoIdUseCase,
-        private val loadPreviousEpisodeUseCase: LoadPreviousEpisodeUseCase,
-        private val loadNextEpisodeUseCase: LoadNextEpisodeUseCase,
-        private val loadSpecificEpisodeUseCase: LoadSpecificEpisodeUseCase,
-        private val loadVideoPlayerUseCase: LoadVideoPlayerUseCase,
-        private val getVideoPlayerUseCase: GetVideoPlayerUseCase,
-        private val releasePlayerUseCase: ReleasePlayerUseCase
+    private val loadPreviousEpisodeUseCase: LoadPreviousEpisodeUseCase,
+    private val loadNextEpisodeUseCase: LoadNextEpisodeUseCase,
+    private val loadSpecificEpisodeUseCase: LoadSpecificEpisodeUseCase,
+    private val getVideoPlayerUseCase: GetVideoPlayerUseCase,
+    private val releasePlayerUseCase: ReleasePlayerUseCase
 
 ) : ViewModel() {
 
@@ -72,4 +74,5 @@ class VideoViewModel @Inject constructor(
         super.onCleared()
         releasePlayerUseCase()
     }
+
 }

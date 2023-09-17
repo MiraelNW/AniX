@@ -21,16 +21,6 @@ class NavigationState(
         }
     }
 
-    fun navigateToSearchScreen(){
-        navHostController.navigate(Screen.Search.route) {
-            launchSingleTop = true
-            popUpTo(navHostController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            restoreState = true
-        }
-    }
-
     fun navigateToFilterScreen() {
         navHostController.navigate(Screen.Filter.route) {
             launchSingleTop = true

@@ -1,6 +1,8 @@
 package com.miraelDev.vauma.presentation.searchAimeScreen
 
 
+import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,18 +38,23 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.presentation.animeListScreen.AnimeSearchView
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
+import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.AnimeCard
 import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.LastSearchedAnime
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
-import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
-import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
 import io.ktor.utils.io.errors.IOException
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -59,9 +66,9 @@ fun SearchAnimeScreen(
 ) {
 
     val searchTextState by viewModel.searchTextState
-    val searchScreenState by viewModel.screenState.collectAsState()
-    val searchHistory by viewModel.searchHistory.collectAsState()
-    val filterList by viewModel.filterList.collectAsState()
+    val searchScreenState by viewModel.screenState.collectAsStateWithLifecycle()
+    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
+    val filterList by viewModel.filterList.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -99,6 +106,7 @@ fun SearchAnimeScreen(
             }
         )
 
+
         when (val results = searchScreenState) {
 
             is SearchAnimeScreenState.SearchResult -> {
@@ -118,7 +126,6 @@ fun SearchAnimeScreen(
             is SearchAnimeScreenState.InitialList -> {
                 open = false
                 val resultList = results.result.collectAsLazyPagingItems()
-//                Log.d("tag",resultList.loadState.toString())
                 SearchResult(
                     searchResults = resultList,
                     onAnimeItemClick = onAnimeItemClick,
@@ -216,8 +223,6 @@ private fun SearchResult(
     onAnimeItemClick: (Int) -> Unit,
 ) {
 
-    val scrollState = rememberLazyListState()
-
     Box(Modifier.fillMaxSize()) {
 
         searchResults.apply {
@@ -246,17 +251,18 @@ private fun SearchResult(
 
                 else -> {
                     LazyColumn(
-                        modifier = Modifier.navigationBarsPadding(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .navigationBarsPadding(),
                         contentPadding = PaddingValues(
                             top = 4.dp,
-                            bottom = 8.dp,
+                            bottom = if (loadState.append.endOfPaginationReached) 64.dp else 8.dp,
                             start = 4.dp,
                             end = 4.dp
                         ),
-                        state = scrollState,
                         verticalArrangement = Arrangement.spacedBy(
                             space = 8.dp,
-                            alignment = Alignment.CenterVertically
+                            alignment = Alignment.Top
                         )
                     ) {
 
@@ -266,6 +272,30 @@ private fun SearchResult(
                                     item = it,
                                     onAnimeItemClick = onAnimeItemClick
                                 )
+                            }
+                        }
+
+                        if (searchResults.itemCount == 0) {
+                            item {
+                                val composition by rememberLottieComposition(
+                                    LottieCompositionSpec.RawRes(R.raw.search)
+                                )
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    LottieAnimation(
+                                        modifier = Modifier
+                                            .padding(bottom = 48.dp)
+                                            .align(Alignment.Center)
+                                            .size(
+                                                if (LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE)
+                                                    200.dp
+                                                else
+                                                    300.dp
+                                            ),
+                                        composition = composition,
+                                        iterations = 4
+                                    )
+
+                                }
                             }
                         }
 
@@ -285,6 +315,7 @@ private fun SearchResult(
                         if (searchResults.loadState.append is LoadState.Error) {
                             item {
                                 ErrorAppendItem(
+                                    modifier = Modifier.padding(bottom = 64.dp),
                                     message = "Попробуйте снова",
                                     onClickRetry = searchResults::retry
                                 )

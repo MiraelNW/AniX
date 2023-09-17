@@ -6,4 +6,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 @Stable
-class HikariApplication : Application()
+class VaumaApplication : Application(){
+
+
+
+}

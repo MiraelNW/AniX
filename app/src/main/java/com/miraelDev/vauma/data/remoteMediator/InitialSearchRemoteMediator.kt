@@ -76,16 +76,14 @@ class InitialSearchRemoteMediator(
                 return MediatorResult.Error(IOException())
             }
 
-            Log.d("tag"," remote mediator ${ApiRoutes.SEARCH_URL_ANIME_LIST}&page_num=$page&page_size=20&format=json")
             val apiResponse = client.get<Response>(
-                "${ApiRoutes.SEARCH_URL_ANIME_LIST}&page_num=$page&page_size=20"
+                "${ApiRoutes.SEARCH_URL_ANIME_LIST}&page_num=$page&page_size=$PAGE_SIZE"
             )
-
-            Log.d("tag",apiResponse.results.firstOrNull().toString())
 
             val anime = apiResponse.results.map { it.mapToInitialSearchModel() }
 
-            val endOfPaginationReached = anime.isEmpty()
+            val endOfPaginationReached =
+                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -139,5 +137,9 @@ class InitialSearchRemoteMediator(
         }?.data?.lastOrNull()?.let { movie ->
             appDatabase.initialSearchRemoteKeysDao().getRemoteKeyByAnimeId(movie.id)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

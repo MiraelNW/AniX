@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -39,6 +41,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.ui.theme.LightGreen
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -56,12 +59,13 @@ fun DownloadBottomSheet(
     bottomSheetContent: @Composable () -> Unit
 ) {
 
+    val orientation = LocalOrientation.current
 
     BackHandler(modalSheetState.isVisible) {
         coroutineScope.launch { modalSheetState.hide() }
     }
 
-    var selected by rememberSaveable { mutableStateOf(0) }
+    var selected by rememberSaveable { mutableIntStateOf(0) }
 
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
@@ -75,7 +79,7 @@ fun DownloadBottomSheet(
             Column(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .fillMaxHeight(0.4f)
+                    .fillMaxHeight(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.8f else 0.4f)
                     .fillMaxWidth()
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -76,12 +76,13 @@ class FilmCategoryRemoteMediator(
             }
 
             val apiResponse = client.get<Response>(
-                "${ApiRoutes.GET_FILMS_CATEGORY_LIST}page_num=$page&page_size=20"
+                "${ApiRoutes.GET_FILMS_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
             )
 
             val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
 
-            val endOfPaginationReached = anime.isEmpty()
+            val endOfPaginationReached =
+                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -135,5 +136,9 @@ class FilmCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { movie ->
             appDatabase.filmCategoryRemoteKeysDao().getRemoteKeyByAnimeId(movie.id)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

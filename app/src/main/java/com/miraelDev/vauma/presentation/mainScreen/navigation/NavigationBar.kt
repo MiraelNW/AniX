@@ -2,7 +2,6 @@ package com.miraelDev.vauma.presentation.mainScreen.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -32,7 +31,10 @@ import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.navigation.NavigationState
 
 @Composable
-fun BottomBar(navigationState: NavigationState) {
+fun BottomBar(
+    modifier: Modifier = Modifier,
+    navigationState: NavigationState
+) {
 
     val backStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
 
@@ -43,15 +45,17 @@ fun BottomBar(navigationState: NavigationState) {
             NavigationItem.Library
         )
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 12.dp)) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp)
+    ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .navigationBarsPadding()
                 .align(Alignment.Center),
-            elevation =6.dp,
+            elevation = 6.dp,
             shape = RoundedCornerShape(24.dp),
             backgroundColor = MaterialTheme.colors.background
         ) {
@@ -80,7 +84,7 @@ fun BottomBar(navigationState: NavigationState) {
 }
 
 @Composable
-fun RowScope.AddItem(
+private fun RowScope.AddItem(
     item: NavigationItem,
     navigationState: NavigationState,
     selected: Boolean

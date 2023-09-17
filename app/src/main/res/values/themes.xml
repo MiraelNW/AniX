@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Hikari" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.Vauma" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">#C9e0e0e0</item>
     </style>
 
-    <style name="Theme.Hikari.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.Vauma.Starting" parent="Theme.SplashScreen">
         <!-- Set the splash screen background, animated icon, and animation duration. -->
         <item name="windowSplashScreenBackground">@color/white</item>
 
@@ -17,6 +17,6 @@
 
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->
-        <item name="postSplashScreenTheme">@style/Theme.Hikari</item>
+        <item name="postSplashScreenTheme">@style/Theme.Vauma</item>
     </style>
 </resources>

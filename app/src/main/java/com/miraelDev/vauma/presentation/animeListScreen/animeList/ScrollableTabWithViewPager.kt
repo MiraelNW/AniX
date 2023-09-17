@@ -1,9 +1,11 @@
 package com.miraelDev.vauma.presentation.animeListScreen.animeList
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,10 +17,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.systemGestureExclusion
@@ -51,6 +57,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.R
@@ -60,6 +69,7 @@ import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
 import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
 import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.utils.io.errors.IOException
@@ -75,7 +85,11 @@ fun ScrollableTabWithViewPager(
     onAnimeItemClick: (Int) -> Unit
 ) {
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f,
+        pageCount = { 4 }
+    )
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -103,8 +117,6 @@ fun ScrollableTabWithViewPager(
         stringResource(R.string.name),
         stringResource(R.string.films)
     )
-
-
 
     ScrollableTabRow(
         modifier = Modifier.height(50.dp),
@@ -137,61 +149,57 @@ fun ScrollableTabWithViewPager(
         modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)
             .systemGestureExclusion(),
-        pageCount = categoryList.size,
         state = pagerState,
-        userScrollEnabled = scrollEnable
-    ) { page ->
+        pageSpacing = 0.dp,
+        userScrollEnabled = scrollEnable,
+        reverseLayout = false,
+        contentPadding = PaddingValues(0.dp),
+        pageNestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
+            Orientation.Vertical
+        ),
+        pageContent = {page ->
+            when (page) {
 
-        when (page) {
+                1 -> {
 
-            0 -> {
-                AnimeList(
-                    categoryList = newCategoryList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it },
-                    onClickRetry = { shouldRetry = true }
-                )
-            }
+                    AnimeList(
+                        categoryList = popularAnimeList,
+                        onAnimeItemClick = onAnimeItemClick,
+                        changeScrollPossibility = { scrollEnable = it },
+                        onClickRetry = { shouldRetry = true }
+                    )
+                }
 
-            1 -> {
+                2 -> {
+                    AnimeList(
+                        categoryList = nameAnimeList,
+                        onAnimeItemClick = onAnimeItemClick,
+                        changeScrollPossibility = { scrollEnable = it },
+                        onClickRetry = { shouldRetry = true }
+                    )
+                }
 
-                AnimeList(
-                    categoryList = popularAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it },
-                    onClickRetry = { shouldRetry = true }
-                )
-            }
+                3 -> {
 
-            2 -> {
-                AnimeList(
-                    categoryList = nameAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it },
-                    onClickRetry = { shouldRetry = true }
-                )
-            }
+                    AnimeList(
+                        categoryList = filmsAnimeList,
+                        onAnimeItemClick = onAnimeItemClick,
+                        changeScrollPossibility = { scrollEnable = it },
+                        onClickRetry = { shouldRetry = true }
+                    )
+                }
 
-            3 -> {
-
-                AnimeList(
-                    categoryList = filmsAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it },
-                    onClickRetry = { shouldRetry = true }
-                )
-            }
-
-            else -> {
-                AnimeList(
-                    categoryList = newCategoryList,
-                    onAnimeItemClick = onAnimeItemClick,
-                    changeScrollPossibility = { scrollEnable = it },
-                    onClickRetry = { shouldRetry = true }
-                )
+                else -> {
+                    AnimeList(
+                        categoryList = newCategoryList,
+                        onAnimeItemClick = onAnimeItemClick,
+                        changeScrollPossibility = { scrollEnable = it },
+                        onClickRetry = { shouldRetry = true }
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 @Composable
@@ -201,8 +209,6 @@ private fun AnimeList(
     changeScrollPossibility: (Boolean) -> Unit,
     onClickRetry: () -> Unit
 ) {
-
-    val scrollState = rememberLazyListState()
 
     Box(Modifier.fillMaxSize()) {
 
@@ -233,14 +239,14 @@ private fun AnimeList(
 
                 else -> {
                     LazyColumn(
-                        modifier = Modifier.navigationBarsPadding(),
+                        modifier = Modifier
+                            .navigationBarsPadding(),
                         contentPadding = PaddingValues(
                             top = 4.dp,
-                            bottom = 8.dp,
+                            bottom = if (loadState.append.endOfPaginationReached) 64.dp else 8.dp,
                             start = 4.dp,
                             end = 4.dp
                         ),
-                        state = scrollState,
                         verticalArrangement = Arrangement.spacedBy(
                             space = 8.dp,
                             alignment = Alignment.CenterVertically

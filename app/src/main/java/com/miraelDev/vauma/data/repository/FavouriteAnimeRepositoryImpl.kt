@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.data.repository
 
+import android.util.Log
 import com.miraelDev.vauma.data.local.dao.FavouriteAnimeDao
-import com.miraelDev.vauma.data.local.models.favourite.AnimeInfoDbModel
 import com.miraelDev.vauma.data.local.models.favourite.toAnimeInfo
 import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.domain.models.AnimeInfo
@@ -11,34 +11,38 @@ import com.miraelDev.vauma.domain.result.Result
 import com.miraelDev.vauma.exntensions.mergeWith
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavouriteAnimeRepositoryImpl @Inject constructor(
     private val favouriteAnimeDao: FavouriteAnimeDao
 ) : FavouriteAnimeRepository {
 
-    private var searchResults = MutableSharedFlow<Result<AnimeInfo>>()
-    private var favouriteListIsNeeded = MutableSharedFlow<Unit>(replay = 1)
+    private val searchResults = MutableSharedFlow<Result<AnimeInfo>>()
 
-    private var nextFrom: Int? = null
+    private val _initialList = mutableListOf<AnimeInfo>()
 
-    private val _animeList = mutableListOf<AnimeInfoDbModel>()
-    private val animeList: List<AnimeInfoDbModel> get() = _animeList.toList()
+    private val initialListFlow = MutableSharedFlow<Result<AnimeInfo>>()
 
-    private val favouriteResult = flow {
-        favouriteListIsNeeded.emit(Unit)
-        favouriteListIsNeeded.collect {
-            val favList = favouriteAnimeDao.getFavouriteAnimeList().map { it.toAnimeInfo() }
-            if (favList.isEmpty()) {
-                emit(Result.Failure(failureCause = FailureCauses.NotFound))
-            } else {
-                emit(Result.Success(animeList = favList))
+    private val favouriteListIsNeeded = MutableSharedFlow<Unit>(replay = 1)
+
+    private val favouriteResult =
+        favouriteAnimeDao.getFavouriteAnimeList()
+            .map { list ->
+                val animeInfoList = list.map { it.toAnimeInfo() }
+                if (list.isEmpty()) {
+                    Result.Failure(failureCause = FailureCauses.NotFound)
+                } else {
+                    _initialList.removeAll(_initialList)
+                    _initialList.addAll(animeInfoList)
+                    Result.Success(animeList = animeInfoList)
+                }
             }
+            .mergeWith(searchResults)
+            .mergeWith(initialListFlow)
 
-        }
-    }
-        .mergeWith(searchResults)
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo) {
 
@@ -56,7 +60,11 @@ class FavouriteAnimeRepositoryImpl @Inject constructor(
     override fun getFavouriteAnimeList(): Flow<Result<AnimeInfo>> = favouriteResult
 
     override suspend fun loadAnimeList() {
-        favouriteListIsNeeded.emit(Unit)
+        if (_initialList.isEmpty()) {
+            initialListFlow.emit(Result.Failure(failureCause = FailureCauses.NotFound))
+        } else {
+            initialListFlow.emit(Result.Success(animeList = _initialList.toList()))
+        }
     }
 
     override suspend fun searchAnimeItemInDatabase(name: String) {
@@ -67,8 +75,6 @@ class FavouriteAnimeRepositoryImpl @Inject constructor(
         } else {
             searchResults.emit(Result.Success(animeList = searchList))
         }
-
-
     }
 
 

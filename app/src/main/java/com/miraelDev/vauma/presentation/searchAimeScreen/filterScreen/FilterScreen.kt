@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.pressClickEffect
@@ -37,11 +38,11 @@ fun FilterScreen(
     viewModel: FilterViewModel = hiltViewModel()
 ) {
 
-    val filterGenreList = viewModel.genreListFlow.collectAsState(listOf())
+    val filterGenreList = viewModel.genreListFlow.collectAsStateWithLifecycle(listOf())
 
-    val filterYearCategory by viewModel.yearCategoryFlow.collectAsState(INITIAL)
+    val filterYearCategory by viewModel.yearCategoryFlow.collectAsStateWithLifecycle(INITIAL)
 
-    val filterSortByCategory by viewModel.sortByCategoryFlow.collectAsState(INITIAL)
+    val filterSortByCategory by viewModel.sortByCategoryFlow.collectAsStateWithLifecycle(INITIAL)
 
     Scaffold(
         modifier = Modifier

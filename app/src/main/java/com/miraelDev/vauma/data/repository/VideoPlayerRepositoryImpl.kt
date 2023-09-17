@@ -1,26 +1,36 @@
 package com.miraelDev.vauma.data.repository
 
+import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import com.miraelDev.vauma.di.DataModule
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.domain.models.PlayerWrapper
 import com.miraelDev.vauma.domain.models.VideoInfo
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
+import dagger.Provides
+import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@UnstableApi
 class VideoPlayerRepositoryImpl @Inject constructor(
-        private val player: ExoPlayer
+    private val player: ExoPlayer
 ) : VideoPlayerRepository {
 
     private val videoUrls = MutableStateFlow(VideoInfo())
     private val videoId = MutableStateFlow(0)
 
-    private var playerWrapper = MutableStateFlow(
-            PlayerWrapper(player, isFirstEpisode = false, isLastEpisode = false, title = "no name")
+    private val playerWrapper = MutableStateFlow(
+        PlayerWrapper(player, isFirstEpisode = false, isLastEpisode = false, title = "no name")
     )
+
     override fun getVideoPlayer(): StateFlow<PlayerWrapper> {
         player.prepare()
         return playerWrapper.asStateFlow()
@@ -28,6 +38,10 @@ class VideoPlayerRepositoryImpl @Inject constructor(
 
     override fun loadVideoId(id: Int) {
         videoId.value = id
+
+        playerWrapper.value =
+            playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
+
         if (id == (videoUrls.value.playerUrl.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
         }
@@ -54,7 +68,8 @@ class VideoPlayerRepositoryImpl @Inject constructor(
         val nextVideoId = videoId.value + 1
         videoId.value = nextVideoId
 
-        playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = false)
+        playerWrapper.value =
+            playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
 
         if (nextVideoId == (videoUrls.value.playerUrl.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
@@ -70,7 +85,8 @@ class VideoPlayerRepositoryImpl @Inject constructor(
         val previousVideoId = videoId.value - 1
         videoId.value = previousVideoId
 
-        playerWrapper.value = playerWrapper.value.copy(isLastEpisode = false)
+        playerWrapper.value =
+            playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
 
         if (previousVideoId == 0) {
             playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
@@ -83,7 +99,7 @@ class VideoPlayerRepositoryImpl @Inject constructor(
     }
 
     override fun releasePlayer() {
-        player.release()
+        player.stop()
     }
 
     override fun loadSpecificEpisode(specificEpisode: Int) {
@@ -91,6 +107,17 @@ class VideoPlayerRepositoryImpl @Inject constructor(
         if (specificEpisode == videoId.value) return
 
         videoId.value = specificEpisode
+
+        playerWrapper.value =
+            playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
+
+        if (specificEpisode == 0) {
+            playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
+        }
+
+        if (specificEpisode == (videoUrls.value.playerUrl.size - 1)) {
+            playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
+        }
 
         val name = videoUrls.value.videoName[specificEpisode]
         val url = videoUrls.value.playerUrl[specificEpisode]
@@ -101,13 +128,12 @@ class VideoPlayerRepositoryImpl @Inject constructor(
     private fun setMediaItem(name: String, url: String) {
         player.apply {
             setMediaItem(
-                    MediaItem.Builder()
-                            .setUri(url)
-                            .build()
+                MediaItem.Builder()
+                    .setUri(url)
+                    .build()
             )
             playWhenReady = true
         }
-        playerWrapper.value = playerWrapper.value.copy(exoPlayer = player)
         playerWrapper.value = playerWrapper.value.copy(title = name)
     }
 }

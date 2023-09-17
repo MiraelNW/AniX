@@ -2,6 +2,7 @@ package com.miraelDev.vauma.presentation.mainScreen
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -12,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,13 +62,11 @@ class MainActivity : ComponentActivity() {
 
             darkTheme = isSystemDark || darkModeUserChoice
 
-            var landscape by rememberSaveable { mutableStateOf(0) }
-
-            var colorPallet by rememberSaveable { mutableStateOf(ColorPallet.GREEN) }
+            var landscape by rememberSaveable { mutableIntStateOf(0) }
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
-            var orientation by remember { mutableStateOf(Configuration.ORIENTATION_PORTRAIT) }
+            var orientation by remember { mutableIntStateOf(Configuration.ORIENTATION_PORTRAIT) }
             val configuration = LocalConfiguration.current
 
             LaunchedEffect(configuration) {
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     LocalOrientation provides orientation,
                     LocalTheme provides darkTheme
             ) {
-                HikariTheme(darkTheme = darkTheme, colorPallet = colorPallet) {
+                HikariTheme(darkTheme = darkTheme) {
                     var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
                     useDarkIcons = darkTheme
                     DisposableEffect(systemUiController, useDarkIcons) {
@@ -95,7 +95,6 @@ class MainActivity : ComponentActivity() {
                                 viewModel.setThemeMode(darkTheme)
                                 useDarkIcons = !useDarkIcons
                             },
-                            onFullScreenToggle = { landscape = it },
                             onVideoViewClick = { isVideoViewOpen ->
                                 if (!darkTheme) {
                                     useDarkIcons = !useDarkIcons
@@ -104,34 +103,18 @@ class MainActivity : ComponentActivity() {
                                     BACK -> shouldShowSystemBars = true
                                     ON_VIDEO_VIEW -> shouldShowSystemBars = false
                                 }
-                            },
-                            onColorThemeChoose = { color ->
-                                colorPallet = when (color) {
-
-                                    1 -> {
-                                        ColorPallet.ORANGE
-                                    }
-
-                                    2 -> {
-                                        ColorPallet.PURPLE
-                                    }
-
-                                    else -> {
-                                        ColorPallet.GREEN
-                                    }
-                                }
                             }
                     )
                 }
             }
-            observeState(isFullScreen = landscape, shouldShowSystemBars = shouldShowSystemBars)
+            observeState(isFullScreen = orientation, shouldShowSystemBars = shouldShowSystemBars)
         }
     }
 
     private fun observeState(isFullScreen: Int, shouldShowSystemBars: Boolean) {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                if (isFullScreen == 1 && !shouldShowSystemBars) {
+                if (isFullScreen == Configuration.ORIENTATION_LANDSCAPE && !shouldShowSystemBars) {
                     hideSystemBars()
                 } else {
                     showSystemBars()
@@ -158,7 +141,6 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val BACK = 0
         private const val ON_VIDEO_VIEW = 1
-        private const val IS_DARK_THEME = "is_dark_theme"
     }
 }
 

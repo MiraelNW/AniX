@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,11 +33,12 @@ class FavouriteAnimeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchTextState = mutableStateOf("")
-    val searchTextState = _searchTextState
+    val searchTextState: State<String> = _searchTextState
 
     private val loadingFlow = MutableSharedFlow<FavouriteListScreenState.Loading>()
 
     val screenState = getFavouriteAnimeListUseCase()
+        .onStart { FavouriteListScreenState.Loading as FavouriteListScreenState }
         .map {
             when (val res = it) {
                 is Result.Failure -> {
@@ -53,7 +55,6 @@ class FavouriteAnimeViewModel @Inject constructor(
             }
         }
         .mergeWith(loadingFlow)
-        .onStart { FavouriteListScreenState.Loading as FavouriteListScreenState }
         .stateIn(
             viewModelScope,
             SharingStarted.Lazily,

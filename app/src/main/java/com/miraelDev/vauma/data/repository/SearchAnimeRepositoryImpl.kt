@@ -13,12 +13,16 @@ import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -28,6 +32,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
 ) : SearchAnimeRepository {
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var _filterMap = mutableMapOf<Int, String>()
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()
@@ -39,7 +45,6 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     private val _searchResult = MutableSharedFlow<Flow<PagingData<AnimeInfo>>>()
 
     override fun getFilterList(): Flow<List<String>> = _filterListFlow.asSharedFlow()
-
 
     override suspend fun addToFilterList(categoryId: Int, category: String) {
         _filterMap[categoryId] = category
@@ -144,7 +149,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
                     appDatabase = appDatabase,
                     networkHandler = networkHandler
                 )
-            ).flow
+            )
+                .flow
         )
 
     }

@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -40,7 +42,7 @@ import com.miraelDev.vauma.exntensions.pressClickEffect
 @Composable
 fun AnimeSeriesDialog(
     onDismiss: () -> Unit,
-    onSeriesClick:(Int)->Unit
+    onSeriesClick: (Int) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -52,7 +54,6 @@ fun AnimeSeriesDialog(
         ),
         content = {
 
-            val interactionSource = remember { MutableInteractionSource() }
 
             Card(
                 modifier = Modifier
@@ -74,66 +75,54 @@ fun AnimeSeriesDialog(
                         modifier = Modifier
                             .verticalScroll(scrollState)
                             .weight(1f),
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalArrangement = Arrangement.Center,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         repeat(24) {
-                            Box(
-                                modifier = Modifier
-                                    .pressClickEffect()
-                                    .fillMaxWidth()
-                                    .padding(6.dp)
-                                    .background(MaterialTheme.colors.background),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable(
-                                            interactionSource = interactionSource,
-                                            indication = null
-                                        ) {
-                                            onSeriesClick(it)
-                                        }
-                                        .padding(
-                                            start = 8.dp,
-                                            top = 8.dp,
-                                            bottom = 4.dp,
-                                            end = 2.dp
-                                        )
-                                        .background(MaterialTheme.colors.background),
-
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        modifier = Modifier.widthIn(max = 100.dp),
-                                        text = "Серия ${it+1}",
-                                        fontSize = 16.sp
-                                    )
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(
-                                            modifier = Modifier.widthIn(min = 100.dp, max = 175.dp),
-                                            text = "Какое то название серииgdfdfgdfgdfgdfg",
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            fontSize = 16.sp
-                                        )
-                                        Spacer(modifier = Modifier.width(2.dp))
-                                        Icon(
-                                            modifier = Modifier.size(18.dp),
-                                            imageVector = Icons.Filled.ArrowForward,
-                                            contentDescription = "Watch series"
-                                        )
-                                    }
-
-                                }
-                            }
+                            SeriesElement(number = it, onSeriesClick = onSeriesClick)
                         }
                     }
                 }
             }
-
-        },
+        }
     )
+}
+
+@Composable
+private fun SeriesElement(
+    number : Int,
+    onSeriesClick: (Int) -> Unit
+) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Box(
+        modifier = Modifier
+            .pressClickEffect()
+            .padding(6.dp)
+            .border(width = 2.dp, color = MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.background),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    onSeriesClick(number)
+                }
+                .padding(8.dp)
+                .background(MaterialTheme.colors.background),
+
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.widthIn(max = 100.dp),
+                text = "Серия ${number + 1}",
+                fontSize = 16.sp
+            )
+        }
+    }
 }

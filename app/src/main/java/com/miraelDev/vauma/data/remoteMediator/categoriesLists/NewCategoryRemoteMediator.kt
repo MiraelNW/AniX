@@ -12,6 +12,7 @@ import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToNewCategoryModel
+import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -54,12 +55,10 @@ class NewCategoryRemoteMediator(
             }
 
             LoadType.PREPEND -> {
-//                val remoteKeys = getRemoteKeyForFirstItem(state)
-//                val prevKey = remoteKeys?.prevKey
-//                prevKey
-//                    ?:
-//                remoteKeys != null
-                    return MediatorResult.Success(endOfPaginationReached = true)
+                val remoteKeys = getRemoteKeyForFirstItem(state)
+                val prevKey = remoteKeys?.prevKey
+                prevKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
 
             LoadType.APPEND -> {
@@ -74,17 +73,12 @@ class NewCategoryRemoteMediator(
         try {
 
             val apiResponse = client.get<Response>(
-                "${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=20"
-            )
-
-
-            Log.d(
-                "tag",
-                apiResponse.toString()
+                "${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
             )
 
             val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
-            val endOfPaginationReached = anime.isEmpty()
+            val endOfPaginationReached =
+                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -138,5 +132,9 @@ class NewCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { anime ->
             appDatabase.newCategoryRemoteKeys().getRemoteKeyByAnimeId(anime.id)
         }
+    }
+
+    companion object{
+        private const val PAGE_SIZE = 20
     }
 }

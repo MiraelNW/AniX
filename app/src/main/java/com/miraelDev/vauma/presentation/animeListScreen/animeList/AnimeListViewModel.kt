@@ -2,6 +2,8 @@ package com.miraelDev.vauma.presentation.animeListScreen.animeList
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.miraelDev.vauma.domain.usecases.homeUseCase.GetFilmsAnimeListUseCase
 import com.miraelDev.vauma.domain.usecases.homeUseCase.GetNameAnimeListUseCase
 import com.miraelDev.vauma.domain.usecases.homeUseCase.GetNewAnimeListUseCase
@@ -21,19 +23,19 @@ class AnimeListViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        Log.d("tag", "crash")
-    }
-
     val newAnimeList = getNewAnimeListUseCase()
         .filterNotNull()
+        .cachedIn(viewModelScope)
 
     val popularAnimeList = getPopularAnimeListUseCase()
         .filterNotNull()
+        .cachedIn(viewModelScope)
 
     val nameAnimeList = getNameAnimeListUseCase()
         .filterNotNull()
+        .cachedIn(viewModelScope)
 
     val filmsAnimeList = getFilmsAnimeListUseCase()
         .filterNotNull()
+        .cachedIn(viewModelScope)
 }

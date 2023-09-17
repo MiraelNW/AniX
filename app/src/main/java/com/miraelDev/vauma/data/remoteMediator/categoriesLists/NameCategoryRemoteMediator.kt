@@ -75,12 +75,13 @@ class NameCategoryRemoteMediator(
             }
 
             val apiResponse = client.get<Response>(
-                "${ApiRoutes.GET_NAME_CATEGORY_LIST}page_num=$page&page_size=20"
+                "${ApiRoutes.GET_NAME_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
             )
 
             val anime = apiResponse.results.map { it.mapToNameCategoryModel() }
 
-            val endOfPaginationReached = anime.isEmpty()
+            val endOfPaginationReached =
+                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -134,5 +135,9 @@ class NameCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { movie ->
             appDatabase.nameCategoryRemoteKeys().getRemoteKeyByAnimeId(movie.id)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

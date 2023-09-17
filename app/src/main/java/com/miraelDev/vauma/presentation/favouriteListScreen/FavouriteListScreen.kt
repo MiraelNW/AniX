@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -61,6 +63,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -71,8 +74,10 @@ import com.miraelDev.vauma.R
 import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.exntensions.pressClickEffect
+import com.miraelDev.vauma.navigation.Screen
 import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.FavouriteIcon
 import com.miraelDev.vauma.presentation.animeListScreen.FavouriteSearchView
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListFavouriteAnime
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -81,13 +86,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun FavouriteListScreen(
     onAnimeItemClick: (Int) -> Unit,
-    navigateToSearchScreen: () -> Unit,
+    navigateToSearchScreen: (String) -> Unit,
     viewModel: FavouriteAnimeViewModel = hiltViewModel(),
 ) {
 
     val searchTextState by viewModel.searchTextState
 
-    val screenState by viewModel.screenState.collectAsState()
+    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
 
     var resultAfterSearch by rememberSaveable { mutableStateOf(false) }
 
@@ -95,16 +100,13 @@ fun FavouriteListScreen(
 
     var isSearchButtonClicked by rememberSaveable { mutableStateOf(false) }
 
-
-
     LaunchedEffect(key1 = isSearchButtonClicked) {
         if (isSearchButtonClicked) {
             viewModel.searchAnimeByName(searchTextState)
             delay(800)
-            navigateToSearchScreen()
             viewModel.loadAnimeList()
+            navigateToSearchScreen(Screen.SearchAndFilter.route)
             viewModel.updateSearchTextState("")
-
         }
         isSearchButtonClicked = false
     }
@@ -179,11 +181,12 @@ private fun EmptyListAnimation() {
         onDispose { scaleValue = 0f }
     }
 
+    val orientation = LocalOrientation.current
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.65f)
+            .fillMaxWidth(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.6f else 1f)
+            .fillMaxHeight(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.9f else 0.65f)
             .scale(scale)
     ) {
         LottieAnimation(
@@ -229,7 +232,10 @@ private fun Toolbar(
     }
 
     TopAppBar(
-        modifier = Modifier.statusBarsPadding(),
+        modifier =if(LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE)
+            Modifier.systemBarsPadding()
+        else
+            Modifier.statusBarsPadding(),
         backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp
     ) {

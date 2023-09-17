@@ -11,6 +11,7 @@ import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToPopularCategoryModel
+import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -73,11 +74,12 @@ class PopularCategoryRemoteMediator(
             }
 
             val apiResponse = client.get<Response>(
-                "${ApiRoutes.GET_POPULAR_CATEGORY_LIST}page_num=$page&page_size=20"
+                "${ApiRoutes.GET_POPULAR_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
             )
 
             val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
-            val endOfPaginationReached = anime.isEmpty()
+            val endOfPaginationReached =
+                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -130,5 +132,9 @@ class PopularCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { anime ->
             appDatabase.popularCategoryRemoteKeysDao().getRemoteKeyByAnimeId(anime.id)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

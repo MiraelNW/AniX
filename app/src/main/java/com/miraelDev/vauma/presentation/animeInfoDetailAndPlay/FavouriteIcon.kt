@@ -13,8 +13,10 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -28,9 +30,9 @@ fun FavouriteIcon(
         selected: Boolean = false,
         onFavouriteIconClick: (Boolean) -> Unit
 ) {
-    var isSelected by remember { mutableStateOf(selected) }
+    var isSelected by rememberSaveable { mutableStateOf(selected) }
 
-    var scaleForIconFloat by remember { mutableStateOf(0f) }
+    var scaleForIconFloat by rememberSaveable { mutableFloatStateOf(0f) }
 
     val scaleForIcon by animateFloatAsState(
             targetValue = scaleForIconFloat,
@@ -41,7 +43,7 @@ fun FavouriteIcon(
             label = ""
     )
 
-    var scaleForIconBorderFloat by remember { mutableStateOf(1f) }
+    var scaleForIconBorderFloat by rememberSaveable { mutableFloatStateOf(1f) }
 
     val scaleForIconBorder by animateFloatAsState(
             targetValue = scaleForIconBorderFloat,
@@ -73,8 +75,8 @@ fun FavouriteIcon(
 
         Icon(
                 modifier = Modifier
-                        .fillMaxSize()
-                        .scale(scaleForIconBorder),
+                    .fillMaxSize()
+                    .scale(scaleForIconBorder),
                 tint = Color.White,
                 imageVector = Icons.Filled.FavoriteBorder,
                 contentDescription = "favourite icon"
@@ -82,8 +84,8 @@ fun FavouriteIcon(
 
         Icon(
                 modifier = Modifier
-                        .fillMaxSize()
-                        .scale(scaleForIcon),
+                    .fillMaxSize()
+                    .scale(scaleForIcon),
                 tint = Color.Red,
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "favourite icon"
