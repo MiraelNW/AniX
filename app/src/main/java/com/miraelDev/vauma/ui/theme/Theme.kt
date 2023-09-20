@@ -11,6 +11,7 @@ import com.miraelDev.vauma.ui.theme.DarkGreen
 import com.miraelDev.vauma.ui.theme.DarkWhite700
 import com.miraelDev.vauma.ui.theme.Green
 import com.miraelDev.vauma.ui.theme.LightBlack
+import com.miraelDev.vauma.ui.theme.LightWhite
 import com.miraelDev.vauma.ui.theme.Shapes
 import com.miraelDev.vauma.ui.theme.Typography
 
@@ -20,6 +21,7 @@ private val LightMainColorPalette = lightColors(
         background = Color.White,
         onSurface = DarkWhite700,
         onBackground = Color.Black,
+        onSecondary = LightWhite,
 )
 
 
@@ -28,6 +30,7 @@ private val DarkMainColorPalette = darkColors(
         background = Black,
         onSurface = LightBlack,
         onBackground = Color.White,
+        onSecondary = LightBlack,
 )
 
 @Composable

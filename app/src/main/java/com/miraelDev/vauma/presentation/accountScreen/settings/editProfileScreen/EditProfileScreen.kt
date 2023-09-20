@@ -72,8 +72,9 @@ fun EditProfileScreen(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+
                 AsyncImage(
                     modifier = Modifier
                         .size(160.dp)
@@ -83,6 +84,7 @@ fun EditProfileScreen(
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile image"
                 )
+
                 NameField(
                     text = nickName,
                     onValueChange = viewModel::updateNickName,
@@ -123,8 +125,9 @@ private fun NameField(
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Transparent,
             errorBorderColor = Color.Red,
-            backgroundColor = LightWhite,
+            backgroundColor = MaterialTheme.colors.onSecondary,
         ),
         visualTransformation = VisualTransformation.None
     )
@@ -151,8 +154,9 @@ private fun EmailField(
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Transparent,
             errorBorderColor = Color.Red,
-            backgroundColor = LightWhite,
+            backgroundColor = MaterialTheme.colors.onSecondary,
         ),
         visualTransformation = VisualTransformation.None
     )
