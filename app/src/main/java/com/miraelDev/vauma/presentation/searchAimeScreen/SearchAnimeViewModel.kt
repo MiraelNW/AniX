@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -64,6 +65,7 @@ class SearchAnimeViewModel @Inject constructor(
         }
 
     val filterList = getFilterListUseCase()
+        .onEach { searchAnimeByName(searchTextState.value) }
         .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 
     val searchHistory = getSearchHistoryListUseCase()

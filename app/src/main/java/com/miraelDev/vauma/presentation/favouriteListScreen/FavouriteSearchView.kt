@@ -19,10 +19,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.miraelDev.vauma.R
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -70,14 +74,13 @@ fun FavouriteSearchView(
                     modifier = Modifier
                         .alpha(alpha = ContentAlpha.medium),
                     color = MaterialTheme.colors.onBackground,
-                    text = "Search anime..."
+                    text = stringResource(id = R.string.search_anime)
                 )
             },
             shape = RoundedCornerShape(16.dp),
             leadingIcon = {
                 Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Filled.Search,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                     contentDescription = "Search Icon",
                     tint = MaterialTheme.colors.primary
                 )

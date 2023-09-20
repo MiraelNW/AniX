@@ -1,14 +1,14 @@
-package com.miraelDev.vauma.presentation.animeListScreen.settingsScreen.LanguageScreen
+package com.miraelDev.vauma.presentation.accountScreen.settings.languageScreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +40,9 @@ private fun Toolbar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { onBackPressed() }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        modifier = Modifier.size(24.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                        tint = MaterialTheme.colors.onBackground,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -50,7 +52,7 @@ private fun Toolbar(
                         .width(8.dp)
                 )
                 Text(
-                    text = "Выбор языка",
+                    text = stringResource(R.string.language_choose),
                     fontSize = 24.sp,
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = FontFamily.SansSerif,

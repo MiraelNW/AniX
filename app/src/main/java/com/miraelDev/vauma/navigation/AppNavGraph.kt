@@ -10,30 +10,27 @@ import androidx.navigation.compose.composable
 fun AppNavGraph(
     navHosController: NavHostController,
     homeScreenContent: @Composable () -> Unit,
-    settingsScreenContent: @Composable () -> Unit,
     favouriteScreenContent: @Composable () -> Unit,
     searchScreenContent: @Composable () -> Unit,
     filterScreenContent: @Composable () -> Unit,
     notificationScreenContent: @Composable () -> Unit,
     languageScreenContent: @Composable () -> Unit,
     privacyPolicyScreenContent: @Composable () -> Unit,
-    colorPaletteScreenContent: @Composable () -> Unit,
     animeDetailScreenContent: @Composable (Int) -> Unit,
     videoViewScreenContent: @Composable () -> Unit,
+    editProfileScreenContent: @Composable () -> Unit,
+    downloadVideoScreenContent: @Composable () -> Unit,
+    accountScreen: @Composable () -> Unit,
 ) {
     NavHost(
         navController = navHosController,
-        startDestination = Screen.HomeAndSettings.route
+        startDestination = Screen.Home.route
     ) {
 
-        homeAndSettingsNavGraph(
-            homeScreenContent = homeScreenContent,
-            settingsScreenContent = settingsScreenContent,
-            notificationScreenContent = notificationScreenContent,
-            languageScreenContent = languageScreenContent,
-            privacyPolicyScreenContent = privacyPolicyScreenContent,
-            colorPaletteScreenContent = colorPaletteScreenContent,
-        )
+        composable(Screen.Home.route){
+            homeScreenContent()
+        }
+
         searchAndFilterNavGraph(
             searchScreenContent = searchScreenContent,
             filterScreenContent = filterScreenContent
@@ -41,6 +38,14 @@ fun AppNavGraph(
         composable(Screen.Favourite.route) {
             favouriteScreenContent()
         }
+        profileNavGraph(
+            accountScreen = accountScreen,
+            editProfileContent = editProfileScreenContent,
+            notificationScreenContent = notificationScreenContent,
+            downloadVideoScreenContent = downloadVideoScreenContent,
+            languageScreenContent = languageScreenContent,
+            privacyPolicyScreenContent = privacyPolicyScreenContent
+        )
         animeDetailAndVideoView(
             animeDetailScreenContent = animeDetailScreenContent,
             videoViewScreenContent = videoViewScreenContent

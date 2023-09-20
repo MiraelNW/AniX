@@ -16,8 +16,10 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
@@ -40,7 +42,7 @@ fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo) {
         ) {
             Icon(
                 imageVector = Icons.Filled.Star,
-                contentDescription = "rating star",
+                contentDescription = stringResource(R.string.rating_star),
                 tint = MaterialTheme.colors.primary
             )
             Text(

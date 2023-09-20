@@ -27,12 +27,6 @@ class NavigationState(
         }
     }
 
-    fun navigateToSettingsScreen() {
-        navHostController.navigate(Screen.Settings.route) {
-            launchSingleTop = true
-        }
-    }
-
     fun navigateToSettingsItem(route: String) {
         navHostController.navigate(route) { launchSingleTop = true }
     }

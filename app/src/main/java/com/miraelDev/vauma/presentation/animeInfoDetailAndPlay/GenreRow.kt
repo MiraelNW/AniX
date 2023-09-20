@@ -7,8 +7,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 
 @Composable
@@ -19,7 +21,7 @@ fun GenreRow(animeItem: AnimeDetailInfo) {
     Row(
         modifier = Modifier.padding(8.dp)
     ) {
-        Text(text = "Жанры: ", fontSize = 18.sp)
+        Text(text = stringResource(R.string.genres), fontSize = 18.sp)
 
         Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())

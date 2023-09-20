@@ -21,7 +21,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.miraelDev.vauma.R
+import com.miraelDev.vauma.ui.theme.DarkWhite700
 
 @Composable
 fun FavouriteIcon(
@@ -77,9 +80,9 @@ fun FavouriteIcon(
                 modifier = Modifier
                     .fillMaxSize()
                     .scale(scaleForIconBorder),
-                tint = Color.White,
+                tint = DarkWhite700,
                 imageVector = Icons.Filled.FavoriteBorder,
-                contentDescription = "favourite icon"
+                contentDescription = stringResource(R.string.favourite_icon)
         )
 
         Icon(
@@ -88,7 +91,7 @@ fun FavouriteIcon(
                     .scale(scaleForIcon),
                 tint = Color.Red,
                 imageVector = Icons.Filled.Favorite,
-                contentDescription = "favourite icon"
+                contentDescription = stringResource(R.string.selected_favourite_icon)
         )
 
 

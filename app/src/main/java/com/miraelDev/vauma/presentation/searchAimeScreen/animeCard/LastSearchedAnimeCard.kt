@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.miraelDev.vauma.R
 
 @Composable
 fun LastSearchedAnime(searchName: String,onSearchItemClick: (String) -> Unit) {
@@ -47,7 +50,7 @@ fun LastSearchedAnime(searchName: String,onSearchItemClick: (String) -> Unit) {
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
             Icon(
-                imageVector = Icons.Filled.Search,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                 contentDescription = "last searched animes",
                 tint = MaterialTheme.colors.primary
             )

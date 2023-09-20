@@ -68,6 +68,13 @@ abstract class DataModule {
         private const val PLAYER_SEEK_BACK_INCREMENT = 10 * 1000L
         private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L
 
+
+        @Provides
+        @Singleton
+        fun provideFilterRepository(@ApplicationContext context: Context): FilterRepositoryImpl{
+            return FilterRepositoryImpl(context)
+        }
+
         @Provides
         @Singleton
         fun provideVideoPlayer(application: Application): ExoPlayer {

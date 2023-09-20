@@ -134,8 +134,7 @@ fun FavouriteListScreen(
                 FavouriteList(
                     favouriteAnimeList = res.result,
                     onAnimeItemClick = onAnimeItemClick,
-                    onFavouriteIconClick = viewModel::selectAnimeItem,
-                    nextDataIsNeed = viewModel::loadAnimeList
+                    onFavouriteIconClick = viewModel::selectAnimeItem
                 )
 
             }
@@ -185,8 +184,8 @@ private fun EmptyListAnimation() {
 
     Box(
         modifier = Modifier
-            .fillMaxWidth(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.6f else 1f)
-            .fillMaxHeight(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.9f else 0.65f)
+            .fillMaxWidth(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.6f else 1f)
+            .fillMaxHeight(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.9f else 0.65f)
             .scale(scale)
     ) {
         LottieAnimation(
@@ -212,7 +211,7 @@ private fun ToSearchButton(toSearchButtonClick: () -> Unit) {
     ) {
         Text(
             modifier = Modifier.padding(6.dp),
-            text = "Найти аниме",
+            text = stringResource(id = R.string.search_anime),
             fontSize = 18.sp,
             color = Color.White
         )
@@ -268,7 +267,7 @@ private fun Toolbar(
                             .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
                             .size(32.dp),
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
-                        contentDescription = "brand icon",
+                        contentDescription = stringResource(R.string.brand_icon),
                         tint = MaterialTheme.colors.primary
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -290,8 +289,8 @@ private fun Toolbar(
 
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "Search",
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                            contentDescription = stringResource(id = R.string.search),
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.fillMaxSize(),
                         )
@@ -313,8 +312,7 @@ private fun Toolbar(
 private fun FavouriteList(
     favouriteAnimeList: List<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit,
-    onFavouriteIconClick: (AnimeInfo) -> Unit,
-    nextDataIsNeed: () -> Unit,
+    onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
 
     val configuration = LocalConfiguration.current

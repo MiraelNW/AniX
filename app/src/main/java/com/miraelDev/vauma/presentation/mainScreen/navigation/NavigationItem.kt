@@ -5,29 +5,36 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.navigation.Screen
 
 sealed class NavigationItem(
     val screen: Screen,
     val title: Int,
-    val icon: ImageVector
+    val icon: Int
 ) {
     object Home : NavigationItem(
-        screen = Screen.HomeAndSettings,
+        screen = Screen.Home,
         title = R.string.home,
-        icon = Icons.Filled.Home
+        icon = R.drawable.ic_home
     )
 
     object Search : NavigationItem(
         screen = Screen.SearchAndFilter,
         title = R.string.search,
-        icon = Icons.Filled.Search
+        icon = R.drawable.ic_search
     )
 
-    object Library : NavigationItem(
+    object Favourite : NavigationItem(
         screen = Screen.Favourite,
-        title = R.string.library,
-        icon = Icons.Filled.Favorite
+        title = R.string.favourite,
+        icon =  R.drawable.ic_heart
+    )
+
+    object Account : NavigationItem(
+        screen = Screen.Account,
+        title = R.string.account,
+        icon = R.drawable.ic_account
     )
 }

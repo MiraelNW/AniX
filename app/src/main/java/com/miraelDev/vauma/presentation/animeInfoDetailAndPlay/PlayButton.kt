@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,14 +63,14 @@ fun PlayButton(
                 Icon(
                     modifier = Modifier.padding(2.dp),
                     imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "play icon",
+                    contentDescription = stringResource(R.string.play_icon),
                     tint = MaterialTheme.colors.primary
                 )
             }
 
             Text(
                 modifier = Modifier.padding(4.dp),
-                text = "Play",
+                text = stringResource(R.string.play),
                 color = Color.White,
                 fontSize = 18.sp
             )
@@ -87,7 +88,7 @@ fun PlayButton(
             Icon(
                 modifier = Modifier.size(16.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_download),
-                contentDescription = "download",
+                contentDescription = stringResource(id = R.string.download),
                 tint = Color.White
             )
         }

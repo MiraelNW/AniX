@@ -69,7 +69,7 @@ fun FilterScreen(
 
                 Text(
                     modifier = Modifier.padding(start = 4.dp, bottom = 16.dp),
-                    text = "Год выпуска",
+                    text = stringResource(R.string.year),
                     fontSize = 20.sp,
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = FontFamily.SansSerif
@@ -81,14 +81,14 @@ fun FilterScreen(
                 ) {
 
                     val filterCategoriesYearList = ImmutableList.of(
-                        "Онгоинг",
+                        stringResource(R.string.ongoing),
                         "2023",
                         "2022",
                         "2021",
                         "2015-2020",
                         "2008-2014",
                         "2000-2007",
-                        "до 2000",
+                        stringResource(R.string.before_2000),
                     )
 
                     filterCategoriesYearList.forEach { category ->
@@ -135,14 +135,15 @@ fun FilterScreen(
                 )
 
                 FlowRow(
+                    modifier = Modifier.padding(bottom = 48.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
 
                     val filterCategoriesSortList = ImmutableList.of(
-                        "Алфавиту",
-                        "Рейтингу",
-                        "Количеству серий",
-                        "Году выхода",
+                        stringResource(R.string.sort_by_name),
+                        stringResource(R.string.sort_by_rate),
+                        stringResource(R.string.sort_by_episode_count),
+                        stringResource(R.string.sort_by_year_released),
                     )
 
                     filterCategoriesSortList.forEach { category ->
@@ -160,7 +161,7 @@ fun FilterScreen(
             FloatingActionButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 16.dp, end = 8.dp),
+                    .padding(bottom = 16.dp, end = 12.dp),
                 backgroundColor = MaterialTheme.colors.background,
                 onClick = viewModel::clearAllFilters
             ) {
@@ -173,11 +174,11 @@ fun FilterScreen(
                         modifier = Modifier.size(24.dp),
                         tint = MaterialTheme.colors.primary,
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_bin),
-                        contentDescription = "clear"
+                        contentDescription = stringResource(R.string.clear)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Очистить",
+                        text = stringResource(R.string.clear),
                         color = MaterialTheme.colors.primary,
                         fontSize = 14.sp
                     )
@@ -207,7 +208,7 @@ private fun Toolbar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onBackPressed) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -217,7 +218,7 @@ private fun Toolbar(
                         .width(8.dp)
                 )
                 Text(
-                    text = "Фильтр",
+                    text = stringResource(id = R.string.filter),
                     fontSize = 24.sp,
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = FontFamily.SansSerif,

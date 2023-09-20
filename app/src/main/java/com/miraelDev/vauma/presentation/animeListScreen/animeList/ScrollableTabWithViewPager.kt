@@ -1,11 +1,11 @@
 package com.miraelDev.vauma.presentation.animeListScreen.animeList
 
-import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,14 +17,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.systemGestureExclusion
@@ -57,19 +53,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
 import com.miraelDev.vauma.exntensions.pressClickEffect
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
+import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
-import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
-import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
-import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.utils.io.errors.IOException
@@ -137,6 +130,7 @@ fun ScrollableTabWithViewPager(
                     )
                 },
                 selected = index == pagerState.currentPage,
+                interactionSource = NoRippleInteractionSource(),
                 enabled = scrollEnable,
                 onClick = {
                     coroutineScope.launch { pagerState.animateScrollToPage(index) }

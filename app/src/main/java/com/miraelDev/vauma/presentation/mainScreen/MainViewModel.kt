@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
     }
 
     companion object {
-        private val IS_DARK_THEME = "is_dark_theme"
+        private const val IS_DARK_THEME = "is_dark_theme"
     }
 
 }

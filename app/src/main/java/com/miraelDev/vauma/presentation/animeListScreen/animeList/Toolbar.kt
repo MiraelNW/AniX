@@ -30,11 +30,7 @@ import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.ui.theme.QuickSand
 
 @Composable
-fun Toolbar(
-        onSettingsClick: () -> Unit,
-        onThemeButtonClick: () -> Unit,
-        darkTheme: Boolean
-) {
+fun Toolbar() {
 
     val orientation = LocalOrientation.current
 
@@ -72,13 +68,6 @@ fun Toolbar(
                         fontSize = 24.sp
                 )
             }
-
-
-            SettingsAndThemeButtons(
-                    onSettingsClick = onSettingsClick,
-                    onThemeButtonClick = onThemeButtonClick,
-                    darkTheme = darkTheme
-            )
 
         }
     }

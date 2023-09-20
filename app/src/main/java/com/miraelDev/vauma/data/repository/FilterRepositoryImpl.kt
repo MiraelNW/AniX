@@ -1,5 +1,7 @@
 package com.miraelDev.vauma.data.repository
 
+import android.content.Context
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.CategoryModel
 import com.miraelDev.vauma.domain.repository.FilterAnimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,31 +10,31 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class FilterRepositoryImpl @Inject constructor(
-
+    context : Context
 ) : FilterAnimeRepository {
 
     private val _filterCategoriesGenreList = mutableListOf(
-        CategoryModel("Сенен", false),
-        CategoryModel("Седзе", false),
-        CategoryModel("Комедия", false),
-        CategoryModel("Романтика", false),
-        CategoryModel("Школа", false),
-        CategoryModel("Боевые искусства", false),
-        CategoryModel("Гарем", false),
-        CategoryModel("Детектив", false),
-        CategoryModel("Драма", false),
-        CategoryModel("Повседневность", false),
-        CategoryModel("Приключение", false),
-        CategoryModel("Психологическое", false),
-        CategoryModel("Сверхъестественное", false),
-        CategoryModel("Спорт", false),
-        CategoryModel("Ужасы", false),
-        CategoryModel("Фантастика", false),
-        CategoryModel("Фэнтези", false),
-        CategoryModel("Экшен", false),
-        CategoryModel("Триллер", false),
-        CategoryModel("Супер сила", false),
-        CategoryModel("Гурман", false),
+        CategoryModel(context.getString(R.string.shounen), false),
+        CategoryModel(context.getString(R.string.shojo), false),
+        CategoryModel(context.getString(R.string.comedy), false),
+        CategoryModel(context.getString(R.string.romance), false),
+        CategoryModel(context.getString(R.string.school), false),
+        CategoryModel(context.getString(R.string.martial_arts), false),
+        CategoryModel(context.getString(R.string.harem), false),
+        CategoryModel(context.getString(R.string.detective), false),
+        CategoryModel(context.getString(R.string.drama), false),
+        CategoryModel(context.getString(R.string.everyday_life), false),
+        CategoryModel(context.getString(R.string.adventure), false),
+        CategoryModel(context.getString(R.string.psychological), false),
+        CategoryModel(context.getString(R.string.supernatural), false),
+        CategoryModel(context.getString(R.string.sport), false),
+        CategoryModel(context.getString(R.string.horror), false),
+        CategoryModel(context.getString(R.string.fantastic), false),
+        CategoryModel(context.getString(R.string.fantasy), false),
+        CategoryModel(context.getString(R.string.action), false),
+        CategoryModel(context.getString(R.string.thriller), false),
+        CategoryModel(context.getString(R.string.superpower), false),
+        CategoryModel(context.getString(R.string.gourmet), false),
     )
 
     private val filterCategoriesGenreList: List<CategoryModel>

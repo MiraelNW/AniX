@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -43,6 +44,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     private val _searchTextFlow = MutableStateFlow("")
 
     private val _searchResult = MutableSharedFlow<Flow<PagingData<AnimeInfo>>>()
+
+    private val _searchName = MutableStateFlow<String>("")
 
     override fun getFilterList(): Flow<List<String>> = _filterListFlow.asSharedFlow()
 
@@ -73,6 +76,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
         val yearFilter = filterMap[1]
         val sortFilter = filterMap[2]
         val genreListFilter = mutableListOf<String>()
+
+        _searchName.value = name
         filterMap.keys
             .filter { it != 1 && it != 2 }
             .forEach { filterMap[it]?.let { str -> genreListFilter.add(str) } }
@@ -102,6 +107,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     override fun getSearchName(): Flow<String> = _searchTextFlow.asStateFlow()
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) {
+
+        if(name.isEmpty()) return
 
         val searchHistoryDbModel = SearchHistoryDbModel(name)
 

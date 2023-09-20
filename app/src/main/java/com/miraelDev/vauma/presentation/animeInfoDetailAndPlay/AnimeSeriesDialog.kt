@@ -30,12 +30,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.pressClickEffect
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -65,7 +67,7 @@ fun AnimeSeriesDialog(
                     Modifier.padding(12.dp),
                 ) {
                     Text(
-                        text = "Выберите серию",
+                        text = stringResource(R.string.choose_series),
                         modifier = Modifier
                             .padding(top = 8.dp, bottom = 8.dp)
                             .align(Alignment.CenterHorizontally),

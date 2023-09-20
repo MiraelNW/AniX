@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -267,6 +268,7 @@ private fun SearchResult(
                     ) {
 
                         items(count = searchResults.itemCount) { index ->
+
                             searchResults[index]?.let {
                                 AnimeCard(
                                     item = it,
@@ -275,7 +277,11 @@ private fun SearchResult(
                             }
                         }
 
-                        if (searchResults.itemCount == 0) {
+                        if (
+                            searchResults.loadState.append.endOfPaginationReached &&
+                            searchResults.loadState.prepend.endOfPaginationReached &&
+                            searchResults.itemCount == 0
+                        ) {
                             item {
                                 val composition by rememberLottieComposition(
                                     LottieCompositionSpec.RawRes(R.raw.search)
@@ -316,7 +322,7 @@ private fun SearchResult(
                             item {
                                 ErrorAppendItem(
                                     modifier = Modifier.padding(bottom = 64.dp),
-                                    message = "Попробуйте снова",
+                                    message = stringResource(R.string.try_again),
                                     onClickRetry = searchResults::retry
                                 )
                             }

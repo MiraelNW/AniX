@@ -35,10 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
@@ -79,7 +81,7 @@ fun DownloadBottomSheet(
             Column(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .fillMaxHeight(if(orientation == Configuration.ORIENTATION_LANDSCAPE) 0.8f else 0.4f)
+                    .fillMaxHeight(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.8f else 0.4f)
                     .fillMaxWidth()
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,7 +89,7 @@ fun DownloadBottomSheet(
             ) {
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Скачать эпизод", fontSize = 24.sp)
+                    Text(text = stringResource(R.string.download_episode), fontSize = 24.sp)
                     Spacer(modifier = Modifier.height(12.dp))
                     Divider(
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp),
@@ -121,7 +123,7 @@ fun DownloadBottomSheet(
                             contentColor = MaterialTheme.colors.primary
                         )
                     ) {
-                        Text("Закрыть", fontSize = 18.sp)
+                        Text(stringResource(R.string.close), fontSize = 18.sp)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedButton(
@@ -138,7 +140,7 @@ fun DownloadBottomSheet(
                             contentColor = Color.White
                         )
                     ) {
-                        Text("Скачать", fontSize = 18.sp)
+                        Text(stringResource(R.string.download), fontSize = 18.sp)
                     }
                 }
             }
@@ -177,7 +179,7 @@ private fun EpisodeItem(
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
             },
             imageOptions = ImageOptions(
-                contentDescription = "anime episode preview",
+                contentDescription = stringResource(R.string.anime_episode_preview),
                 contentScale = ContentScale.FillBounds,
             )
         )

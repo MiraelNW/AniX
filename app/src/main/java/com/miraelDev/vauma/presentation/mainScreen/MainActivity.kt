@@ -2,7 +2,6 @@ package com.miraelDev.vauma.presentation.mainScreen
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -31,7 +30,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.guru.composecookbook.theme.HikariTheme
-import com.miraelDev.vauma.ui.theme.ColorPallet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -61,8 +59,6 @@ class MainActivity : ComponentActivity() {
             var darkTheme by rememberSaveable { mutableStateOf(false) }
 
             darkTheme = isSystemDark || darkModeUserChoice
-
-            var landscape by rememberSaveable { mutableIntStateOf(0) }
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 

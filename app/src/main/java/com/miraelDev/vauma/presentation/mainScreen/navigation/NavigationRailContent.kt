@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -41,7 +43,8 @@ fun NavigationRailContent(
         ImmutableList.of(
             NavigationItem.Home,
             NavigationItem.Search,
-            NavigationItem.Library
+            NavigationItem.Favourite,
+            NavigationItem.Account,
         )
 
     Column(
@@ -106,7 +109,7 @@ private fun ColumnScope.AddItem(
         ) {
             Icon(
                 modifier = Modifier.align(Alignment.Center).padding(vertical = 4.dp),
-                imageVector = item.icon,
+                imageVector = ImageVector.vectorResource(item.icon),
                 contentDescription = "icon",
                 tint = contentColor
             )

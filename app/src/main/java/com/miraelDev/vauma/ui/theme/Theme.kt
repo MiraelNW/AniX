@@ -7,12 +7,10 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.miraelDev.vauma.ui.theme.Black
-import com.miraelDev.vauma.ui.theme.Blue
-import com.miraelDev.vauma.ui.theme.ColorPallet
 import com.miraelDev.vauma.ui.theme.DarkGreen
+import com.miraelDev.vauma.ui.theme.DarkWhite700
 import com.miraelDev.vauma.ui.theme.Green
-import com.miraelDev.vauma.ui.theme.Orange
-import com.miraelDev.vauma.ui.theme.Red
+import com.miraelDev.vauma.ui.theme.LightBlack
 import com.miraelDev.vauma.ui.theme.Shapes
 import com.miraelDev.vauma.ui.theme.Typography
 
@@ -20,6 +18,7 @@ import com.miraelDev.vauma.ui.theme.Typography
 private val LightMainColorPalette = lightColors(
         primary = Green,
         background = Color.White,
+        onSurface = DarkWhite700,
         onBackground = Color.Black,
 )
 
@@ -27,6 +26,7 @@ private val LightMainColorPalette = lightColors(
 private val DarkMainColorPalette = darkColors(
         primary = DarkGreen,
         background = Black,
+        onSurface = LightBlack,
         onBackground = Color.White,
 )
 

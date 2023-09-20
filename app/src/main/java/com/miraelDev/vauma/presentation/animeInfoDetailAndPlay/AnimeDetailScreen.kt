@@ -20,11 +20,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.launch
@@ -179,7 +181,7 @@ private fun DetailScreen(
                 item {
                     Text(
                         modifier = Modifier.padding(8.dp),
-                        text = "Смотрите также",
+                        text = stringResource(R.string.watch_others),
                         fontSize = 24.sp
                     )
                 }

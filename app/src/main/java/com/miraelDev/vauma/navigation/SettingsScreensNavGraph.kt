@@ -12,24 +12,24 @@ fun NavGraphBuilder.settingsScreens(
     privacyPolicyScreenContent: @Composable () -> Unit,
     colorPaletteScreenContent: @Composable () -> Unit,
 ) {
-    navigation(
-        startDestination = Screen.Settings.route,
-        route = Screen.DifferentSettings.route
-    ) {
-        composable(route = Screen.Settings.route) {
-            settingsScreenContent()
-        }
-        composable(route = Screen.Notifications.route) {
-            notificationScreenContent()
-        }
-        composable(route = Screen.Language.route) {
-            languageScreenContent()
-        }
-        composable(route = Screen.PrivacyPolicy.route) {
-            privacyPolicyScreenContent()
-        }
-        composable(route = Screen.ColorPalette.route) {
-            colorPaletteScreenContent()
-        }
-    }
+//    navigation(
+//        startDestination = Screen.Settings.route,
+//        route = Screen.DifferentSettings.route
+//    ) {
+//        composable(route = Screen.Settings.route) {
+//            settingsScreenContent()
+//        }
+//        composable(route = Screen.Notifications.route) {
+//            notificationScreenContent()
+//        }
+//        composable(route = Screen.Language.route) {
+//            languageScreenContent()
+//        }
+//        composable(route = Screen.PrivacyPolicy.route) {
+//            privacyPolicyScreenContent()
+//        }
+//        composable(route = Screen.ColorPalette.route) {
+//            colorPaletteScreenContent()
+//        }
+//    }
 }

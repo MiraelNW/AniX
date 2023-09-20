@@ -17,13 +17,13 @@ fun NavGraphBuilder.homeAndSettingsNavGraph(
         startDestination = Screen.Home.route,
         route = Screen.HomeAndSettings.route
     ) {
-        settingsScreens(
-            settingsScreenContent = settingsScreenContent,
-            notificationScreenContent = notificationScreenContent,
-            languageScreenContent = languageScreenContent,
-            privacyPolicyScreenContent = privacyPolicyScreenContent,
-            colorPaletteScreenContent = colorPaletteScreenContent,
-        )
+//        settingsScreens(
+//            settingsScreenContent = settingsScreenContent,
+//            notificationScreenContent = notificationScreenContent,
+//            languageScreenContent = languageScreenContent,
+//            privacyPolicyScreenContent = privacyPolicyScreenContent,
+//            colorPaletteScreenContent = colorPaletteScreenContent,
+//        )
         composable(route = Screen.Home.route) {
             homeScreenContent()
         }

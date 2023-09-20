@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.animeListScreen.settingsScreen.NotificationsScreen
+package com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -13,14 +13,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -55,7 +56,7 @@ private fun NotificationsList() {
                 transitionSpec = {
                     fadeIn(animationSpec = tween(durationMillis = 150)) with
                             fadeOut(animationSpec = tween(durationMillis = 150))
-                }
+                }, label = ""
             ) { isSelected ->
                 Column() {
                     Row(
@@ -69,7 +70,7 @@ private fun NotificationsList() {
                     ) {
 
 
-                        Text(text = "Уведомление о вышедших тайтлах", fontSize = 18.sp)
+                        Text(text = stringResource(R.string.notification_of_released_titles), fontSize = 18.sp)
                         Switcher(isSelected = isSelectedTitles)
                     }
 
@@ -97,7 +98,7 @@ private fun NotificationsList() {
 
                 Text(
                     modifier = Modifier.fillMaxWidth(0.7f),
-                    text = "Уведомление о вышедших сериях понравившихся аниме",
+                    text = stringResource(R.string.notification_of_released_series),
                     fontSize = 18.sp,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -121,7 +122,7 @@ private fun NotificationsList() {
 
                 Text(
                     modifier = Modifier.fillMaxWidth(0.7f),
-                    text = "Уведомление о вышедшем обновлении",
+                    text = stringResource(R.string.notification_of_released_update),
                     fontSize = 18.sp,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -167,7 +168,7 @@ private fun CheckBoxesWithText() {
                     allTitlesIsChecked = !allTitlesIsChecked
                     titlesInWishListIsChecked = false
                 })
-            Text(modifier = Modifier.fillMaxWidth(), text = "Все тайтлы")
+            Text(modifier = Modifier.fillMaxWidth(), text = stringResource(R.string.all_titles))
         }
         Row(
             modifier = Modifier
@@ -196,7 +197,7 @@ private fun CheckBoxesWithText() {
                 })
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Тайтлы, которые вы хотели бы посмотреть"
+                text = stringResource(R.string.titles_you_want_to_watch)
             )
         }
     }
@@ -221,7 +222,9 @@ private fun Toolbar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { onBackPressed() }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        modifier = Modifier.size(24.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                        tint = MaterialTheme.colors.onBackground,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -231,7 +234,7 @@ private fun Toolbar(
                         .width(8.dp)
                 )
                 Text(
-                    text = "Настройки уведомлений",
+                    text = stringResource(R.string.notification_settings),
                     fontSize = 24.sp,
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = FontFamily.SansSerif,
@@ -251,7 +254,7 @@ fun Switcher(
     borderWidth: Dp = 1.dp,
     parentShape: Shape = CircleShape,
     toggleShape: Shape = CircleShape,
-    animationSpec: AnimationSpec<Dp> = tween(durationMillis = 300),
+    animationSpec: AnimationSpec<Dp> = tween(durationMillis = 500),
 ) {
     val offset by animateDpAsState(
         targetValue = if (isSelected) size else 0.dp,
@@ -263,27 +266,23 @@ fun Switcher(
             .width(size * 2)
             .height(size)
             .clip(shape = parentShape)
-            .background(if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.background)
+            .background(if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface)
     ) {
         Box(
             modifier = Modifier
-                .size(if (isSelected) size else 24.dp)
+                .size(if (isSelected) size else 26.dp)
                 .offset(x = offset)
                 .padding(all = padding)
                 .clip(shape = toggleShape)
                 .align(Alignment.CenterStart)
-                .background(
-                    if (isSelected) MaterialTheme.colors.background
-                    else MaterialTheme.colors.primary.copy(0.6f)
-                )
+                .background(Color.White)
         ) {}
         Row(
             modifier = Modifier
                 .border(
                     border = BorderStroke(
                         width = borderWidth,
-                        color = if (isSelected) MaterialTheme.colors.primary
-                        else MaterialTheme.colors.primary.copy(0.6f)
+                        color = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
                     ),
                     shape = parentShape
                 )

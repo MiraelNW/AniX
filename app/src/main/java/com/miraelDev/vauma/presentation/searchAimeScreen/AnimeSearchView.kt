@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -124,14 +125,14 @@ fun AnimeSearchView(
 
                     fontSize = animatedTextSizeState.sp,
                     color = MaterialTheme.colors.onBackground,
-                    text = "Search anime..."
+                    text = stringResource(R.string.search_anime)
                 )
             },
             shape = RoundedCornerShape(16.dp),
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search Icon",
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                    contentDescription = stringResource(R.string.search_icon),
                     tint = MaterialTheme.colors.primary
                 )
             },
@@ -151,7 +152,7 @@ fun AnimeSearchView(
                     }) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Close Icon",
+                            contentDescription = stringResource(R.string.close_icon),
                             tint = Color.Gray
                         )
 
@@ -192,7 +193,7 @@ private fun Filter(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
-                contentDescription = "filter",
+                contentDescription = stringResource(R.string.filter_icon),
                 tint = MaterialTheme.colors.primary
             )
         }
