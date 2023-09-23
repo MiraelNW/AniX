@@ -87,4 +87,15 @@
     <string name="dark_theme">Включить темную тему</string>
     <string name="LogOut">Выход</string>
     <string name="update_profile">Обновить профиль</string>
+    <string name="enter_your_name">Введиет ваше имя</string>
+    <string name="enter_your_email">Введиет вашу почту</string>
+    <string name="edit_icon">edit_icon</string>
+    <string name="log_in_account">Войти в аккаунт</string>
+    <string name="remember_me">Запомните меня</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_in">Войти</string>
+    <string name="enter_with">Войти с помощью</string>
+    <string name="forgot_the_password">забыли пароль?</string>
+    <string name="enter_password">Введите свой пароль</string>
+    <string name="repeaet_password">Повторите пароль</string>
 </resources>

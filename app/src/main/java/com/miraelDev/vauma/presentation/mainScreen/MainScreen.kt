@@ -161,7 +161,11 @@ fun MainScreen(
                 editProfileScreenContent = {
                     shouldShowBottomBar = false
                     shouldShowNavRail = false
-                    EditProfileScreen()
+                    EditProfileScreen(
+                        onBackPressed = {
+                            navigationState.navHostController.popBackStack()
+                        }
+                    )
                 },
 
 

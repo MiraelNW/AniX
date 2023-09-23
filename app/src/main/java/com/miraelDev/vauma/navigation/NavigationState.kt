@@ -11,6 +11,12 @@ class NavigationState(
     val navHostController: NavHostController
 ) {
 
+    fun navigateToSignUpScreen() {
+        navHostController.navigate(Screen.SignUp.route) {
+            launchSingleTop = true
+        }
+    }
+
     fun navigateTo(route: String) {
         navHostController.navigate(route) {
             launchSingleTop = true

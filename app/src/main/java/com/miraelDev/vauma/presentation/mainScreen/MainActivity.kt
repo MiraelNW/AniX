@@ -6,30 +6,41 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.guru.composecookbook.theme.HikariTheme
+import com.miraelDev.vauma.domain.models.AuthState
+import com.miraelDev.vauma.presentation.auth.AuthScreen
+import com.miraelDev.vauma.presentation.auth.SignInScreen
+import com.miraelDev.vauma.presentation.auth.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -65,42 +76,62 @@ class MainActivity : ComponentActivity() {
             var orientation by remember { mutableIntStateOf(Configuration.ORIENTATION_PORTRAIT) }
             val configuration = LocalConfiguration.current
 
+            val authState by viewModel.authState.collectAsStateWithLifecycle()
+
             LaunchedEffect(configuration) {
                 snapshotFlow { configuration.orientation }
-                        .collect { orientation = it }
+                    .collect { orientation = it }
             }
 
             CompositionLocalProvider(
-                    LocalOrientation provides orientation,
-                    LocalTheme provides darkTheme
+                LocalOrientation provides orientation,
+                LocalTheme provides darkTheme
             ) {
                 HikariTheme(darkTheme = darkTheme) {
+
                     var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
                     useDarkIcons = darkTheme
                     DisposableEffect(systemUiController, useDarkIcons) {
                         systemUiController.setSystemBarsColor(
-                                color = Color.Transparent,
-                                darkIcons = !useDarkIcons
+                            color = Color.Transparent,
+                            darkIcons = !useDarkIcons
                         )
                         onDispose {}
                     }
 
-                    MainScreen(
-                            onThemeButtonClick = {
-                                darkTheme = !darkTheme
-                                viewModel.setThemeMode(darkTheme)
-                                useDarkIcons = !useDarkIcons
-                            },
-                            onVideoViewClick = { isVideoViewOpen ->
-                                if (!darkTheme) {
+                    when (authState) {
+                        AuthState.Authorized -> {
+                            MainScreen(
+                                onThemeButtonClick = {
+                                    darkTheme = !darkTheme
+                                    viewModel.setThemeMode(darkTheme)
                                     useDarkIcons = !useDarkIcons
+                                },
+                                onVideoViewClick = { isVideoViewOpen ->
+                                    if (!darkTheme) {
+                                        useDarkIcons = !useDarkIcons
+                                    }
+                                    when (isVideoViewOpen) {
+                                        BACK -> shouldShowSystemBars = true
+                                        ON_VIDEO_VIEW -> shouldShowSystemBars = false
+                                    }
                                 }
-                                when (isVideoViewOpen) {
-                                    BACK -> shouldShowSystemBars = true
-                                    ON_VIDEO_VIEW -> shouldShowSystemBars = false
+                            )
+                        }
+
+                        AuthState.NotAuthorized -> {
+                            AuthScreen(
+                                signIn = {
+                                    viewModel.changeAuthState()
+                                },
+                                signUp = {
+                                    viewModel.changeAuthState()
                                 }
-                            }
-                    )
+                            )
+                        }
+
+                        AuthState.Initial -> {}
+                    }
                 }
             }
             observeState(isFullScreen = orientation, shouldShowSystemBars = shouldShowSystemBars)
@@ -124,7 +155,7 @@ class MainActivity : ComponentActivity() {
         // Configure the behavior of the hidden system bars
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         // Hide both the status bar and the navigation bar
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
@@ -139,4 +170,3 @@ class MainActivity : ComponentActivity() {
         private const val ON_VIDEO_VIEW = 1
     }
 }
-

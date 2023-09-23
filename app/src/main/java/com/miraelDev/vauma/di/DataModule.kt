@@ -12,11 +12,13 @@ import com.miraelDev.vauma.data.repository.SearchAnimeRepositoryImpl
 import com.miraelDev.vauma.data.repository.VideoPlayerRepositoryImpl
 import com.miraelDev.vauma.data.dataStore.PreferenceManager
 import com.miraelDev.vauma.data.downloadMananger.AndroidDownloader
+import com.miraelDev.vauma.data.repository.RegistrationUserRepositoryImpl
 import com.miraelDev.vauma.domain.downloader.Downloader
 import com.miraelDev.vauma.domain.repository.AnimeDetailRepository
 import com.miraelDev.vauma.domain.repository.AnimeListRepository
 import com.miraelDev.vauma.domain.repository.FavouriteAnimeRepository
 import com.miraelDev.vauma.domain.repository.FilterAnimeRepository
+import com.miraelDev.vauma.domain.repository.RegistrationUserRepository
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
 import dagger.Binds
@@ -24,7 +26,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -56,6 +57,10 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindFavouriteAnimeRepository(impl: FavouriteAnimeRepositoryImpl): FavouriteAnimeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRegistrationUserRepository(impl: RegistrationUserRepositoryImpl): RegistrationUserRepository
 
     @Binds
     @Singleton

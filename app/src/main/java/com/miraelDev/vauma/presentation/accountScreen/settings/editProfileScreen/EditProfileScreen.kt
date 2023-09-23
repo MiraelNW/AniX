@@ -1,6 +1,8 @@
 package com.miraelDev.vauma.presentation.accountScreen.settings.editProfileScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +14,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
+import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 import com.miraelDev.vauma.ui.theme.DarkWhite
 import com.miraelDev.vauma.ui.theme.DarkWhite700
@@ -45,7 +51,8 @@ import com.miraelDev.vauma.ui.theme.LightWhite
 
 @Composable
 fun EditProfileScreen(
-    viewModel: EditProfileViewModel = hiltViewModel()
+    onBackPressed: () -> Unit,
+    viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
 
     val nickName by viewModel.nickNameState
@@ -59,7 +66,7 @@ fun EditProfileScreen(
             .systemBarsPadding(),
     ) {
         Toolbar(
-            onBackPressed = { /*TODO*/ },
+            onBackPressed = onBackPressed,
             text = R.string.edit_profile
         )
         Column(
@@ -74,16 +81,28 @@ fun EditProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                Box(
+                   modifier = Modifier.noRippleEffectClick{}
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(160.dp)
+                            .clip(CircleShape),
+                        model = "https://gravatar.com/avatar/0143887282216779617c58f10181af2e?s=400&d=robohash&r=x",
+                        placeholder = painterResource(id = R.drawable.ic_account),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Profile image"
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 12.dp),
+                        imageVector = Icons.Default.Edit,
+                        tint = MaterialTheme.colors.primary,
+                        contentDescription = stringResource(R.string.edit_icon)
+                    )
+                }
 
-                AsyncImage(
-                    modifier = Modifier
-                        .size(160.dp)
-                        .clip(CircleShape),
-                    model = "https://gravatar.com/avatar/0143887282216779617c58f10181af2e?s=400&d=robohash&r=x",
-                    placeholder = painterResource(id = R.drawable.ic_account),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile image"
-                )
 
                 NameField(
                     text = nickName,
@@ -98,7 +117,9 @@ fun EditProfileScreen(
                 )
             }
 
-            UpdateButton(onUpdateButtonClick = {})
+            UpdateButton(onUpdateButtonClick = {
+
+            })
         }
 
 
@@ -121,7 +142,12 @@ private fun NameField(
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
-        placeholder = { Text(text = "Введиет ваше имя") },
+        placeholder = {
+            Text(
+                text = stringResource(R.string.enter_your_name),
+                color = MaterialTheme.colors.onBackground.copy(0.5f)
+            )
+        },
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -150,7 +176,12 @@ private fun EmailField(
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
-        placeholder = { Text(text = "Введиет вашу почту") },
+        placeholder = {
+            Text(
+                text = stringResource(R.string.enter_your_email),
+                color = MaterialTheme.colors.onBackground.copy(0.5f)
+            )
+        },
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(

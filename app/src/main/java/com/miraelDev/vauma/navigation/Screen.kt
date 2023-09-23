@@ -2,6 +2,10 @@ package com.miraelDev.vauma.navigation
 
 sealed class Screen(val route: String) {
 
+    object SignIn : Screen(ROUTE_SIGN_IN)
+
+    object SignUp : Screen(ROUTE_SIGN_UP)
+
     object SearchAndFilter : Screen(ROUTE_SEARCH_AND_FILTER)
 
     object HomeAndSettings : Screen(ROUTE_HOME_AND_SETTINGS)
@@ -29,8 +33,6 @@ sealed class Screen(val route: String) {
 
     object PrivacyPolicy : Screen(ROUTE_PRIVACY_POLICY)
 
-    object ColorPalette : Screen(ROUTE_COLOR_PALETTE)
-
     object AnimeDetail : Screen(ROUTE_ANIME_DETAIL) {
 
         private const val ROUTE_FOR_ARGS = "anime_detail"
@@ -47,6 +49,8 @@ sealed class Screen(val route: String) {
 
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
 
+        private const val ROUTE_SIGN_IN = "sign_in"
+        private const val ROUTE_SIGN_UP = "sign_up"
         private const val ROUTE_SEARCH_AND_FILTER = "search_and_filter"
         private const val ROUTE_HOME_AND_SETTINGS = "home_and_settings"
         private const val ROUTE_PROFILE_AND_SETTINGS = "profile_and_settings"
@@ -57,13 +61,11 @@ sealed class Screen(val route: String) {
         private const val ROUTE_ACCOUNT = "account"
         private const val ROUTE_SEARCH = "search"
         private const val ROUTE_FILTER = "filter"
-        private const val ROUTE_SETTINGS = "settings"
         private const val ROUTE_EDIT_PROFILE = "edit_profile"
         private const val ROUTE_DOWNLOAD_VIDEO = "download_video"
         private const val ROUTE_NOTIFICATIONS = "notifications"
         private const val ROUTE_LANGUAGE = "language"
         private const val ROUTE_PRIVACY_POLICY = "privacy_policy"
-        private const val ROUTE_COLOR_PALETTE = "color_palette"
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
         private const val ROUTE_VIDEO_VIEW = "video_view"
 

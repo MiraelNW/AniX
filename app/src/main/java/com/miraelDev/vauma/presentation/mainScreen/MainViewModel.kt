@@ -4,6 +4,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraelDev.vauma.data.dataStore.PreferenceManager
+import com.miraelDev.vauma.domain.models.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,19 +17,25 @@ class MainViewModel @Inject constructor(
        private val preferenceManager: PreferenceManager
 ) : ViewModel() {
 
-    private val mutableStateFlow = MutableStateFlow(true)
-    val isLoading = mutableStateFlow.asStateFlow()
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
 
     private val isDarkThemeKey = booleanPreferencesKey(IS_DARK_THEME)
 
     private val _isDarkThemeFlow = MutableStateFlow(false)
     val isDarkThemeFlow = _isDarkThemeFlow.asStateFlow()
 
+    val authState = MutableStateFlow(AuthState.Authorized as AuthState)
+
+    fun changeAuthState(){
+        authState.value = AuthState.Authorized
+    }
+
     init {
         viewModelScope.launch {
             preferenceManager.getPreference(isDarkThemeKey, false).collectLatest { isDark ->
                 _isDarkThemeFlow.value = isDark
-                mutableStateFlow.value = false
+                _isLoading.value = false
             }
         }
     }
