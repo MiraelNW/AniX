@@ -7,10 +7,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.with
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,13 +24,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,25 +51,32 @@ import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.Switcher
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountScreen(
     onSettingItemClick: (Int) -> Unit,
     onDarkThemeClick: () -> Unit,
 ) {
 
-
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .systemBarsPadding()
     ) {
         Toolbar()
-        ProfileNameAndImage()
-        AllSettings(
-            onSettingItemClick = onSettingItemClick,
-            onDarkThemeClick = onDarkThemeClick
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ProfileNameAndImage()
+            AllSettings(
+                onSettingItemClick = onSettingItemClick,
+                onDarkThemeClick = onDarkThemeClick
+            )
+        }
     }
 }
 
@@ -140,7 +153,7 @@ private fun AllSettings(
         stringResource(R.string.edit_profile) to R.drawable.ic_edit_profile,
         stringResource(R.string.notification) to R.drawable.ic_notification,
         stringResource(R.string.download_video) to R.drawable.ic_download_videos,
-        )
+    )
 
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
