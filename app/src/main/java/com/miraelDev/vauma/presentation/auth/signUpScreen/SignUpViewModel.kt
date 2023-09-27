@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.auth
+package com.miraelDev.vauma.presentation.auth.signUpScreen
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

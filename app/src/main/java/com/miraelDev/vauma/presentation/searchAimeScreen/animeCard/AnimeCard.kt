@@ -37,7 +37,7 @@ fun AnimeCard(
     LaunchedEffect(Unit) {
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(700)
+            animationSpec = tween(500)
         )
     }
     val animatedModifier = Modifier.alpha(animatedProgress.value)

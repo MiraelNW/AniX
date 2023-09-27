@@ -67,6 +67,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -104,7 +105,7 @@ fun ScrollableTabWithViewPager(
         }
     }
 
-    val categoryList = listOf(
+    val categoryList = immutableListOf(
         stringResource(R.string.new_str),
         stringResource(R.string.popular),
         stringResource(R.string.name),

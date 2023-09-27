@@ -10,7 +10,6 @@ fun NavGraphBuilder.profileNavGraph(
     editProfileContent: @Composable () -> Unit,
     notificationScreenContent: @Composable () -> Unit,
     downloadVideoScreenContent: @Composable () -> Unit,
-    languageScreenContent: @Composable () -> Unit,
     privacyPolicyScreenContent: @Composable () -> Unit,
 ) {
     navigation(
@@ -28,9 +27,6 @@ fun NavGraphBuilder.profileNavGraph(
         }
         composable(route = Screen.DownloadVideo.route) {
             downloadVideoScreenContent()
-        }
-        composable(route = Screen.Language.route) {
-            languageScreenContent()
         }
         composable(route = Screen.PrivacyPolicy.route) {
             privacyPolicyScreenContent()

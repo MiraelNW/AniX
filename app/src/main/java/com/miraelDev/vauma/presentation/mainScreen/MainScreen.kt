@@ -18,7 +18,6 @@ import com.miraelDev.vauma.presentation.accountScreen.settings.downloadSettingsS
 import com.miraelDev.vauma.presentation.accountScreen.settings.editProfileScreen.EditProfileScreen
 import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.AnimeDetailScreen
 import com.miraelDev.vauma.presentation.animeListScreen.animeList.HomeScreen
-import com.miraelDev.vauma.presentation.accountScreen.settings.languageScreen.LanguageScreen
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.NotificationScreen
 import com.miraelDev.vauma.presentation.accountScreen.settings.privacyPolicy.PrivacyPolicyScreen
 import com.miraelDev.vauma.presentation.favouriteListScreen.FavouriteListScreen
@@ -155,24 +154,17 @@ fun MainScreen(
                 downloadVideoScreenContent = {
                     shouldShowBottomBar = false
                     shouldShowNavRail = false
-                    DownloadSettings()
-                },
-
-                editProfileScreenContent = {
-                    shouldShowBottomBar = false
-                    shouldShowNavRail = false
-                    EditProfileScreen(
+                    DownloadSettings(
                         onBackPressed = {
                             navigationState.navHostController.popBackStack()
                         }
                     )
                 },
 
-
-                languageScreenContent = {
+                editProfileScreenContent = {
                     shouldShowBottomBar = false
                     shouldShowNavRail = false
-                    LanguageScreen(
+                    EditProfileScreen(
                         onBackPressed = {
                             navigationState.navHostController.popBackStack()
                         }

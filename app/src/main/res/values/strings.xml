@@ -83,12 +83,12 @@
     <string name="account">Аккаунт</string>
     <string name="profile">Профиль</string>
     <string name="edit_profile">Изменить профиль</string>
-    <string name="download_video">Скаченные видео</string>
-    <string name="dark_theme">Включить темную тему</string>
+    <string name="download_video">Загрузка видео</string>
+    <string name="dark_theme">Изменить тему</string>
     <string name="LogOut">Выход</string>
     <string name="update_profile">Обновить профиль</string>
     <string name="enter_your_name">Введиет ваше имя</string>
-    <string name="enter_your_email">Введиет вашу почту</string>
+    <string name="enter_your_email">Введите вашу почту</string>
     <string name="edit_icon">edit_icon</string>
     <string name="log_in_account">Войти в аккаунт</string>
     <string name="remember_me">Запомните меня</string>
@@ -97,5 +97,10 @@
     <string name="enter_with">Войти с помощью</string>
     <string name="forgot_the_password">забыли пароль?</string>
     <string name="enter_password">Введите свой пароль</string>
-    <string name="repeaet_password">Повторите пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="wi_fi_only">Загружать видео только по Wi-Fi</string>
+    <string name="delete_downloads">Удалить скаченные видео</string>
+    <string name="clear_cache">Очистить кеш</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
 </resources>

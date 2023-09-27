@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.auth
+package com.miraelDev.vauma.presentation.auth.signUpScreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -373,7 +373,7 @@ private fun RepeatedPasswordField(
         ),
         placeholder = {
             Text(
-                text = stringResource(R.string.repeaet_password),
+                text = stringResource(R.string.repeat_password),
                 color = MaterialTheme.colors.onBackground.copy(0.3f)
             )
         },

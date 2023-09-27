@@ -14,7 +14,6 @@ fun AppNavGraph(
     searchScreenContent: @Composable () -> Unit,
     filterScreenContent: @Composable () -> Unit,
     notificationScreenContent: @Composable () -> Unit,
-    languageScreenContent: @Composable () -> Unit,
     privacyPolicyScreenContent: @Composable () -> Unit,
     animeDetailScreenContent: @Composable (Int) -> Unit,
     videoViewScreenContent: @Composable () -> Unit,
@@ -43,7 +42,6 @@ fun AppNavGraph(
             editProfileContent = editProfileScreenContent,
             notificationScreenContent = notificationScreenContent,
             downloadVideoScreenContent = downloadVideoScreenContent,
-            languageScreenContent = languageScreenContent,
             privacyPolicyScreenContent = privacyPolicyScreenContent
         )
         animeDetailAndVideoView(

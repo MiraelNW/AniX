@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.auth
+package com.miraelDev.vauma.presentation.auth.signInScreen
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -30,7 +30,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember

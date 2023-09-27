@@ -4,5 +4,5 @@ import com.miraelDev.vauma.domain.downloader.Downloader
 import javax.inject.Inject
 
 class DownloadAnimeEpisodeUseCase @Inject constructor(private val downloader: Downloader) {
-    operator fun invoke(url:String, videoName:String) = downloader.downloadVideo(url,videoName)
+    suspend operator fun invoke(url:String, videoName:String) = downloader.downloadVideo(url,videoName)
 }

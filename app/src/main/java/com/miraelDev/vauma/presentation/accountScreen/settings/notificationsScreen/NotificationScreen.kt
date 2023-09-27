@@ -249,7 +249,7 @@ private fun Toolbar(
 @Composable
 fun Switcher(
     isSelected: Boolean,
-    size: Dp = 30.dp,
+    size: Dp = 26.dp,
     padding: Dp = 4.dp,
     borderWidth: Dp = 1.dp,
     parentShape: Shape = CircleShape,
@@ -270,7 +270,7 @@ fun Switcher(
     ) {
         Box(
             modifier = Modifier
-                .size(if (isSelected) size else 26.dp)
+                .size(if (isSelected) size else 22.dp)
                 .offset(x = offset)
                 .padding(all = padding)
                 .clip(shape = toggleShape)

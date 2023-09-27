@@ -140,11 +140,12 @@ private fun AllSettings(
         stringResource(R.string.edit_profile) to R.drawable.ic_edit_profile,
         stringResource(R.string.notification) to R.drawable.ic_notification,
         stringResource(R.string.download_video) to R.drawable.ic_download_videos,
-        stringResource(R.string.language) to R.drawable.ic_language,
-
         )
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.padding(bottom = 36.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         settingsItems.forEachIndexed { index, textWithIconId ->
             SettingItem(
                 index = index,

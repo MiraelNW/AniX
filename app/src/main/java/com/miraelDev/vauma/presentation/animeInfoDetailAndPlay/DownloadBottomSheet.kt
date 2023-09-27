@@ -81,7 +81,7 @@ fun DownloadBottomSheet(
             Column(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .fillMaxHeight(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.8f else 0.4f)
+                    .fillMaxHeight(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.8f else 0.5f)
                     .fillMaxWidth()
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -53,7 +53,10 @@ class AnimeDetailViewModel @Inject constructor(
             )
 
     fun downloadEpisode(url:String,videoName:String){
-        downloadAnimeEpisodeUseCase(url,videoName)
+        viewModelScope.launch{
+            downloadAnimeEpisodeUseCase(url,videoName)
+        }
+
     }
 
     fun loadVideoId(id:Int){

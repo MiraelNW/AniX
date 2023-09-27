@@ -1,9 +1,10 @@
 package com.miraelDev.vauma.presentation.auth
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import com.miraelDev.vauma.navigation.AuthNavGraph
 import com.miraelDev.vauma.navigation.rememberNavigationState
+import com.miraelDev.vauma.presentation.auth.signInScreen.SignInScreen
+import com.miraelDev.vauma.presentation.auth.signUpScreen.SignUpScreen
 
 @Composable
 fun AuthScreen(

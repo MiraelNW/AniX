@@ -82,4 +82,24 @@
     <string name="superpower">Superpower</string>
     <string name="gourmet">Gourmet</string>
     <string name="account">Account</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="download_video">Download video settings</string>
+    <string name="dark_theme">Change theme</string>
+    <string name="LogOut">LogOut</string>
+    <string name="update_profile">Update profile</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="edit_icon">edit_icon</string>
+    <string name="log_in_account">Log in account</string>
+    <string name="remember_me">Remember me</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in">Sign in</string>
+    <string name="enter_with">Enter with</string>
+    <string name="forgot_the_password">forgot the password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="wi_fi_only">Wi-Fi only</string>
+    <string name="delete_downloads">Delete downloads</string>
+    <string name="clear_cache">Clear cache</string>
 </resources>

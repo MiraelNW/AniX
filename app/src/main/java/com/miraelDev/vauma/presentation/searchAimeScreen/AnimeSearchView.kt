@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -186,9 +188,14 @@ private fun Filter(
     keyboardController: SoftwareKeyboardController?,
     onFilterClicked: (SoftwareKeyboardController?) -> Unit
 ) {
-    AnimatedVisibility(visible = visible) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         IconButton(
             modifier = Modifier.size(36.dp),
+            enabled = visible,
             onClick = { onFilterClicked(keyboardController) }
         ) {
             Icon(

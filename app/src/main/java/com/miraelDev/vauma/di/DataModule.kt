@@ -100,8 +100,8 @@ abstract class DataModule {
 
         @Provides
         @Singleton
-        fun provideAndroidDownloader(@ApplicationContext context: Context): AndroidDownloader {
-            return AndroidDownloader(context)
+        fun provideAndroidDownloader(@ApplicationContext context: Context,preferenceManager: PreferenceManager): AndroidDownloader {
+            return AndroidDownloader(context,preferenceManager)
         }
     }
 
