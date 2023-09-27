@@ -86,10 +86,7 @@ fun SearchAnimeScreen(
         val filterListState = rememberLazyListState()
 
         AnimeSearchView(
-            text = TextFieldValue(
-                searchTextState,
-                selection = TextRange(searchTextState.length)
-            ),
+            textField = searchTextState,
             isSearchHistoryItemClick = isSearchHistoryItemClick,
             showFilter = open,
             open = open,

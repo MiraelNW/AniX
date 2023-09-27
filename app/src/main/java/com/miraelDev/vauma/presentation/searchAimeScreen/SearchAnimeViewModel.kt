@@ -51,7 +51,6 @@ class SearchAnimeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchTextState = mutableStateOf("")
-
     val searchTextState: State<String> = _searchTextState
 
     private val searchResult = MutableSharedFlow<SearchAnimeScreenState>(replay = 1)
@@ -91,6 +90,7 @@ class SearchAnimeViewModel @Inject constructor(
     }
 
     fun updateSearchTextState(value: String) {
+        Log.d("tag",value)
         _searchTextState.value = value
     }
 

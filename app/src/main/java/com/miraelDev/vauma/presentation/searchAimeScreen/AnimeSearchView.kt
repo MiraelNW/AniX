@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.presentation.animeListScreen
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -58,7 +59,7 @@ import com.miraelDev.vauma.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AnimeSearchView(
-    text: TextFieldValue,
+    textField: String,
     showFilter: Boolean,
     isSearchHistoryItemClick: Boolean,
     onTextChange: (String) -> Unit,
@@ -92,7 +93,7 @@ fun AnimeSearchView(
         if (isSearchHistoryItemClick || isSearchKeyClick) {
             clicked = false
             isSearchKeyClick = false
-            onSearchClicked(text.text)
+            onSearchClicked(textField)
             focusManager.clearFocus()
             keyboardController?.hide()
         }
@@ -117,8 +118,8 @@ fun AnimeSearchView(
                 .fillMaxWidth(animatedWidthState)
                 .height(animatedHeightState)
                 .focusRequester(focusRequester),
-            value = text,
-            onValueChange = { onTextChange(it.text) },
+            value = textField,
+            onValueChange = onTextChange,
             enabled = true,
             singleLine = true,
             interactionSource = source,
@@ -143,7 +144,7 @@ fun AnimeSearchView(
             trailingIcon = {
                 if (expanded) {
                     IconButton(onClick = {
-                        if (text.text.isNotEmpty()) {
+                        if (textField.isNotEmpty()) {
                             onTextChange("")
                             onClearText()
                         } else {
