@@ -34,6 +34,7 @@ import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 
 private const val DELETE_VIDEO = 1
 private const val CLEAR_CACHE = 2
+
 @Composable
 fun DownloadSettings(
     viewModel: DownloadSettingsViewModel = hiltViewModel(),
@@ -60,7 +61,7 @@ fun DownloadSettings(
 
                     if (index == CLEAR_CACHE) {
                         context.cacheDir.deleteRecursively()
-                    }else{
+                    } else {
                         viewModel.deleteAllVideos()
                     }
 
@@ -111,7 +112,12 @@ private fun WifiSettingItem(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_wifi),
                 contentDescription = ""
             )
-            Text(text = stringResource(R.string.wi_fi_only), fontSize = 18.sp)
+            Text(
+                modifier= Modifier.fillMaxWidth(0.8f),
+                text = stringResource(R.string.wi_fi_only),
+                fontSize = 18.sp,
+                maxLines = 2
+            )
         }
         Switcher(isSelected = isWifiOnly)
     }
