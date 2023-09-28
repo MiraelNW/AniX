@@ -90,7 +90,6 @@ class SearchAnimeViewModel @Inject constructor(
     }
 
     fun updateSearchTextState(value: String) {
-        Log.d("tag",value)
         _searchTextState.value = value
     }
 

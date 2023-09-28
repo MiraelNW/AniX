@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,7 @@ import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.LastSearchedA
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
 import io.ktor.utils.io.errors.IOException
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -105,6 +107,7 @@ fun SearchAnimeScreen(
         )
 
 
+
         when (val results = searchScreenState) {
 
             is SearchAnimeScreenState.SearchResult -> {
@@ -122,6 +125,7 @@ fun SearchAnimeScreen(
             }
 
             is SearchAnimeScreenState.InitialList -> {
+
                 open = false
                 val resultList = results.result.collectAsLazyPagingItems()
                 SearchResult(
@@ -221,15 +225,24 @@ private fun SearchResult(
     onAnimeItemClick: (Int) -> Unit,
 ) {
 
+    var shouldShowLoading by remember {
+        mutableStateOf(false)
+    }
+
     Box(Modifier.fillMaxSize()) {
 
         searchResults.apply {
             when {
 
                 loadState.refresh is LoadState.Loading -> {
-                    ShimmerList()
+                    LaunchedEffect(key1 = Unit){
+                        delay(300)
+                        shouldShowLoading = true
+                    }
+                    if(shouldShowLoading){
+                        ShimmerList()
+                    }
                 }
-
 
                 loadState.refresh is LoadState.Error -> {
                     val e = searchResults.loadState.refresh as LoadState.Error

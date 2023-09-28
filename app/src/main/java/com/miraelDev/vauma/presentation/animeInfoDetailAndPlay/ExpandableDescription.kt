@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.ui.theme.QuickSand1
 
@@ -33,9 +35,9 @@ fun ExpandableDescription(
     fontStyle: FontStyle? = null,
     text: String,
     collapsedMaxLine: Int = 3,
-    showMoreText: String = "... Show More",
+    showMoreText: String = stringResource(R.string.show_more),
     showMoreStyle: SpanStyle = SpanStyle(fontWeight = FontWeight.W500),
-    showLessText: String = " Show Less",
+    showLessText: String = stringResource(R.string.show_less),
     showLessStyle: SpanStyle = showMoreStyle,
     textAlign: TextAlign? = null
 ) {

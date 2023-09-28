@@ -47,9 +47,9 @@
     <string name="clear">очистить</string>
     <string name="brand_icon">бренд</string>
     <string name="language_choose">Выбор языка</string>
-    <string name="notification_of_released_titles">Уведомление о вышедших тайтлах</string>
-    <string name="notification_of_released_series">Уведомление о вышедших сериях понравившихся аниме</string>
-    <string name="notification_of_released_update">Уведомление о вышедшем обновлении</string>
+    <string name="notification_of_released_titles">Уведомление о новых тайтлах</string>
+    <string name="notification_of_released_series">Уведомление о новых сериях понравившихся аниме</string>
+    <string name="notification_of_released_update">Уведомление о новом обновлении</string>
     <string name="all_titles">Все тайтлы</string>
     <string name="titles_you_want_to_watch">Тайтлы, которые вы хотели бы посмотреть</string>
     <string name="notification_settings">Настройки уведомлений</string>
@@ -84,10 +84,10 @@
     <string name="profile">Профиль</string>
     <string name="edit_profile">Изменить профиль</string>
     <string name="download_video">Загрузка видео</string>
-    <string name="dark_theme">Изменить тему</string>
+    <string name="dark_theme">Темная тема</string>
     <string name="LogOut">Выход</string>
     <string name="update_profile">Обновить профиль</string>
-    <string name="enter_your_name">Введиет ваше имя</string>
+    <string name="enter_your_name">Введите ваше имя</string>
     <string name="enter_your_email">Введите вашу почту</string>
     <string name="edit_icon">edit_icon</string>
     <string name="log_in_account">Войти в аккаунт</string>
@@ -103,4 +103,6 @@
     <string name="clear_cache">Очистить кеш</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
+    <string name="show_more"> ...Показать еще</string>
+    <string name="show_less">"...Спрятать"</string>
 </resources>

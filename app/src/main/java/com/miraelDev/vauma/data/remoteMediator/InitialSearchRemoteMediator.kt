@@ -72,7 +72,6 @@ class InitialSearchRemoteMediator(
         try {
 
             if (!networkHandler.isConnected.value) {
-                delay(1000)
                 return MediatorResult.Error(IOException())
             }
 
@@ -107,7 +106,6 @@ class InitialSearchRemoteMediator(
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (error: Exception) {
-            delay(1000)
             return MediatorResult.Error(error)
         }
     }

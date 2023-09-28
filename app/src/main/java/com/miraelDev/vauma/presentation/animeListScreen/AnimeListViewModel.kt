@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

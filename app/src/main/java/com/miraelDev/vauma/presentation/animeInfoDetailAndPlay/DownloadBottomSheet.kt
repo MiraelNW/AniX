@@ -89,7 +89,11 @@ fun DownloadBottomSheet(
             ) {
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = stringResource(R.string.download_episode), fontSize = 24.sp)
+                    Text(
+                        text = stringResource(R.string.download_episode),
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colors.onBackground
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     Divider(
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp),

@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring

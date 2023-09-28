@@ -85,7 +85,7 @@
     <string name="profile">Profile</string>
     <string name="edit_profile">Edit profile</string>
     <string name="download_video">Download video settings</string>
-    <string name="dark_theme">Change theme</string>
+    <string name="dark_theme">Dark theme</string>
     <string name="LogOut">LogOut</string>
     <string name="update_profile">Update profile</string>
     <string name="enter_your_name">Enter your name</string>
@@ -102,4 +102,8 @@
     <string name="wi_fi_only">Wi-Fi only</string>
     <string name="delete_downloads">Delete downloads</string>
     <string name="clear_cache">Clear cache</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="show_more">... Show More</string>
+    <string name="show_less">" Show Less"</string>
 </resources>

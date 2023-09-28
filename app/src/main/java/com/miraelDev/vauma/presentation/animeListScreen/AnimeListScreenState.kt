@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import com.miraelDev.vauma.domain.models.AnimeInfo
 

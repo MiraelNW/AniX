@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

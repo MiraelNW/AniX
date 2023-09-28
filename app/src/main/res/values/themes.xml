@@ -2,7 +2,8 @@
 <resources>
 
     <style name="Theme.Vauma" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#C9e0e0e0</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.Vauma.Starting" parent="Theme.SplashScreen">

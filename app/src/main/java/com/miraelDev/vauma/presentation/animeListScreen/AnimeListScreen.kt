@@ -1,17 +1,15 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.miraelDev.vauma.domain.models.AnimeInfo
-import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
 
 @Composable
 fun HomeScreen(

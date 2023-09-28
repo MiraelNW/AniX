@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -17,7 +18,7 @@ import com.miraelDev.vauma.presentation.accountScreen.AccountScreen
 import com.miraelDev.vauma.presentation.accountScreen.settings.downloadSettingsScreen.DownloadSettings
 import com.miraelDev.vauma.presentation.accountScreen.settings.editProfileScreen.EditProfileScreen
 import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.AnimeDetailScreen
-import com.miraelDev.vauma.presentation.animeListScreen.animeList.HomeScreen
+import com.miraelDev.vauma.presentation.animeListScreen.HomeScreen
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.NotificationScreen
 import com.miraelDev.vauma.presentation.accountScreen.settings.privacyPolicy.PrivacyPolicyScreen
 import com.miraelDev.vauma.presentation.favouriteListScreen.FavouriteListScreen

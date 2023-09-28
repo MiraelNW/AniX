@@ -3,9 +3,17 @@ package com.miraelDev.vauma.presentation.mainScreen
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material.Text
+import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -18,8 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.compositionContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -45,14 +56,16 @@ val LocalTheme = compositionLocalOf<Boolean> { error("no provide value") }
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val viewModel: MainViewModel by viewModels()
-        installSplashScreen().setKeepOnScreenCondition { viewModel.isLoading.value }
+        splashScreen.setKeepOnScreenCondition { false }
 
         setContent {
+
             val systemUiController = rememberSystemUiController()
 
             val isSystemDark = isSystemInDarkTheme()
@@ -70,6 +83,11 @@ class MainActivity : ComponentActivity() {
 
             val authState by viewModel.authState.collectAsStateWithLifecycle()
 
+            DisposableEffect(Unit) {
+                enableEdgeToEdge()
+                onDispose {}
+            }
+
             LaunchedEffect(configuration) {
                 snapshotFlow { configuration.orientation }
                     .collect { orientation = it }
@@ -79,6 +97,7 @@ class MainActivity : ComponentActivity() {
                 LocalOrientation provides orientation,
                 LocalTheme provides darkTheme
             ) {
+
                 HikariTheme(darkTheme = darkTheme) {
 
                     var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }

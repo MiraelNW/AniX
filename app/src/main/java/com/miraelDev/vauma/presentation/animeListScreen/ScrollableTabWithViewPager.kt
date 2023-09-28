@@ -1,11 +1,10 @@
-package com.miraelDev.vauma.presentation.animeListScreen.animeList
+package com.miraelDev.vauma.presentation.animeListScreen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -113,7 +112,7 @@ fun ScrollableTabWithViewPager(
     )
 
     ScrollableTabRow(
-        modifier = Modifier.height(50.dp),
+        modifier = Modifier.height(48.dp),
         selectedTabIndex = pagerState.currentPage,
         backgroundColor = MaterialTheme.colors.background,
         edgePadding = 8.dp,
