@@ -12,11 +12,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -32,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,55 +47,55 @@ import androidx.compose.ui.window.DialogProperties
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.exntensions.pressClickEffect
+import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AnimeSeriesDialog(
     onDismiss: () -> Unit,
     onSeriesClick: (Int) -> Unit
 ) {
 
-    val scrollState = rememberScrollState()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .noRippleEffectClick(onClick = onDismiss)
+            .background(Color.Black.copy(alpha = 0.5f))
+    ) {
 
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-
-        ),
-        content = {
-
-
-            Card(
-                modifier = Modifier.fillMaxHeight(),
-                shape = RoundedCornerShape(16.dp),
-                backgroundColor = MaterialTheme.colors.background
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .systemBarsPadding()
+                .padding(vertical = 32.dp)
+                .noRippleEffectClick { }
+                .align(Alignment.Center),
+            shape = RoundedCornerShape(16.dp),
+            backgroundColor = MaterialTheme.colors.background
+        ) {
+            Column(
+                Modifier
+                    .padding(12.dp)
+                    .wrapContentSize(),
             ) {
-                Column(
-                    Modifier.padding(12.dp),
+                Text(
+                    text = stringResource(R.string.choose_series),
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally),
+                    fontSize = 32.sp,
+                )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = stringResource(R.string.choose_series),
-                        modifier = Modifier
-                            .padding(top = 8.dp, bottom = 8.dp)
-                            .align(Alignment.CenterHorizontally),
-                        fontSize = 32.sp,
-                    )
-                    LazyVerticalGrid(
-                        modifier = Modifier
-                            .weight(1f),
-                        columns = GridCells.Fixed(3),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        item {  }
-                        items(24){
-                            SeriesElement(number = it, onSeriesClick = onSeriesClick)
-                        }
+                    items(12) {
+                        SeriesElement(number = it, onSeriesClick = onSeriesClick)
                     }
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
