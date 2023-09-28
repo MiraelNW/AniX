@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.miraelDev.vauma.R
+import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.exntensions.pressClickEffect
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -58,8 +61,7 @@ fun AnimeSeriesDialog(
 
 
             Card(
-                modifier = Modifier
-                    .fillMaxHeight(0.9f),
+                modifier = Modifier.fillMaxHeight(),
                 shape = RoundedCornerShape(16.dp),
                 backgroundColor = MaterialTheme.colors.background
             ) {
@@ -73,14 +75,15 @@ fun AnimeSeriesDialog(
                             .align(Alignment.CenterHorizontally),
                         fontSize = 32.sp,
                     )
-                    FlowRow(
+                    LazyVerticalGrid(
                         modifier = Modifier
-                            .verticalScroll(scrollState)
                             .weight(1f),
+                        columns = GridCells.Fixed(3),
                         verticalArrangement = Arrangement.Center,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        repeat(24) {
+                        item {  }
+                        items(24){
                             SeriesElement(number = it, onSeriesClick = onSeriesClick)
                         }
                     }
@@ -92,26 +95,24 @@ fun AnimeSeriesDialog(
 
 @Composable
 private fun SeriesElement(
-    number : Int,
+    number: Int,
     onSeriesClick: (Int) -> Unit
 ) {
 
-    val interactionSource = remember { MutableInteractionSource() }
-
     Box(
         modifier = Modifier
-            .pressClickEffect()
             .padding(6.dp)
-            .border(width = 2.dp, color = MaterialTheme.colors.primary)
+            .border(
+                width = 2.dp,
+                color = MaterialTheme.colors.primary,
+                shape = RoundedCornerShape(24.dp)
+            )
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
+                .noRippleEffectClick {
                     onSeriesClick(number)
                 }
                 .padding(8.dp)

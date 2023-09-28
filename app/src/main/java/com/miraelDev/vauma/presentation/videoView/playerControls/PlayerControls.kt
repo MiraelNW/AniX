@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
+import androidx.media3.common.Player.STATE_BUFFERING
 import androidx.media3.common.Player.STATE_ENDED
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
@@ -206,6 +207,7 @@ fun PlayerControls(
                                 modifier = Modifier
                                     .size(42.dp)
                                     .noRippleEffectClick(
+                                        enabled = playerState != STATE_BUFFERING,
                                         onClick = {
                                             if (isVideoPlaying.not() && playerState == Player.STATE_ENDED) {
                                                 videoTime = 0

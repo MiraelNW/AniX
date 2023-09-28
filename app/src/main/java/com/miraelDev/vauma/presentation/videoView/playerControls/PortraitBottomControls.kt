@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.videoView.playerControls
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,6 +112,7 @@ fun PortraitBottomControls(
                     modifier = Modifier
                         .size(24.dp)
                         .noRippleEffectClick(
+                            enabled = playerState != Player.STATE_BUFFERING ,
                             onClick = {
                                 if (isVideoPlaying.not() && playerState == Player.STATE_ENDED) {
                                     resetTime()

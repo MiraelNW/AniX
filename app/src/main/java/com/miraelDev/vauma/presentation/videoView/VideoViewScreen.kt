@@ -1,3 +1,4 @@
+import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
@@ -8,6 +9,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -21,16 +24,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.Player.STATE_BUFFERING
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -42,6 +50,7 @@ import com.miraelDev.vauma.presentation.videoView.playerControls.PlayerControls
 import com.miraelDev.vauma.presentation.videoView.utilis.setAutoOrientation
 import com.miraelDev.vauma.presentation.videoView.utilis.setLandscape
 import com.miraelDev.vauma.presentation.videoView.utilis.setPortrait
+import com.miraelDev.vauma.ui.theme.LightGreen700
 import kotlinx.coroutines.delay
 
 private const val PORTRAIT = 0
@@ -152,6 +161,7 @@ private fun VideoView(
     DisposableEffect(key1 = Unit) {
         val listener =
             object : Player.Listener {
+
                 override fun onEvents(
                     player: Player,
                     events: Player.Events
@@ -162,6 +172,7 @@ private fun VideoView(
                     bufferedPercentage = player.bufferedPercentage
                     isPlaying = player.isPlaying
                     playbackState = player.playbackState
+
                 }
             }
         exoPlayer.addListener(listener)
@@ -189,7 +200,6 @@ private fun VideoView(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-
 
         VideoPlayer(
             exoPlayer = exoPlayer,
@@ -274,6 +284,17 @@ private fun VideoView(
                 autoLoadNextVideo = autoLoadVideo
             }
         )
+
+        if (playbackState == STATE_BUFFERING) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(64.dp)
+                    .align(Alignment.Center),
+                strokeWidth = 4.dp,
+                backgroundColor = LightGreen700.copy(alpha = 0.4f),
+                strokeCap = StrokeCap.Butt,
+            )
+        }
     }
 }
 
