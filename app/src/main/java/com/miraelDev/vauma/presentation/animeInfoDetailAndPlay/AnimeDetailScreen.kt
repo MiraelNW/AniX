@@ -121,15 +121,6 @@ private fun DetailScreen(
             modifier = Modifier.navigationBarsPadding()
         ) {
 
-            if (showSeriesDialog) {
-                AnimeSeriesDialog(
-                    onDismiss = {
-                        showSeriesDialog = false
-                    },
-                    onSeriesClick = onSeriesClick
-                )
-            }
-
             LazyColumn(
                 modifier = Modifier
                     .navigationBarsPadding(),
@@ -202,6 +193,15 @@ private fun DetailScreen(
                     .padding(end = 8.dp, top = 8.dp),
                 onFavouriteIconClick = onFavouriteIconCLick
             )
+
+            if (showSeriesDialog) {
+                AnimeSeriesDialog(
+                    onDismiss = {
+                        showSeriesDialog = false
+                    },
+                    onSeriesClick = onSeriesClick
+                )
+            }
         }
     }
 
