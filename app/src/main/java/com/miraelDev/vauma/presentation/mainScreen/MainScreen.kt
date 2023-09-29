@@ -37,20 +37,10 @@ fun MainScreen(
     onThemeButtonClick: () -> Unit,
     onVideoViewClick: (Int) -> Unit,
 ) {
-
-    var shouldShowBottomBar by rememberSaveable { mutableStateOf(true) }
-    var shouldShowNavRail by rememberSaveable { mutableStateOf(false) }
-
     val orientation = LocalOrientation.current
-    LaunchedEffect(key1 = orientation) {
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            shouldShowBottomBar = false
-            shouldShowNavRail = true
-        } else {
-            shouldShowBottomBar = true
-            shouldShowNavRail = false
-        }
-    }
+
+    var shouldShowBottomBar by remember { mutableStateOf(orientation == Configuration.ORIENTATION_LANDSCAPE) }
+    var shouldShowNavRail by remember { mutableStateOf(orientation == Configuration.ORIENTATION_LANDSCAPE) }
 
     val navigationState = rememberNavigationState()
     Scaffold(

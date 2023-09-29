@@ -32,11 +32,9 @@ import com.miraelDev.vauma.ui.theme.QuickSand
 @Composable
 fun Toolbar() {
 
-    val orientation = LocalOrientation.current
 
     TopAppBar(
-            modifier = if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-                Modifier.systemBarsPadding() else Modifier.statusBarsPadding(),
+            modifier =  Modifier.statusBarsPadding(),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 0.dp
     ) {
