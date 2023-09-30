@@ -25,6 +25,7 @@ private val LightMainColorPalette = lightColors(
     onSurface = DarkWhite700,
     onBackground = Color.Black,
     onSecondary = LightWhite,
+    secondaryVariant = Color(0xFFA29C9C)
 )
 
 
@@ -34,6 +35,7 @@ private val DarkMainColorPalette = darkColors(
     onSurface = LightBlack,
     onBackground = Color.White,
     onSecondary = LightBlack,
+    secondaryVariant = Color(0xFF818181)
 )
 
 @OptIn(ExperimentalFoundationApi::class)

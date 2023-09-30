@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miraelDev.vauma.exntensions.shimmerEffect
+import com.miraelDev.vauma.exntensions.shimmerItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -30,13 +31,13 @@ fun ShimmerListFavouriteAnime() {
     val scrollState = rememberScrollState()
 
     FlowRow(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 4.dp, end = 4.dp)
-                    .navigationBarsPadding()
-                    .verticalScroll(scrollState),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            maxItemsInEachRow = 2
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 4.dp, end = 4.dp)
+            .navigationBarsPadding()
+            .verticalScroll(scrollState),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        maxItemsInEachRow = 2
     ) {
         repeat(6) {
             ShimmerAnimeCard()
@@ -48,21 +49,19 @@ fun ShimmerListFavouriteAnime() {
 @Composable
 private fun ShimmerAnimeCard() {
     Card(
-            shape = RoundedCornerShape(16.dp),
-            backgroundColor = MaterialTheme.colors.background,
-            modifier = Modifier
-                    .height(300.dp)
-                    .width(170.dp)
-                    .padding(vertical = 8.dp)
-            ,
-            elevation = 4.dp
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier
+            .height(300.dp)
+            .width(170.dp)
+            .padding(vertical = 8.dp),
+        elevation = 4.dp
     ) {
-        Row() {
+        Row(modifier = Modifier.shimmerEffect()) {
             Spacer(
-                    modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
-                            .shimmerEffect()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .shimmerItem()
             )
         }
     }

@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miraelDev.vauma.exntensions.shimmerEffect
+import com.miraelDev.vauma.exntensions.shimmerItem
 
 @Composable
 @Preview(showBackground = true)
@@ -56,13 +57,12 @@ private fun ShimmerAnimeCard() {
             .height(220.dp),
         elevation = 4.dp
     ) {
-        Row() {
+        Row(modifier = Modifier.shimmerEffect()) {
             Spacer(
                 modifier = Modifier
                     .height(220.dp)
                     .width(150.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .shimmerEffect()
+                    .shimmerItem()
             )
             Spacer(
                 modifier = Modifier
@@ -93,8 +93,7 @@ private fun AnimePreview() {
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .height(16.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .shimmerEffect()
+                        .shimmerItem()
                 )
                 Rating()
             }
@@ -108,8 +107,7 @@ private fun AnimePreview() {
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .shimmerEffect()
+                    .shimmerItem()
             )
         }
 
@@ -124,8 +122,7 @@ private fun AnimePreview() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .shimmerEffect()
+                    .shimmerItem()
             )
         }
     }
@@ -133,21 +130,21 @@ private fun AnimePreview() {
 
 @Composable
 private fun Rating() {
-    Row {
+    Row(
+        modifier = Modifier
+    ) {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth(0.2f)
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect()
                 .height(16.dp)
+                .shimmerItem()
         )
         Spacer(modifier = Modifier.width(2.dp))
         Spacer(
             modifier = Modifier
                 .fillMaxWidth(0.3f)
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect()
                 .height(16.dp)
+                .shimmerItem()
         )
     }
 }

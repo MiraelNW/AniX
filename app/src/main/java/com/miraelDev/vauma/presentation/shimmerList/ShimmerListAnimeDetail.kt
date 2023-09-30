@@ -1,5 +1,11 @@
 package com.miraelDev.vauma.presentation.shimmerList
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,12 +22,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miraelDev.vauma.exntensions.shimmerEffect
+import com.miraelDev.vauma.exntensions.shimmerItem
 
 @Composable
 @Preview(showBackground = true)
@@ -30,11 +41,12 @@ fun ShimmerListAnimeDetail() {
     val scrollState = rememberScrollState()
 
     Column(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-                    .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ShimmerAnimeImage()
 
@@ -57,94 +69,115 @@ fun ShimmerListAnimeDetail() {
 
 @Composable
 private fun ShimmerAnimeImage() {
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+            .shimmerEffect()
+    ) {
         Spacer(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp)
-                        .clip(RoundedCornerShape(bottomEnd = 24.dp, bottomStart = 24.dp))
-                        .shimmerEffect(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .clip(RoundedCornerShape(bottomEnd = 24.dp, bottomStart = 24.dp))
+                .shimmerItem()
         )
     }
 }
 
+
 @Composable
 private fun ShimmerAnimeNameAndShareButton() {
     Row(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .shimmerEffect()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+
+
         Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-            Spacer(modifier = Modifier
+            Spacer(
+                modifier = Modifier
                     .height(16.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
-                    .shimmerEffect())
-            Spacer(modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .shimmerItem()
+            )
+            Spacer(
+                modifier = Modifier
                     .height(16.dp)
                     .fillMaxWidth(0.8f)
-                    .clip(RoundedCornerShape(24.dp))
-                    .shimmerEffect())
+                    .shimmerItem()
+            )
 
         }
 
-        Spacer(modifier = Modifier
+        Spacer(
+            modifier = Modifier
                 .height(24.dp)
                 .width(24.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .shimmerEffect()
+                .shimmerItem()
         )
     }
 }
 
 @Composable
 private fun ShimmerPlayButton() {
-    Spacer(
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shimmerEffect()
+            .height(72.dp)
+    ) {
+        Spacer(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .padding(top = 30.dp, start = 16.dp, end = 16.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .shimmerEffect()
-    )
+                .fillMaxWidth()
+                .height(72.dp)
+                .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                .shimmerItem()
+        )
+    }
+
+
 }
 
 @Composable
 private fun ShimmerRatingAndCategoriesRow() {
     Row(
-            modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .shimmerEffect()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Row(
-                modifier = Modifier.padding(2.dp),
-                verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(2.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier
+            Spacer(
+                modifier = Modifier
                     .width(48.dp)
                     .height(24.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .shimmerEffect()
+                    .shimmerItem()
             )
 
         }
 
         Row(
-                modifier = Modifier.fillMaxWidth(0.9f),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(0.9f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier
+            Spacer(
+                modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(24.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .shimmerEffect()
+                    .shimmerItem()
             )
         }
 
@@ -154,50 +187,60 @@ private fun ShimmerRatingAndCategoriesRow() {
 @Composable
 private fun ShimmerGenreRow() {
     Row(
-            modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .shimmerEffect()
     ) {
-        Spacer(modifier = Modifier
+        Spacer(
+            modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .height(24.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .shimmerEffect())
+                .shimmerItem()
+        )
     }
 }
 
 @Composable
 private fun ShimmerExpandableDescription() {
     Row(
-            modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .shimmerEffect()
     ) {
-        Spacer(modifier = Modifier
+        Spacer(
+            modifier = Modifier
                 .fillMaxWidth()
-                .height(156.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .shimmerEffect())
+                .height(128.dp)
+                .shimmerItem()
+        )
     }
 }
 
 @Composable
 private fun ShimmerOtherAnimeText() {
     Row(
-            modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .shimmerEffect()
     ) {
-        Spacer(modifier = Modifier
+        Spacer(
+            modifier = Modifier
                 .fillMaxWidth(0.4f)
                 .height(24.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .shimmerEffect())
+                .shimmerItem()
+        )
     }
 }
 
 @Composable
 private fun ShimmerOtherAnimes() {
     Row(
-            modifier = Modifier
-                    .padding(8.dp)
-                    .horizontalScroll(rememberScrollState()),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .shimmerEffect()
+            .horizontalScroll(rememberScrollState()),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         repeat(3) {
             AnimeCard()
@@ -210,26 +253,26 @@ private fun ShimmerOtherAnimes() {
 private fun AnimeCard() {
 
     Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .shimmerEffect(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
 
         Spacer(
-                modifier = Modifier
-                        .height(250.dp)
-                        .width(200.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .shimmerEffect(),
+            modifier = Modifier
+                .height(250.dp)
+                .width(200.dp)
+                .shimmerItem()
         )
 
         Spacer(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .height(16.dp)
-                        .padding(4.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .shimmerEffect()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .padding(4.dp)
+                .shimmerItem()
         )
     }
 }

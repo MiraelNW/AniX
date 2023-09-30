@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import android.content.Intent
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -137,7 +138,11 @@ private fun DetailScreen(
                             intent.action = Intent.ACTION_SEND
                             intent.putExtra(
                                 Intent.EXTRA_TEXT,
-                                "Привет! Смотри какое интересное аниме нашел: ${animeDetail.nameRu}, рекомендую глянуть его в этом приложение"
+                                "Привет! \n" +
+                                        "Смотри какое аниме я нашел:\n " +
+                                        "${animeDetail.nameRu} \n" +
+                                        "в нем ${animeDetail.episodes} серий \n" +
+                                        "обязательно посмотри его в приложении Vauma https://vauma.com/anime-detail/${animeDetail.id}"
                             )
                             intent.type = "text/plain"
                             startActivity(

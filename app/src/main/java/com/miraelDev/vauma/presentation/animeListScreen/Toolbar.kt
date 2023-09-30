@@ -32,7 +32,6 @@ import com.miraelDev.vauma.ui.theme.QuickSand
 @Composable
 fun Toolbar() {
 
-
     TopAppBar(
             modifier =  Modifier.statusBarsPadding(),
             backgroundColor = MaterialTheme.colors.background,

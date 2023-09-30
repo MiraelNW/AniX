@@ -28,7 +28,6 @@ class AnimeDetailRepositoryImpl @Inject constructor(
     override fun getAnimeDetail(): SharedFlow<Result<AnimeDetailInfo>> = _animeDetail.asSharedFlow()
 
     override suspend fun loadAnimeDetail(animeId: Int) {
-        delay(2000)
 
         when (val apiResult = searchApiService.getAnimeById(animeId)) {
             is ApiResult.Success -> {
