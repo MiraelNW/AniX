@@ -1,30 +1,22 @@
 package com.miraelDev.vauma.presentation.animeListScreen
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
+import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.systemGestureExclusion
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -40,33 +32,27 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
-import com.miraelDev.vauma.exntensions.pressClickEffect
-import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
+import com.miraelDev.vauma.presentation.commonComposFunc.AnimeCard
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendMessage
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorRetryButton
 import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
-import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
-import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
+import com.miraelDev.vauma.presentation.shimmerList.ShimmerAnimeCard
+import com.miraelDev.vauma.presentation.shimmerList.ShimmerGrid
 import io.ktor.utils.io.errors.IOException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
+
+private const val SMALL_ANIMATION = 1.015f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -151,7 +137,7 @@ fun ScrollableTabWithViewPager(
         pageNestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
             Orientation.Vertical
         ),
-        pageContent = {page ->
+        pageContent = { page ->
             when (page) {
 
                 1 -> {
@@ -204,6 +190,10 @@ private fun AnimeList(
     onClickRetry: () -> Unit
 ) {
 
+    var shouldShowLoading by remember {
+        mutableStateOf(false)
+    }
+
     Box(Modifier.fillMaxSize()) {
 
         categoryList.apply {
@@ -211,7 +201,13 @@ private fun AnimeList(
 
                 loadState.refresh is LoadState.Loading -> {
                     changeScrollPossibility(true)
-                    ShimmerList()
+                    LaunchedEffect(key1 = Unit){
+                        delay(300)
+                        shouldShowLoading = true
+                    }
+                    if(shouldShowLoading){
+                        ShimmerGrid(SMALL_ANIMATION)
+                    }
                 }
 
                 loadState.refresh is LoadState.Error -> {
@@ -219,11 +215,13 @@ private fun AnimeList(
                     val e = categoryList.loadState.refresh as LoadState.Error
                     if (e.error is IOException) {
                         WentWrongAnimation(
+                            modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
                             onClickRetry = onClickRetry
                         )
                     } else {
                         WentWrongAnimation(
+                            modifier = Modifier.fillMaxSize(),
                             res = R.raw.smth_went_wrong,
                             onClickRetry = onClickRetry
                         )
@@ -232,190 +230,68 @@ private fun AnimeList(
                 }
 
                 else -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .navigationBarsPadding(),
-                        contentPadding = PaddingValues(
-                            top = 4.dp,
-                            bottom = if (loadState.append.endOfPaginationReached) 64.dp else 8.dp,
-                            start = 4.dp,
-                            end = 4.dp
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(
-                            space = 8.dp,
-                            alignment = Alignment.CenterVertically
-                        )
-                    ) {
-                        if (categoryList.itemCount > 0) {
-                            items(count = categoryList.itemCount) { index ->
-                                changeScrollPossibility(true)
-                                categoryList[index]?.let {
-                                    AnimeCard(
-                                        animeItem = it,
-                                        onAnimeItemClick = onAnimeItemClick
-                                    )
-                                }
-                            }
-                        }
 
-                        if (categoryList.loadState.append is LoadState.Loading) {
-                            item {
-                                changeScrollPossibility(true)
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    repeat(4) {
-                                        ShimmerItem()
+                    val orientation = LocalOrientation.current
+                    val cells = remember {
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            3
+                        } else {
+                            2
+                        }
+                    }
+                    Column {
+                        LazyVerticalGrid(
+                            modifier = Modifier
+                                .navigationBarsPadding(),
+                            contentPadding = PaddingValues(
+                                top = 12.dp,
+                                bottom = if (loadState.append.endOfPaginationReached
+                                    || loadState.append is LoadState.Error
+                                ) 64.dp else 8.dp,
+                                start = 4.dp,
+                                end = 4.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(
+                                space = 8.dp,
+                                alignment = Alignment.CenterVertically
+                            ),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            columns = GridCells.Fixed(cells)
+                        ) {
+                            if (categoryList.itemCount > 0) {
+                                items(count = categoryList.itemCount) { index ->
+                                    changeScrollPossibility(true)
+                                    categoryList[index]?.let {
+                                        AnimeCard(
+                                            animeItem = it,
+                                            onAnimeItemClick = onAnimeItemClick
+                                        )
                                     }
                                 }
                             }
-                        }
 
-                        if (categoryList.loadState.append is LoadState.Error) {
-                            item {
-                                ErrorAppendItem(
-                                    message = "Попробуйте снова",
-                                    onClickRetry = onClickRetry
-                                )
+                            if (categoryList.loadState.append is LoadState.Loading) {
+                                items(count = 6) {
+                                    changeScrollPossibility(true)
+                                    ShimmerAnimeCard(
+                                        targetValue = SMALL_ANIMATION,
+                                        modifier = Modifier
+                                    )
+                                }
+                            }
+
+                            if (categoryList.loadState.append is LoadState.Error) {
+                                item {
+                                    ErrorAppendMessage(message = "Попробуйте снова")
+                                }
+                                item {
+                                    ErrorRetryButton(onClickRetry = onClickRetry)
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
-
-    val animatedProgress = remember { Animatable(initialValue = 0f) }
-    LaunchedEffect(Unit) {
-        animatedProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(500)
-        )
-    }
-
-    val animatedModifier = Modifier
-        .alpha(animatedProgress.value)
-
-    Card(
-        onClick = { onAnimeItemClick(animeItem.id) },
-        shape = RoundedCornerShape(16.dp),
-        backgroundColor = MaterialTheme.colors.background,
-        modifier = Modifier
-            .fillMaxWidth()
-            .pressClickEffect(),
-        elevation = 4.dp
-    ) {
-        Row(modifier = animatedModifier) {
-            Box(
-                modifier = Modifier
-                    .height(220.dp)
-                    .width(150.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                GlideImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    imageModel = { animeItem.image },
-                    imageOptions = ImageOptions(
-                        contentDescription = animeItem.nameRu,
-                        contentScale = ContentScale.FillBounds
-
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    },
-                )
-                Rating(animeItem = animeItem)
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .height(1.dp)
-                    .width(16.dp)
-            )
-            AnimePreview(animeItem = animeItem)
-        }
-    }
-}
-
-@Composable
-private fun AnimePreview(
-    animeItem: AnimeInfo
-) {
-    Column(
-        modifier = Modifier
-            .height(220.dp)
-            .padding(top = 8.dp, end = 12.dp),
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Column {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp, end = 16.dp),
-                text = animeItem.nameRu,
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onBackground,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = animeItem.nameEn,
-                color = MaterialTheme.colors.onBackground.copy(alpha = 0.4f),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        Text(
-            text = animeItem.genres.joinToString(),
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
-            color = MaterialTheme.colors.onBackground.copy(alpha = 0.4f)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = animeItem.airedOn.take(4),
-                maxLines = 1,
-                fontSize = 18.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colors.onBackground
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun Rating(animeItem: AnimeInfo) {
-    Box(
-        modifier = Modifier
-            .padding(top = 16.dp, start = 16.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.primary)
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(6.dp),
-            text = animeItem.score.toString(),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-        )
     }
 }

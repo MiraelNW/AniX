@@ -106,8 +106,13 @@ private fun DetailScreen(
         animeDetailInfo = animeDetail,
         coroutineScope = coroutineScope,
         modalSheetState = modalSheetState,
-        onDownloadClick = { videoUrl, videoName ->
-            downloadAnimeEpisode(videoUrl, videoName)
+        onDownloadClick = { selectedList ->
+            selectedList.forEach {
+                downloadAnimeEpisode(
+                    animeDetail.videoUrls.playerUrl[it],
+                    animeDetail.videoUrls.videoName[it]
+                )
+            }
             coroutineScope.launch {
                 modalSheetState.hide()
             }

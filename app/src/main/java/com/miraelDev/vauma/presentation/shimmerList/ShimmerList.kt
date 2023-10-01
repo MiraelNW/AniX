@@ -1,7 +1,9 @@
 package com.miraelDev.vauma.presentation.shimmerList
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,67 +12,75 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import com.miraelDev.vauma.exntensions.shimmerEffect
 import com.miraelDev.vauma.exntensions.shimmerItem
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 
 @Composable
-@Preview(showBackground = true)
-fun ShimmerList() {
+fun ShimmerGrid(targetValue: Float) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 4.dp, end = 4.dp)
-            .verticalScroll(rememberScrollState())
-            .navigationBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        repeat(6) {
-            ShimmerAnimeCard()
+    val orientation = LocalOrientation.current
+    val cells = remember {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            3
+        } else {
+            2
         }
     }
 
+    LazyVerticalGrid(
+        modifier = Modifier
+            .navigationBarsPadding(),
+        contentPadding = PaddingValues(
+            top = 12.dp,
+            bottom = 12.dp,
+            start = 4.dp,
+            end = 4.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(
+            space = 8.dp,
+            alignment = Alignment.CenterVertically
+        ),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        columns = GridCells.Fixed(cells)
+    ) {
+        items(count = 6){
+            ShimmerAnimeCard(targetValue = targetValue, Modifier.fillMaxWidth(0.5f))
+        }
+    }
 }
 
 @Composable
 fun ShimmerItem() {
-    ShimmerAnimeCard()
+    ShimmerAnimeCard(targetValue = 1.5f, modifier = Modifier)
 }
 
 @Composable
-private fun ShimmerAnimeCard() {
+fun ShimmerAnimeCard(targetValue: Float, modifier: Modifier) {
     Card(
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.shimmerEffect(targetValue),
+        shape = RoundedCornerShape(24.dp),
         backgroundColor = MaterialTheme.colors.background,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp),
         elevation = 4.dp
     ) {
-        Row(modifier = Modifier.shimmerEffect()) {
+        Column {
             Spacer(
                 modifier = Modifier
-                    .height(220.dp)
-                    .width(150.dp)
+                    .fillMaxWidth()
+                    .height(300.dp)
                     .shimmerItem()
             )
-            Spacer(
-                modifier = Modifier
-                    .height(150.dp)
-                    .width(16.dp)
-            )
-            AnimePreview()
-
         }
     }
 }

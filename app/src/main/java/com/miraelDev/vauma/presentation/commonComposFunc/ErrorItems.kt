@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.presentation.commonComposFunc
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -14,14 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 
 @Composable
 fun ErrorRefreshItem(
     modifier: Modifier = Modifier,
     onClickRetry: () -> Unit
 ) {
+    val orientationLandscape = LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE
+
     OutlinedButton(
-        modifier = modifier.padding(16.dp),
         onClick = onClickRetry,
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(
@@ -29,7 +32,7 @@ fun ErrorRefreshItem(
             color = MaterialTheme.colors.primary.copy(0.3f)
         )
     ) {
-        Text(text = "Обновить", fontSize = 24.sp)
+        Text(text = "Обновить", fontSize = if (orientationLandscape) 18.sp else 24.sp)
     }
 }
 
@@ -61,5 +64,32 @@ fun ErrorAppendItem(
         ) {
             Text(text = "Обновить", fontSize = 20.sp)
         }
+    }
+}
+
+@Composable
+fun ErrorAppendMessage(
+    message: String,
+) {
+    Text(
+        modifier = Modifier.padding(top = 4.dp),
+        text = message,
+        maxLines = 1,
+        style = MaterialTheme.typography.h6,
+        color = Color.Red
+    )
+}
+
+@Composable
+fun ErrorRetryButton(onClickRetry: () -> Unit) {
+    OutlinedButton(
+        onClick = onClickRetry,
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colors.primary.copy(0.3f)
+        )
+    ) {
+        Text(text = "Обновить", fontSize = 16.sp)
     }
 }

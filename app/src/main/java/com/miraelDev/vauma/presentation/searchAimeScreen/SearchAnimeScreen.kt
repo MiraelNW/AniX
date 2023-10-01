@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,9 +37,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,15 +51,22 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.presentation.animeListScreen.AnimeSearchView
+import com.miraelDev.vauma.presentation.commonComposFunc.AnimeCard
 import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendMessage
+import com.miraelDev.vauma.presentation.commonComposFunc.ErrorRetryButton
 import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
-import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.AnimeCard
+import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.SearchAnimeCard
 import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.LastSearchedAnime
+import com.miraelDev.vauma.presentation.shimmerList.ShimmerAnimeCard
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
-import com.miraelDev.vauma.presentation.shimmerList.ShimmerList
+import com.miraelDev.vauma.presentation.shimmerList.ShimmerGrid
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
+
+
+private const val SMALL_ANIMATION = 1.015f
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -128,9 +136,10 @@ fun SearchAnimeScreen(
 
                 open = false
                 val resultList = results.result.collectAsLazyPagingItems()
-                SearchResult(
-                    searchResults = resultList,
+                InitialAnimeList(
+                    initialList = resultList,
                     onAnimeItemClick = onAnimeItemClick,
+                    onClickRetry = { resultList.retry() }
                 )
 
             }
@@ -218,6 +227,118 @@ private fun SearchHistory(
     }
 }
 
+@Composable
+private fun InitialAnimeList(
+    initialList: LazyPagingItems<AnimeInfo>,
+    onAnimeItemClick: (Int) -> Unit,
+    onClickRetry: () -> Unit
+) {
+
+    var shouldShowLoading by remember {
+        mutableStateOf(false)
+    }
+
+    Box(Modifier.fillMaxSize()) {
+
+        initialList.apply {
+            when {
+
+                loadState.refresh is LoadState.Loading -> {
+                    LaunchedEffect(key1 = Unit){
+                        delay(300)
+                        shouldShowLoading = true
+                    }
+                    if(shouldShowLoading){
+                        ShimmerGrid(SMALL_ANIMATION)
+                    }
+
+                }
+
+                loadState.refresh is LoadState.Error -> {
+                    val e = initialList.loadState.refresh as LoadState.Error
+                    if (e.error is IOException) {
+                        WentWrongAnimation(
+                            modifier = Modifier
+                                .fillMaxHeight(0.8f)
+                                .align(Alignment.Center),
+                            res = R.raw.lost_internet,
+                            onClickRetry = onClickRetry
+                        )
+                    } else {
+                        WentWrongAnimation(
+                            modifier = Modifier
+                                .fillMaxHeight(0.8f)
+                                .align(Alignment.Center),
+                            res = R.raw.smth_went_wrong,
+                            onClickRetry = onClickRetry
+                        )
+                    }
+
+                }
+
+                else -> {
+
+                    val orientation = LocalOrientation.current
+                    val cells = remember {
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            3
+                        } else {
+                            2
+                        }
+                    }
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .navigationBarsPadding(),
+                        contentPadding = PaddingValues(
+                            top = 12.dp,
+                            bottom = if (loadState.append.endOfPaginationReached
+                                || loadState.append is LoadState.Error
+                            ) 64.dp else 8.dp,
+                            start = 4.dp,
+                            end = 4.dp
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 8.dp,
+                            alignment = Alignment.CenterVertically
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        columns = GridCells.Fixed(cells)
+                    ) {
+                        Log.d("tag",initialList.loadState.toString())
+                        if (initialList.itemCount > 0) {
+                            items(count = initialList.itemCount) { index ->
+                                initialList[index]?.let {
+                                    AnimeCard(
+                                        animeItem = it,
+                                        onAnimeItemClick = onAnimeItemClick
+                                    )
+                                }
+                            }
+                        }
+
+                        if (initialList.loadState.append is LoadState.Loading) {
+                            items(count = 6) {
+                                ShimmerAnimeCard(
+                                    targetValue = SMALL_ANIMATION,
+                                    modifier = Modifier
+                                )
+                            }
+                        }
+
+                        if (initialList.loadState.append is LoadState.Error) {
+                            item {
+                                ErrorAppendMessage(message = "Попробуйте снова")
+                            }
+                            item {
+                                ErrorRetryButton(onClickRetry = onClickRetry)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun SearchResult(
@@ -235,12 +356,12 @@ private fun SearchResult(
             when {
 
                 loadState.refresh is LoadState.Loading -> {
-                    LaunchedEffect(key1 = Unit){
+                    LaunchedEffect(key1 = Unit) {
                         delay(300)
                         shouldShowLoading = true
                     }
-                    if(shouldShowLoading){
-                        ShimmerList()
+                    if (shouldShowLoading) {
+                        ShimmerGrid(targetValue = 1.02f)
                     }
                 }
 
@@ -248,11 +369,13 @@ private fun SearchResult(
                     val e = searchResults.loadState.refresh as LoadState.Error
                     if (e.error is IOException) {
                         WentWrongAnimation(
+                            modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
                             onClickRetry = searchResults::retry
                         )
                     } else {
                         WentWrongAnimation(
+                            modifier = Modifier.fillMaxSize(),
                             res = R.raw.smth_went_wrong,
                             onClickRetry = searchResults::retry
                         )
@@ -280,7 +403,7 @@ private fun SearchResult(
                         items(count = searchResults.itemCount) { index ->
 
                             searchResults[index]?.let {
-                                AnimeCard(
+                                SearchAnimeCard(
                                     item = it,
                                     onAnimeItemClick = onAnimeItemClick
                                 )

@@ -57,7 +57,7 @@ private fun ShimmerAnimeCard() {
             .padding(vertical = 8.dp),
         elevation = 4.dp
     ) {
-        Row(modifier = Modifier.shimmerEffect()) {
+        Row(modifier = Modifier.shimmerEffect(1.5f)) {
             Spacer(
                 modifier = Modifier
                     .fillMaxSize()

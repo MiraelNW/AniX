@@ -28,7 +28,7 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AnimeCard(
+fun SearchAnimeCard(
     item: AnimeInfo,
     onAnimeItemClick: (Int) -> Unit
 ) {
