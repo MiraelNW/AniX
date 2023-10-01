@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 
 @Composable
@@ -90,6 +92,6 @@ fun ErrorRetryButton(onClickRetry: () -> Unit) {
             color = MaterialTheme.colors.primary.copy(0.3f)
         )
     ) {
-        Text(text = "Обновить", fontSize = 16.sp)
+        Text(text = stringResource(R.string.update), fontSize = 16.sp)
     }
 }

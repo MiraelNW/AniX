@@ -105,4 +105,6 @@
     <string name="cancel">Отмена</string>
     <string name="show_more"> ...Показать еще</string>
     <string name="show_less">"...Спрятать"</string>
+    <string name="retry">Попробуйте снова</string>
+    <string name="update">Обновить</string>
 </resources>

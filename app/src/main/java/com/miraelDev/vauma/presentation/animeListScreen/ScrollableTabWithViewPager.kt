@@ -282,7 +282,7 @@ private fun AnimeList(
 
                             if (categoryList.loadState.append is LoadState.Error) {
                                 item {
-                                    ErrorAppendMessage(message = "Попробуйте снова")
+                                    ErrorAppendMessage(message = stringResource(R.string.retry))
                                 }
                                 item {
                                     ErrorRetryButton(onClickRetry = onClickRetry)
