@@ -38,66 +38,34 @@ class SearchPagingPagingSource(
 
             val response =
                 if (yearFilter != null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode != null && sortFilter != null && genreListFilter.isEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize"
                     )
                 } else if (yearCode == null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize"
                     )
                 } else {
-                    Log.d(
-                        "tag",
-                        "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&page_num=$page&page_size=$pageSize"
-                    )
                     client.get<Response>(
                         "${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&page_num=$page&page_size=$pageSize"
                     )

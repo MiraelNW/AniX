@@ -78,16 +78,16 @@ private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
             elevation = 4.dp
         ) {
 
-            AsyncImage(
-                modifier = Modifier
-                    .height(300.dp)
-                    .width(230.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                model = animeItem.image,
-                contentDescription = animeItem.nameEn,
-                contentScale = ContentScale.FillBounds,
-
-                )
+//            AsyncImage(
+//                modifier = Modifier
+//                    .height(300.dp)
+//                    .width(230.dp)
+//                    .clip(RoundedCornerShape(16.dp)),
+//                model = animeItem.image,
+//                contentDescription = animeItem.nameEn,
+//                contentScale = ContentScale.FillBounds,
+//
+//                )
 
         }
         Text(

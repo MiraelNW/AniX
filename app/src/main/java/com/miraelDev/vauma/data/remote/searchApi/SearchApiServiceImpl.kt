@@ -1,9 +1,11 @@
 package com.miraelDev.vauma.data.remote.searchApi
 
+import android.util.Log
 import com.miraelDev.vauma.data.remote.ApiResult
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.data.remote.NetworkHandler
+import com.miraelDev.vauma.data.remote.dto.AnimeInfoDto
 import com.miraelDev.vauma.data.remote.dto.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
@@ -21,8 +23,9 @@ class SearchApiServiceImpl @Inject constructor(
         return if (networkHandler.isConnected.value) {
             try {
                 ApiResult.Success(
-                    animeList =
-                    client.get<Response>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/").results
+                    animeList = listOf(
+                        client.get<AnimeInfoDto>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/")
+                    )
                 )
 
             } catch (exception: Exception) {

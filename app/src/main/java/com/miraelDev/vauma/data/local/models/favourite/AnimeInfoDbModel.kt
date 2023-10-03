@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.Genre
 import com.miraelDev.vauma.domain.models.VideoInfo
 import kotlinx.serialization.Serializable
 
@@ -25,7 +26,7 @@ data class AnimeInfoDbModel(
     val duration: Int,
     val description: String,
     val videoUrls: VideoInfo = VideoInfo(),
-    val genres: List<String>,
+    val genres: List<Genre>,
     var page:Int
 )
 

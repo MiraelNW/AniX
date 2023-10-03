@@ -72,6 +72,10 @@ class NewCategoryRemoteMediator(
 
         try {
 
+            Log.d("tag",client.get<Response>(
+                "${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
+            ).toString())
+
             val apiResponse = client.get<Response>(
                 "${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
             )

@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.animeListScreen
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -213,6 +214,7 @@ private fun AnimeList(
                 loadState.refresh is LoadState.Error -> {
                     changeScrollPossibility(false)
                     val e = categoryList.loadState.refresh as LoadState.Error
+                    Log.d("tag",e.error.message.toString())
                     if (e.error is IOException) {
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
