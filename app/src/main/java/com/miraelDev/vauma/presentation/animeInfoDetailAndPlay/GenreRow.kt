@@ -28,8 +28,8 @@ fun GenreRow(animeItem: AnimeDetailInfo) {
         ) {
             animeItem.genres.forEachIndexed { index, genre ->
                 Text(
-                        text = if (index != (animeItem.genres.size-1) ) " ${genre.lowercase()},"
-                        else " ${genre.lowercase()}.",
+                        text = if (index != (animeItem.genres.size-1) ) " ${genre.nameRu.lowercase()},"
+                        else " ${genre.nameRu.lowercase()}.",
                         fontSize = 18.sp,
                         maxLines = 1
                 )

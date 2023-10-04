@@ -15,7 +15,7 @@ data class AnimeDetailInfo(
     val duration: Int,
     val description: String,
     val videoUrls: VideoInfo = VideoInfo(),
-    val genres: List<String>,
+    val genres: List<Genre>,
     val similar: List<Similar>
 )
 

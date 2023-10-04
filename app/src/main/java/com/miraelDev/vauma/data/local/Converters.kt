@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.data.local
 
 import androidx.room.TypeConverter
+import com.miraelDev.vauma.domain.models.Genre
 import com.miraelDev.vauma.domain.models.VideoInfo
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
@@ -27,6 +28,16 @@ class Converters {
 
     @TypeConverter
     fun stringToVideoInfo(value: String): VideoInfo {
+        return Json.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun genreToString(genre: List<Genre>): String {
+        return Json.encodeToString(genre)
+    }
+
+    @TypeConverter
+    fun stringToGenre(value: String): List<Genre> {
         return Json.decodeFromString(value)
     }
 }

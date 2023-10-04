@@ -38,9 +38,9 @@ data class AnimeInfoDto(
 
         @SerialName("duration") val duration: Int,
 
-        @SerialName("genres") val genres: List<String>,
+        @SerialName("genres") val genres: List<GenreDto>,
 
-        @SerialName("similar") val similar: SimilarListDto,
+        @SerialName("similar_animes") val similar: List<SimilarDto>,
 )
 
 internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
@@ -54,11 +54,11 @@ internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = ImmutableList.copyOf(this.genres),
+            genres = ImmutableList.copyOf(this.genres.map { it.toGenre() }),
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
-            similar = this.similar.results.map { it.toSimilar() }
+            similar = this.similar.map { it.toSimilar() }
     )
 }
 
@@ -73,7 +73,7 @@ internal fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = ImmutableList.copyOf(this.genres),
+            genres = ImmutableList.copyOf(this.genres.map { it.toGenre() }),
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
@@ -91,7 +91,7 @@ internal fun AnimeInfoDto.mapToNewCategoryModel(): NewCategoryAnimeInfoDbModel {
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = this.genres,
+            genres = this.genres.map { it.toGenre() },
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
@@ -110,7 +110,7 @@ internal fun AnimeInfoDto.mapToPopularCategoryModel(): PopularCategoryAnimeInfoD
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = this.genres,
+            genres = this.genres.map { it.toGenre() },
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
@@ -128,7 +128,7 @@ internal fun AnimeInfoDto.mapToFilmCategoryModel(): FilmCategoryAnimeInfoDbModel
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = this.genres,
+            genres = this.genres.map { it.toGenre() },
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
@@ -147,7 +147,7 @@ internal fun AnimeInfoDto.mapToNameCategoryModel(): NameCategoryAnimeInfoDbModel
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = this.genres,
+            genres = this.genres.map { it.toGenre() },
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
@@ -166,7 +166,7 @@ internal fun AnimeInfoDto.mapToInitialSearchModel(): InitialSearchAnimeInfoDbMod
             airedOn = this.airedOn,
             status = this.status,
             kind = this.kind,
-            genres = this.genres,
+            genres = this.genres.map { it.toGenre() },
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
