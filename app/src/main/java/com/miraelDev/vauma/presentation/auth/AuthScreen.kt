@@ -27,7 +27,7 @@ fun AuthScreen(
         signUpScreenContent = {
             SignUpScreen(
                 signUp = signUp,
-                onBackClicked = {
+                onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }
             )

@@ -9,23 +9,24 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import io.ktor.client.features.HttpTimeout
-import io.ktor.client.features.cache.HttpCache
-import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.kotlinx.serializer.KotlinxSerializer
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.isSuccess
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.ANDROID
-import io.ktor.client.features.logging.LogLevel
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object HttpClientModule {
-
-
-    private fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true; prettyPrint = true; }
 
     @Provides
     @Singleton
@@ -33,11 +34,31 @@ object HttpClientModule {
 
         return HttpClient(Android) {
 
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(createJson())
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                        prettyPrint = true
+                    }
+                )
             }
 
             install(HttpCache)
+
+            install(Auth) {
+
+            }
+
+            install(HttpRequestRetry) {
+                maxRetries = 5
+                retryIf { request, response ->
+                    !response.status.isSuccess()
+                }
+                delayMillis { retry ->
+                    retry * 2000L
+                }
+            }
 
             install(Logging) {
                 logger = Logger.ANDROID

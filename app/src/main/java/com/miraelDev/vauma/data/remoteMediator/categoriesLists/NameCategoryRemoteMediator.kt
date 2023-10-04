@@ -13,6 +13,7 @@ import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToNameCategoryModel
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
@@ -74,9 +75,9 @@ class NameCategoryRemoteMediator(
                 return MediatorResult.Error(IOException())
             }
 
-            val apiResponse = client.get<Response>(
-                "${ApiRoutes.GET_NAME_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE"
-            )
+            val apiResponse = client
+                .get("${ApiRoutes.GET_NAME_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE")
+                .body<Response>()
 
             val anime = apiResponse.results.map { it.mapToNameCategoryModel() }
 

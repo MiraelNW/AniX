@@ -15,4 +15,6 @@ object ApiRoutes {
     const val GET_FILMS_CATEGORY_LIST = "$BASE_URL/category/film/?"
 
     const val GET_NAME_CATEGORY_LIST = "$BASE_URL/category/name/?"
+
+    const val REGISTRATION = "$BASE_URL/"
 }

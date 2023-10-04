@@ -6,10 +6,12 @@ import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import io.ktor.client.HttpClient
-import io.ktor.client.features.ClientRequestException
-import io.ktor.client.features.RedirectResponseException
-import io.ktor.client.features.ServerResponseException
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
+import io.ktor.client.request.url
 import javax.inject.Inject
 
 class SearchApiServiceImpl @Inject constructor(
@@ -21,8 +23,10 @@ class SearchApiServiceImpl @Inject constructor(
         return if (networkHandler.isConnected.value) {
             try {
                 ApiResult.Success(
-                    animeList =
-                    client.get<Response>("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/").results
+                    animeList = client
+                        .get("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/")
+                        .body<Response>()
+                        .results
                 )
 
             } catch (exception: Exception) {

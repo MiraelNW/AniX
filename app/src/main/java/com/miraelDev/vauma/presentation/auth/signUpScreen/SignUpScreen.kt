@@ -60,7 +60,7 @@ import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
-    onBackClicked: () ->Unit,
+    onBackPressed: () ->Unit,
     signUp: () ->Unit,
 ) {
     val nickName by viewModel.nickNameState
@@ -75,7 +75,7 @@ fun SignUpScreen(
 
     val focusManager = LocalFocusManager.current
 
-    BackHandler(onBack = onBackClicked)
+    BackHandler(onBack = onBackPressed)
 
     Column(
         modifier = Modifier
@@ -84,7 +84,7 @@ fun SignUpScreen(
             .systemBarsPadding(),
     ) {
         Toolbar(
-            onBackPressed = {},
+            onBackPressed = onBackPressed,
             text = R.string.sign_up
         )
         Column(

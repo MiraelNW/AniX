@@ -14,6 +14,7 @@ import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToInitialSearchModel
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
@@ -75,9 +76,9 @@ class InitialSearchRemoteMediator(
                 return MediatorResult.Error(IOException())
             }
 
-            val apiResponse = client.get<Response>(
-                "${ApiRoutes.SEARCH_URL_ANIME_LIST}&page_num=$page&page_size=$PAGE_SIZE"
-            )
+            val apiResponse = client
+                .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}&page_num=$page&page_size=$PAGE_SIZE")
+                .body<Response>()
 
             val anime = apiResponse.results.map { it.mapToInitialSearchModel() }
 
