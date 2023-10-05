@@ -53,11 +53,11 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
         onClick = { onAnimeItemClick(animeItem.id) },
         shape = RoundedCornerShape(16.dp),
         backgroundColor = MaterialTheme.colors.background,
-        modifier = Modifier.pressClickEffect(),
+        modifier = Modifier.pressClickEffect().alpha(alpha),
         elevation = 4.dp
     ) {
         Column{
-            Box(modifier = Modifier.alpha(alpha)) {
+            Box {
                 GlideImage(
                     modifier = Modifier
                         .height(300.dp)
@@ -79,8 +79,7 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
             Box(
                 modifier = Modifier
                     .width(200.dp)
-                    .background(MaterialTheme.colors.background)
-                    .alpha(alpha),
+                    .background(MaterialTheme.colors.background),
             ) {
                 Text(
                     modifier = Modifier

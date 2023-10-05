@@ -109,4 +109,6 @@
     <string name="update">Обновить</string>
     <string name="edit_your_name">edit your name</string>
     <string name="change_password">Change password</string>
+    <string name="submit">Submit</string>
+    <string name="give_rating">Give rating</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -13,10 +12,13 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +32,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListAnimeDetail
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+private const val CLOSE_BOTTOM_SHEET = 0
+private const val RATING_SCREEN = 1
+private const val DOWNLOAD_SCREEN = 2
 
 @Composable
 fun AnimeDetailScreen(
@@ -45,6 +52,10 @@ fun AnimeDetailScreen(
     val viewModel = hiltViewModel<AnimeDetailViewModel>()
 
     val screenState by viewModel.animeDetail.collectAsStateWithLifecycle(AnimeDetailScreenState.Initial)
+
+    var shouldShowLoading by remember {
+        mutableStateOf(false)
+    }
 
     when (val results = screenState) {
 
@@ -69,10 +80,14 @@ fun AnimeDetailScreen(
         }
 
         is AnimeDetailScreenState.Loading -> {
-            ShimmerListAnimeDetail()
-
             viewModel.loadAnimeDetail(animeId)
-
+            LaunchedEffect(key1 = Unit) {
+                delay(200)
+                shouldShowLoading = true
+            }
+            if (shouldShowLoading) {
+                ShimmerListAnimeDetail()
+            }
         }
 
         is AnimeDetailScreenState.Initial -> {}
@@ -102,7 +117,10 @@ private fun DetailScreen(
         skipHalfExpanded = true
     )
 
-    DownloadBottomSheet(
+    var currentBottomSheetScreen by rememberSaveable { mutableIntStateOf(CLOSE_BOTTOM_SHEET) }
+
+    BottomSheet(
+        bottomSheetScreen = currentBottomSheetScreen,
         animeDetailInfo = animeDetail,
         coroutineScope = coroutineScope,
         modalSheetState = modalSheetState,
@@ -119,6 +137,7 @@ private fun DetailScreen(
         },
         onCloseDownloadSheet = {
             coroutineScope.launch {
+                currentBottomSheetScreen = CLOSE_BOTTOM_SHEET
                 modalSheetState.hide()
             }
         }
@@ -167,13 +186,24 @@ private fun DetailScreen(
                         onPlayClick = { showSeriesDialog = true },
                         onDownloadClick = {
                             coroutineScope.launch {
+                                currentBottomSheetScreen = DOWNLOAD_SCREEN
                                 modalSheetState.show()
                             }
                         }
                     )
                 }
 
-                item { RatingAndCategoriesRow(animeItem = animeDetail) }
+                item {
+                    RatingAndCategoriesRow(
+                        animeItem = animeDetail,
+                        onRatingClick = {
+                            coroutineScope.launch {
+                                currentBottomSheetScreen = RATING_SCREEN
+                                modalSheetState.show()
+                            }
+                        }
+                    )
+                }
 
                 item { GenreRow(animeItem = animeDetail) }
 

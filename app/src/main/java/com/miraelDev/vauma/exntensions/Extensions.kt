@@ -38,10 +38,6 @@ fun <T> Flow<T>.mergeWith(another: Flow<T>): Flow<T> {
     return merge(this, another)
 }
 
-fun String.encode(): String {
-    return Uri.encode(this)
-}
-
 fun Modifier.noRippleEffectClick(
     enabled: Boolean = true,
     onClick: () -> Unit

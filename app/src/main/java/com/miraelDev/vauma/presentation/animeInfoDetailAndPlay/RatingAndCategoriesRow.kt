@@ -19,18 +19,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.exntensions.noRippleEffectClick
+import com.miraelDev.vauma.exntensions.pressClickEffect
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
 import com.miraelDev.vauma.ui.theme.LightGreen700
 
 
 @Composable
-fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo) {
+fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo, onRatingClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,7 +44,9 @@ fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo) {
     ) {
 
         Row(
-            modifier = Modifier.padding(2.dp),
+            modifier = Modifier
+                .noRippleEffectClick(onClick = onRatingClick)
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -52,6 +58,13 @@ fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo) {
                 text = animeItem.score.toString(),
                 color = if (LocalTheme.current) Color.White else MaterialTheme.colors.primary
             )
+            Icon(
+                modifier = Modifier.padding(start = 4.dp),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_forward),
+                contentDescription = stringResource(R.string.rating_star),
+                tint = MaterialTheme.colors.primary
+            )
+
         }
 
         Row(

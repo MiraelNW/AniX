@@ -15,6 +15,7 @@ import com.miraelDev.vauma.data.remote.dto.mapToNewCategoryModel
 import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
