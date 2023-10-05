@@ -348,13 +348,13 @@ private fun AnimeCard(
     onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
 
-    val animatedProgress = remember { Animatable(initialValue = 0f) }
-    LaunchedEffect(Unit) {
-        animatedProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(700)
-        )
-    }
+//    val animatedProgress = remember { Animatable(initialValue = 0f) }
+//    LaunchedEffect(Unit) {
+//        animatedProgress.animateTo(
+//            targetValue = 1f,
+//            animationSpec = tween(700)
+//        )
+//    }
 
     var unSelectedItem by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(unSelectedItem) {
@@ -363,7 +363,7 @@ private fun AnimeCard(
             onFavouriteIconClick(item)
         }
     }
-    val animatedModifier = Modifier.alpha(animatedProgress.value)
+//    val animatedModifier = Modifier.alpha(animatedProgress.value)
 
     AnimatedVisibility(
         visible = !unSelectedItem,
@@ -379,7 +379,7 @@ private fun AnimeCard(
                 .pressClickEffect(),
             elevation = 4.dp
         ) {
-            Box(modifier = animatedModifier) {
+            Box(modifier = Modifier) {
                 GlideImage(
                     modifier = Modifier
                         .height(300.dp)
@@ -395,7 +395,7 @@ private fun AnimeCard(
                     },
                 )
                 FavouriteIcon(
-                    modifier = animatedModifier
+                    modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(end = 8.dp, top = 8.dp),
                     size = 24,

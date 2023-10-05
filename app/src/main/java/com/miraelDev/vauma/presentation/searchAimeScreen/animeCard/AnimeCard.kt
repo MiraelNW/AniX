@@ -33,14 +33,13 @@ fun SearchAnimeCard(
     onAnimeItemClick: (Int) -> Unit
 ) {
 
-    val animatedProgress = remember { Animatable(initialValue = 0f) }
-    LaunchedEffect(Unit) {
-        animatedProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(500)
-        )
-    }
-    val animatedModifier = Modifier.alpha(animatedProgress.value)
+//    val animatedProgress = remember { Animatable(initialValue = 0f) }
+//    LaunchedEffect(Unit) {
+//        animatedProgress.animateTo(
+//            targetValue = 1f,
+//            animationSpec = tween(500)
+//        )
+//    }
 
     Card(
         onClick = { onAnimeItemClick(item.id) },
@@ -48,10 +47,11 @@ fun SearchAnimeCard(
         backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier
             .fillMaxWidth()
+//            .alpha(animatedProgress.value)
             .pressClickEffect(),
         elevation = 4.dp
     ) {
-        Row(modifier = animatedModifier) {
+        Row {
 
             Box(
                 modifier = Modifier

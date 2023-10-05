@@ -42,18 +42,18 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
 
-    var alphaValue by remember { mutableFloatStateOf(0f) }
-    val alpha by animateFloatAsState(targetValue = alphaValue, animationSpec = tween(500))
-
-    LaunchedEffect(Unit) {
-        alphaValue = 1f
-    }
+//    var alphaValue by remember { mutableFloatStateOf(0f) }
+//    val alpha by animateFloatAsState(targetValue = alphaValue, animationSpec = tween(500))
+//
+//    LaunchedEffect(Unit) {
+//        alphaValue = 1f
+//    }
 
     Card(
         onClick = { onAnimeItemClick(animeItem.id) },
         shape = RoundedCornerShape(16.dp),
         backgroundColor = MaterialTheme.colors.background,
-        modifier = Modifier.pressClickEffect().alpha(alpha),
+        modifier = Modifier.pressClickEffect(),
         elevation = 4.dp
     ) {
         Column{

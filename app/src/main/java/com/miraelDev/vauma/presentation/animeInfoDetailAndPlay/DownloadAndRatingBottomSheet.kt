@@ -50,10 +50,11 @@ import kotlinx.coroutines.launch
 
 private const val RATING_SCREEN = 1
 private const val DOWNLOAD_SCREEN = 2
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(
-    bottomSheetScreen : Int,
+    bottomSheetScreen: Int,
     animeDetailInfo: AnimeDetailInfo,
     coroutineScope: CoroutineScope,
     modalSheetState: ModalBottomSheetState,
@@ -117,6 +118,13 @@ private fun RatingScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth(0.2f)
+                .clip(RoundedCornerShape(24.dp)),
+            color = MaterialTheme.colors.onBackground.copy(0.3f),
+            thickness = 3.dp
+        )
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -146,7 +154,7 @@ private fun RatingScreen(
                         Text(text = "9.8", fontSize = 36.sp, fontWeight = FontWeight.Bold)
                         Text(text = " /10", fontSize = 20.sp)
                     }
-                    FixRatingBar(rating = 3.2f,modifier = Modifier.height(16.dp))
+                    FixRatingBar(rating = 3.2f, modifier = Modifier.height(16.dp))
                     Text(text = "(243455 users)", fontSize = 10.sp)
                 }
 
@@ -236,6 +244,14 @@ private fun DownloadScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth(0.2f)
+                .clip(RoundedCornerShape(24.dp)),
+            color = MaterialTheme.colors.onBackground.copy(0.3f),
+            thickness = 3.dp
+        )
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
