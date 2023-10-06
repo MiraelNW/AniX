@@ -266,7 +266,7 @@ private fun Toolbar(
                             .clip(CircleShape)
                             .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
                             .size(32.dp),
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_brand_icon),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_app_icon),
                         contentDescription = stringResource(R.string.brand_icon),
                         tint = MaterialTheme.colors.primary
                     )

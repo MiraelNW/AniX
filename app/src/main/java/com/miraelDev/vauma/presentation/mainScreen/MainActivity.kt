@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val viewModel: MainViewModel by viewModels()
-        splashScreen.setKeepOnScreenCondition { false }
+        splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
 
         setContent {
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.miraelDev.vauma.data.dataStore.PreferenceManager
 import com.miraelDev.vauma.domain.models.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -33,8 +34,10 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+
             preferenceManager.getPreference(isDarkThemeKey, false).collectLatest { isDark ->
                 _isDarkThemeFlow.value = isDark
+                delay(10000)
                 _isLoading.value = false
             }
         }
