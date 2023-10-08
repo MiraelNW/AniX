@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
 import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.animation.crossfade.CrossfadePlugin
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.transformation.blur.BlurTransformationPlugin
@@ -43,7 +44,7 @@ fun TopAnimeImage(
                     contentScale = ContentScale.FillBounds,
                 ),
                 component = rememberImageComponent {
-                    +BlurTransformationPlugin(radius = 30)
+//                    +BlurTransformationPlugin(radius = 30)
                 }
             )
             Card(

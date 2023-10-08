@@ -37,7 +37,6 @@ class MainViewModel @Inject constructor(
 
             preferenceManager.getPreference(isDarkThemeKey, false).collectLatest { isDark ->
                 _isDarkThemeFlow.value = isDark
-                delay(10000)
                 _isLoading.value = false
             }
         }

@@ -44,12 +44,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.Switcher
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
+import com.miraelDev.vauma.ui.theme.Montserrat
+import com.miraelDev.vauma.ui.theme.Typography
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -104,16 +107,12 @@ private fun Toolbar() {
                     contentDescription = "brand icon",
                     tint = MaterialTheme.colors.primary
                 )
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
-                )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = stringResource(R.string.profile),
+                    text = stringResource(R.string.app_name),
                     fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
+                    color = MaterialTheme.colors.primary,
+                    style = Typography.body1
                 )
             }
 
@@ -137,8 +136,8 @@ private fun ProfileNameAndImage() {
             contentDescription = "Profile image"
         )
         Column {
-            Text(text = "Nick name")
-            Text(text = "goodworkinspclass@mail.ru")
+            Text(text = "Nick name", maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(text = "goodworkinspclass@mail.ru", maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }

@@ -13,13 +13,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
+import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 
 @Composable
 fun PrivacyPolicyScreen(onBackPressed: () -> Unit) {
     BackHandler { onBackPressed() }
 
     Column(modifier = Modifier.systemBarsPadding()) {
-        Toolbar(onBackPressed = onBackPressed)
+        Toolbar(onBackPressed = onBackPressed,text = R.string.privacy_policy)
         PrivacyPolicyText()
     }
 }
@@ -39,44 +40,4 @@ private fun PrivacyPolicyText(){
     )
 }
 
-@Composable
-private fun Toolbar(
-    onBackPressed: () -> Unit,
-) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onBackPressed() }) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
-                )
-                Text(
-                    text = stringResource(R.string.privacy_policy),
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
-                )
-            }
-
-        }
-    }
-}
 

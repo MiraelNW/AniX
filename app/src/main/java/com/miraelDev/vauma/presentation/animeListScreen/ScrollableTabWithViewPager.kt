@@ -48,6 +48,7 @@ import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnim
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerAnimeCard
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerGrid
+import com.miraelDev.vauma.ui.theme.Typography
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -112,8 +113,9 @@ fun ScrollableTabWithViewPager(
                 text = {
                     Text(
                         text = title,
-                        color = if (index == pagerState.currentPage) MaterialTheme.colors.onBackground
-                        else MaterialTheme.colors.onBackground.copy(0.75f)
+                        color = MaterialTheme.colors.onBackground,
+//                        else MaterialTheme.colors.onBackground.copy(0.75f),
+                        style = Typography.h6
                     )
                 },
                 selected = index == pagerState.currentPage,
@@ -214,7 +216,6 @@ private fun AnimeList(
                 loadState.refresh is LoadState.Error -> {
                     changeScrollPossibility(false)
                     val e = categoryList.loadState.refresh as LoadState.Error
-                    Log.d("tag",e.error.message.toString())
                     if (e.error is IOException) {
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),

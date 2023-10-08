@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
+import com.miraelDev.vauma.ui.theme.Montserrat
 
 @Composable
 fun Toolbar(
@@ -58,7 +59,8 @@ fun Toolbar(
                     text = stringResource(id =text),
                     fontSize = 24.sp,
                     color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = Montserrat,
+
                 )
             }
 

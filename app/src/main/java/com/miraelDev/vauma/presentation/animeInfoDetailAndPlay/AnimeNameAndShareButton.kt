@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.ui.theme.Montserrat
 
 
 @Composable
@@ -37,12 +38,14 @@ fun AnimeNameAndShareButton(
         Column(modifier = Modifier.fillMaxWidth(0.8f)) {
             Text(
                 text = animeItem.nameRu,
-                fontSize = 24.sp,
+                fontFamily = Montserrat,
+                fontSize = 22.sp,
             )
             Text(
                 text = animeItem.nameEn,
                 overflow = TextOverflow.Ellipsis,
-                fontSize = 20.sp,
+                fontFamily = Montserrat,
+                fontSize = 18.sp,
                 color = MaterialTheme.colors.onBackground.copy(0.8f)
             )
         }

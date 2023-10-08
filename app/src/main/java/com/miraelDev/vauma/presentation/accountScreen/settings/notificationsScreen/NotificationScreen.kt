@@ -28,13 +28,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
+import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
+import com.miraelDev.vauma.ui.theme.Montserrat
 
 @Composable
 fun NotificationScreen(onBackPressed: () -> Unit) {
     BackHandler() { onBackPressed() }
 
     Column(modifier = Modifier.systemBarsPadding()) {
-        Toolbar(onBackPressed = onBackPressed)
+        Toolbar(onBackPressed = onBackPressed,text = R.string.notification_settings)
         NotificationsList()
     }
 }
@@ -203,48 +205,6 @@ private fun CheckBoxesWithText() {
     }
 
 }
-
-@Composable
-private fun Toolbar(
-    onBackPressed: () -> Unit,
-) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onBackPressed() }) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
-                )
-                Text(
-                    text = stringResource(R.string.notification_settings),
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
-                )
-            }
-
-        }
-    }
-}
-
 
 @Composable
 fun Switcher(

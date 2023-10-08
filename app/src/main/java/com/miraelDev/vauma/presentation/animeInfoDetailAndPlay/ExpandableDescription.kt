@@ -25,14 +25,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
-import com.miraelDev.vauma.ui.theme.QuickSand1
+import com.miraelDev.vauma.ui.theme.Typography
 
 @Composable
 fun ExpandableDescription(
     modifier: Modifier = Modifier,
     textModifier: Modifier = Modifier,
-    style: TextStyle = LocalTextStyle.current,
-    fontStyle: FontStyle? = null,
+    style: TextStyle = Typography.body1,
     text: String,
     collapsedMaxLine: Int = 3,
     showMoreText: String = stringResource(R.string.show_more),
@@ -83,8 +82,6 @@ fun ExpandableDescription(
                 }
             },
             maxLines = if (isExpanded) Int.MAX_VALUE else collapsedMaxLine,
-            fontStyle = fontStyle,
-            fontFamily = QuickSand1,
             onTextLayout = { textLayoutResult ->
                 if (!isExpanded && textLayoutResult.hasVisualOverflow) {
                     clickable = true
