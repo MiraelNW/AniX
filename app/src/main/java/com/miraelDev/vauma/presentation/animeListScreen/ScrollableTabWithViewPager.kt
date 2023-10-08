@@ -113,9 +113,8 @@ fun ScrollableTabWithViewPager(
                 text = {
                     Text(
                         text = title,
-                        color = MaterialTheme.colors.onBackground,
-//                        else MaterialTheme.colors.onBackground.copy(0.75f),
-                        style = Typography.h6
+                        color = if (index == pagerState.currentPage) MaterialTheme.colors.onBackground
+                        else MaterialTheme.colors.onBackground.copy(0.75f),
                     )
                 },
                 selected = index == pagerState.currentPage,
@@ -204,11 +203,11 @@ private fun AnimeList(
 
                 loadState.refresh is LoadState.Loading -> {
                     changeScrollPossibility(true)
-                    LaunchedEffect(key1 = Unit){
+                    LaunchedEffect(key1 = Unit) {
                         delay(300)
                         shouldShowLoading = true
                     }
-                    if(shouldShowLoading){
+                    if (shouldShowLoading) {
                         ShimmerGrid(SMALL_ANIMATION)
                     }
                 }

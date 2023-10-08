@@ -22,40 +22,8 @@ val Montserrat = FontFamily(
     Font(R.font.montserrat_light_italic, FontWeight.Light, FontStyle.Italic),
 )
 
-val Roboto = FontFamily(
-    Font(R.font.roboto_medium, FontWeight.Medium),
-    Font(R.font.roboto_medium_italic, FontWeight.Medium, FontStyle.Italic),
-    Font(R.font.roboto_regular, FontWeight.Normal),
-    Font(R.font.roboto_light, FontWeight.Light),
-    Font(R.font.roboto_light_italic, FontWeight.Light, FontStyle.Italic),
-)
-
-//another one font family
-
-
 // Set of Material typography styles to start with
-val Typography = Typography(
-    defaultFontFamily = FontFamily.Default,
 
-    h5 = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Medium,
-        fontSize = 24.sp,
-        letterSpacing = 0.sp
-    ),
+val Typography = Typography()
 
-    h6 = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        letterSpacing = 0.sp
-    ),
-
-    body1 = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-        letterSpacing = 0.sp
-    )
-)
 

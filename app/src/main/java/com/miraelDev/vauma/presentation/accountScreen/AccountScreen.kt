@@ -7,19 +7,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.with
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.LocalOverscrollConfiguration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -31,9 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,18 +36,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.Switcher
+import com.miraelDev.vauma.presentation.animeListScreen.Toolbar
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
-import com.miraelDev.vauma.ui.theme.Montserrat
-import com.miraelDev.vauma.ui.theme.Typography
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountScreen(
     onSettingItemClick: (Int) -> Unit,
@@ -68,6 +58,7 @@ fun AccountScreen(
             .systemBarsPadding()
     ) {
         Toolbar()
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,43 +70,6 @@ fun AccountScreen(
                 onSettingItemClick = onSettingItemClick,
                 onDarkThemeClick = onDarkThemeClick
             )
-        }
-    }
-}
-
-@Composable
-private fun Toolbar() {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
-                        .size(32.dp),
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_app_icon),
-                    contentDescription = "brand icon",
-                    tint = MaterialTheme.colors.primary
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = stringResource(R.string.app_name),
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.primary,
-                    style = Typography.body1
-                )
-            }
-
         }
     }
 }
@@ -135,9 +89,21 @@ private fun ProfileNameAndImage() {
             contentScale = ContentScale.Crop,
             contentDescription = "Profile image"
         )
-        Column {
-            Text(text = "Nick name", maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(text = "goodworkinspclass@mail.ru", maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                text = "Nick name",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onBackground,
+                fontSize = 24.sp
+            )
+            Text(
+                text = "goodworkinspclass@mail.ru",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colors.onBackground.copy(0.6f),
+                fontSize = 16.sp
+            )
         }
     }
 }

@@ -19,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,12 +29,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.domain.models.AnimeInfo
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
 import com.miraelDev.vauma.exntensions.pressClickEffect
-import com.miraelDev.vauma.ui.theme.Montserrat
-import com.miraelDev.vauma.ui.theme.Roboto
-import com.miraelDev.vauma.ui.theme.Typography
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.crossfade.CrossfadePlugin
-import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -82,9 +75,9 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
                         .padding(vertical = 4.dp, horizontal = 12.dp),
                     text = animeItem.nameRu,
                     color = MaterialTheme.colors.onBackground,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = Roboto,
+                    fontSize = 16.sp,
+//                    fontWeight = FontWeight.Light,
+//                    fontFamily = Roboto,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center

@@ -60,6 +60,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -79,6 +80,7 @@ import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.FavouriteIcon
 import com.miraelDev.vauma.presentation.animeListScreen.FavouriteSearchView
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListFavouriteAnime
+import com.miraelDev.vauma.ui.theme.Montserrat
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.delay
@@ -270,10 +272,12 @@ private fun Toolbar(
                         contentDescription = stringResource(R.string.brand_icon),
                         tint = MaterialTheme.colors.primary
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(id = R.string.app_name),
                         color = MaterialTheme.colors.primary,
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Medium,
                         fontSize = 24.sp
                     )
                 }
