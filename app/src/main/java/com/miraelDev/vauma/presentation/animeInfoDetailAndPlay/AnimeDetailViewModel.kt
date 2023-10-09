@@ -2,8 +2,8 @@ package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
-import com.miraelDev.vauma.domain.models.toAnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.toAnimeInfo
 import com.miraelDev.vauma.domain.result.Result
 import com.miraelDev.vauma.domain.usecases.animeDetailUseCase.DownloadAnimeEpisodeUseCase
 import com.miraelDev.vauma.domain.usecases.animeDetailUseCase.GetAnimeDetailUseCase
@@ -71,7 +71,7 @@ class AnimeDetailViewModel @Inject constructor(
         }
     }
 
-    fun selectAnimeItem(isSelected: Boolean,animeInfo:AnimeDetailInfo) {
+    fun selectAnimeItem(isSelected: Boolean,animeInfo: AnimeDetailInfo) {
         viewModelScope.launch {
             selectAnimeItemUseCase(isSelected, animeInfo.toAnimeInfo())
         }

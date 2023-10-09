@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.usecases.searchUsecase.SaveSearchTextUseCase
 import com.miraelDev.vauma.domain.usecases.searchUsecase.SearchAnimeByNameUseCase
 import com.miraelDev.vauma.domain.usecases.favouriteListUseCase.GetFavouriteAnimeListUseCase

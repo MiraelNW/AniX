@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.domain.usecases.videoPlayerUseCase
 
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.domain.models
+package com.miraelDev.vauma.domain.models.anime
 
 
 import androidx.compose.runtime.Stable

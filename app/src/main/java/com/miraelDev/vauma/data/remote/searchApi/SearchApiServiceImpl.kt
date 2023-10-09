@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.data.remote.searchApi
 
+import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.remote.ApiResult
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.FailureCauses
@@ -12,22 +13,32 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
 import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 class SearchApiServiceImpl @Inject constructor(
     private val client: HttpClient,
-    private val networkHandler: NetworkHandler
+    private val networkHandler: NetworkHandler,
+    private val localTokenService: LocalTokenService
 ) : SearchApiService {
 
     override suspend fun getAnimeById(id: Int): ApiResult {
+
+        val bearerToken = localTokenService.getBearerToken()
+
         return if (networkHandler.isConnected.value) {
             try {
                 ApiResult.Success(
                     animeList = immutableListOf(
-                        client
-                            .get("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/")
+                        client.get {
+                            url("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/")
+                            headers {
+                                append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                            }
+                        }
                             .body<AnimeInfoDto>()
 
                     )

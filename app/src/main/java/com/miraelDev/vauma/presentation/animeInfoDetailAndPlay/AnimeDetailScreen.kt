@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

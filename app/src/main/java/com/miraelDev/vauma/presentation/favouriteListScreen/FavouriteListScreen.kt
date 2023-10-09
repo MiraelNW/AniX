@@ -1,9 +1,7 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -39,12 +37,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +47,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -73,7 +67,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.data.remote.FailureCauses
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.exntensions.pressClickEffect
 import com.miraelDev.vauma.navigation.Screen
 import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.FavouriteIcon
@@ -274,10 +268,8 @@ private fun Toolbar(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(id = R.string.app_name),
-                        color = MaterialTheme.colors.primary,
-                        fontFamily = Montserrat,
-                        fontWeight = FontWeight.Medium,
+                        text = stringResource(id = R.string.favourite),
+                        color = MaterialTheme.colors.onBackground,
                         fontSize = 24.sp
                     )
                 }

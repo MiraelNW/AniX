@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 
 
 @Composable

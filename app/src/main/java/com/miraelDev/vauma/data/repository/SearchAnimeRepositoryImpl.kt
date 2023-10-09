@@ -4,13 +4,14 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.local.dao.SearchHistoryAnimeDao
 import com.miraelDev.vauma.data.local.models.SearchHistoryDbModel
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.searchApi.SearchPagingPagingSource
 import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
@@ -18,12 +19,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -32,6 +30,7 @@ class SearchAnimeRepositoryImpl @Inject constructor(
     private val client: HttpClient,
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
+    private val localTokenService: LocalTokenService
 ) : SearchAnimeRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -95,7 +94,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
                     sortFilter = sortFilter,
                     genreListFilter = genreListFilter,
                     client = client,
-                    networkHandler = networkHandler
+                    networkHandler = networkHandler,
+                    localTokenService = localTokenService
                 )
             }
         ).flow
@@ -154,7 +154,8 @@ class SearchAnimeRepositoryImpl @Inject constructor(
                 remoteMediator = InitialSearchRemoteMediator(
                     client = client,
                     appDatabase = appDatabase,
-                    networkHandler = networkHandler
+                    networkHandler = networkHandler,
+                    localTokenService = localTokenService
                 )
             )
                 .flow

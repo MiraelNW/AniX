@@ -1,19 +1,12 @@
 package com.miraelDev.vauma.data.repository
 
-import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import com.miraelDev.vauma.di.DataModule
-import com.miraelDev.vauma.domain.models.AnimeInfo
-import com.miraelDev.vauma.domain.models.PlayerWrapper
-import com.miraelDev.vauma.domain.models.VideoInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.PlayerWrapper
+import com.miraelDev.vauma.domain.models.anime.VideoInfo
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
-import dagger.Provides
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

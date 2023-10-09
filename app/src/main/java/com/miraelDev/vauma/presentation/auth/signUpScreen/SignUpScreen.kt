@@ -61,7 +61,6 @@ import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     onBackPressed: () ->Unit,
-    signUp: () ->Unit,
 ) {
     val nickName by viewModel.nickNameState
     val email by viewModel.emailState
@@ -190,7 +189,6 @@ fun SignUpScreen(
                             repeatedPassword.isEmpty() || !viewModel.passwordIsEqual()
                     }else{
                         viewModel.registrationUser()
-                        signUp()
                     }
                 }
             )

@@ -68,7 +68,6 @@ import com.miraelDev.vauma.exntensions.pressClickEffect
 fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
     navigateToSignUpScreen: () -> Unit,
-    signIn: () -> Unit,
 ) {
     Surface {
         var credentials by remember { mutableStateOf(Credentials()) }
@@ -185,7 +184,7 @@ fun SignInScreen(
                                 isLoginError = loginText.isEmpty()
                                 isPasswordError = passwordText.isEmpty()
                             } else {
-                                signIn()
+                                viewModel.signIn(loginText, passwordText)
                             }
                         },
                         shape = RoundedCornerShape(16.dp),

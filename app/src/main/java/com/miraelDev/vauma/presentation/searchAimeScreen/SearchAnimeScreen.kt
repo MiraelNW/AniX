@@ -49,7 +49,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.presentation.animeListScreen.AnimeSearchView
 import com.miraelDev.vauma.presentation.commonComposFunc.AnimeCard
 import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendItem

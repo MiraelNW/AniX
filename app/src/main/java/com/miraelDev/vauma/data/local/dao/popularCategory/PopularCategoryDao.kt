@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraelDev.vauma.data.local.models.newCategory.PopularCategoryAnimeInfoDbModel
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 
 @Dao
 interface PopularCategoryDao {

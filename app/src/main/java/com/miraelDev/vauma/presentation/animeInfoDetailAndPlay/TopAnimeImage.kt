@@ -15,12 +15,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.crossfade.CrossfadePlugin
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
-import com.skydoves.landscapist.transformation.blur.BlurTransformationPlugin
 
 @Composable
 fun TopAnimeImage(

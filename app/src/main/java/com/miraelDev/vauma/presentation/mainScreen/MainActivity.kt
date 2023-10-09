@@ -3,17 +3,10 @@ package com.miraelDev.vauma.presentation.mainScreen
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material.Text
-import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -26,11 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.compositionContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -42,7 +32,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.guru.composecookbook.theme.HikariTheme
-import com.miraelDev.vauma.domain.models.AuthState
+import com.miraelDev.vauma.domain.models.auth.AuthState
 import com.miraelDev.vauma.presentation.auth.AuthScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -62,7 +52,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val viewModel: MainViewModel by viewModels()
-        splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
+
+        var readyToDrawStartScreen = false
+
+        splashScreen.setKeepOnScreenCondition { !readyToDrawStartScreen }
 
         setContent {
 
@@ -100,7 +93,7 @@ class MainActivity : ComponentActivity() {
 
                 HikariTheme(darkTheme = darkTheme) {
 
-                    var useDarkIcons by rememberSaveable { mutableStateOf(darkTheme) }
+                    var useDarkIcons by rememberSaveable { mutableStateOf(false) }
                     useDarkIcons = darkTheme
                     DisposableEffect(systemUiController, useDarkIcons) {
                         systemUiController.setSystemBarsColor(
@@ -118,6 +111,9 @@ class MainActivity : ComponentActivity() {
                                     viewModel.setThemeMode(darkTheme)
                                     useDarkIcons = !useDarkIcons
                                 },
+                                onReadyToDrawStartScreen = {
+                                    readyToDrawStartScreen = true
+                                },
                                 onVideoViewClick = { isVideoViewOpen ->
                                     if (!darkTheme) {
                                         useDarkIcons = !useDarkIcons
@@ -131,14 +127,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         AuthState.NotAuthorized -> {
-                            AuthScreen(
-                                signIn = {
-                                    viewModel.changeAuthState()
-                                },
-                                signUp = {
-                                    viewModel.changeAuthState()
-                                }
-                            )
+                            AuthScreen()
                         }
 
                         AuthState.Initial -> {}

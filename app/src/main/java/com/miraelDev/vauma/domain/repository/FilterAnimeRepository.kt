@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.domain.repository
 
-import com.miraelDev.vauma.domain.models.CategoryModel
+import com.miraelDev.vauma.domain.models.anime.CategoryModel
 import kotlinx.coroutines.flow.StateFlow
 
 interface FilterAnimeRepository {

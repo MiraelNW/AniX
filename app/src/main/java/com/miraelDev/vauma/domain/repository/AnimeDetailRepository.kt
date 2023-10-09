@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.domain.repository
 
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.result.Result
 import kotlinx.coroutines.flow.Flow
 

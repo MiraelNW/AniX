@@ -3,9 +3,9 @@ package com.miraelDev.vauma.data.local.models.favourite
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.common.collect.ImmutableList
-import com.miraelDev.vauma.domain.models.AnimeInfo
-import com.miraelDev.vauma.domain.models.Genre
-import com.miraelDev.vauma.domain.models.VideoInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.Genre
+import com.miraelDev.vauma.domain.models.anime.VideoInfo
 import kotlinx.serialization.Serializable
 
 
@@ -30,7 +30,7 @@ data class AnimeInfoDbModel(
     var page:Int
 )
 
-fun AnimeInfoDbModel.toAnimeInfo():AnimeInfo{
+fun AnimeInfoDbModel.toAnimeInfo(): AnimeInfo {
     return  AnimeInfo(
         id = this.id,
         nameRu = this.nameRu,

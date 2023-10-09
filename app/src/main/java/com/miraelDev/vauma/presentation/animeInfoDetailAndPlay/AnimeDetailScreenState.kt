@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import com.miraelDev.vauma.data.remote.FailureCauses
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 
 sealed class AnimeDetailScreenState {
 

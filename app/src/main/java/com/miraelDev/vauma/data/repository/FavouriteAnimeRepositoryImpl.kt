@@ -1,18 +1,15 @@
 package com.miraelDev.vauma.data.repository
 
-import android.util.Log
 import com.miraelDev.vauma.data.local.dao.FavouriteAnimeDao
 import com.miraelDev.vauma.data.local.models.favourite.toAnimeInfo
 import com.miraelDev.vauma.data.remote.FailureCauses
-import com.miraelDev.vauma.domain.models.AnimeInfo
-import com.miraelDev.vauma.domain.models.toAnimeDbModel
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.toAnimeDbModel
 import com.miraelDev.vauma.domain.repository.FavouriteAnimeRepository
 import com.miraelDev.vauma.domain.result.Result
 import com.miraelDev.vauma.exntensions.mergeWith
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

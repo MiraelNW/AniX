@@ -1,7 +1,6 @@
 package com.miraelDev.vauma.domain.repository
 
-import androidx.paging.PagingData
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.result.Result
 import kotlinx.coroutines.flow.Flow
 

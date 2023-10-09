@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
 import com.miraelDev.vauma.data.remote.FailureCauses
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 
 sealed class FavouriteListScreenState {
 

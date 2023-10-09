@@ -5,16 +5,20 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.local.models.newCategory.FilmCategoryRemoteKeys
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToFilmCategoryModel
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
@@ -22,10 +26,9 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPagingApi::class)
 class FilmCategoryRemoteMediator(
     private val appDatabase: AppDatabase,
-
     private val client: HttpClient,
-
-    private val networkHandler: NetworkHandler
+    private val networkHandler: NetworkHandler,
+    private val localTokenService: LocalTokenService
 
 ) : RemoteMediator<Int, AnimeInfo>() {
 
@@ -76,10 +79,14 @@ class FilmCategoryRemoteMediator(
                 return MediatorResult.Error(IOException())
             }
 
-            val apiResponse = client
-                .get("${ApiRoutes.GET_FILMS_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE")
+            val apiResponse = client.get {
+                val bearerToken = localTokenService.getBearerToken()
+                url("${ApiRoutes.GET_FILMS_CATEGORY_LIST}page_num=$page&page_size=${PAGE_SIZE}")
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                }
+            }
                 .body<Response>()
-
 
 
             val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }

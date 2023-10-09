@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.presentation.animeListScreen
 
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 
 sealed class AnimeListScreenState {
 

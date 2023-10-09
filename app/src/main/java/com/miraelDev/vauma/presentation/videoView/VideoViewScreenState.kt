@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.presentation.videoView
 
-import com.miraelDev.vauma.domain.models.PlayerWrapper
+import com.miraelDev.vauma.domain.models.anime.PlayerWrapper
 
 sealed class VideoViewScreenState {
 

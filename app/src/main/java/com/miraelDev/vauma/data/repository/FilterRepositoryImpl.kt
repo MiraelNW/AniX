@@ -2,7 +2,7 @@ package com.miraelDev.vauma.data.repository
 
 import android.content.Context
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.CategoryModel
+import com.miraelDev.vauma.domain.models.anime.CategoryModel
 import com.miraelDev.vauma.domain.repository.FilterAnimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

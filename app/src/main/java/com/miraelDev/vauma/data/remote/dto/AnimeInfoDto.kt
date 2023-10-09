@@ -6,8 +6,8 @@ import com.miraelDev.vauma.data.local.models.newCategory.NameCategoryAnimeInfoDb
 import com.miraelDev.vauma.data.local.models.newCategory.NewCategoryAnimeInfoDbModel
 import com.miraelDev.vauma.data.local.models.initialSearch.InitialSearchAnimeInfoDbModel
 import com.miraelDev.vauma.data.local.models.newCategory.PopularCategoryAnimeInfoDbModel
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

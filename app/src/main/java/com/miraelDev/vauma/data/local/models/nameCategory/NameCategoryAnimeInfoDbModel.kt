@@ -2,8 +2,8 @@ package com.miraelDev.vauma.data.local.models.newCategory
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.miraelDev.vauma.domain.models.Genre
-import com.miraelDev.vauma.domain.models.VideoInfo
+import com.miraelDev.vauma.domain.models.anime.Genre
+import com.miraelDev.vauma.domain.models.anime.VideoInfo
 import kotlinx.serialization.Serializable
 
 

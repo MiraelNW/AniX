@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
 import com.miraelDev.vauma.ui.theme.LightGreen
 import com.skydoves.landscapist.ImageOptions

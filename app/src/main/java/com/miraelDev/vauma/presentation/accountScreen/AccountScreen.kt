@@ -57,7 +57,10 @@ fun AccountScreen(
             .fillMaxSize()
             .systemBarsPadding()
     ) {
-        Toolbar()
+        Toolbar(
+            text = stringResource(id = R.string.profile),
+            color = MaterialTheme.colors.onBackground
+        )
 
         Column(
             modifier = Modifier

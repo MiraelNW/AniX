@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.data.remote.dto
 
-import com.miraelDev.vauma.domain.models.Genre
+import com.miraelDev.vauma.domain.models.anime.Genre
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,7 +11,7 @@ data class GenreDto(
     @SerialName("russian") val nameRu: String,
 )
 
-fun GenreDto.toGenre():Genre{
+fun GenreDto.toGenre(): Genre {
     return Genre(
         id = this.id,
         nameRu = this.nameRu,

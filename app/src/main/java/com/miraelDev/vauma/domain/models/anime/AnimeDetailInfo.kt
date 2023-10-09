@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.domain.models
+package com.miraelDev.vauma.domain.models.anime
 
 
 data class AnimeDetailInfo(

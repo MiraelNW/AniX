@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.data.remote.dto
 
-import com.miraelDev.vauma.domain.models.Similar
+import com.miraelDev.vauma.domain.models.anime.Similar
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,7 +20,7 @@ data class SimilarDto(
     val nameRu: String,
 )
 
-fun SimilarDto.toSimilar():Similar{
+fun SimilarDto.toSimilar(): Similar {
     return Similar(
         id = this.id,
         kind = this.kind,

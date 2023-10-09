@@ -5,10 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -25,12 +23,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeDetailInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
-import com.miraelDev.vauma.exntensions.pressClickEffect
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
-import com.miraelDev.vauma.ui.theme.LightGreen700
 
 
 @Composable

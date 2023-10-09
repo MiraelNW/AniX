@@ -1,16 +1,20 @@
 package com.miraelDev.vauma.data.remote.searchApi
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.common.io.Files.append
+import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.toAnimeInfo
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import io.ktor.utils.io.errors.IOException
 
 class SearchPagingPagingSource(
@@ -19,7 +23,8 @@ class SearchPagingPagingSource(
     private val sortFilter: String?,
     private val genreListFilter: List<String>,
     private val client: HttpClient,
-    private val networkHandler: NetworkHandler
+    private val networkHandler: NetworkHandler,
+    private val localTokenService: LocalTokenService
 ) : PagingSource<Int, AnimeInfo>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeInfo> {
         return try {
@@ -37,38 +42,72 @@ class SearchPagingPagingSource(
             val page = params.key ?: 1
             val pageSize = params.loadSize.coerceAtMost(20)
 
+            val bearerToken = localTokenService.getBearerToken()
+
             val response =
                 if (yearFilter != null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode != null && sortFilter != null && genreListFilter.isEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else if (yearCode == null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 } else {
-                    client
-                        .get("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&page_num=$page&page_size=$pageSize")
+                    client.get {
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&page_num=$page&page_size=$pageSize")
+                        headers {
+                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                        }
+                    }
                         .body<Response>()
                 }
 

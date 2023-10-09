@@ -1,10 +1,9 @@
 package com.miraelDev.vauma.data.local
 
 import androidx.room.TypeConverter
-import com.miraelDev.vauma.domain.models.Genre
-import com.miraelDev.vauma.domain.models.VideoInfo
+import com.miraelDev.vauma.domain.models.anime.Genre
+import com.miraelDev.vauma.domain.models.anime.VideoInfo
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

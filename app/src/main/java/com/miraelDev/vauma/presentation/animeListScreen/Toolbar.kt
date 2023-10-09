@@ -18,18 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.ui.theme.Montserrat
-import com.miraelDev.vauma.ui.theme.Typography
 
 @Composable
-fun Toolbar() {
+fun Toolbar(
+    text:String,
+    color: Color,
+    fontFamily :FontFamily = FontFamily.Default,
+    fontWeight :FontWeight = FontWeight.Normal
+) {
 
     TopAppBar(
         modifier = Modifier.statusBarsPadding(),
@@ -58,10 +62,10 @@ fun Toolbar() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(id = R.string.app_name),
-                    color = MaterialTheme.colors.primary,
-                    fontFamily = Montserrat,
-                    fontWeight = FontWeight.Medium,
+                    text = text,
+                    color = color,
+                    fontFamily = fontFamily,
+                    fontWeight = fontWeight,
                     fontSize = 24.sp
                 )
             }

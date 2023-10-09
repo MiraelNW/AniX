@@ -4,15 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.vauma.domain.models.User
-import com.miraelDev.vauma.domain.usecases.authUseCases.RegistrationUseCase
+import com.miraelDev.vauma.domain.models.user.User
+import com.miraelDev.vauma.domain.usecases.authUseCases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val registration: RegistrationUseCase
+    private val registration: SignUpUseCase
 ) : ViewModel() {
 
     private val _nickNameState = mutableStateOf("")
@@ -58,7 +58,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             registration(
                 User(
-                    name = nickNameState.value.ifBlank { emailState.value.substringBefore("@") },
+                    username = nickNameState.value.ifBlank { emailState.value.substringBefore("@") },
                     password = passwordState.value,
                     email = emailState.value
                 )

@@ -7,10 +7,7 @@ import com.miraelDev.vauma.presentation.auth.signInScreen.SignInScreen
 import com.miraelDev.vauma.presentation.auth.signUpScreen.SignUpScreen
 
 @Composable
-fun AuthScreen(
-    signUp: () -> Unit,
-    signIn:() -> Unit
-) {
+fun AuthScreen() {
 
     val navigationState = rememberNavigationState()
 
@@ -18,7 +15,6 @@ fun AuthScreen(
         navHosController = navigationState.navHostController,
         signInScreenContent = {
             SignInScreen(
-                signIn = signIn,
                 navigateToSignUpScreen = {
                     navigationState.navigateToSignUpScreen()
                 }
@@ -26,7 +22,6 @@ fun AuthScreen(
         },
         signUpScreenContent = {
             SignUpScreen(
-                signUp = signUp,
                 onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }

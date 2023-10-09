@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.domain.models
+package com.miraelDev.vauma.domain.models.anime
 
 import com.miraelDev.vauma.data.local.models.favourite.AnimeInfoDbModel
 

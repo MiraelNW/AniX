@@ -1,7 +1,6 @@
 package com.miraelDev.vauma.presentation.animeListScreen
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +38,7 @@ import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.miraelDev.vauma.R
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
 import com.miraelDev.vauma.presentation.commonComposFunc.AnimeCard
 import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendMessage
@@ -48,7 +47,6 @@ import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnim
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerAnimeCard
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerGrid
-import com.miraelDev.vauma.ui.theme.Typography
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -114,7 +112,7 @@ fun ScrollableTabWithViewPager(
                     Text(
                         text = title,
                         color = if (index == pagerState.currentPage) MaterialTheme.colors.onBackground
-                        else MaterialTheme.colors.onBackground.copy(0.75f),
+                        else MaterialTheme.colors.onBackground.copy(0.7f),
                     )
                 },
                 selected = index == pagerState.currentPage,

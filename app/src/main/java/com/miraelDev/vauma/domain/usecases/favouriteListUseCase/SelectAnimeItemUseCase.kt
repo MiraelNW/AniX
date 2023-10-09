@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.domain.usecases.favouriteListUseCase
 
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.repository.FavouriteAnimeRepository
 import javax.inject.Inject
 

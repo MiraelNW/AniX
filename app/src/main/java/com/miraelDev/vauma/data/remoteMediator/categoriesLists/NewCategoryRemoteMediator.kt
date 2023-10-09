@@ -1,33 +1,33 @@
 package com.miraelDev.vauma.data.remoteMediator.categoriesLists
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.local.models.newCategory.NewCategoryRemoteKeys
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
 import com.miraelDev.vauma.data.remote.dto.mapToNewCategoryModel
-import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
-import com.miraelDev.vauma.domain.models.AnimeInfo
+import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
 class NewCategoryRemoteMediator(
     private val appDatabase: AppDatabase,
-
     private val client: HttpClient,
-
-    private val networkHandler: NetworkHandler
-
+    private val networkHandler: NetworkHandler,
+    private val localTokenService: LocalTokenService
 ) : RemoteMediator<Int, AnimeInfo>() {
 
 
@@ -73,8 +73,15 @@ class NewCategoryRemoteMediator(
 
         try {
 
-            val apiResponse = client
-                .get("${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE")
+            val bearerToken = localTokenService.getBearerToken()
+
+            val apiResponse = client.get {
+
+                url("${ApiRoutes.GET_NEW_CATEGORY_LIST}page_num=$page&page_size=$PAGE_SIZE")
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
+                }
+            }
                 .body<Response>()
 
             val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
@@ -135,7 +142,7 @@ class NewCategoryRemoteMediator(
         }
     }
 
-    companion object{
+    companion object {
         private const val PAGE_SIZE = 20
     }
 }

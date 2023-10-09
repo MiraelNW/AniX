@@ -18,8 +18,6 @@ class PreferenceManager(context: Context) : PreferenceDataStoreAPI {
 
     private val dataStore = context.dataStore
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     override fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T):
             Flow<T> = dataStore.data.catch { exception ->
         if (exception is IOException) {
@@ -32,13 +30,10 @@ class PreferenceManager(context: Context) : PreferenceDataStoreAPI {
         result
     }
 
-
-    // This Sets the value based on the value passed in value parameter.
     override suspend fun <T> putPreference(key: Preferences.Key<T>, value: T) {
         dataStore.edit { preferences ->
             preferences[key] = value
         }
     }
-
 
 }

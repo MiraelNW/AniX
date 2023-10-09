@@ -5,10 +5,8 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.media3.common.util.UnstableApi
 import com.miraelDev.vauma.navigation.AppNavGraph
@@ -36,6 +34,7 @@ private const val ON_VIDEO_VIEW = 1
 fun MainScreen(
     onThemeButtonClick: () -> Unit,
     onVideoViewClick: (Int) -> Unit,
+    onReadyToDrawStartScreen:()->Unit
 ) {
     val orientation = LocalOrientation.current
 
@@ -62,6 +61,7 @@ fun MainScreen(
                 navHosController = navigationState.navHostController,
                 homeScreenContent = {
                     HomeScreen(
+                        onReadyToDrawHomeScreen = onReadyToDrawStartScreen,
                         onAnimeItemClick = navigationState::navigateToAnimeDetail,
                     )
                     shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
