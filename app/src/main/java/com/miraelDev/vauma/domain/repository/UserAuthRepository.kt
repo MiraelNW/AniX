@@ -12,6 +12,6 @@ interface UserAuthRepository {
 
     suspend fun checkAuthState()
 
-    fun getUserAuthStatus(): Flow<AuthState>
+    suspend fun logOutUser()
 
 }

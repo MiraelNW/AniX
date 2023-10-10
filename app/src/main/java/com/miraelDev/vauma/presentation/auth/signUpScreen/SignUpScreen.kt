@@ -43,15 +43,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
@@ -60,17 +59,16 @@ import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
-    onBackPressed: () ->Unit,
+    onBackPressed: () -> Unit,
 ) {
-    val nickName by viewModel.nickNameState
-    val email by viewModel.emailState
-    val phoneNumber by viewModel.phoneNumberState
-    val repeatedPassword by viewModel.repeatedPasswordState
-    val password by viewModel.passwordState
+    val nickName by viewModel.nickNameTextState
+    val email by viewModel.emailTextState
+    val phoneNumber by viewModel.phoneNumberTextState
+    val repeatedPassword by viewModel.repeatedPasswordTextState
+    val password by viewModel.passwordTextState
 
-    var isEmailError by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
-    var isRepeatedPasswordError by remember { mutableStateOf(false) }
+    val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
+    val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
 
@@ -130,9 +128,7 @@ fun SignUpScreen(
                     modifier = Modifier
                         .onFocusEvent {
                             if (it.isFocused) {
-                                isPasswordError = false
-                                isEmailError = false
-                                isRepeatedPasswordError = false
+                                viewModel.refreshEmailError()
                             }
                         },
                     text = email,
@@ -145,15 +141,10 @@ fun SignUpScreen(
                     modifier = Modifier
                         .onFocusEvent {
                             if (it.isFocused) {
-                                isPasswordError = false
-                                isEmailError = false
-                                isRepeatedPasswordError = false
+                                viewModel.refreshPasswordError()
                             }
                         },
-                    value = TextFieldValue(
-                        text = password,
-                        selection = TextRange(password.length)
-                    ),
+                    value = password,
                     onChange = viewModel::updatePassword,
                     focusManager = focusManager,
                     isError = isPasswordError,
@@ -163,32 +154,22 @@ fun SignUpScreen(
                     modifier = Modifier
                         .onFocusEvent {
                             if (it.isFocused) {
-                                isPasswordError = false
-                                isEmailError = false
-                                isRepeatedPasswordError = false
+                                viewModel.refreshPasswordError()
                             }
                         },
-                    value = TextFieldValue(
-                        text = repeatedPassword,
-                        selection = TextRange(repeatedPassword.length)
-                    ),
+                    value = repeatedPassword,
                     onChange = viewModel::updateRepeatedPassword,
-                    isError = isRepeatedPasswordError,
+                    isError = isPasswordError,
                 )
             }
 
             RegistrationButton(
                 onRegistrationButtonClick = {
                     focusManager.clearFocus()
-                    if (email.isEmpty() || password.isEmpty()
-                        || repeatedPassword.isEmpty() || !viewModel.passwordIsEqual()
-                    ) {
-                        isEmailError = email.isEmpty()
-                        isPasswordError = password.isEmpty() || !viewModel.passwordIsEqual()
-                        isRepeatedPasswordError =
-                            repeatedPassword.isEmpty() || !viewModel.passwordIsEqual()
-                    }else{
-                        viewModel.registrationUser()
+                    val isEmailValid = viewModel.isEmailValid()
+                    val isPasswordIsValid = viewModel.isPasswordValid()
+                    if (isEmailValid && isPasswordIsValid) {
+                        viewModel.signUpUser()
                     }
                 }
             )
@@ -280,7 +261,7 @@ private fun EmailField(
 @Composable
 private fun PasswordField(
     modifier: Modifier,
-    value: TextFieldValue,
+    value: String,
     onChange: (String) -> Unit,
     focusManager: FocusManager,
     isError: Boolean,
@@ -313,7 +294,7 @@ private fun PasswordField(
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(0.9f),
         value = value,
-        onValueChange = { onChange(it.text) },
+        onValueChange = onChange,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         isError = isError,
@@ -345,7 +326,7 @@ private fun PasswordField(
 @Composable
 private fun RepeatedPasswordField(
     modifier: Modifier,
-    value: TextFieldValue,
+    value: String,
     onChange: (String) -> Unit,
     isError: Boolean,
 ) {
@@ -362,7 +343,7 @@ private fun RepeatedPasswordField(
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(0.9f),
         value = value,
-        onValueChange = { onChange(it.text) },
+        onValueChange = onChange,
         leadingIcon = leadingIcon,
         isError = isError,
         keyboardOptions = KeyboardOptions(

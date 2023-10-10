@@ -39,16 +39,19 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.Switcher
 import com.miraelDev.vauma.presentation.animeListScreen.Toolbar
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun AccountScreen(
     onSettingItemClick: (Int) -> Unit,
     onDarkThemeClick: () -> Unit,
+    viewModel: AccountScreenViewModel = hiltViewModel()
 ) {
 
     val scrollState = rememberScrollState()
@@ -71,7 +74,8 @@ fun AccountScreen(
             ProfileNameAndImage()
             AllSettings(
                 onSettingItemClick = onSettingItemClick,
-                onDarkThemeClick = onDarkThemeClick
+                onDarkThemeClick = onDarkThemeClick,
+                onLogOutClick = viewModel::logOut
             )
         }
     }
@@ -115,6 +119,7 @@ private fun ProfileNameAndImage() {
 private fun AllSettings(
     onSettingItemClick: (Int) -> Unit,
     onDarkThemeClick: () -> Unit,
+    onLogOutClick: () -> Unit,
 ) {
 
     val settingsItems = listOf(
@@ -140,7 +145,7 @@ private fun AllSettings(
 
         PrivacyPolicyItem(onPrivacyPolicyItemClick = onSettingItemClick)
 
-        LogOut(onLogOutClick = {})
+        LogOut(onLogOutClick = onLogOutClick)
     }
 }
 

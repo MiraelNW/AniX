@@ -12,7 +12,10 @@ import com.miraelDev.vauma.data.repository.SearchAnimeRepositoryImpl
 import com.miraelDev.vauma.data.repository.VideoPlayerRepositoryImpl
 import com.miraelDev.vauma.data.dataStore.PreferenceManager
 import com.miraelDev.vauma.data.downloadMananger.AndroidDownloader
+import com.miraelDev.vauma.data.remote.userApiService.UserApiService
+import com.miraelDev.vauma.data.remote.userApiService.UserApiServiceImpl
 import com.miraelDev.vauma.data.repository.UserAuthRepositoryImpl
+import com.miraelDev.vauma.data.repository.UserRepositoryImpl
 import com.miraelDev.vauma.domain.downloader.Downloader
 import com.miraelDev.vauma.domain.repository.AnimeDetailRepository
 import com.miraelDev.vauma.domain.repository.AnimeListRepository
@@ -20,6 +23,7 @@ import com.miraelDev.vauma.domain.repository.FavouriteAnimeRepository
 import com.miraelDev.vauma.domain.repository.FilterAnimeRepository
 import com.miraelDev.vauma.domain.repository.UserAuthRepository
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
+import com.miraelDev.vauma.domain.repository.UserRepository
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
 import dagger.Binds
 import dagger.Module
@@ -61,6 +65,14 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindRegistrationUserRepository(impl: UserAuthRepositoryImpl): UserAuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserApiService(impl: UserApiServiceImpl): UserApiService
 
     @Binds
     @Singleton

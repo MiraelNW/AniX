@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         AuthState.NotAuthorized -> {
-                            AuthScreen()
+                            AuthScreen(onReadyToDrawStartScreen = { readyToDrawStartScreen = true })
                         }
 
                         AuthState.Initial -> {}

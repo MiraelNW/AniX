@@ -6,6 +6,7 @@ import com.miraelDev.vauma.data.dataStore.LocalTokenService
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.domain.models.auth.AccessToken
 import com.miraelDev.vauma.domain.models.auth.RefreshToken
+import com.miraelDev.vauma.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,7 +43,10 @@ object HttpClientModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(localTokenService: LocalTokenService): HttpClient {
+    fun provideHttpClient(
+        localTokenService: LocalTokenService,
+        userRepository: UserRepository
+    ): HttpClient {
 
         return HttpClient(Android).config {
 
@@ -68,11 +72,17 @@ object HttpClientModule {
                 bearer {
                     refreshTokens {
                         val refreshToken = localTokenService.getRefreshToken()
-                        val accessToken = client.post {
-                            markAsRefreshTokenRequest()
-                            url("auth/token/refresh/")
-                            setBody(RefreshToken(refreshToken))
-                        }.body<AccessToken>()
+                        val accessToken = try {
+                            client.post {
+                                markAsRefreshTokenRequest()
+                                url("auth/token/refresh/")
+                                setBody(RefreshToken(refreshToken))
+                            }.body<AccessToken>()
+                        } catch (e: Exception) {
+                            userRepository.setUserUnAuthorizedStatus()
+                            AccessToken(bearerToken = "")
+                        }
+
                         BearerTokens(
                             accessToken = accessToken.bearerToken,
                             refreshToken = refreshToken
@@ -84,10 +94,10 @@ object HttpClientModule {
             install(HttpRequestRetry) {
                 maxRetries = 5
                 retryIf { request, response ->
-                    !response.status.isSuccess()
+                    !response.status.isSuccess() && response.status.value != 401
                 }
                 delayMillis { retry ->
-                    retry * 2000L
+                    retry * 1000L
                 }
             }
 
