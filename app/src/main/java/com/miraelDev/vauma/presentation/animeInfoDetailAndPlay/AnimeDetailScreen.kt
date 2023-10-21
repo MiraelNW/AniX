@@ -47,31 +47,43 @@ fun AnimeDetailScreen(
     onAnimeItemClick: (Int) -> Unit,
     onSeriesClick: () -> Unit
 ) {
-    BackHandler { onBackPressed() }
-
     val viewModel = hiltViewModel<AnimeDetailViewModel>()
 
     val screenState by viewModel.animeDetail.collectAsStateWithLifecycle(AnimeDetailScreenState.Initial)
+
+    val onBackPressedAction = remember { { onBackPressed() } }
+
+    val loadAnimeDetailAction: (Int) -> Unit = remember { { viewModel.loadAnimeDetail(it) } }
+    val loadAnimeVideoAction: (Int) -> Unit = remember { { viewModel.loadVideoId(it) } }
+    val downloadEpisodeAction: (String, String) -> Unit =
+        remember { { url, videoName -> viewModel.downloadEpisode(url, videoName) } }
+
 
     var shouldShowLoading by remember {
         mutableStateOf(false)
     }
 
+    BackHandler(onBack = onBackPressedAction)
+
     when (val results = screenState) {
 
         is AnimeDetailScreenState.SearchResult -> {
+
+            val selectAnimeItemAction: (Boolean) -> Unit =
+                remember {
+                    { isSelected -> viewModel.selectAnimeItem(isSelected, results.result.first()) }
+                }
+
             DetailScreen(
                 animeDetail = results.result.first(),
-                onBackPressed = onBackPressed,
+                onBackPressed = onBackPressedAction,
                 onAnimeItemClick = onAnimeItemClick,
                 onSeriesClick = { videoId ->
-                    viewModel.loadVideoId(videoId)
+                    loadAnimeVideoAction(videoId)
                     onSeriesClick()
                 },
-                downloadAnimeEpisode = viewModel::downloadEpisode,
-                onFavouriteIconCLick = { isSelected ->
-                    viewModel.selectAnimeItem(isSelected, results.result.first())
-                }
+                downloadAnimeEpisode = downloadEpisodeAction,
+                onFavouriteIconCLick = selectAnimeItemAction
 
             )
         }
@@ -80,7 +92,8 @@ fun AnimeDetailScreen(
         }
 
         is AnimeDetailScreenState.Loading -> {
-            viewModel.loadAnimeDetail(animeId)
+            loadAnimeDetailAction(animeId)
+
             LaunchedEffect(key1 = Unit) {
                 delay(200)
                 shouldShowLoading = true
@@ -122,7 +135,9 @@ private fun DetailScreen(
     BottomSheet(
         bottomSheetScreen = currentBottomSheetScreen,
         animeDetailInfo = animeDetail,
-        coroutineScope = coroutineScope,
+        onBackPressed = {
+            coroutineScope.launch { modalSheetState.hide() }
+        },
         modalSheetState = modalSheetState,
         onDownloadClick = { selectedList ->
             selectedList.forEach {

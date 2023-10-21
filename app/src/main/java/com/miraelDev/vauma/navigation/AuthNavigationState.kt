@@ -2,23 +2,15 @@ package com.miraelDev.vauma.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-class NavigationState(
+class AuthNavigationState(
     val navHostController: NavHostController
 ) {
-
     fun navigateToSignUpScreen() {
         navHostController.navigate(Screen.SignUp.route) {
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateTo(route: String) {
-        navHostController.navigate(route) {
             launchSingleTop = true
             popUpTo(navHostController.graph.findStartDestination().id) {
                 saveState = true
@@ -27,31 +19,33 @@ class NavigationState(
         }
     }
 
-    fun navigateToFilterScreen() {
-        navHostController.navigate(Screen.Filter.route) {
+    fun navigateToCodeVerifyScreen(email: String) {
+        navHostController.navigate(Screen.EmailCodeVerify.getRouteWithArgs(email))
+    }
+
+    fun navigateToCodeVerifyResetPasswordScreen(email: String) {
+        navHostController.navigate(Screen.EmailCodeVerifyResetPassword.getRouteWithArgs(email))
+    }
+
+    fun navigateToEmailChooseScreen() {
+        navHostController.navigate(Screen.EmailChoose.route) {
             launchSingleTop = true
         }
     }
 
-    fun navigateToSettingsItem(route: String) {
-        navHostController.navigate(route) { launchSingleTop = true }
-    }
-
-    fun navigateToAnimeDetail(animeId: Int) {
-        navHostController.navigate(Screen.AnimeDetail.getRouteWithArgs(animeId))
-    }
-
-    fun navigateToVideoView() {
-        navHostController.navigate(Screen.VideoView.route) {
+    fun navigateToResetPassword() {
+        navHostController.navigate((Screen.ResetPassword.route)) {
+            launchSingleTop = true
         }
     }
 }
 
+
 @Composable
-fun rememberNavigationState(
+fun rememberAuthNavigationState(
     navHostController: NavHostController = rememberNavController()
-): NavigationState {
+): AuthNavigationState {
     return remember {
-        NavigationState(navHostController)
+        AuthNavigationState(navHostController)
     }
 }

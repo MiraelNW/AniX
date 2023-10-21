@@ -56,7 +56,7 @@ private const val DOWNLOAD_SCREEN = 2
 fun BottomSheet(
     bottomSheetScreen: Int,
     animeDetailInfo: AnimeDetailInfo,
-    coroutineScope: CoroutineScope,
+    onBackPressed: () -> Unit,
     modalSheetState: ModalBottomSheetState,
     onDownloadClick: (List<Int>) -> Unit,
     onCloseDownloadSheet: () -> Unit,
@@ -64,7 +64,7 @@ fun BottomSheet(
 ) {
 
     BackHandler(modalSheetState.isVisible) {
-        coroutineScope.launch { modalSheetState.hide() }
+        onBackPressed()
     }
 
     ModalBottomSheetLayout(
@@ -151,11 +151,24 @@ private fun RatingScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Row(verticalAlignment = Alignment.Bottom) {
-                        Text(text = "9.8", fontSize = 36.sp, fontWeight = FontWeight.Bold)
-                        Text(text = " /10", fontSize = 20.sp)
+                        Text(
+                            text = "9.8",
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                        Text(
+                            text = " /10",
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colors.onBackground
+                        )
                     }
                     FixRatingBar(rating = 3.2f, modifier = Modifier.height(16.dp))
-                    Text(text = "(243455 users)", fontSize = 10.sp)
+                    Text(
+                        text = "(243455 users)",
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colors.onBackground
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -167,7 +180,7 @@ private fun RatingScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "${5 - it}")
+                            Text(text = "${5 - it}",color = MaterialTheme.colors.onBackground)
                             Box() {
                                 Spacer(
                                     modifier = Modifier

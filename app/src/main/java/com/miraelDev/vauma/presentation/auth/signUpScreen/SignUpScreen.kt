@@ -1,23 +1,28 @@
 package com.miraelDev.vauma.presentation.auth.signUpScreen
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
@@ -29,23 +34,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,30 +57,73 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
+import com.miraelDev.vauma.presentation.auth.signInScreen.ErrorValidField
+import com.miraelDev.vauma.presentation.commonComposFunc.EmailField
+import com.miraelDev.vauma.presentation.commonComposFunc.PasswordField
 import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
+    signUp: (String) -> Unit,
     onBackPressed: () -> Unit,
 ) {
-    val nickName by viewModel.nickNameTextState
-    val email by viewModel.emailTextState
-    val phoneNumber by viewModel.phoneNumberTextState
-    val repeatedPassword by viewModel.repeatedPasswordTextState
-    val password by viewModel.passwordTextState
+    val imagePath = remember { { viewModel.imagePath.value } }
+    val nickName = remember { { viewModel.nickNameTextState.value } }
+    val email = remember { { viewModel.emailTextState.value } }
+    val repeatedPassword = remember { { viewModel.repeatedPasswordTextState.value } }
+    val password = remember { { viewModel.passwordTextState.value } }
+
+    val loginFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+
+    var isLoginInFocus by rememberSaveable { mutableStateOf(true) }
 
     val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
     val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
+    val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
+    val isSignUpError by viewModel.signUpError.collectAsStateWithLifecycle()
+
+    val onBackPressedAction = remember { { onBackPressed() } }
+    val updateNickNameAction: (String) -> Unit = remember { { viewModel.updateNickName(it) } }
+    val updateEmailAction: (String) -> Unit = remember { { viewModel.updateEmail(it) } }
+    val updatePasswordAction: (String) -> Unit = remember { { viewModel.updatePassword(it) } }
+    val updateRepeatedPasswordAction: (String) -> Unit =
+        remember { { viewModel.updateRepeatedPassword(it) } }
+    val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
+    val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
+    val isEmailValidAction = remember { { viewModel.isEmailValid() } }
+    val isPasswordValidAction = remember { { viewModel.isPasswordValid() } }
+    val isPasswordEqualsAction = remember { { viewModel.isPasswordEquals() } }
+    val signUpUser = remember {
+        {
+            viewModel.signUpUser()
+            signUp(email())
+        }
+    }
+
 
     val focusManager = LocalFocusManager.current
 
-    BackHandler(onBack = onBackPressed)
+    val clearFocus = remember { { focusManager.clearFocus() } }
+    val moveFocusDown: KeyboardActionScope.() -> Unit =
+        remember { { focusManager.moveFocus(FocusDirection.Down) } }
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.changeImagePath(uri.toString())
+            }
+        }
+    )
+
+    BackHandler(onBack = onBackPressedAction)
 
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxSize()
+            .background(MaterialTheme.colors.background)
             .systemBarsPadding(),
     ) {
         Toolbar(
@@ -87,6 +133,9 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .imePadding()
+                .padding(horizontal = 12.dp)
+                .verticalScroll(rememberScrollState())
                 .padding(bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
@@ -97,16 +146,20 @@ fun SignUpScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Box(
-                    modifier = Modifier.noRippleEffectClick {}
+                    modifier = Modifier.noRippleEffectClick {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
                 ) {
                     AsyncImage(
                         modifier = Modifier
                             .size(160.dp)
                             .clip(CircleShape),
-                        model = "https://gravatar.com/avatar/0143887282216779617c58f10181af2e?s=400&d=robohash&r=x",
+                        model = imagePath().ifEmpty { R.drawable.ic_placeholder },
                         placeholder = painterResource(id = R.drawable.ic_placeholder),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = "Profile image"
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = stringResource(R.string.profile_image)
                     )
                     Icon(
                         modifier = Modifier
@@ -120,56 +173,121 @@ fun SignUpScreen(
 
                 NameField(
                     text = nickName,
-                    onValueChange = viewModel::updateNickName,
-                    focusManager = focusManager
+                    onValueChange = updateNickNameAction,
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
-                EmailField(
-                    modifier = Modifier
-                        .onFocusEvent {
-                            if (it.isFocused) {
-                                viewModel.refreshEmailError()
-                            }
-                        },
-                    text = email,
-                    onValueChange = viewModel::updateEmail,
-                    isError = isEmailError,
-                    focusManager = focusManager
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    EmailField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(loginFocusRequester)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    refreshEmailErrorAction()
+                                }
+                            },
+                        text = email,
+                        isLoginError = isEmailError,
+                        onNext = moveFocusDown,
+                        onChange = updateEmailAction
 
-                PasswordField(
-                    modifier = Modifier
-                        .onFocusEvent {
-                            if (it.isFocused) {
-                                viewModel.refreshPasswordError()
-                            }
-                        },
-                    value = password,
-                    onChange = viewModel::updatePassword,
-                    focusManager = focusManager,
-                    isError = isPasswordError,
-                )
+                    )
 
-                RepeatedPasswordField(
-                    modifier = Modifier
-                        .onFocusEvent {
-                            if (it.isFocused) {
-                                viewModel.refreshPasswordError()
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = isEmailError,
+                        error = stringResource(R.string.invalid_mail)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    PasswordField(
+                        text = password,
+                        isPasswordError = !isPasswordError.successful,
+                        onChange = updatePasswordAction,
+                        submit = {},
+                        imeAction = ImeAction.Next,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(passwordFocusRequester)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    isLoginInFocus = true
+                                    refreshPasswordErrorAction()
+                                }
                             }
-                        },
-                    value = repeatedPassword,
-                    onChange = viewModel::updateRepeatedPassword,
-                    isError = isPasswordError,
-                )
+                    )
+
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = isSignUpError,
+                        error = stringResource(R.string.incorrect_password_or_email_entered)
+                    )
+
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = !isPasswordError.hasMinimum,
+                        error = stringResource(R.string.password_must_be_more_than_6_characters)
+                    )
+
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = !isPasswordError.hasCapitalizedLetter,
+                        error = stringResource(R.string.the_password_must_contain_capital_letters)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    PasswordField(
+                        text = repeatedPassword,
+                        isPasswordError = !isPasswordNotEqualsError,
+                        onChange = updateRepeatedPasswordAction,
+                        iconRes = R.drawable.ic_lock,
+                        iconSize = 20.dp,
+                        submit = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(passwordFocusRequester)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    isLoginInFocus = true
+                                    refreshPasswordErrorAction()
+                                }
+                            }
+                    )
+
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = !isPasswordNotEqualsError,
+                        error = stringResource(R.string.password_mismatch)
+                    )
+
+                    ErrorValidField(
+                        modifier = Modifier.padding(start = 16.dp),
+                        isError = isSignUpError,
+                        error = stringResource(R.string.error_try_again_later)
+                    )
+                }
             }
 
             RegistrationButton(
-                onRegistrationButtonClick = {
-                    focusManager.clearFocus()
-                    val isEmailValid = viewModel.isEmailValid()
-                    val isPasswordIsValid = viewModel.isPasswordValid()
-                    if (isEmailValid && isPasswordIsValid) {
-                        viewModel.signUpUser()
+                onSignUpButtonClick = {
+                    clearFocus()
+                    val isEmailValid = isEmailValidAction()
+                    val isPasswordValid = isPasswordValidAction()
+                    val isPasswordEquals = isPasswordEqualsAction()
+                    if (isEmailValid && isPasswordValid && isPasswordEquals) {
+                        signUpUser()
                     }
                 }
             )
@@ -181,203 +299,51 @@ fun SignUpScreen(
 
 @Composable
 private fun NameField(
-    text: String,
+    text: () -> String,
     onValueChange: (String) -> Unit,
-    focusManager: FocusManager
+    onNext: KeyboardActionScope.() -> Unit,
 ) {
+
+    val value = remember(text) { text() }
+
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = text,
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
         onValueChange = onValueChange,
-        label = { Text(text = stringResource(id = R.string.enter_your_name)) },
+        label = { Text(text = stringResource(R.string.your_name), fontSize = 14.sp) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            onNext = onNext
         ),
         placeholder = {
             Text(
                 text = stringResource(R.string.enter_your_name),
-                color = MaterialTheme.colors.onBackground.copy(0.3f)
+                color = MaterialTheme.colors.onBackground.copy(0.7f)
             )
         },
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedLabelColor = MaterialTheme.colors.onBackground.copy(0.3f),
+            textColor = MaterialTheme.colors.onBackground,
+            unfocusedLabelColor = MaterialTheme.colors.onBackground.copy(0.7f),
             focusedLabelColor = MaterialTheme.colors.primary,
-            unfocusedBorderColor = Color.Transparent,
             errorBorderColor = Color.Red,
             backgroundColor = MaterialTheme.colors.onSecondary,
         ),
         visualTransformation = VisualTransformation.None
-    )
-}
-
-@Composable
-private fun EmailField(
-    modifier: Modifier,
-    text: String,
-    onValueChange: (String) -> Unit,
-    isError: Boolean,
-    focusManager: FocusManager,
-) {
-
-    val leadingIcon = @Composable {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_mail),
-            contentDescription = "",
-            tint = if (isError) Color.Red else MaterialTheme.colors.primary
-        )
-    }
-
-    OutlinedTextField(
-        modifier = modifier.fillMaxWidth(0.9f),
-        value = text,
-        onValueChange = onValueChange,
-        isError = isError,
-        leadingIcon = leadingIcon,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        ),
-        placeholder = {
-            Text(
-                text = stringResource(R.string.enter_your_email),
-                color = MaterialTheme.colors.onBackground.copy(0.3f)
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Transparent,
-            errorBorderColor = Color.Red,
-            backgroundColor = MaterialTheme.colors.onSecondary,
-        ),
-        visualTransformation = VisualTransformation.None
-    )
-}
-
-@Composable
-private fun PasswordField(
-    modifier: Modifier,
-    value: String,
-    onChange: (String) -> Unit,
-    focusManager: FocusManager,
-    isError: Boolean,
-) {
-
-    var isPasswordVisible by remember { mutableStateOf(false) }
-
-    val leadingIcon = @Composable {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_key),
-            contentDescription = "",
-            tint = if (isError) Color.Red else MaterialTheme.colors.primary
-        )
-    }
-    val trailingIcon = @Composable {
-        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = ImageVector.vectorResource(
-                    id =
-                    if (isPasswordVisible) R.drawable.ic_open_eye else R.drawable.ic_close_eye
-                ),
-                contentDescription = "",
-                tint = if (isError) Color.Red else MaterialTheme.colors.primary
-            )
-        }
-    }
-
-    OutlinedTextField(
-        modifier = modifier.fillMaxWidth(0.9f),
-        value = value,
-        onValueChange = onChange,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        isError = isError,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next,
-            keyboardType = KeyboardType.Password
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        ),
-        placeholder = {
-            Text(
-                text = stringResource(R.string.enter_password),
-                color = MaterialTheme.colors.onBackground.copy(0.3f)
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults
-            .outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Transparent,
-                errorBorderColor = Color.Red,
-                backgroundColor = MaterialTheme.colors.onSecondary,
-            ),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-    )
-}
-
-@Composable
-private fun RepeatedPasswordField(
-    modifier: Modifier,
-    value: String,
-    onChange: (String) -> Unit,
-    isError: Boolean,
-) {
-
-    val leadingIcon = @Composable {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_key),
-            contentDescription = "",
-            tint = if (isError) Color.Red else MaterialTheme.colors.primary
-        )
-    }
-
-    OutlinedTextField(
-        modifier = modifier.fillMaxWidth(0.9f),
-        value = value,
-        onValueChange = onChange,
-        leadingIcon = leadingIcon,
-        isError = isError,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next,
-            keyboardType = KeyboardType.Password
-        ),
-        placeholder = {
-            Text(
-                text = stringResource(R.string.repeat_password),
-                color = MaterialTheme.colors.onBackground.copy(0.3f)
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults
-            .outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Transparent,
-                errorBorderColor = Color.Red,
-                backgroundColor = MaterialTheme.colors.onSecondary,
-            ),
-        visualTransformation = PasswordVisualTransformation()
     )
 }
 
 @Composable
 private fun RegistrationButton(
-    onRegistrationButtonClick: () -> Unit
+    onSignUpButtonClick: () -> Unit
 ) {
 
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth(0.9f)
             .padding(top = 48.dp),
-        onClick = onRegistrationButtonClick,
+        onClick = onSignUpButtonClick,
         shape = RoundedCornerShape(36.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.primary

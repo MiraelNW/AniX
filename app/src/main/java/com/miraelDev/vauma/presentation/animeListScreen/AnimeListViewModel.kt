@@ -38,4 +38,5 @@ class AnimeListViewModel @Inject constructor(
     val filmsAnimeList = getFilmsAnimeListUseCase()
         .filterNotNull()
         .cachedIn(viewModelScope)
+
 }

@@ -9,7 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.media3.common.util.UnstableApi
-import com.miraelDev.vauma.navigation.AppNavGraph
+import com.miraelDev.vauma.navigation.appNavGraph.AppNavGraph
 import com.miraelDev.vauma.navigation.Screen
 import com.miraelDev.vauma.navigation.rememberNavigationState
 import com.miraelDev.vauma.presentation.accountScreen.AccountScreen
@@ -42,6 +42,12 @@ fun MainScreen(
     var shouldShowNavRail by remember { mutableStateOf(orientation == Configuration.ORIENTATION_LANDSCAPE) }
 
     val navigationState = rememberNavigationState()
+
+
+    LaunchedEffect(key1 = Unit) {
+        onReadyToDrawStartScreen()
+    }
+
     Scaffold(
         bottomBar = {
             if (shouldShowBottomBar) {
@@ -61,7 +67,6 @@ fun MainScreen(
                 navHosController = navigationState.navHostController,
                 homeScreenContent = {
                     HomeScreen(
-                        onReadyToDrawHomeScreen = onReadyToDrawStartScreen,
                         onAnimeItemClick = navigationState::navigateToAnimeDetail,
                     )
                     shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT

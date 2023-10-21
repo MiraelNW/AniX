@@ -30,9 +30,7 @@ import com.miraelDev.vauma.ui.theme.LightGreen
 
 
 private const val DELETE_VIDEO = 1
-private const val CLEAR_CACHE = 2
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DeleteDialog(
     index: Int,

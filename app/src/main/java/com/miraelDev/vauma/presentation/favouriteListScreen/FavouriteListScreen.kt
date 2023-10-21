@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -40,11 +41,13 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,7 +57,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,6 +67,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
@@ -74,10 +77,10 @@ import com.miraelDev.vauma.presentation.animeInfoDetailAndPlay.FavouriteIcon
 import com.miraelDev.vauma.presentation.animeListScreen.FavouriteSearchView
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerListFavouriteAnime
-import com.miraelDev.vauma.ui.theme.Montserrat
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun FavouriteListScreen(
@@ -86,7 +89,9 @@ fun FavouriteListScreen(
     viewModel: FavouriteAnimeViewModel = hiltViewModel(),
 ) {
 
-    val searchTextState by viewModel.searchTextState
+    val searchTextState = remember { { viewModel.searchTextState.value } }
+
+    Log.d("tag", searchTextState().toString())
 
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
 
@@ -96,15 +101,30 @@ fun FavouriteListScreen(
 
     var isSearchButtonClicked by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = isSearchButtonClicked) {
-        if (isSearchButtonClicked) {
-            viewModel.searchAnimeByName(searchTextState)
-            delay(800)
-            viewModel.loadAnimeList()
-            navigateToSearchScreen(Screen.SearchAndFilter.route)
-            viewModel.updateSearchTextState("")
-        }
-        isSearchButtonClicked = false
+    val searchAnimeByNameAction: (String) -> Unit = remember { { viewModel.searchAnimeByName(it) } }
+    val updateSearchTextStateAction: (String) -> Unit =
+        remember { { viewModel.updateSearchTextState(it) } }
+    val navigateToSearchScreenAction: (String) -> Unit = remember { { navigateToSearchScreen(it) } }
+    val selectAnimeItemAction: (AnimeInfo) -> Unit = remember { { viewModel.selectAnimeItem(it) } }
+    val searchAnimeItemInDatabaseAction: (String) -> Unit =
+        remember { { viewModel.searchAnimeItemInDatabase(it) } }
+    val loadAnimeListAction = remember { { viewModel.loadAnimeList() } }
+
+    val searchButtonIsClickedAction = remember { { isSearchButtonClicked = true } }
+    val searchButtonIsNotClickedAction = remember { { isSearchButtonClicked = false } }
+
+    LaunchedEffect(key1 = Unit){
+        snapshotFlow { isSearchButtonClicked }
+            .collect { clicked ->
+                if(clicked){
+                    searchAnimeByNameAction(searchTextState())
+                    delay(800)
+                    navigateToSearchScreenAction(Screen.SearchAndFilter.route)
+                    loadAnimeListAction()
+                    updateSearchTextStateAction("")
+                    searchButtonIsNotClickedAction()
+                }
+            }
     }
 
     Column(
@@ -113,12 +133,12 @@ fun FavouriteListScreen(
 
         Toolbar(
             text = searchTextState,
-            onTextChange = viewModel::updateSearchTextState,
+            onTextChange = updateSearchTextStateAction,
             onSearchClicked = {
                 resultAfterSearch = true
-                viewModel.searchAnimeItemInDatabase(it)
+                searchAnimeItemInDatabaseAction(it)
             },
-            onCloseSearchView = viewModel::loadAnimeList
+            onCloseSearchView = loadAnimeListAction
         )
 
         when (val res = screenState) {
@@ -130,7 +150,7 @@ fun FavouriteListScreen(
                 FavouriteList(
                     favouriteAnimeList = res.result,
                     onAnimeItemClick = onAnimeItemClick,
-                    onFavouriteIconClick = viewModel::selectAnimeItem
+                    onFavouriteIconClick = selectAnimeItemAction
                 )
 
             }
@@ -141,7 +161,7 @@ fun FavouriteListScreen(
 
                 if (res.failure is FailureCauses.NotFound && resultAfterSearch) {
                     EmptyListAnimation()
-                    ToSearchButton(toSearchButtonClick = { isSearchButtonClicked = true })
+                    ToSearchButton(toSearchButtonClick = searchButtonIsClickedAction)
                 } else {
                     EmptyListAnimation()
                 }
@@ -197,8 +217,7 @@ private fun EmptyListAnimation() {
 @Composable
 private fun ToSearchButton(toSearchButtonClick: () -> Unit) {
     OutlinedButton(
-        modifier = Modifier
-            .pressClickEffect(),
+        modifier = Modifier.pressClickEffect(),
         onClick = toSearchButtonClick,
         shape = RoundedCornerShape(24.dp),
         colors = ButtonDefaults.outlinedButtonColors(
@@ -216,7 +235,7 @@ private fun ToSearchButton(toSearchButtonClick: () -> Unit) {
 
 @Composable
 private fun Toolbar(
-    text: String,
+    text: () -> String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
     onCloseSearchView: () -> Unit,
@@ -227,7 +246,7 @@ private fun Toolbar(
     }
 
     TopAppBar(
-        modifier =if(LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE)
+        modifier = if (LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE)
             Modifier.systemBarsPadding()
         else
             Modifier.statusBarsPadding(),
@@ -260,7 +279,6 @@ private fun Toolbar(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
                             .size(32.dp),
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_app_icon),
                         contentDescription = stringResource(R.string.brand_icon),
@@ -306,7 +324,7 @@ private fun Toolbar(
 
 @Composable
 private fun FavouriteList(
-    favouriteAnimeList: List<AnimeInfo>,
+    favouriteAnimeList: ImmutableList<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit,
     onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {

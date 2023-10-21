@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.navigation
+package com.miraelDev.vauma.navigation.appNavGraph
 
 import android.content.Intent
 import androidx.compose.runtime.Composable
@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.miraelDev.vauma.navigation.Screen
 
 fun NavGraphBuilder.animeDetailAndVideoView(
     animeDetailScreenContent: @Composable (Int) -> Unit,

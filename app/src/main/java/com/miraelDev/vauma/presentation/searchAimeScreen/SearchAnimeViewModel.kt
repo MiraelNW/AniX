@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.domain.usecases.filterUsecase.ClearAllFiltersInFilterRepositoryUseCase
 import com.miraelDev.vauma.domain.usecases.searchUsecase.GetSearchHistoryListUseCase
 import com.miraelDev.vauma.domain.usecases.searchUsecase.GetSearchNameUseCase
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,7 +67,7 @@ class SearchAnimeViewModel @Inject constructor(
 
     val filterList = getFilterListUseCase()
         .onEach { searchAnimeByName(searchTextState.value) }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        .stateIn(viewModelScope, SharingStarted.Lazily, immutableListOf())
 
     val searchHistory = getSearchHistoryListUseCase()
         .stateIn(

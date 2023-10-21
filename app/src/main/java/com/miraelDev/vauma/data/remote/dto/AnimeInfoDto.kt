@@ -58,7 +58,7 @@ internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
             episodes = this.episodes,
             image = this.image,
             duration = this.duration,
-            similar = this.similar.map { it.toSimilar() }
+            similar = ImmutableList.copyOf(this.similar.map { it.toSimilar() })
     )
 }
 

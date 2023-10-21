@@ -2,8 +2,7 @@ package com.miraelDev.vauma.data.remote.searchApi
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.google.common.io.Files.append
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.Response
@@ -47,7 +46,7 @@ class SearchPagingPagingSource(
             val response =
                 if (yearFilter != null && sortFilter != null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -55,7 +54,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode != null && sortFilter != null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -63,7 +62,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -71,7 +70,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -79,7 +78,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&date=$yearCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -87,7 +86,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -95,7 +94,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter == null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -103,7 +102,7 @@ class SearchPagingPagingSource(
                         .body<Response>()
                 } else {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST}${name}&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&page_num=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }

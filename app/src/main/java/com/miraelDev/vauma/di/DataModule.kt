@@ -4,25 +4,30 @@ import android.app.Application
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import com.miraelDev.vauma.data.dataStore.localUser.LocalUserManager
+import com.miraelDev.vauma.data.dataStore.localUser.LocalUserStoreApi
+import com.miraelDev.vauma.data.dataStore.preference.PreferenceDataStoreAPI
+import com.miraelDev.vauma.data.dataStore.preference.PreferenceManager
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
+import com.miraelDev.vauma.data.downloadMananger.AndroidDownloader
+import com.miraelDev.vauma.data.remote.userApiService.UserApiService
+import com.miraelDev.vauma.data.remote.userApiService.UserApiServiceImpl
 import com.miraelDev.vauma.data.repository.AnimeDetailRepositoryImpl
 import com.miraelDev.vauma.data.repository.AnimeListRepositoryImpl
 import com.miraelDev.vauma.data.repository.FavouriteAnimeRepositoryImpl
 import com.miraelDev.vauma.data.repository.FilterRepositoryImpl
 import com.miraelDev.vauma.data.repository.SearchAnimeRepositoryImpl
-import com.miraelDev.vauma.data.repository.VideoPlayerRepositoryImpl
-import com.miraelDev.vauma.data.dataStore.PreferenceManager
-import com.miraelDev.vauma.data.downloadMananger.AndroidDownloader
-import com.miraelDev.vauma.data.remote.userApiService.UserApiService
-import com.miraelDev.vauma.data.remote.userApiService.UserApiServiceImpl
 import com.miraelDev.vauma.data.repository.UserAuthRepositoryImpl
 import com.miraelDev.vauma.data.repository.UserRepositoryImpl
+import com.miraelDev.vauma.data.repository.VideoPlayerRepositoryImpl
+import com.miraelDev.vauma.di.qualifiers.AuthClient
 import com.miraelDev.vauma.domain.downloader.Downloader
 import com.miraelDev.vauma.domain.repository.AnimeDetailRepository
 import com.miraelDev.vauma.domain.repository.AnimeListRepository
 import com.miraelDev.vauma.domain.repository.FavouriteAnimeRepository
 import com.miraelDev.vauma.domain.repository.FilterAnimeRepository
-import com.miraelDev.vauma.domain.repository.UserAuthRepository
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
+import com.miraelDev.vauma.domain.repository.UserAuthRepository
 import com.miraelDev.vauma.domain.repository.UserRepository
 import com.miraelDev.vauma.domain.repository.VideoPlayerRepository
 import dagger.Binds
@@ -31,6 +36,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @Module
@@ -64,7 +70,7 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindRegistrationUserRepository(impl: UserAuthRepositoryImpl): UserAuthRepository
+    abstract fun bindUserAuthRepository(impl: UserAuthRepositoryImpl): UserAuthRepository
 
     @Binds
     @Singleton
@@ -88,8 +94,24 @@ abstract class DataModule {
 
         @Provides
         @Singleton
-        fun provideFilterRepository(@ApplicationContext context: Context): FilterRepositoryImpl{
+        fun provideFilterRepository(@ApplicationContext context: Context): FilterRepositoryImpl {
             return FilterRepositoryImpl(context)
+        }
+
+        @Provides
+        @Singleton
+        fun provideUserAuthRepositoryImpl(
+            @AuthClient client: HttpClient,
+            localService: LocalTokenService,
+            userRepository: UserRepository,
+            @ApplicationContext context: Context
+        ): UserAuthRepositoryImpl {
+            return UserAuthRepositoryImpl(
+                client = client,
+                localService = localService,
+                userRepository = userRepository,
+                context = context
+            )
         }
 
         @Provides
@@ -101,19 +123,28 @@ abstract class DataModule {
                     setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
                 }
                 .build()
-            
+
         }
 
         @Provides
         @Singleton
-        fun providePreferenceManager(@ApplicationContext context: Context): PreferenceManager {
+        fun providePreferenceManager(@ApplicationContext context: Context): PreferenceDataStoreAPI {
             return PreferenceManager(context)
         }
 
         @Provides
         @Singleton
-        fun provideAndroidDownloader(@ApplicationContext context: Context,preferenceManager: PreferenceManager): AndroidDownloader {
-            return AndroidDownloader(context,preferenceManager)
+        fun provideLocalUserManager(@ApplicationContext context: Context): LocalUserStoreApi {
+            return LocalUserManager(context)
+        }
+
+        @Provides
+        @Singleton
+        fun provideAndroidDownloader(
+            @ApplicationContext context: Context,
+            preferenceManager: PreferenceDataStoreAPI
+        ): AndroidDownloader {
+            return AndroidDownloader(context, preferenceManager)
         }
     }
 

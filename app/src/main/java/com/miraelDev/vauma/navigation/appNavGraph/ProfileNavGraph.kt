@@ -1,9 +1,10 @@
-package com.miraelDev.vauma.navigation
+package com.miraelDev.vauma.navigation.appNavGraph
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.miraelDev.vauma.navigation.Screen
 
 fun NavGraphBuilder.profileNavGraph(
     accountScreen: @Composable () -> Unit,

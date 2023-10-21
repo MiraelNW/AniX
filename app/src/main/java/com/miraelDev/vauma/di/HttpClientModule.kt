@@ -2,8 +2,11 @@ package com.miraelDev.vauma.di
 
 import android.content.Context
 import android.util.Log
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.BuildConfig
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.remote.NetworkHandler
+import com.miraelDev.vauma.di.qualifiers.AuthClient
+import com.miraelDev.vauma.di.qualifiers.CommonHttpClient
 import com.miraelDev.vauma.domain.models.auth.AccessToken
 import com.miraelDev.vauma.domain.models.auth.RefreshToken
 import com.miraelDev.vauma.domain.repository.UserRepository
@@ -43,6 +46,60 @@ object HttpClientModule {
 
     @Provides
     @Singleton
+    @AuthClient
+    fun provideAuthClient(): HttpClient {
+
+        return HttpClient(Android).config {
+
+            defaultRequest {
+                url(BuildConfig.BASE_URL)
+                contentType(ContentType.Application.Json)
+                accept(ContentType.Application.Json)
+            }
+
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                        prettyPrint = true
+                    }
+                )
+            }
+
+            install(HttpCache)
+
+            install(HttpRequestRetry) {
+                maxRetries = 3
+                retryIf { request, response ->
+                    !response.status.isSuccess() && response.status.value != 401
+                }
+                delayMillis { retry ->
+                    retry * 1000L
+                }
+            }
+
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.i("HttpClient", message)
+                    }
+                }
+            }
+
+            install(HttpTimeout) {
+                requestTimeoutMillis = 10000L
+                connectTimeoutMillis = 10000L
+                socketTimeoutMillis = 10000L
+            }
+
+        }
+    }
+
+    @Provides
+    @Singleton
+    @CommonHttpClient
     fun provideHttpClient(
         localTokenService: LocalTokenService,
         userRepository: UserRepository
@@ -51,7 +108,7 @@ object HttpClientModule {
         return HttpClient(Android).config {
 
             defaultRequest {
-                url("https://vauma.fun/")
+                url(BuildConfig.BASE_URL)
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Application.Json)
             }
@@ -75,10 +132,11 @@ object HttpClientModule {
                         val accessToken = try {
                             client.post {
                                 markAsRefreshTokenRequest()
-                                url("auth/token/refresh/")
+                                url(BuildConfig.AUTH_REFRESH_URL)
                                 setBody(RefreshToken(refreshToken))
                             }.body<AccessToken>()
                         } catch (e: Exception) {
+
                             userRepository.setUserUnAuthorizedStatus()
                             AccessToken(bearerToken = "")
                         }

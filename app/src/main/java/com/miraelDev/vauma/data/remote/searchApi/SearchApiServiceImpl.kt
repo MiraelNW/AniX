@@ -1,12 +1,12 @@
 package com.miraelDev.vauma.data.remote.searchApi
 
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.remote.ApiResult
 import com.miraelDev.vauma.data.remote.ApiRoutes
 import com.miraelDev.vauma.data.remote.FailureCauses
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.dto.AnimeInfoDto
-import com.miraelDev.vauma.data.remote.dto.Response
+import com.miraelDev.vauma.di.qualifiers.CommonHttpClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -20,7 +20,7 @@ import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 class SearchApiServiceImpl @Inject constructor(
-    private val client: HttpClient,
+    @CommonHttpClient private val client: HttpClient,
     private val networkHandler: NetworkHandler,
     private val localTokenService: LocalTokenService
 ) : SearchApiService {
@@ -34,7 +34,7 @@ class SearchApiServiceImpl @Inject constructor(
                 ApiResult.Success(
                     animeList = immutableListOf(
                         client.get {
-                            url("${ApiRoutes.SEARCH_URL_ANIME_ID}$id/")
+                            url("${ApiRoutes.SEARCH_URL_ANIME_ID_ROUTE}$id/")
                             headers {
                                 append(HttpHeaders.Authorization, "Bearer $bearerToken")
                             }

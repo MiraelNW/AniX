@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
@@ -61,6 +62,7 @@ fun ScrollableTabWithViewPager(
     filmsAnimeList: LazyPagingItems<AnimeInfo>,
     popularAnimeList: LazyPagingItems<AnimeInfo>,
     nameAnimeList: LazyPagingItems<AnimeInfo>,
+    
     onAnimeItemClick: (Int) -> Unit
 ) {
 

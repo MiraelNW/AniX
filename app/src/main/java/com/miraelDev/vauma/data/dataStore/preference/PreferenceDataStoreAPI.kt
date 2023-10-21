@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.data.dataStore
+package com.miraelDev.vauma.data.dataStore.preference
 
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.flow.Flow

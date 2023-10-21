@@ -1,5 +1,7 @@
 package com.miraelDev.vauma.domain.models.anime
 
+import com.google.common.collect.ImmutableList
+
 
 data class AnimeDetailInfo(
     val id: Int,
@@ -15,8 +17,8 @@ data class AnimeDetailInfo(
     val duration: Int,
     val description: String,
     val videoUrls: VideoInfo = VideoInfo(),
-    val genres: List<Genre>,
-    val similar: List<Similar>
+    val genres: ImmutableList<Genre>,
+    val similar: ImmutableList<Similar>
 )
 
 fun AnimeDetailInfo.toAnimeInfo(): AnimeInfo {

@@ -3,21 +3,15 @@ package com.miraelDev.vauma.data.downloadMananger
 import android.app.DownloadManager
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import com.miraelDev.vauma.data.dataStore.PreferenceManager
+import com.miraelDev.vauma.data.dataStore.preference.PreferenceDataStoreAPI
 import com.miraelDev.vauma.domain.downloader.Downloader
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 
 class AndroidDownloader(
     private val context: Context,
-    private val preferenceManager: PreferenceManager
+    private val preferenceManager: PreferenceDataStoreAPI
 ) : Downloader {
 
     private val downloadManager = context.getSystemService(DownloadManager::class.java)

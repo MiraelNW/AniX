@@ -4,13 +4,14 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remoteMediator.categoriesLists.FilmCategoryRemoteMediator
 import com.miraelDev.vauma.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
 import com.miraelDev.vauma.data.remoteMediator.categoriesLists.NewCategoryRemoteMediator
 import com.miraelDev.vauma.data.remoteMediator.categoriesLists.PopularCategoryRemoteMediator
+import com.miraelDev.vauma.di.qualifiers.CommonHttpClient
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.repository.AnimeListRepository
 import io.ktor.client.HttpClient
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class AnimeListRepositoryImpl @Inject constructor(
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
-    private val httpClient: HttpClient,
+    @CommonHttpClient private val httpClient: HttpClient,
     private val localTokenService: LocalTokenService
 ) : AnimeListRepository {
 

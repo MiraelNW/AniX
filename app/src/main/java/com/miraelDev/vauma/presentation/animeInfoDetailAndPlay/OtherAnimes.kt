@@ -26,12 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.domain.models.anime.Similar
 import com.miraelDev.vauma.exntensions.pressClickEffect
 
 @Composable
 fun OtherAnime(
-    animeList: List<Similar>,
+    animeList: ImmutableList<Similar>,
     onAnimeItemClick: (Int) -> Unit
 ) {
     LazyRow(

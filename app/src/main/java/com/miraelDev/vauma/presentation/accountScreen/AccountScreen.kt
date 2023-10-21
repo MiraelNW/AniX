@@ -27,6 +27,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +46,6 @@ import com.miraelDev.vauma.R
 import com.miraelDev.vauma.presentation.accountScreen.settings.notificationsScreen.Switcher
 import com.miraelDev.vauma.presentation.animeListScreen.Toolbar
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun AccountScreen(
@@ -53,6 +53,8 @@ fun AccountScreen(
     onDarkThemeClick: () -> Unit,
     viewModel: AccountScreenViewModel = hiltViewModel()
 ) {
+
+    val logOutAction = remember{ { viewModel.logOut() } }
 
     val scrollState = rememberScrollState()
     Column(
@@ -68,14 +70,15 @@ fun AccountScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .padding(horizontal = 6.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileNameAndImage()
             AllSettings(
                 onSettingItemClick = onSettingItemClick,
                 onDarkThemeClick = onDarkThemeClick,
-                onLogOutClick = viewModel::logOut
+                onLogOutClick = logOutAction
             )
         }
     }
@@ -83,15 +86,19 @@ fun AccountScreen(
 
 @Composable
 private fun ProfileNameAndImage() {
+
+    val imagePath = remember { "" }
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp,vertical= 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AsyncImage(
             modifier = Modifier
-                .size(160.dp)
+                .size(140.dp)
                 .clip(CircleShape),
-            model = "https://gravatar.com/avatar/0143887282216779617c58f10181af2e?s=400&d=robohash&r=x",
+            model = imagePath.ifEmpty { R.drawable.ic_placeholder },
             placeholder = painterResource(id = R.drawable.ic_account),
             contentScale = ContentScale.Crop,
             contentDescription = "Profile image"
@@ -289,7 +296,7 @@ private fun DarkTheme(
             )
         }
 
-        Switcher(isSelected = isDarkTheme)
+        Switcher(isSelectedFun = { isDarkTheme })
 
     }
 }

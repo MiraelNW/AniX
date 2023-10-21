@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.local.models.newCategory.NameCategoryRemoteKeys
 import com.miraelDev.vauma.data.remote.ApiRoutes
@@ -80,7 +80,7 @@ class NameCategoryRemoteMediator(
 
             val apiResponse = client.get {
                 val bearerToken = localTokenService.getBearerToken()
-                url("${ApiRoutes.GET_NAME_CATEGORY_LIST}page_num=$page&page_size=${PAGE_SIZE}")
+                url("${ApiRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page_num=$page&page_size=${PAGE_SIZE}")
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $bearerToken")
                 }

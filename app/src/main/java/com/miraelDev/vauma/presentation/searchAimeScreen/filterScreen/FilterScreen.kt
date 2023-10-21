@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.pressClickEffect
+import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 import com.miraelDev.vauma.presentation.mainScreen.LocalTheme
 import com.miraelDev.vauma.presentation.searchAimeScreen.filterScreen.FilterViewModel
 import com.miraelDev.vauma.ui.theme.LightGreen700
@@ -51,6 +52,7 @@ fun FilterScreen(
         topBar = {
             Toolbar(
                 onBackPressed = onBackPressed,
+                text = R.string.filter
             )
         }
     ) {
@@ -188,45 +190,6 @@ fun FilterScreen(
         }
     }
 
-}
-
-@Composable
-private fun Toolbar(
-    onBackPressed: () -> Unit,
-) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onBackPressed) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .width(8.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.filter),
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = FontFamily.SansSerif,
-                )
-            }
-
-        }
-    }
 }
 
 @Composable

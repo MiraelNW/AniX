@@ -4,13 +4,14 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.miraelDev.vauma.data.dataStore.LocalTokenService
+import com.miraelDev.vauma.data.dataStore.tokenService.LocalTokenService
 import com.miraelDev.vauma.data.local.AppDatabase
 import com.miraelDev.vauma.data.local.dao.SearchHistoryAnimeDao
 import com.miraelDev.vauma.data.local.models.SearchHistoryDbModel
 import com.miraelDev.vauma.data.remote.NetworkHandler
 import com.miraelDev.vauma.data.remote.searchApi.SearchPagingPagingSource
 import com.miraelDev.vauma.data.remoteMediator.InitialSearchRemoteMediator
+import com.miraelDev.vauma.di.qualifiers.CommonHttpClient
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.repository.SearchAnimeRepository
 import io.ktor.client.HttpClient
@@ -27,7 +28,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 class SearchAnimeRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
-    private val client: HttpClient,
+    @CommonHttpClient private val client: HttpClient,
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
     private val localTokenService: LocalTokenService
@@ -108,7 +109,7 @@ class SearchAnimeRepositoryImpl @Inject constructor(
 
     override suspend fun saveNameInAnimeSearchHistory(name: String) {
 
-        if(name.isEmpty()) return
+        if (name.isEmpty()) return
 
         val searchHistoryDbModel = SearchHistoryDbModel(name)
 

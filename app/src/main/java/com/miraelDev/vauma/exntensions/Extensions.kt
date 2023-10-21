@@ -1,6 +1,9 @@
 package com.miraelDev.vauma.exntensions
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.net.Uri
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -31,6 +34,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.miraelDev.vauma.presentation.auth.signInScreen.SignInViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 
@@ -56,7 +60,7 @@ fun Modifier.shimmerEffect(targetValue:Float): Modifier = composed {
     val infiniteTransition = rememberInfiniteTransition()
 
     val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
+        initialValue = 0.98f,
         targetValue = targetValue,
         animationSpec = infiniteRepeatable(
             animation = tween(1200),
@@ -99,4 +103,13 @@ fun Modifier.pressClickEffect(onClick: (() -> Unit)? = null) = composed {
                 }
             }
         }
+}
+
+inline fun <reified Activity : ComponentActivity> Context.getActivity(): Activity {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    throw IllegalStateException("no activity")
 }

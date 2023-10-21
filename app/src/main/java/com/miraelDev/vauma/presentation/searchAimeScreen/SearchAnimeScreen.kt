@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.presentation.animeListScreen.AnimeSearchView
@@ -57,11 +59,11 @@ import com.miraelDev.vauma.presentation.commonComposFunc.ErrorAppendMessage
 import com.miraelDev.vauma.presentation.commonComposFunc.ErrorRetryButton
 import com.miraelDev.vauma.presentation.commonComposFunc.animation.WentWrongAnimation
 import com.miraelDev.vauma.presentation.mainScreen.LocalOrientation
-import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.SearchAnimeCard
 import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.LastSearchedAnime
+import com.miraelDev.vauma.presentation.searchAimeScreen.animeCard.SearchAnimeCard
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerAnimeCard
-import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import com.miraelDev.vauma.presentation.shimmerList.ShimmerGrid
+import com.miraelDev.vauma.presentation.shimmerList.ShimmerItem
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
 
@@ -76,10 +78,16 @@ fun SearchAnimeScreen(
     viewModel: SearchAnimeViewModel = hiltViewModel(),
 ) {
 
-    val searchTextState by viewModel.searchTextState
+    val searchTextState = remember { { viewModel.searchTextState.value } }
     val searchScreenState by viewModel.screenState.collectAsStateWithLifecycle()
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     val filterList by viewModel.filterList.collectAsStateWithLifecycle()
+
+    val updateSearchTextAction: (String) -> Unit =
+        remember { { viewModel.updateSearchTextState(it) } }
+    val searchAnimeByNameAction: (String) -> Unit = remember { { viewModel.searchAnimeByName(it) } }
+    val showSearchHistoryAction = remember { { viewModel.showSearchHistory() } }
+    val showInitialListAction = remember { { viewModel.showInitialList() } }
 
     Column(
         modifier = Modifier
@@ -87,31 +95,25 @@ fun SearchAnimeScreen(
             .systemBarsPadding(),
     ) {
 
-        var open by remember { mutableStateOf(false) }
+        var open by rememberSaveable { mutableStateOf(false) }
 
         var isSearchHistoryItemClick by rememberSaveable {
             mutableStateOf(false)
         }
 
-        val filterListState = rememberLazyListState()
-
         AnimeSearchView(
-            textField = searchTextState,
+            text = searchTextState,
             isSearchHistoryItemClick = isSearchHistoryItemClick,
             showFilter = open,
-            open = open,
-            onTextChange = viewModel::updateSearchTextState,
-            onClearText = viewModel::showSearchHistory,
+            onTextChange = updateSearchTextAction,
+            onClearText = showSearchHistoryAction,
             onSearchClicked = {
-                viewModel.searchAnimeByName(it)
+                searchAnimeByNameAction(it)
                 isSearchHistoryItemClick = false
             },
-            clickOnSearchView = viewModel::showSearchHistory,
-            onCloseSearchView = viewModel::showInitialList,
-            onFilterClicked = { keyboardController ->
-                keyboardController?.hide()
-                onFilterClicked()
-            }
+            clickOnSearchView = showSearchHistoryAction,
+            onCloseSearchView = showInitialListAction,
+            onFilterClicked = onFilterClicked
         )
 
 
@@ -123,10 +125,11 @@ fun SearchAnimeScreen(
 
                 val resultList = results.result.collectAsLazyPagingItems()
                 Column {
-                    Filters(filterList = filterList, filterListState)
+                    Filters(filterList = ImmutableList.copyOf(filterList))
                     SearchResult(
                         searchResults = resultList,
                         onAnimeItemClick = onAnimeItemClick,
+                        onRetry = resultList::retry
                     )
                 }
 
@@ -139,7 +142,7 @@ fun SearchAnimeScreen(
                 InitialAnimeList(
                     initialList = resultList,
                     onAnimeItemClick = onAnimeItemClick,
-                    onClickRetry = { resultList.retry() }
+                    onClickRetry = resultList::retry
                 )
 
             }
@@ -147,11 +150,11 @@ fun SearchAnimeScreen(
             is SearchAnimeScreenState.SearchHistory -> {
                 open = true
                 Column {
-                    Filters(filterList = filterList, filterListState)
+                    Filters(filterList = ImmutableList.copyOf(filterList))
                     SearchHistory(
-                        searchHistory = searchHistory,
+                        searchHistory = ImmutableList.copyOf(searchHistory),
                         onSearchItemClick = {
-                            viewModel.updateSearchTextState(it)
+                            updateSearchTextAction(it)
                             isSearchHistoryItemClick = true
                         }
                     )
@@ -165,20 +168,17 @@ fun SearchAnimeScreen(
 
 
 @Composable
-private fun Filters(
-    filterList: List<String>,
-    state: LazyListState
-) {
+private fun Filters(filterList: ImmutableList<String>) {
     if (filterList.isNotEmpty()) {
         LazyRow(
-            state = state,
+            state = rememberLazyListState(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             items(items = filterList, key = { it }) {
-                CategoryField(text = it)
+                CategoryField(text = { it })
             }
         }
     }
@@ -186,8 +186,10 @@ private fun Filters(
 
 @Composable
 private fun CategoryField(
-    text: String
+    text:() -> String
 ) {
+
+    val value = remember(text){ text() }
 
     Box(
         modifier = Modifier
@@ -196,7 +198,7 @@ private fun CategoryField(
     ) {
         Text(
             modifier = Modifier.padding(10.dp),
-            text = text,
+            text = value,
             color = MaterialTheme.colors.background,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
@@ -207,7 +209,7 @@ private fun CategoryField(
 
 @Composable
 private fun SearchHistory(
-    searchHistory: List<String>,
+    searchHistory: ImmutableList<String>,
     onSearchItemClick: (String) -> Unit
 ) {
     LazyColumn(
@@ -238,17 +240,26 @@ private fun InitialAnimeList(
         mutableStateOf(false)
     }
 
+    val orientation = LocalOrientation.current
+    val cells = remember {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            3
+        } else {
+            2
+        }
+    }
+
     Box(Modifier.fillMaxSize()) {
 
         initialList.apply {
             when {
 
                 loadState.refresh is LoadState.Loading -> {
-                    LaunchedEffect(key1 = Unit){
+                    LaunchedEffect(key1 = Unit) {
                         delay(300)
                         shouldShowLoading = true
                     }
-                    if(shouldShowLoading){
+                    if (shouldShowLoading) {
                         ShimmerGrid(SMALL_ANIMATION)
                     }
 
@@ -278,17 +289,8 @@ private fun InitialAnimeList(
 
                 else -> {
 
-                    val orientation = LocalOrientation.current
-                    val cells = remember {
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            3
-                        } else {
-                            2
-                        }
-                    }
                     LazyVerticalGrid(
-                        modifier = Modifier
-                            .navigationBarsPadding(),
+                        modifier = Modifier.navigationBarsPadding(),
                         contentPadding = PaddingValues(
                             top = 12.dp,
                             bottom = if (loadState.append.endOfPaginationReached
@@ -304,7 +306,6 @@ private fun InitialAnimeList(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         columns = GridCells.Fixed(cells)
                     ) {
-                        Log.d("tag",initialList.loadState.toString())
                         if (initialList.itemCount > 0) {
                             items(count = initialList.itemCount) { index ->
                                 initialList[index]?.let {
@@ -344,6 +345,7 @@ private fun InitialAnimeList(
 private fun SearchResult(
     searchResults: LazyPagingItems<AnimeInfo>,
     onAnimeItemClick: (Int) -> Unit,
+    onRetry:()->Unit,
 ) {
 
     var shouldShowLoading by remember {
@@ -371,13 +373,13 @@ private fun SearchResult(
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
-                            onClickRetry = searchResults::retry
+                            onClickRetry = onRetry
                         )
                     } else {
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.smth_went_wrong,
-                            onClickRetry = searchResults::retry
+                            onClickRetry = onRetry
                         )
                     }
 
@@ -419,11 +421,14 @@ private fun SearchResult(
                                 val composition by rememberLottieComposition(
                                     LottieCompositionSpec.RawRes(R.raw.search)
                                 )
-                                Box(modifier = Modifier.fillMaxSize()) {
+                                Column(
+                                    modifier = Modifier.fillParentMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     LottieAnimation(
                                         modifier = Modifier
-                                            .padding(bottom = 48.dp)
-                                            .align(Alignment.Center)
+                                            .padding(bottom = 36.dp)
                                             .size(
                                                 if (LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE)
                                                     200.dp
@@ -431,8 +436,25 @@ private fun SearchResult(
                                                     300.dp
                                             ),
                                         composition = composition,
-                                        iterations = 4
+                                        iterations = 16
                                     )
+
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(24.dp))
+                                            .background(MaterialTheme.colors.primary)
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                horizontal = 12.dp,
+                                                vertical = 8.dp
+                                            ),
+                                            text = "Не смогли найти это аниме",
+                                            fontSize = 20.sp,
+                                            color = Color.White
+                                        )
+                                    }
+
 
                                 }
                             }
@@ -456,7 +478,7 @@ private fun SearchResult(
                                 ErrorAppendItem(
                                     modifier = Modifier.padding(bottom = 64.dp),
                                     message = stringResource(R.string.try_again),
-                                    onClickRetry = searchResults::retry
+                                    onClickRetry = onRetry
                                 )
                             }
                         }

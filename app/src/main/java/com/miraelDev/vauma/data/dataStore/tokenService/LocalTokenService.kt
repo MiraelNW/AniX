@@ -1,11 +1,14 @@
-package com.miraelDev.vauma.data.dataStore
+package com.miraelDev.vauma.data.dataStore.tokenService
 
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.miraelDev.vauma.data.dataStore.preference.PreferenceDataStoreAPI
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
-class LocalTokenService @Inject constructor(private val preferenceManager: PreferenceManager) {
+class LocalTokenService @Inject constructor(
+    private val preferenceManager: PreferenceDataStoreAPI
+) {
 
     suspend fun saveBearerToken(bearerToken: String) {
         preferenceManager.putPreference(bearerTokenKey, bearerToken)

@@ -1,9 +1,11 @@
 package com.miraelDev.vauma.presentation.favouriteListScreen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.domain.models.anime.AnimeInfo
 import com.miraelDev.vauma.domain.usecases.searchUsecase.SaveSearchTextUseCase
 import com.miraelDev.vauma.domain.usecases.searchUsecase.SearchAnimeByNameUseCase
@@ -46,7 +48,7 @@ class FavouriteAnimeViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
-                    FavouriteListScreenState.Result(result = res.animeList) as FavouriteListScreenState
+                    FavouriteListScreenState.Result(result =ImmutableList.copyOf(res.animeList)) as FavouriteListScreenState
                 }
 
                 is Result.Initial -> {

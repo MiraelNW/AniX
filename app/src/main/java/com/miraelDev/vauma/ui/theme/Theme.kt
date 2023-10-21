@@ -9,6 +9,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import com.miraelDev.vauma.ui.theme.Black
 import com.miraelDev.vauma.ui.theme.DarkGreen
 import com.miraelDev.vauma.ui.theme.DarkWhite700
@@ -24,7 +25,7 @@ private val LightMainColorPalette = lightColors(
     background = Color.White,
     onSurface = DarkWhite700,
     onBackground = Color.Black,
-    onSecondary = LightWhite,
+    onSecondary = White,
     secondaryVariant = Color(0xFFA29C9C)
 )
 

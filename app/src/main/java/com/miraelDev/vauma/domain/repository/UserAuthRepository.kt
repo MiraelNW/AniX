@@ -1,6 +1,5 @@
 package com.miraelDev.vauma.domain.repository
 
-import com.miraelDev.vauma.domain.models.auth.AuthState
 import com.miraelDev.vauma.domain.models.user.User
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +9,15 @@ interface UserAuthRepository {
 
     suspend fun signIn(user: User)
 
+    fun getSignInError():Flow<Boolean>
+
+    fun getSignUpError():Flow<Boolean>
+
     suspend fun checkAuthState()
+
+    suspend fun changePassword()
+
+    suspend fun checkVkAuthState()
 
     suspend fun logOutUser()
 

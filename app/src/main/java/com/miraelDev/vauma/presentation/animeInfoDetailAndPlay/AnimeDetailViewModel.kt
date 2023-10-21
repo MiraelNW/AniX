@@ -2,6 +2,7 @@ package com.miraelDev.vauma.presentation.animeInfoDetailAndPlay
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.domain.models.anime.AnimeDetailInfo
 import com.miraelDev.vauma.domain.models.anime.toAnimeInfo
 import com.miraelDev.vauma.domain.result.Result
@@ -32,7 +33,7 @@ class AnimeDetailViewModel @Inject constructor(
                 when (val res = it) {
 
                     is Result.Success -> {
-                        AnimeDetailScreenState.SearchResult(result = res.animeList) as AnimeDetailScreenState
+                        AnimeDetailScreenState.SearchResult(result = ImmutableList.copyOf(res.animeList)) as AnimeDetailScreenState
                     }
 
                     is Result.Failure -> {

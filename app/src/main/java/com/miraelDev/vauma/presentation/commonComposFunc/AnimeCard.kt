@@ -76,8 +76,6 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
                     text = animeItem.nameRu,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 16.sp,
-//                    fontWeight = FontWeight.Light,
-//                    fontFamily = Roboto,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center

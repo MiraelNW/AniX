@@ -9,7 +9,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -32,11 +31,12 @@ import com.miraelDev.vauma.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FavouriteSearchView(
-    text: String,
+    text: () -> String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
     onCloseSearchView: () -> Unit,
 ) {
+
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val focusRequester = remember { FocusRequester() }
@@ -45,11 +45,13 @@ fun FavouriteSearchView(
     var enabled by rememberSaveable { mutableStateOf(true) }
 
     val source = remember { MutableInteractionSource() }
-    var clicked by remember { mutableStateOf(false) }
+    val clearFocus = remember { { focusManager.clearFocus() } }
+    val onSearchClickedAction: (String) -> Unit = remember { { onSearchClicked(it) } }
+    val onTextChangeAction: (String) -> Unit = remember { { onTextChange(it) } }
+    val onCloseSearchViewAction = remember { { onCloseSearchView() } }
 
     if (source.collectIsPressedAsState().value) {
         enabled = false
-        clicked = true
     }
 
     Row(
@@ -62,10 +64,8 @@ fun FavouriteSearchView(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
-            value = text,
-            onValueChange = {
-                onTextChange(it)
-            },
+            value = text(),
+            onValueChange = onTextChange,
             enabled = true,
             singleLine = true,
             interactionSource = source,
@@ -87,11 +87,11 @@ fun FavouriteSearchView(
             },
             trailingIcon = {
                 IconButton(onClick = {
-                    if (text.isNotEmpty()) {
-                        onTextChange("")
+                    if (text().isNotEmpty()) {
+                        onTextChangeAction(EMPTY_STRING)
                     } else {
-                        onCloseSearchView()
-                        focusManager.clearFocus()
+                        onCloseSearchViewAction()
+                        clearFocus()
                         keyboardController?.hide()
                     }
                 }) {
@@ -107,9 +107,8 @@ fun FavouriteSearchView(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    clicked = false
-                    onSearchClicked(text)
-                    focusManager.clearFocus()
+                    onSearchClickedAction(text())
+                    clearFocus()
                     keyboardController?.hide()
                 }
 
@@ -124,3 +123,5 @@ fun FavouriteSearchView(
         )
     }
 }
+
+private const val EMPTY_STRING = ""

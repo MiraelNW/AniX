@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -20,13 +21,9 @@ import com.miraelDev.vauma.ui.theme.Montserrat
 @Composable
 fun HomeScreen(
     onAnimeItemClick: (Int) -> Unit,
-    onReadyToDrawHomeScreen: () -> Unit,
     viewModel: AnimeListViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(key1 = Unit) {
-        onReadyToDrawHomeScreen()
-    }
 
     Box {
         val newCategoryList =
@@ -64,8 +61,9 @@ fun AnimeList(
     ) {
 
         Toolbar(
-            text = stringResource(id = R.string.app_name),
+            text = stringResource(R.string.short_app_name),
             color = MaterialTheme.colors.primary,
+            spacerWidth = 2.dp,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Medium
         )

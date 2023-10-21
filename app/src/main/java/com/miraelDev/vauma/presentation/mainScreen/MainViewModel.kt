@@ -1,28 +1,24 @@
 package com.miraelDev.vauma.presentation.mainScreen
 
-import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miraelDev.vauma.data.dataStore.PreferenceManager
+import com.miraelDev.vauma.data.dataStore.preference.PreferenceDataStoreAPI
 import com.miraelDev.vauma.domain.models.auth.AuthState
 import com.miraelDev.vauma.domain.usecases.authUseCases.CheckUserAuthStateUseCase
 import com.miraelDev.vauma.domain.usecases.authUseCases.GetUserAuthStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val preferenceManager: PreferenceManager,
+    private val preferenceManager: PreferenceDataStoreAPI,
     private val getUserAuthStateUseCase: GetUserAuthStateUseCase,
     private val checkUserAuthStateUseCase: CheckUserAuthStateUseCase
 ) : ViewModel() {

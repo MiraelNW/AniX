@@ -1,7 +1,5 @@
 package com.miraelDev.vauma.presentation.accountScreen.settings.editProfileScreen
 
-import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +15,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -30,8 +29,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -59,6 +58,8 @@ import coil.compose.AsyncImage
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
 import com.miraelDev.vauma.exntensions.noRippleEffectClick
+import com.miraelDev.vauma.presentation.auth.signInScreen.ErrorValidField
+import com.miraelDev.vauma.presentation.commonComposFunc.EmailField
 import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 
 @Composable
@@ -67,28 +68,56 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
 
-    val nickName by viewModel.nickNameState
-    val email by viewModel.emailState
+    val nickName = remember { { viewModel.nickNameState.value } }
+    val email = remember { { viewModel.emailState.value } }
 
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     var shouldShowChangePasswordDialog by rememberSaveable { mutableStateOf(false) }
 
-    val incorrectCurrentPassword by viewModel.isCurrentPasswordInvalid.collectAsStateWithLifecycle()
-    val isPasswordValid by viewModel.isNewPasswordValid.collectAsStateWithLifecycle(true)
+    val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
+    val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
+    val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
 
-    val currentPassword by viewModel.currentPassword
-    val newPassword by viewModel.newPassword
-    val repeatedPassword by viewModel.repeatedPassword
+    val currentPassword = remember { { viewModel.currentPassword.value } }
+    val newPassword = remember { { viewModel.newPassword.value } }
+    val repeatedPassword = remember { { viewModel.repeatedPassword.value } }
 
-    var selectedImageUri by remember {
-        mutableStateOf<Uri?>(null)
+    val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
+    val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
+
+    val updateEmailAction: (String) -> Unit = remember { { viewModel.updateEmail(it) } }
+    val updateNickNameAction: (String) -> Unit = remember { { viewModel.updateNickName(it) } }
+
+    val resetAllChangesAction = remember { { viewModel.resetAllChanges() } }
+    val changePasswordAction = remember { { viewModel.changePassword() } }
+
+    val isNewPasswordValidAction = remember { { viewModel.isNewPasswordValid() } }
+    val isCurrentPasswordValidAction = remember { { viewModel.isCurrentPasswordValid() } }
+    val isPasswordEqualsAction = remember { { viewModel.isPasswordEquals() } }
+
+    val updateCurrentPasswordAction: (String) -> Unit =
+        remember { { viewModel.updateCurrentPassword(it) } }
+    val updateNewPasswordAction: (String) -> Unit = remember { { viewModel.updateNewPassword(it) } }
+    val updateRepeatedPasswordAction: (String) -> Unit =
+        remember { { viewModel.updateRepeatedPassword(it) } }
+
+
+    val moveFocusDown: KeyboardActionScope.() -> Unit =
+        remember { { focusManager.moveFocus(FocusDirection.Down) } }
+
+    var imagePath by rememberSaveable {
+        mutableStateOf("")
     }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            selectedImageUri = uri
+            uri?.let {
+                imagePath = it.toString()
+            }
+
         }
     )
 
@@ -114,7 +143,9 @@ fun EditProfileScreen(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
@@ -129,7 +160,7 @@ fun EditProfileScreen(
                             modifier = Modifier
                                 .size(160.dp)
                                 .clip(CircleShape),
-                            model = selectedImageUri,
+                            model = imagePath.ifEmpty { R.drawable.ic_placeholder },
                             placeholder = painterResource(id = R.drawable.ic_account),
                             contentScale = ContentScale.Crop,
                             contentDescription = "Profile image"
@@ -147,19 +178,40 @@ fun EditProfileScreen(
 
                     NameField(
                         text = nickName,
-                        onValueChange = viewModel::updateNickName,
-                        focusManager = focusManager
+                        onValueChange = updateNickNameAction,
+                        onNext = moveFocusDown
                     )
 
-                    EmailField(
-                        text = email,
-                        onValueChange = viewModel::updateEmail,
-                        focusManager = focusManager
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        EmailField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester)
+                                .onFocusEvent {
+                                    if (it.isFocused) {
+                                        refreshEmailErrorAction()
+                                    }
+                                },
+                            text = email,
+                            isLoginError = isEmailError,
+                            onNext = moveFocusDown,
+                            onChange = updateEmailAction
+
+                        )
+
+                        ErrorValidField(
+                            modifier = Modifier.padding(start = 16.dp),
+                            isError = isEmailError,
+                            error = stringResource(id = R.string.invalid_mail)
+                        )
+                    }
                 }
 
                 Column(
-                    modifier = Modifier.padding(top=24.dp),
+                    modifier = Modifier.padding(top = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     ChangePassword(
@@ -180,20 +232,25 @@ fun EditProfileScreen(
         if (shouldShowChangePasswordDialog) {
             ChangePasswordDialog(
                 onDismiss = {
-                    viewModel.resetAllChanges()
+                    resetAllChangesAction()
                     shouldShowChangePasswordDialog = false
                 },
+                refreshPasswordError = refreshPasswordErrorAction,
+                isPasswordError = isPasswordError,
+                isPasswordNotEqualsError = isPasswordNotEqualsError,
                 onChangeClick = {
-
+                    changePasswordAction()
+                    shouldShowChangePasswordDialog = false
                 },
-                incorrectCurrentPasswordError = incorrectCurrentPassword,
-                isPasswordsValid = isPasswordValid,
+                checkCurrentPasswordValid = isCurrentPasswordValidAction,
+                checkNewPasswordValid = isNewPasswordValidAction,
+                checkPasswordEquals = isPasswordEqualsAction,
                 newPassword = newPassword,
                 currentPassword = currentPassword,
                 repeatedPassword = repeatedPassword,
-                onCurrentPasswordChange = viewModel::updateCurrentPassword,
-                onNewPasswordChange = viewModel::updateNewPassword,
-                onRepeatedPasswordChange = viewModel::updateRepeatedPassword
+                onCurrentPasswordChange = updateCurrentPasswordAction,
+                onNewPasswordChange = updateNewPasswordAction,
+                onRepeatedPasswordChange = updateRepeatedPasswordAction
             )
         }
     }
@@ -232,19 +289,20 @@ private fun ChangePassword(onChangePasswordClick: () -> Unit) {
 
 @Composable
 private fun NameField(
-    text: String,
+    text: () -> String,
     onValueChange: (String) -> Unit,
-    focusManager: FocusManager
+    onNext: KeyboardActionScope.() -> Unit,
 ) {
+
+    val value = remember(text) { text() }
+
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = text,
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
         onValueChange = onValueChange,
-//        isError = isLoginError,
-//        leadingIcon = leadingIcon,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            onNext = onNext
         ),
         placeholder = {
             Text(
@@ -255,41 +313,7 @@ private fun NameField(
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Transparent,
-            errorBorderColor = Color.Red,
-            backgroundColor = MaterialTheme.colors.onSecondary,
-        ),
-        visualTransformation = VisualTransformation.None
-    )
-}
-
-@Composable
-private fun EmailField(
-    text: String,
-    onValueChange: (String) -> Unit,
-    focusManager: FocusManager,
-) {
-
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = text,
-        onValueChange = onValueChange,
-//        isError = isLoginError,
-//        leadingIcon = leadingIcon,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        ),
-        placeholder = {
-            Text(
-                text = "edit your email",
-                color = MaterialTheme.colors.onBackground.copy(0.5f)
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Transparent,
+            textColor = MaterialTheme.colors.onBackground,
             errorBorderColor = Color.Red,
             backgroundColor = MaterialTheme.colors.onSecondary,
         ),

@@ -1,4 +1,4 @@
-package com.miraelDev.vauma.navigation
+package com.miraelDev.vauma.navigation.appNavGraph
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder

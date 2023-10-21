@@ -1,5 +1,9 @@
 package com.miraelDev.vauma.presentation.auth.signInScreen
 
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,234 +14,329 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.miraelDev.vauma.R
 import com.miraelDev.vauma.exntensions.NoRippleInteractionSource
 import com.miraelDev.vauma.exntensions.pressClickEffect
+import com.miraelDev.vauma.presentation.commonComposFunc.EmailField
+import com.miraelDev.vauma.presentation.commonComposFunc.PasswordField
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.auth.VKAuthenticationResult
+import com.vk.api.sdk.auth.VKScope
+import kotlinx.coroutines.launch
 
+private const val GOOGLE_AUTH_REQUEST_CODE = 1
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
-    onReadyToDrawStartScreen: () -> Unit,
     navigateToSignUpScreen: () -> Unit,
+    onForgetPasswordClick: () -> Unit,
 ) {
-
-    LaunchedEffect(key1 = Unit) {
-        onReadyToDrawStartScreen()
-    }
 
     Surface {
 
-        val loginText by viewModel.loginTextState
-        val passwordText by viewModel.passwordTextState
+        val loginText = remember{ { viewModel.loginTextState.value } }
+        val passwordText = remember { { viewModel.passwordTextState.value } }
+
+        val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
+        val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
+        val isSignInError by viewModel.signInError.collectAsStateWithLifecycle()
 
         val loginFocusRequester = remember { FocusRequester() }
         val passwordFocusRequester = remember { FocusRequester() }
 
         var isLoginInFocus by rememberSaveable { mutableStateOf(true) }
 
-        val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
-        val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
+        val isEmailValidAction = remember { { viewModel.isEmailValid() } }
+        val isPasswordValidAction = remember { { viewModel.isPasswordValid() } }
+        val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
+        val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
+        val signInAction = remember { { viewModel.signIn() } }
+        val updatePasswordAction: (String) -> Unit = remember { { viewModel.updatePasswordTextState(it) } }
+        val updateEmailAction: (String) -> Unit = remember { { viewModel.updateLoginTextState(it) } }
+        val navigateToSignUp = remember { { navigateToSignUpScreen() } }
 
         val focusManager = LocalFocusManager.current
+        val context = LocalContext.current
 
-        Column(
+        val clearFocus = remember { { focusManager.clearFocus() } }
+        val moveFocusDown: KeyboardActionScope.() -> Unit = remember { { focusManager.moveFocus(FocusDirection.Down) } }
+        val freeFocus = remember { { loginFocusRequester.freeFocus() } }
+
+        val snackbarHostState = remember { SnackbarHostState() }
+        val coroutineScope = rememberCoroutineScope()
+
+        val googleAuthResultLauncher = rememberLauncherForActivityResult(
+            contract = AuthResultContract(),
+            onResult = { task ->
+                try {
+                    val account = task?.getResult(ApiException::class.java)
+                    if (account != null) {
+                        viewModel.signInGoogleAccount(account)
+                    } else {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.google_auth_went_wrong))
+                        }
+                    }
+                } catch (e: ApiException) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(context.getString(R.string.google_auth_went_wrong))
+                    }
+                }
+            }
+        )
+
+        val vkAuthResultLauncher = rememberLauncherForActivityResult(
+            contract = VK.getVKAuthActivityResultContract(),
+            onResult = {
+                when (it) {
+                    is VKAuthenticationResult.Success -> {
+                        viewModel.signInVkAccount()
+                    }
+
+                    is VKAuthenticationResult.Failed -> {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.vk_auth_went_wrong))
+                        }
+                    }
+                }
+
+            }
+        )
+
+
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 24.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .systemBarsPadding(),
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState) {
+                    Snackbar(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                        snackbarData = it,
+                        shape = RoundedCornerShape(16.dp),
+                        backgroundColor = MaterialTheme.colors.background,
+                        contentColor = MaterialTheme.colors.onBackground
+                    )
+                }
+            }
         ) {
-
-
-            Image(
-                modifier = Modifier.size(220.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_app_icon),
-                contentDescription = "app icon"
-            )
-
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.log_in_account),
-                color = MaterialTheme.colors.primary,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
-
             Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 12.dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    LoginField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(loginFocusRequester)
-                            .onFocusEvent {
-                                if (it.isFocused) {
-                                    viewModel.refreshEmailError()
-                                }
-                            },
-                        value = loginText,
-                        isLoginError = isEmailError,
-                        focusManager = focusManager,
-                        onChange = viewModel::updateLoginTextState
 
-                    )
-
-                    ErrorValidField(
-                        modifier = Modifier.padding(start = 16.dp),
-                        isError = isEmailError,
-                        error = "Недопустимая почта"
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.height(14.dp))
+                Image(
+                    modifier = Modifier.size(150.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_app_icon),
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = stringResource(R.string.app_icon)
+                )
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.Start
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    PasswordField(
-                        value = passwordText,
-                        isPasswordError = !isPasswordError.successful,
-                        onChange = viewModel::updatePasswordTextState,
-                        submit = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(passwordFocusRequester)
-                            .onFocusEvent {
-                                if (it.isFocused) {
-                                    isLoginInFocus = true
-                                    viewModel.refreshPasswordError()
-                                }
-                            }
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = stringResource(R.string.log_in_account),
+                        color = MaterialTheme.colors.primary,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
                     )
 
-                    ErrorValidField(
-                        modifier = Modifier.padding(start = 16.dp),
-                        isError = !isPasswordError.hasMinimum,
-                        error = "Пароль должен быть больше 6 символов"
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        EmailField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(loginFocusRequester)
+                                .onFocusEvent {
+                                    if (it.isFocused) {
+                                        refreshEmailErrorAction()
+                                    }
+                                },
+                            text = loginText,
+                            isLoginError = isEmailError,
+                            onNext = moveFocusDown,
+                            onChange = updateEmailAction
 
-                    ErrorValidField(
-                        modifier = Modifier.padding(start = 16.dp),
-                        isError = !isPasswordError.hasCapitalizedLetter,
-                        error = "Пароль должен содержать заглавные буквы"
-                    )
-                }
+                        )
 
-
-
-                Spacer(modifier = Modifier.height(20.dp))
-                SignInAndSignUpButtons(
-                    focusManager = focusManager,
-                    onSignInClick = {
-                        val isEmailValid = viewModel.isEmailValid()
-                        val isPasswordValid = viewModel.isPasswordValid()
-                        if (!isEmailError || !isPasswordValid) {
-                            loginFocusRequester.freeFocus()
-                        } else {
-                            viewModel.signIn(loginText, passwordText)
-                        }
-                    },
-                    onSignUpClick = {
-                        viewModel.refreshEmailError()
-                        viewModel.refreshPasswordError()
-                        navigateToSignUpScreen()
+                        ErrorValidField(
+                            modifier = Modifier.padding(start = 16.dp),
+                            isError = isEmailError,
+                            error = stringResource(id = R.string.invalid_mail)
+                        )
                     }
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                ForgetPassword(onForgetPasswordClick = {})
+
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        PasswordField(
+                            text = passwordText,
+                            isPasswordError = !isPasswordError.successful,
+                            onChange = updatePasswordAction,
+                            submit = {},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(passwordFocusRequester)
+                                .onFocusEvent {
+                                    if (it.isFocused) {
+                                        isLoginInFocus = true
+                                        refreshPasswordErrorAction()
+                                    }
+                                }
+                        )
+
+                        ErrorValidField(
+                            modifier = Modifier.padding(start = 16.dp),
+                            isError = isSignInError,
+                            error = stringResource(R.string.incorrect_password_or_email_entered)
+                        )
+
+                        ErrorValidField(
+                            modifier = Modifier.padding(start = 16.dp),
+                            isError = !isPasswordError.hasMinimum,
+                            error = stringResource(R.string.password_must_be_more_than_6_characters)
+                        )
+
+                        ErrorValidField(
+                            modifier = Modifier.padding(start = 16.dp),
+                            isError = !isPasswordError.hasCapitalizedLetter,
+                            error = stringResource(R.string.the_password_must_contain_capital_letters)
+                        )
+                    }
+
+
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    SignInAndSignUpButtons(
+                        onSignInClick = {
+                            clearFocus()
+                            val isEmailValid = isEmailValidAction()
+                            val isPasswordValid = isPasswordValidAction()
+                            if (!isEmailValid || !isPasswordValid) {
+                                freeFocus()
+                            } else {
+                                signInAction()
+                            }
+                        },
+                        onSignUpClick = {
+                            clearFocus()
+                            refreshEmailErrorAction()
+                            refreshPasswordErrorAction()
+                            navigateToSignUp()
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    ForgetPassword(onForgetPasswordClick = onForgetPasswordClick)
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Spacer(
+                            modifier = Modifier
+                                .height(1.dp)
+                                .weight(1f)
+                                .background(MaterialTheme.colors.onBackground.copy(0.1f))
+                        )
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.enter_with),
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colors.onBackground.copy(0.5f)
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .height(1.dp)
+                                .weight(1f)
+                                .background(MaterialTheme.colors.onBackground.copy(0.1f))
+                        )
+                    }
+
+                    SignInSocialMedia(
+                        googleAuthResultLauncher = googleAuthResultLauncher,
+                        vkAuthResultLauncher = vkAuthResultLauncher
+                    )
+                }
+
             }
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .weight(1f)
-                        .background(Color.Black.copy(0.1f))
-                )
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.enter_with),
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.Black.copy(0.5f)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .weight(1f)
-                        .background(Color.Black.copy(0.1f))
-                )
-            }
-
-            SignInSocialMedia()
         }
+
     }
 }
 
 @Composable
-private fun ErrorValidField(modifier: Modifier, isError: Boolean, error: String) {
+fun ErrorValidField(modifier: Modifier, isError: Boolean, error: String) {
 
     AnimatedVisibility(modifier = modifier, visible = isError) {
         Text(text = error, color = Color.Red, fontSize = 14.sp)
@@ -246,39 +345,35 @@ private fun ErrorValidField(modifier: Modifier, isError: Boolean, error: String)
 }
 
 @Composable
-private fun SignInSocialMedia() {
+private fun SignInSocialMedia(
+    googleAuthResultLauncher: ManagedActivityResultLauncher<Int, Task<GoogleSignInAccount>?>,
+    vkAuthResultLauncher: ManagedActivityResultLauncher<Collection<VKScope>, VKAuthenticationResult>
+) {
+
     Row(
         modifier = Modifier.fillMaxWidth(0.8f),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+//
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { vkAuthResultLauncher.launch(listOf(VKScope.WALL, VKScope.WALL)) },
             interactionSource = NoRippleInteractionSource()
         ) {
             Image(
-                modifier = Modifier.size(64.dp),
-                painter = painterResource(id = R.drawable.ic_telegram),
+                modifier = Modifier.size(56.dp),
+                painter = painterResource(id = R.drawable.ic_vk),
                 contentDescription = null
             )
         }
+//
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { googleAuthResultLauncher.launch(GOOGLE_AUTH_REQUEST_CODE) },
             interactionSource = NoRippleInteractionSource()
         ) {
             Image(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(56.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_google),
-                contentDescription = null
-            )
-        }
-        IconButton(
-            onClick = { /*TODO*/ },
-            interactionSource = NoRippleInteractionSource()
-        ) {
-            Image(
-                modifier = Modifier.size(64.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_vk),
                 contentDescription = null
             )
         }
@@ -296,7 +391,6 @@ private fun ForgetPassword(onForgetPasswordClick: () -> Unit) {
 
 @Composable
 private fun SignInAndSignUpButtons(
-    focusManager: FocusManager,
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
@@ -307,14 +401,10 @@ private fun SignInAndSignUpButtons(
     ) {
 
         OutlinedButton(
-            onClick = {
-                focusManager.clearFocus()
-                onSignUpClick()
-
-            },
+            onClick = onSignUpClick,
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.White,
+                backgroundColor = MaterialTheme.colors.background,
                 contentColor = MaterialTheme.colors.primary
             )
         ) {
@@ -322,10 +412,7 @@ private fun SignInAndSignUpButtons(
         }
 
         OutlinedButton(
-            onClick = {
-                focusManager.clearFocus()
-                onSignInClick()
-            },
+            onClick = onSignInClick,
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.primary,
@@ -335,102 +422,4 @@ private fun SignInAndSignUpButtons(
             Text(stringResource(R.string.sign_in), fontSize = 18.sp)
         }
     }
-}
-
-@Composable
-fun LoginField(
-    value: String,
-    isLoginError: Boolean,
-    focusManager: FocusManager,
-    onChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: String = "Введите Вашу почту"
-) {
-    val leadingIcon = @Composable {
-        Icon(
-            Icons.Default.Email,
-            contentDescription = "",
-            tint = if (isLoginError) Color.Red else MaterialTheme.colors.primary
-        )
-    }
-
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onChange(it) },
-        modifier = modifier,
-        isError = isLoginError,
-        leadingIcon = leadingIcon,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        ),
-        placeholder = { Text(placeholder) },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            errorBorderColor = Color.Red,
-            backgroundColor = Color.White,
-        ),
-        visualTransformation = VisualTransformation.None
-    )
-}
-
-@Composable
-fun PasswordField(
-    value: String,
-    onChange: (String) -> Unit,
-    isPasswordError: Boolean,
-    submit: () -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: String = "Введите пароль"
-) {
-
-    var isPasswordVisible by remember { mutableStateOf(false) }
-
-    val leadingIcon = @Composable {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_key),
-            contentDescription = "",
-            tint = if (isPasswordError) Color.Red else MaterialTheme.colors.primary
-        )
-    }
-    val trailingIcon = @Composable {
-        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = ImageVector.vectorResource(
-                    id =
-                    if (isPasswordVisible) R.drawable.ic_open_eye else R.drawable.ic_close_eye
-                ),
-                contentDescription = "",
-                tint = if (isPasswordError) Color.Red else MaterialTheme.colors.primary
-            )
-        }
-    }
-
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onChange(it) },
-        modifier = modifier,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        isError = isPasswordError,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Password
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { submit() }
-        ),
-        placeholder = { Text(placeholder) },
-        singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults
-            .outlinedTextFieldColors(
-                errorBorderColor = Color.Red,
-                backgroundColor = Color.White
-            ),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-    )
 }

@@ -29,10 +29,13 @@ import com.miraelDev.vauma.presentation.commonComposFunc.Toolbar
 
 @Composable
 fun NotificationScreen(onBackPressed: () -> Unit) {
-    BackHandler() { onBackPressed() }
+
+    val onBackPressedAction = remember { { onBackPressed() } }
+
+    BackHandler(onBack = onBackPressedAction)
 
     Column(modifier = Modifier.systemBarsPadding()) {
-        Toolbar(onBackPressed = onBackPressed,text = R.string.notification_settings)
+        Toolbar(onBackPressed = onBackPressedAction, text = R.string.notification_settings)
         NotificationsList()
     }
 }
@@ -45,7 +48,7 @@ private fun NotificationsList() {
         modifier = Modifier.padding(8.dp)
     ) {
 
-        var isSelectedTitles by remember { mutableStateOf(false) }
+        var isSelectedTitles by remember {  mutableStateOf(false) }
 
         Column(modifier = Modifier.padding(4.dp)) {
 
@@ -68,8 +71,11 @@ private fun NotificationsList() {
                     ) {
 
 
-                        Text(text = stringResource(R.string.notification_of_released_titles), fontSize = 18.sp)
-                        Switcher(isSelected = isSelectedTitles)
+                        Text(
+                            text = stringResource(R.string.notification_of_released_titles),
+                            fontSize = 18.sp
+                        )
+                        Switcher(isSelectedFun = { isSelectedTitles })
                     }
 
                     if (isSelected) {
@@ -100,7 +106,7 @@ private fun NotificationsList() {
                     fontSize = 18.sp,
                     overflow = TextOverflow.Ellipsis
                 )
-                Switcher(isSelected = isSelectedEpisodes)
+                Switcher(isSelectedFun = { isSelectedEpisodes })
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -124,7 +130,7 @@ private fun NotificationsList() {
                     fontSize = 18.sp,
                     overflow = TextOverflow.Ellipsis
                 )
-                Switcher(isSelected = isSelectedUpdate)
+                Switcher(isSelectedFun = { isSelectedUpdate })
             }
         }
 
@@ -204,7 +210,7 @@ private fun CheckBoxesWithText() {
 
 @Composable
 fun Switcher(
-    isSelected: Boolean,
+    isSelectedFun: () -> Boolean,
     size: Dp = 26.dp,
     padding: Dp = 4.dp,
     borderWidth: Dp = 1.dp,
@@ -212,6 +218,9 @@ fun Switcher(
     toggleShape: Shape = CircleShape,
     animationSpec: AnimationSpec<Dp> = tween(durationMillis = 500),
 ) {
+
+    val isSelected = remember(isSelectedFun) { isSelectedFun() }
+
     val offset by animateDpAsState(
         targetValue = if (isSelected) size else 0.dp,
         animationSpec = animationSpec

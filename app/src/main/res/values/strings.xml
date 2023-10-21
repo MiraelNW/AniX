@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Vauma</string>
+    <string name="web_client_id" translatable="false">177956612236-ev7gtbj7fevjjjbdr8ceh59im7hf29hf.apps.googleusercontent.com</string>
+    <integer name="com_vk_sdk_AppId">51768117</integer>
     <string name="home">Главная</string>
     <string name="search">Поиск</string>
     <string name="favourite">Понравившиеся</string>
@@ -107,8 +109,26 @@
     <string name="show_less">"...Спрятать"</string>
     <string name="retry">Попробуйте снова</string>
     <string name="update">Обновить</string>
-    <string name="edit_your_name">edit your name</string>
-    <string name="change_password">Change password</string>
-    <string name="submit">Submit</string>
-    <string name="give_rating">Give rating</string>
+    <string name="edit_your_name">Изменить имя</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="submit">Подтвердить</string>
+    <string name="give_rating">Оценить</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="google_auth_went_wrong">Не удалось войти в аккаунт</string>
+    <string name="vk_auth_went_wrong">Не удалось войти в аккаунт вк</string>
+    <string name="short_app_name">auma</string>
+    <string name="profile_image">Profile image</string>
+    <string name="invalid_mail">Недопустимая почта</string>
+    <string name="incorrect_password_or_email_entered">Неправильно введен пароль или почта</string>
+    <string name="password_must_be_more_than_6_characters">Пароль должен быть больше 6 символов</string>
+    <string name="the_password_must_contain_capital_letters">Пароль должен содержать заглавные буквы</string>
+    <string name="password_mismatch">Пароли не совпадают</string>
+    <string name="error_try_again_later">Ошибка, попробуйте позже</string>
+    <string name="app_icon">иконка приложения</string>
+    <string name="wrong_current_password">Неверный текущий пароль</string>
+    <string name="email_code_verify">Проверка кода</string>
+    <string name="verify_code">Подтвердить код</string>
+    <string name="continue_message">Продолжить</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="forget_password">Forget password</string>
 </resources>

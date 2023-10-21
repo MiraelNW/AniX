@@ -1,12 +1,15 @@
 package com.miraelDev.vauma.domain.repository
 
 import com.miraelDev.vauma.domain.models.auth.AuthState
+import com.miraelDev.vauma.domain.models.user.LocalUser
 import com.miraelDev.vauma.domain.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    fun getUser(): User
+    fun getRemoteUser(): User
+
+    suspend fun getLocalUser(): LocalUser
 
     fun getUserStatus(): Flow<AuthState>
 
@@ -14,6 +17,6 @@ interface UserRepository {
 
     suspend fun setUserAuthorizedStatus()
 
-    suspend fun updateUser(user: User)
+    suspend fun updateUser(localUser: LocalUser)
 
 }

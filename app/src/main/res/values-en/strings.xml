@@ -105,7 +105,25 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="show_more">... Show More</string>
-    <string name="show_less">" Show Less"</string>
+    <string name="show_less">"...show Less"</string>
     <string name="retry">Try again</string>
     <string name="update">Update</string>
+    <string name="edit_your_name">Edit your name</string>
+    <string name="change_password">Change password</string>
+    <string name="submit">Submit</string>
+    <string name="give_rating">Give rating</string>
+    <string name="your_name">Your name</string>
+    <string name="google_auth_went_wrong">Google auth went wrong</string>
+    <string name="vk_auth_went_wrong">failed to log into VK account</string>
+    <string name="short_app_name">auma</string>
+    <string name="profile_image">Profile image</string>
+    <string name="invalid_mail">Invalid mail</string>
+    <string name="incorrect_password_or_email_entered">Incorrect password or email entered</string>
+    <string name="password_must_be_more_than_6_characters">Password must be more than 6 characters</string>
+    <string name="the_password_must_contain_capital_letters">The password must contain capital letters</string>
+    <string name="password_mismatch">Password mismatch</string>
+    <string name="error_try_again_later">Error, try again later</string>
+    <string name="app_icon">app icon</string>
+    <string name="wrong_current_password">Incorrect current password</string>
+    <string name="email_code_verify">Code check</string>
 </resources>

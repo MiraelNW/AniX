@@ -1,5 +1,6 @@
 package com.miraelDev.vauma.presentation.accountScreen.settings.downloadSettingsScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,9 +43,14 @@ fun DownloadSettings(
     onBackPressed: () -> Unit
 ) {
 
+    val onBackPressedAction = remember { { onBackPressed() } }
+
+    val deleteAllVideosAction = remember { { viewModel.deleteAllVideos() } }
+    val changeStatusAction = remember { { viewModel.changeStatus() } }
+
     val context = LocalContext.current
 
-    val isSelected by viewModel.isSelected
+    val isSelected = remember { { viewModel.isSelected.value } }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
     var deleteVideosText by rememberSaveable { mutableStateOf(false) }
 
@@ -62,7 +69,7 @@ fun DownloadSettings(
                     if (index == CLEAR_CACHE) {
                         context.cacheDir.deleteRecursively()
                     } else {
-                        viewModel.deleteAllVideos()
+                        deleteAllVideosAction()
                     }
 
                 }
@@ -74,8 +81,8 @@ fun DownloadSettings(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Toolbar(onBackPressed = onBackPressed, text = R.string.download_video)
-            WifiSettingItem(isWifiOnly = isSelected, onWifiClick = viewModel::changeStatus)
+            Toolbar(onBackPressed = onBackPressedAction, text = R.string.download_video)
+            WifiSettingItem(isWifiOnly = isSelected, onWifiClick = changeStatusAction)
             DeleteVideos(
                 onDeleteVideosClick = {
                     deleteVideosText = true
@@ -95,7 +102,7 @@ fun DownloadSettings(
 
 @Composable
 private fun WifiSettingItem(
-    isWifiOnly: Boolean,
+    isWifiOnly: () -> Boolean,
     onWifiClick: () -> Unit
 ) {
     Row(
@@ -113,13 +120,13 @@ private fun WifiSettingItem(
                 contentDescription = ""
             )
             Text(
-                modifier= Modifier.fillMaxWidth(0.8f),
+                modifier = Modifier.fillMaxWidth(0.8f),
                 text = stringResource(R.string.wi_fi_only),
                 fontSize = 18.sp,
                 maxLines = 2
             )
         }
-        Switcher(isSelected = isWifiOnly)
+        Switcher(isSelectedFun = isWifiOnly)
     }
 }
 

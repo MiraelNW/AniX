@@ -1,6 +1,8 @@
 package com.miraelDev.vauma.domain.models.anime
 
+import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.data.local.models.favourite.AnimeInfoDbModel
+import okhttp3.internal.immutableListOf
 
 
 data class AnimeInfo(
@@ -19,7 +21,7 @@ data class AnimeInfo(
             "Тандзиро Камадо — старший сын в семье, потерявший своего отца и взявший на себя заботу о своих родных. Однажды он уходит в соседний город, чтобы продать древесный уголь. Вернувшись утром, парень обнаруживает перед собой страшную картину: вся родня была зверски убита, а единственной выжившей является Нэдзуко — обращённая в демона, но пока не потерявшая всю человечность младшая сестра.\n" +
             "С этого момента для Тандзиро и Нэдзуко начинается долгое и опасное путешествие, в котором мальчик намерен разыскать убийцу и узнать способ исцеления для своей сестры. Но в состоянии ли дети преодолеть все трудности и вернуться домой?",
     val videoUrls: VideoInfo = VideoInfo(),
-    val genres: List<Genre> = listOf(
+    val genres: ImmutableList<Genre> = ImmutableList.of(
         Genre(0,"en","ru")
     )
 )
