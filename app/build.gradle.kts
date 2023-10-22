@@ -34,12 +34,20 @@ android {
         buildConfigField("String", "ANIME_LIST_URL", "${properties["ANIME_LIST_URl_KEY"]}")
         buildConfigField("String", "SEARCH_URL", "${properties["SEARCH_ANIME_URl_KEY"]}")
         buildConfigField("String", "NEW_CATEGORY_URL", "${properties["NEW_CATEGORY_URl_KEY"]}")
-        buildConfigField("String", "POPULAR_CATEGORY_URL", "${properties["POPULAR_CATEGORY_URl_KEY"]}")
+        buildConfigField(
+            "String",
+            "POPULAR_CATEGORY_URL",
+            "${properties["POPULAR_CATEGORY_URl_KEY"]}"
+        )
         buildConfigField("String", "FILMS_CATEGORY_URL", "${properties["FILMS_CATEGORY_URl_KEY"]}")
         buildConfigField("String", "NAME_CATEGORY_URL", "${properties["NAME_CATEGORY_URl_KEY"]}")
         buildConfigField("String", "AUTH_REGISTER_URL", "${properties["AUTH_REGISTER_URl_KEY"]}")
         buildConfigField("String", "AUTH_LOGIN_URL", "${properties["AUTH_LOGIN_URl_KEY"]}")
-        buildConfigField("String", "AUTH_CHANGE_PASSWORD_URL", "${properties["AUTH_CHANGE_PASSWORD_URl_KEY"]}")
+        buildConfigField(
+            "String",
+            "AUTH_CHANGE_PASSWORD_URL",
+            "${properties["AUTH_CHANGE_PASSWORD_URl_KEY"]}"
+        )
         buildConfigField("String", "AUTH_LOGOUT_URL", "${properties["AUTH_LOGOUT_URl_KEY"]}")
         buildConfigField("String", "AUTH_REFRESH_URL", "${properties["AUTH_REFRESH_URl_KEY"]}")
 
@@ -114,8 +122,14 @@ dependencies {
 
     //test
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    //mockito
+    testImplementation("org.mockito:mockito-inline:2.8.47")
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
@@ -183,4 +197,8 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

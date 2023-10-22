@@ -1,4 +1,4 @@
-package com.guru.composecookbook.theme
+package com.miraelDev.vauma.ui.theme
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
@@ -10,14 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
-import com.miraelDev.vauma.ui.theme.Black
-import com.miraelDev.vauma.ui.theme.DarkGreen
-import com.miraelDev.vauma.ui.theme.DarkWhite700
-import com.miraelDev.vauma.ui.theme.Green
-import com.miraelDev.vauma.ui.theme.LightBlack
-import com.miraelDev.vauma.ui.theme.LightWhite
-import com.miraelDev.vauma.ui.theme.Shapes
-import com.miraelDev.vauma.ui.theme.Typography
 
 // dark/light green
 private val LightMainColorPalette = lightColors(

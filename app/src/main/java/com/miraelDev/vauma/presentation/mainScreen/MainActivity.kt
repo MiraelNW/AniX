@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.guru.composecookbook.theme.HikariTheme
+import com.miraelDev.vauma.ui.theme.HikariTheme
 import com.miraelDev.vauma.domain.models.auth.AuthState
 import com.miraelDev.vauma.presentation.auth.AuthScreen
 import dagger.hilt.android.AndroidEntryPoint

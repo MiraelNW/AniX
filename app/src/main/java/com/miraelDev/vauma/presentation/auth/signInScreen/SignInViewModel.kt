@@ -49,7 +49,7 @@ class SignInViewModel @Inject constructor(
     val isEmailError: StateFlow<Boolean> = _isEmailError.asStateFlow()
 
     val signInError = signInErrorUseCase()
-        .mergeWith(isPasswordErrorFlow)
+//        .mergeWith(isPasswordErrorFlow)
         .stateIn(
             viewModelScope,
             SharingStarted.Lazily,
