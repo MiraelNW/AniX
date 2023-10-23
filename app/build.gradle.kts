@@ -4,9 +4,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -93,110 +93,103 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.activity:activity-compose:1.8.0-alpha03")
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    implementation("androidx.compose.ui:ui-util:1.3.1")
-    implementation("androidx.compose.material:material:1.5.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-beta01")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.ui)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.ui.util)
+    implementation(libs.material)
+    implementation(libs.lifecycle.runtime.compose)
 
     //exoplayer
-
-    implementation("androidx.media3:media3-exoplayer:1.0.0-beta02")
-    implementation("androidx.media3:media3-ui:1.0.0-beta02")
-
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
 
     //images
-    val landScapistVersion = "2.2.2"
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("io.coil-kt:coil-video:2.4.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("com.github.skydoves:landscapist-glide:$landScapistVersion")
-    implementation("com.github.skydoves:landscapist-transformation:$landScapistVersion")
-    implementation("com.github.skydoves:landscapist-animation:$landScapistVersion")
-    implementation("com.github.skydoves:landscapist-palette:$landScapistVersion")
+    implementation(libs.coil)
+    implementation(libs.coil.video)
+    implementation(libs.coil.compose)
+    implementation(libs.landscapist.glide)
+    implementation(libs.landscapist.transformation)
+    implementation(libs.landscapist.animation)
+    implementation(libs.landscapist.palette)
 
     //test
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
     //mockito
-    testImplementation("org.mockito:mockito-inline:2.8.47")
-    testImplementation("org.mockito:mockito-core:4.0.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0")
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.test.manifest)
 
     //navigation
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("com.google.code.gson:gson:2.10")
+    implementation(libs.navigation.compose)
+    implementation(libs.gson)
 
     //retrofit
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation(libs.lifecycle.viewmodel.compose)
 
     //dagger hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     //splash screen api
-    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+    implementation(libs.core.splashscreen)
 
     //accompanist system ui
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
+    implementation(libs.accompanist.systemuicontroller)
 
     //accompanist pager
-    implementation("com.google.accompanist:accompanist-pager:0.27.1")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.27.1")
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
 
     //ktor
-    implementation("io.ktor:ktor-client-android:2.3.4")
-    implementation("io.ktor:ktor-client-serialization:2.3.4")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
-    implementation("io.ktor:ktor-client-auth:2.3.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-    implementation("io.ktor:ktor-client-logging-jvm:2.3.4")
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.client.logging.jvm)
 
     //google oauth
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation(libs.play.services.auth)
     //vk auth
-    implementation("com.vk:android-sdk-core:4.1.0")
-    implementation("com.vk:android-sdk-api:4.1.0")
+    implementation(libs.vk.sdk.core)
+    implementation(libs.vk.sdk.api)
 
-    //room 
-    val room_version = "2.5.2"
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
+    //room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
 
     //lottie animations
-    val lottieVersion = "6.0.0"
-    implementation("com.airbnb.android:lottie-compose:$lottieVersion")
+    implementation(libs.lottie.compose)
 
     //paging 3
-    implementation("androidx.paging:paging-runtime-ktx:3.2.0")
-    implementation("androidx.paging:paging-compose:3.2.0")
+    implementation(libs.paging.runtime.ktx)
+    implementation(libs.paging.compose)
 
     //data store
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.datastore.preferences)
 }
 
-kapt {
-    correctErrorTypes = true
+hilt {
+    enableAggregatingTask = true
 }
 
 tasks.withType<Test> {
