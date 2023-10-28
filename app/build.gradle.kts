@@ -5,8 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -25,31 +25,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        val properties = Properties().apply {
-            load(rootProject.file("local.properties").reader())
-        }
-
-        buildConfigField("String", "BASE_URL", "${properties["BASE_URl_KEY"]}")
-        buildConfigField("String", "ANIME_LIST_URL", "${properties["ANIME_LIST_URl_KEY"]}")
-        buildConfigField("String", "SEARCH_URL", "${properties["SEARCH_ANIME_URl_KEY"]}")
-        buildConfigField("String", "NEW_CATEGORY_URL", "${properties["NEW_CATEGORY_URl_KEY"]}")
-        buildConfigField(
-            "String",
-            "POPULAR_CATEGORY_URL",
-            "${properties["POPULAR_CATEGORY_URl_KEY"]}"
-        )
-        buildConfigField("String", "FILMS_CATEGORY_URL", "${properties["FILMS_CATEGORY_URl_KEY"]}")
-        buildConfigField("String", "NAME_CATEGORY_URL", "${properties["NAME_CATEGORY_URl_KEY"]}")
-        buildConfigField("String", "AUTH_REGISTER_URL", "${properties["AUTH_REGISTER_URl_KEY"]}")
-        buildConfigField("String", "AUTH_LOGIN_URL", "${properties["AUTH_LOGIN_URl_KEY"]}")
-        buildConfigField(
-            "String",
-            "AUTH_CHANGE_PASSWORD_URL",
-            "${properties["AUTH_CHANGE_PASSWORD_URl_KEY"]}"
-        )
-        buildConfigField("String", "AUTH_LOGOUT_URL", "${properties["AUTH_LOGOUT_URl_KEY"]}")
-        buildConfigField("String", "AUTH_REFRESH_URL", "${properties["AUTH_REFRESH_URl_KEY"]}")
 
     }
 
@@ -81,7 +56,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 
     packaging {
@@ -142,8 +117,8 @@ dependencies {
 
     //dagger hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    ksp(libs.hilt.compiler)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     //splash screen api
@@ -167,13 +142,14 @@ dependencies {
 
     //google oauth
     implementation(libs.play.services.auth)
+
     //vk auth
     implementation(libs.vk.sdk.core)
     implementation(libs.vk.sdk.api)
 
     //room
     implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
+    kapt(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.room.paging)
 
@@ -186,10 +162,39 @@ dependencies {
 
     //data store
     implementation(libs.datastore.preferences)
+
+    //immutable list
+    implementation(libs.kotlinx.collections.immutable)
+
+    implementation(project(":features:signIn"))
+    implementation(project(":features:signUp"))
+    implementation(project(":features:forgotPassword"))
+    implementation(project(":features:account"))
+    implementation(project(":features:home"))
+    implementation(project(":features:favourites"))
+    implementation(project(":features:detailInfo"))
+    implementation(project(":features:search"))
+    implementation(project(":features:videoScreen"))
+
+    implementation(project(":data"))
+
+    implementation(project(":core:theme"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:extensions"))
+    implementation(project(":core:presentation"))
+
+    implementation(project(":core:models:anime"))
+    implementation(project(":core:models:auth"))
+    implementation(project(":core:models:result"))
+    implementation(project(":core:models:user"))
 }
 
 hilt {
     enableAggregatingTask = true
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 tasks.withType<Test> {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="email_code_verify">Проверка кода</string>
+    <string name="verify_code">Подтвердить код</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="invalid_mail">Недопустимая почта</string>
+    <string name="continue_message">Продолжить</string>
+    <string name="choose_email">Choose email</string>
+    <string name="create_password">Create password</string>
+    <string name="password_must_be_more_than_6_characters">Пароль должен быть больше 6 символов</string>
+    <string name="the_password_must_contain_capital_letters">Пароль должен содержать заглавные буквы</string>
+    <string name="password_mismatch">Пароли не совпадают</string>
+    <string name="repeat_password">Повторите пароль</string>
+</resources>

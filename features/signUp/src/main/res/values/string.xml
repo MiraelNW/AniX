@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="profile_image">Profile image</string>
+    <string name="edit_icon">edit_icon</string>
+    <string name="invalid_mail">Недопустимая почта</string>
+    <string name="incorrect_password_or_email_entered">Неправильно введен пароль или почта</string>
+    <string name="password_must_be_more_than_6_characters">Пароль должен быть больше 6 символов</string>
+    <string name="the_password_must_contain_capital_letters">Пароль должен содержать заглавные буквы</string>
+    <string name="password_mismatch">Пароли не совпадают</string>
+    <string name="error_try_again_later">Ошибка, попробуйте позже</string>
+    <string name="enter_your_name">Введите ваше имя</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="verify_code">Подтвердить код</string>
+    <string name="email_code_verify">Проверка кода</string>
+</resources>

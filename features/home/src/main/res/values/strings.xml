@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="short_app_name">auma</string>
+    <string name="retry">Попробуйте снова</string>
+    <string name="new_str">Новые</string>
+    <string name="popular">Популярные</string>
+    <string name="name">Название</string>
+    <string name="films">Фильмы</string>
+</resources>

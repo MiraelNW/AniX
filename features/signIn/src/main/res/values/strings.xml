@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="web_client_id" translatable="false">177956612236-ev7gtbj7fevjjjbdr8ceh59im7hf29hf.apps.googleusercontent.com</string>
+    <string name="google_auth_went_wrong">Не удалось войти в аккаунт</string>
+    <string name="vk_auth_went_wrong">Не удалось войти в аккаунт вк</string>
+    <string name="app_icon">иконка приложения</string>
+    <string name="log_in_account">Войти в аккаунт</string>
+    <string name="invalid_mail">Недопустимая почта</string>
+    <string name="incorrect_password_or_email_entered">Неправильно введен пароль или почта</string>
+    <string name="password_must_be_more_than_6_characters">Пароль должен быть больше 6 символов</string>
+    <string name="the_password_must_contain_capital_letters">Пароль должен содержать заглавные буквы</string>
+    <string name="enter_with">Войти с помощью</string>
+    <string name="forgot_the_password">забыли пароль?</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_in">Войти</string>
+
+</resources>

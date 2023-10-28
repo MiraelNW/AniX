@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="profile">Профиль</string>
+    <string name="edit_profile">Изменить профиль</string>
+    <string name="notification">Уведомления</string>
+    <string name="download_video">Загрузка видео</string>
+    <string name="show">Показать</string>
+    <string name="privacy_policy">Политика сообщества</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="logOut">Выход</string>
+    <string name="notification_of_released_titles">Уведомление о новых тайтлах</string>
+    <string name="notification_of_released_series">Уведомление о новых сериях понравившихся аниме</string>
+    <string name="notification_of_released_update">Уведомление о новом обновлении</string>
+    <string name="titles_you_want_to_watch">Тайтлы, которые вы хотели бы посмотреть</string>
+    <string name="notification_settings">Настройки уведомлений</string>
+    <string name="all_titles">Все тайтлы</string>
+    <string name="wi_fi_only">Загружать видео только по Wi-Fi</string>
+    <string name="delete_downloads">Удалить скаченные видео</string>
+    <string name="clear_cache">Очистить кеш</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="edit_your_name">Изменить имя</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="wrong_current_password">Неверный текущий пароль</string>
+    <string name="incorrect_password_or_email_entered">Неправильно введен пароль или почта</string>
+    <string name="password_must_be_more_than_6_characters">Пароль должен быть больше 6 символов</string>
+    <string name="the_password_must_contain_capital_letters">Пароль должен содержать заглавные буквы</string>
+    <string name="password_mismatch">Пароли не совпадают</string>
+    <string name="update_profile">Обновить профиль</string>
+    <string name="invalid_mail">Недопустимая почта</string>
+    <string name="edit_icon">edit_icon</string>
+</resources>

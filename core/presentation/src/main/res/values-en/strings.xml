@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">presentation</string>
+    <string name="update">Update</string>
+    <string name="back">Back</string>
+    <string name="favourite_icon">add to favourite list</string>
+    <string name="selected_favourite_icon">delete from favourite list</string>
+</resources>

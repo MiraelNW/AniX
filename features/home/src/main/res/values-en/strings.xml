@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="short_app_name">auma</string>
+    <string name="retry">Retry</string>
+    <string name="new_str">New</string>
+    <string name="popular">Popular</string>
+    <string name="name">Name</string>
+    <string name="films">Films</string>
+</resources>

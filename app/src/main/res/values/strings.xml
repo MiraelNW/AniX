@@ -87,7 +87,7 @@
     <string name="edit_profile">Изменить профиль</string>
     <string name="download_video">Загрузка видео</string>
     <string name="dark_theme">Темная тема</string>
-    <string name="LogOut">Выход</string>
+    <string name="logOut">Выход</string>
     <string name="update_profile">Обновить профиль</string>
     <string name="enter_your_name">Введите ваше имя</string>
     <string name="enter_your_email">Введите вашу почту</string>
@@ -130,5 +130,4 @@
     <string name="verify_code">Подтвердить код</string>
     <string name="continue_message">Продолжить</string>
     <string name="forgot_password">Forgot Password</string>
-    <string name="forget_password">Forget password</string>
 </resources>

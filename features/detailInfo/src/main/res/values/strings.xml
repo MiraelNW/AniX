@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rating_star">rating star</string>
+    <string name="play_icon">play icon</string>
+    <string name="play">Начать просмотр</string>
+    <string name="download">Скачать</string>
+    <string name="genres">"Жанры: "</string>
+    <string name="show_more"> ...Показать еще</string>
+    <string name="show_less">"...Спрятать"</string>
+    <string name="anime_episode_preview">anime episode preview</string>
+    <string name="close">Закрыть</string>
+    <string name="download_episode">Скачать эпизод</string>
+    <string name="submit">Подтвердить</string>
+    <string name="give_rating">Оценить</string>
+    <string name="arrow_back">Назад</string>
+    <string name="choose_series">Выберите серию</string>
+    <string name="share_button">Поделиться</string>
+    <string name="watch_others">Смотрите также</string>
+</resources>

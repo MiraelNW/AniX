@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_auth_went_wrong">Google auth went wrong</string>
+    <string name="vk_auth_went_wrong">failed to log into VK account</string>
+    <string name="app_icon">app icon</string>
+    <string name="log_in_account">Log in account</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in">Sign in</string>
+    <string name="enter_with">Enter with</string>
+    <string name="forgot_the_password">forgot the password</string>
+    <string name="invalid_mail">Invalid mail</string>
+    <string name="incorrect_password_or_email_entered">Incorrect password or email entered</string>
+    <string name="password_must_be_more_than_6_characters">Password must be more than 6 characters</string>
+    <string name="the_password_must_contain_capital_letters">The password must contain capital letters</string>
+</resources>

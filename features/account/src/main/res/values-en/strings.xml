@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="notification">Notification</string>
+    <string name="download_video">Download video</string>
+    <string name="show">Show</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="logOut">log out</string>
+    <string name="notification_of_released_titles">notification of released titles</string>
+    <string name="notification_of_released_series">notification of released series</string>
+    <string name="notification_of_released_update">notification of released update</string>
+    <string name="all_titles">All titles</string>
+    <string name="titles_you_want_to_watch">titles that you want to watch</string>
+    <string name="notification_settings">Notification settings</string>
+    <string name="wi_fi_only">Wi-Fi only</string>
+    <string name="delete_downloads">Delete downloads</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_your_name">Edit your name</string>
+    <string name="change_password">Change password</string>
+    <string name="wrong_current_password">Incorrect current password</string>
+    <string name="incorrect_password_or_email_entered">Incorrect password or email entered</string>
+    <string name="password_must_be_more_than_6_characters">Password must be more than 6 characters</string>
+    <string name="the_password_must_contain_capital_letters">The password must contain capital letters</string>
+    <string name="password_mismatch">Password mismatch</string>
+    <string name="update_profile">Update profile</string>
+    <string name="invalid_mail">Invalid mail</string>
+    <string name="edit_icon">edit icon</string>
+</resources>

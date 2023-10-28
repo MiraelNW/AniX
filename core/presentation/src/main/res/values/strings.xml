@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">presentation</string>
+    <string name="update">Обновить</string>
+    <string name="back">Назад</string>
+    <string name="favourite_icon">добавить аниме в список понравившихся</string>
+    <string name="selected_favourite_icon">убрать аниме из списка понравившихся</string>
+</resources>

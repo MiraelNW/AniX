@@ -35,6 +35,9 @@ class AuthNavigationState(
 
     fun navigateToResetPassword() {
         navHostController.navigate((Screen.ResetPassword.route)) {
+            popUpTo(Screen.EmailChoose.route) {
+                saveState = true
+            }
             launchSingleTop = true
         }
     }

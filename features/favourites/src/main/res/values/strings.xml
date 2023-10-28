@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search_anime">Найти аниме...</string>
+    <string name="brand_icon">бренд</string>
+    <string name="favourite">Понравившиеся</string>
+    <string name="search">Поиск</string>
+</resources>

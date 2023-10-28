@@ -1,5 +1,5 @@
 [versions]
-core-ktx = "1.7.0"
+core-ktx = "1.9.0"
 lifecycle-runtime-ktx = "2.3.1"
 activity-compose = "1.8.0-alpha03"
 ui = "1.5.0"
@@ -35,8 +35,8 @@ logging-interceptor = "4.9.3"
 
 lifecycle-viewmodel-compose = "2.5.1"
 
-hilt-android = "2.44"
-hilt-android-compiler = "2.44"
+hilt-android = "2.48"
+hilt-android-compiler = "2.48"
 hilt-compiler = "1.0.0"
 hilt-navigation-compose = "1.0.0"
 
@@ -60,10 +60,10 @@ play-services-auth = "20.7.0"
 android-sdk-core = "4.1.0"
 android-sdk-api = "4.1.0"
 
-room-runtime = "2.5.2"
-room-compiler = "2.5.2"
-room-ktx = "2.5.2"
-room-paging = "2.5.2"
+room-runtime = "2.6.0"
+room-compiler = "2.6.0"
+room-ktx = "2.6.0"
+room-paging = "2.6.0"
 
 lottie-compose = "6.0.0"
 
@@ -71,6 +71,16 @@ paging-runtime-ktx = "3.2.0"
 paging-compose = "3.2.0"
 
 datastore-preferences = "1.0.0"
+
+org-jetbrains-kotlin-jvm = "1.7.0"
+agp = "8.1.1"
+org-jetbrains-kotlin-android = "1.9.0"
+kotlin-bom = "1.8.0"
+appcompat = "1.6.1"
+com-google-android-material-material = "1.10.0"
+dagger-hilt-android-plugin = "2.44"
+
+kotlinx-collections-immutable = "0.3.6"
 
 [libraries]
 
@@ -82,6 +92,7 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "ui-util" }
 material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
+kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
 media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3-exoplayer" }
 media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3-ui" }
@@ -152,3 +163,14 @@ paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", v
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose"}
 
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences"}
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+com-google-android-material-material = { group = "com.google.android.material", name = "material", version.ref = "com-google-android-material-material" }
+
+[plugins]
+
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+dagger-hilt-android-plugin = { id = "dagger.hilt.android.plugin", version.ref = "dagger-hilt-android-plugin" }
+com-android-library = { id = "com.android.library", version.ref = "agp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+com-android-application = { id = "com.android.application", version.ref = "agp" }
