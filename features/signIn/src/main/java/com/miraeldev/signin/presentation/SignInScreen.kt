@@ -123,7 +123,7 @@ fun SignInScreen(
                 try {
                     val account = task?.getResult(ApiException::class.java)
                     if (account != null) {
-                        viewModel.signInGoogleAccount(account)
+                        account.idToken?.let { viewModel.signInGoogleAccount(it) }
                     } else {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar(context.getString(R.string.google_auth_went_wrong))
@@ -142,7 +142,7 @@ fun SignInScreen(
             onResult = {
                 when (it) {
                     is VKAuthenticationResult.Success -> {
-                        viewModel.signInVkAccount()
+                        viewModel.signInVkAccount(it.token.accessToken, it.token.userId.toString())
                     }
 
                     is VKAuthenticationResult.Failed -> {
@@ -349,7 +349,7 @@ private fun SignInSocialMedia(
     ) {
 //
         IconButton(
-            onClick = { vkAuthResultLauncher.launch(listOf(VKScope.WALL, VKScope.WALL)) },
+            onClick = { vkAuthResultLauncher.launch(listOf(VKScope.WALL, VKScope.EMAIL)) },
             interactionSource = NoRippleInteractionSource()
         ) {
             Image(

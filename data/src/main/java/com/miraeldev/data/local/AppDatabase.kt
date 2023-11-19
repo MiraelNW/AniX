@@ -43,7 +43,7 @@ import com.miraeldev.data.local.models.popularCategory.PopularCategoryRemoteKeys
         InitialSearchAnimeInfoDbModel::class,
         InitialSearchRemoteKeys::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

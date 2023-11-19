@@ -19,8 +19,8 @@ class AuthNavigationState(
         }
     }
 
-    fun navigateToCodeVerifyScreen(email: String) {
-        navHostController.navigate(Screen.EmailCodeVerify.getRouteWithArgs(email))
+    fun navigateToCodeVerifyScreen(email: String, password: String) {
+        navHostController.navigate(Screen.EmailCodeVerify.getRouteWithArgs(email, password))
     }
 
     fun navigateToCodeVerifyResetPasswordScreen(email: String) {
@@ -33,8 +33,8 @@ class AuthNavigationState(
         }
     }
 
-    fun navigateToResetPassword() {
-        navHostController.navigate((Screen.ResetPassword.route)) {
+    fun navigateToResetPassword(email: String) {
+        navHostController.navigate((Screen.ResetPassword.getRouteWithArgs(email))) {
             popUpTo(Screen.EmailChoose.route) {
                 saveState = true
             }

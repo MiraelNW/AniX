@@ -1,5 +1,6 @@
 package com.miraeldev.data.remote.searchApi
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.miraeldev.anime.AnimeInfo
@@ -38,7 +39,7 @@ internal class SearchPagingPagingSource(
 
             val sortCode = getSortCode(sortFilter)
 
-            val page = params.key ?: 1
+            val page = params.key ?: 0
             val pageSize = params.loadSize.coerceAtMost(20)
 
             val bearerToken = localTokenService.getBearerToken()
@@ -46,7 +47,7 @@ internal class SearchPagingPagingSource(
             val response =
                 if (yearFilter != null && sortFilter != null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -54,7 +55,7 @@ internal class SearchPagingPagingSource(
                         .body()
                 } else if (yearCode != null && sortFilter != null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -62,7 +63,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&date=$yearCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -70,7 +71,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&genres=$genreCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -78,7 +79,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode != null && sortFilter == null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&date=$yearCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -86,7 +87,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter != null && genreListFilter.isEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&sort=$sortCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -94,7 +95,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else if (yearCode == null && sortFilter == null && genreListFilter.isNotEmpty()) {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&genres=$genreCode&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&genres=$genreCode&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -102,7 +103,7 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 } else {
                     client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}${name}&page_num=$page&page_size=$pageSize")
+                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&page=$page&page_size=$pageSize")
                         headers {
                             append(HttpHeaders.Authorization, "Bearer $bearerToken")
                         }
@@ -110,10 +111,12 @@ internal class SearchPagingPagingSource(
                         .body<Response>()
                 }
 
+
+
             LoadResult.Page(
-                data = response.results.map { it.toAnimeInfo() },
-                prevKey = if (page == 1) null else page.minus(1),
-                nextKey = if (response.next == null) null else page.plus(1),
+                data = response.results.map { it.toAnimeInfo(bearerToken ?: "") },
+                prevKey = if (page == 0) null else page.minus(1),
+                nextKey = if (response.isLast) null else page.plus(1),
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

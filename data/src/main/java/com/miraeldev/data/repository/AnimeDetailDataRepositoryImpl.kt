@@ -4,6 +4,7 @@ import com.miraeldev.AnimeDetailDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.toAnimeInfo
+import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.mapper.AnimeModelsMapper
 import com.miraeldev.data.remote.ApiResult
@@ -19,7 +20,8 @@ internal class AnimeDetailDataRepositoryImpl @Inject constructor(
     private val searchApiService: SearchApiService,
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val favouriteAnimeDao: FavouriteAnimeDao,
-    private val animeModelsMapper: AnimeModelsMapper
+    private val animeModelsMapper: AnimeModelsMapper,
+    private val localTokenService: LocalTokenService
 ) : AnimeDetailDataRepository {
 
     private val _animeDetail = MutableSharedFlow<ResultAnimeDetail>()
@@ -28,9 +30,11 @@ internal class AnimeDetailDataRepositoryImpl @Inject constructor(
 
     override suspend fun loadAnimeDetail(animeId: Int) {
 
+        val token = localTokenService.getBearerToken()
+
         when (val apiResult = searchApiService.getAnimeById(animeId)) {
             is ApiResult.Success -> {
-                val animeList = apiResult.animeList.map { it.toAnimeDetailInfo() }
+                val animeList = apiResult.animeList.map { it.toAnimeDetailInfo(token ?: "") }
                 videoPlayerDataRepository.loadVideoPlayer(animeList.first().toAnimeInfo())
                 _animeDetail.emit(
                     ResultAnimeDetail.Success(animeList = animeList)

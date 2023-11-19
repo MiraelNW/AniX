@@ -16,8 +16,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -46,18 +48,22 @@ fun EmailChooseScreen(
     val email by remember { viewModel.email }
     val loginFocusRequester = remember { FocusRequester() }
     val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
+    val isEmailCheckComplete by viewModel.isEmailCheckComplete.collectAsStateWithLifecycle()
     val updateTextAction: (String) -> Unit = remember {
         {
             viewModel.refreshEmailError()
             viewModel.updateEmailText(it)
         }
     }
-    val onCompleteAction: () -> Unit = remember {
-        {
-            if (viewModel.isEmailValid()) {
-                navigateToCodeVerify(email)
+    val onCompleteAction: () -> Unit = remember { { viewModel.checkEmailExist() } }
+
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow { isEmailCheckComplete }
+            .collect { completeSuccess ->
+                if (completeSuccess) {
+                    navigateToCodeVerify(email)
+                }
             }
-        }
     }
 
     Column(

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class Token(
-    @SerialName("access") val bearerToken: String,
-    @SerialName("refresh") val refreshToken: String,
+    @SerialName("token") val bearerToken: String,
+    @SerialName("refreshToken") val refreshToken: String,
 )

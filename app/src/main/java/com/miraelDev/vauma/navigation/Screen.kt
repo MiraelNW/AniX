@@ -6,8 +6,6 @@ sealed class Screen(val route: String) {
 
     object SignUp : Screen(ROUTE_SIGN_UP)
 
-    object ResetPassword : Screen(ROUTE_RESET_PASSWORD)
-
     object EmailChoose : Screen(ROUTE_EMAIL_CHOOSE)
 
     object SearchAndFilter : Screen(ROUTE_SEARCH_AND_FILTER)
@@ -43,17 +41,25 @@ sealed class Screen(val route: String) {
 
     object PrivacyPolicy : Screen(ROUTE_PRIVACY_POLICY)
 
-    object EmailCodeVerify : Screen(ROUTE_EMAIL_CODE_VERIFY){
+    object ResetPassword : Screen(ROUTE_RESET_PASSWORD){
+        private const val ROUTE_FOR_ARGS = "reset_password"
+
+        fun getRouteWithArgs(email: String): String {
+            return "${ROUTE_FOR_ARGS}/$email"
+        }
+    }
+
+    object EmailCodeVerify : Screen(ROUTE_EMAIL_CODE_VERIFY) {
 
         private const val ROUTE_FOR_ARGS = "email_code_verify"
 
-        fun getRouteWithArgs(email: String): String {
-            return "$ROUTE_FOR_ARGS/$email"
+        fun getRouteWithArgs(email: String, password: String): String {
+            return "$ROUTE_FOR_ARGS/$email/$password"
         }
 
     }
 
-    object EmailCodeVerifyResetPassword : Screen(ROUTE_EMAIL_CODE_VERIFY_RESET_PASSWORD){
+    object EmailCodeVerifyResetPassword : Screen(ROUTE_EMAIL_CODE_VERIFY_RESET_PASSWORD) {
 
         private const val ROUTE_FOR_ARGS = "email_code_verify_reset_password"
 
@@ -79,10 +85,10 @@ sealed class Screen(val route: String) {
 
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
         const val KEY_EMAIL = "email"
+        const val KEY_PASSWORD = "password"
 
         private const val ROUTE_SIGN_IN = "sign_in"
         private const val ROUTE_SIGN_UP = "sign_up"
-        private const val ROUTE_RESET_PASSWORD = "reset_password"
         private const val ROUTE_RESET_PASSWORD_GRAPH = "reset_password_graph"
         private const val ROUTE_EMAIL_CHOOSE = "email_choose"
         private const val ROUTE_SEARCH_AND_FILTER = "search_and_filter"
@@ -103,8 +109,10 @@ sealed class Screen(val route: String) {
         private const val ROUTE_LANGUAGE = "language"
         private const val ROUTE_PRIVACY_POLICY = "privacy_policy"
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
-        private const val ROUTE_EMAIL_CODE_VERIFY = "email_code_verify/{$KEY_EMAIL}"
-        private const val ROUTE_EMAIL_CODE_VERIFY_RESET_PASSWORD = "email_code_verify_reset_password/{$KEY_EMAIL}"
+        private const val ROUTE_EMAIL_CODE_VERIFY = "email_code_verify/{$KEY_EMAIL}/{$KEY_PASSWORD}"
+        private const val ROUTE_RESET_PASSWORD = "reset_password/{$KEY_EMAIL}"
+        private const val ROUTE_EMAIL_CODE_VERIFY_RESET_PASSWORD =
+            "email_code_verify_reset_password/{$KEY_EMAIL}"
         private const val ROUTE_VIDEO_VIEW = "video_view"
 
     }

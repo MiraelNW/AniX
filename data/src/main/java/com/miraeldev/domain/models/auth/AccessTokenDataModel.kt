@@ -4,5 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 @Serializable
 data class AccessTokenDataModel(
-    @SerialName("access") val bearerToken: String,
+    @SerialName("accessToken") val bearerToken: String,
+    @SerialName("refreshToken") val refreshToken: String,
 )

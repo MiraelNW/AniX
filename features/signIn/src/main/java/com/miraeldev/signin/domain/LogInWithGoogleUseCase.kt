@@ -3,9 +3,9 @@ package com.miraeldev.signin.domain
 import com.miraeldev.signin.data.repositories.SignInRepository
 import javax.inject.Inject
 
-class CheckVkAuthStateUseCase @Inject constructor(
+class LogInWithGoogleUseCase @Inject constructor(
     private val repository: SignInRepository
 ) {
-    suspend operator fun invoke() = repository.checkVkAuthState()
+    suspend operator fun invoke(idToken:String) = repository.logInWithGoogle(idToken)
 
 }

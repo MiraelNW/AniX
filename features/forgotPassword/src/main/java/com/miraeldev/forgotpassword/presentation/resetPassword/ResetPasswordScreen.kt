@@ -17,8 +17,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,10 +36,12 @@ import com.miraeldev.forgotpassword.R
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.PasswordField
 import com.miraeldev.presentation.Toolbar
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ResetPasswordScreen(
     onBackPressed: () -> Unit,
+    email:String,
     viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
 
@@ -57,7 +61,7 @@ fun ResetPasswordScreen(
             val newPasswordValid = viewModel.isNewPasswordValid()
             val passwordEquals = viewModel.isPasswordEquals()
             if (newPasswordValid && passwordEquals) {
-                viewModel.saveNewPassword()
+                viewModel.saveNewPassword(email)
             }
         }
     }

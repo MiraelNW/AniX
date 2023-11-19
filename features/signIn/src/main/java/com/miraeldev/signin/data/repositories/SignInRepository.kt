@@ -4,11 +4,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface SignInRepository {
 
-    suspend fun signIn(email: String, password: String)
+    suspend fun signIn(username: String, password: String)
 
     fun getSignInError(): Flow<Boolean>
 
-    suspend fun checkVkAuthState()
+    suspend fun loginWithVk(accessToken:String, userId:String)
 
     suspend fun getUserEmail(): String
+
+    suspend fun logInWithGoogle(idToken:String)
 }

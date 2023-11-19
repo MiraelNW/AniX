@@ -9,13 +9,14 @@ import com.miraeldev.AnimeListDataRepository
 import com.miraeldev.Downloader
 import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.FilterAnimeDataRepository
+import com.miraeldev.ForgotPasswordDataRepository
+import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.data.dataStore.localUser.LocalUserManager
 import com.miraeldev.data.dataStore.localUser.LocalUserStoreApi
-import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.data.dataStore.preference.PreferenceManager
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.downloadMananger.AndroidDownloader
@@ -25,6 +26,7 @@ import com.miraeldev.data.repository.AnimeDetailDataRepositoryImpl
 import com.miraeldev.data.repository.AnimeListDataRepositoryImpl
 import com.miraeldev.data.repository.FavouriteAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.FilterDataRepositoryImpl
+import com.miraeldev.data.repository.ForgotPasswordDataRepositoryImpl
 import com.miraeldev.data.repository.SearchAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.UserAuthDataRepositoryImpl
 import com.miraeldev.data.repository.UserDataRepositoryImpl
@@ -63,6 +65,10 @@ internal abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindVideoPlayerDataRepository(impl: VideoPlayerRepositoryImpl): VideoPlayerDataRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindForgotPasswordDataRepository(impl: ForgotPasswordDataRepositoryImpl): ForgotPasswordDataRepository
 
     @Binds
     @Singleton

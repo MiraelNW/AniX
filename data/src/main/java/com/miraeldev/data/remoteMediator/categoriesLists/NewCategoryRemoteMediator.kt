@@ -52,7 +52,7 @@ internal class NewCategoryRemoteMediator(
             LoadType.REFRESH -> {
 
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: 1
+                remoteKeys?.nextKey?.minus(1) ?: 0
             }
 
             LoadType.PREPEND -> {
@@ -77,7 +77,7 @@ internal class NewCategoryRemoteMediator(
 
             val apiResponse = client.get {
 
-                url("${ApiRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page_num=$page&page_size=$PAGE_SIZE")
+                url("${ApiRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $bearerToken")
                 }
@@ -86,14 +86,14 @@ internal class NewCategoryRemoteMediator(
 
             val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
             val endOfPaginationReached =
-                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
+                anime.isEmpty() || apiResponse.isLast
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.newCategoryRemoteKeys().clearRemoteKeys()
                     appDatabase.newCategoryDao().clearAllAnime()
                 }
-                val prevKey = if (page > 1) page - 1 else null
+                val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val remoteKeys = anime.map {
                     NewCategoryRemoteKeys(

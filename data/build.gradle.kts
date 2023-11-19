@@ -29,6 +29,19 @@ android {
         buildConfigField("String", "ANIME_LIST_URL", "${properties["ANIME_LIST_URl_KEY"]}")
         buildConfigField("String", "SEARCH_URL", "${properties["SEARCH_ANIME_URl_KEY"]}")
         buildConfigField("String", "NEW_CATEGORY_URL", "${properties["NEW_CATEGORY_URl_KEY"]}")
+        buildConfigField("String", "CHECK_EMAIL", "${properties["AUTH_CHECK_EMAIL_KEY"]}")
+        buildConfigField("String", "GOOGLE_LOGIN", "${properties["AUTH_GOOGLE_LOGIN_URl_KEY"]}")
+        buildConfigField(
+            "String",
+            "CREATE_NEW_PASSWORD",
+            "${properties["AUTH_CREATE_NEW_PASSWORD_KEY"]}"
+        )
+        buildConfigField(
+            "String",
+            "VERIFY_OTP_FORGOT_PASSWORD",
+            "${properties["AUTH_VERIFY_OTP_FORGOT_PASSWORD_URl_KEY"]}"
+        )
+        buildConfigField("String", "GET_BY_ID", "${properties["GET_ANIME_BY_ID"]}")
         buildConfigField(
             "String",
             "POPULAR_CATEGORY_URL",
@@ -37,6 +50,11 @@ android {
         buildConfigField("String", "FILMS_CATEGORY_URL", "${properties["FILMS_CATEGORY_URl_KEY"]}")
         buildConfigField("String", "NAME_CATEGORY_URL", "${properties["NAME_CATEGORY_URl_KEY"]}")
         buildConfigField("String", "AUTH_REGISTER_URL", "${properties["AUTH_REGISTER_URl_KEY"]}")
+        buildConfigField(
+            "String",
+            "AUTH_VERIFY_OTP_URL",
+            "${properties["AUTH_VERIFY_OTP_URl_KEY"]}"
+        )
         buildConfigField("String", "AUTH_LOGIN_URL", "${properties["AUTH_LOGIN_URl_KEY"]}")
         buildConfigField(
             "String",
@@ -45,7 +63,6 @@ android {
         )
         buildConfigField("String", "AUTH_LOGOUT_URL", "${properties["AUTH_LOGOUT_URl_KEY"]}")
         buildConfigField("String", "AUTH_REFRESH_URL", "${properties["AUTH_REFRESH_URl_KEY"]}")
-
 
 
     }

@@ -2,7 +2,6 @@ package com.miraelDev.vauma.navigation.authNavGraph
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.miraelDev.vauma.navigation.authNavGraph.AuthNavGraph
 import com.miraelDev.vauma.navigation.rememberAuthNavigationState
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.EmailChooseScreen
 import com.miraeldev.forgotpassword.presentation.codeVerifyResetPassword.CodeVerifyResetPassword
@@ -34,17 +33,18 @@ fun AuthScreen(onReadyToDrawStartScreen: () -> Unit) {
         },
         signUpScreenContent = {
             SignUpScreen(
-                signUp = { email ->
-                    navigationState.navigateToCodeVerifyScreen(email)
+                navigateToOtpScreen = { email, password ->
+                    navigationState.navigateToCodeVerifyScreen(email, password)
                 },
                 onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }
             )
         },
-        codeVerifyScreenContent = { email ->
+        codeVerifyScreenContent = { email, password ->
             CodeVerifyScreen(
                 email = email,
+                password = password,
                 onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }
@@ -64,15 +64,16 @@ fun AuthScreen(onReadyToDrawStartScreen: () -> Unit) {
             CodeVerifyResetPassword(
                 email = email,
                 navigateToResetPasswordScreen = {
-                    navigationState.navigateToResetPassword()
+                    navigationState.navigateToResetPassword(email)
                 },
                 onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }
             )
         },
-        resetPasswordScreenContent = {
+        resetPasswordScreenContent = { email ->
             ResetPasswordScreen(
+                email = email,
                 onBackPressed = {
                     navigationState.navHostController.popBackStack()
                 }

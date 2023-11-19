@@ -1,6 +1,7 @@
 package com.miraeldev.animelist.presentation
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.R
 import com.miraeldev.exntensions.NoRippleInteractionSource
+import com.miraeldev.presentation.AnimeCard
 import com.miraeldev.presentation.ErrorAppendMessage
 import com.miraeldev.presentation.ErrorRetryButton
 import com.miraeldev.presentation.animation.WentWrongAnimation
@@ -262,10 +264,10 @@ private fun AnimeList(
                                 items(count = categoryList.itemCount) { index ->
                                     changeScrollPossibility(true)
                                     categoryList[index]?.let {
-//                                        AnimeCard(
-//                                            animeItem = it,
-//                                            onAnimeItemClick = onAnimeItemClick
-//                                        )
+                                        AnimeCard(
+                                            animeItem = it,
+                                            onAnimeItemClick = onAnimeItemClick
+                                        )
                                     }
                                 }
                             }

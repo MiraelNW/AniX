@@ -7,14 +7,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class GenreDto(
-    @SerialName("id") val id: Int,
     @SerialName("name") val nameEn: String,
     @SerialName("russian") val nameRu: String,
 )
 
 internal fun GenreDto.toGenre(): Genre {
     return Genre(
-        id = this.id,
         nameRu = this.nameRu,
         nameEn = this.nameEn
     )
@@ -22,7 +20,6 @@ internal fun GenreDto.toGenre(): Genre {
 
 internal fun GenreDto.toGenreDataModel(): GenreDataModel {
     return GenreDataModel(
-        id = this.id,
         nameRu = this.nameRu,
         nameEn = this.nameEn
     )

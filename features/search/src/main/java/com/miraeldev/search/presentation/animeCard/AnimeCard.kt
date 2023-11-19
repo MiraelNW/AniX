@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.exntensions.pressClickEffect
@@ -36,6 +38,19 @@ fun SearchAnimeCard(
 //        )
 //    }
 
+    val originalGlideUrl = remember {
+        GlideUrl(
+            item.image.original
+        ) {
+            mapOf(
+                Pair(
+                    "Authorization",
+                    item.image.token
+                )
+            )
+        }
+    }
+
     Card(
         onClick = { onAnimeItemClick(item.id) },
         shape = RoundedCornerShape(16.dp),
@@ -56,11 +71,10 @@ fun SearchAnimeCard(
             ) {
                 GlideImage(
                     modifier = Modifier.fillMaxWidth(),
-                    imageModel = { item.image },
+                    imageModel = { originalGlideUrl },
                     imageOptions = ImageOptions(
                         contentDescription = item.nameRu,
                         contentScale = ContentScale.FillBounds
-
                     ),
                     requestOptions = {
                         RequestOptions()
@@ -123,7 +137,7 @@ private fun AnimePreview(animeItem: AnimeInfo) {
         ) {
 
             Text(
-                text = animeItem.airedOn.take(4),
+                text = animeItem.releasedOn.take(4),
                 maxLines = 1,
                 fontSize = 18.sp,
                 overflow = TextOverflow.Ellipsis,

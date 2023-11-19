@@ -1,5 +1,6 @@
 package com.miraeldev.presentation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.exntensions.NoRippleInteractionSource
@@ -44,13 +46,28 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
         modifier = Modifier.pressClickEffect(),
         elevation = 4.dp
     ) {
+
+        val originalGlideUrl = remember {
+            GlideUrl(
+                animeItem.image.original
+            ) {
+                mapOf(
+                    Pair(
+                        "Authorization",
+                        animeItem.image.token
+                    )
+                )
+            }
+        }
+
         Column {
             Box {
+
                 GlideImage(
                     modifier = Modifier
                         .height(300.dp)
                         .width(200.dp),
-                    imageModel = { animeItem.image },
+                    imageModel = { originalGlideUrl },
                     imageOptions = ImageOptions(
                         contentDescription = animeItem.nameRu,
                         contentScale = ContentScale.FillBounds

@@ -1,8 +1,9 @@
-package com.miraeldev.forgotpassword.data
+package com.miraeldev
 
 import kotlinx.coroutines.flow.Flow
 
-interface ForgotPasswordRepository {
+interface ForgotPasswordDataRepository {
+
 
     fun getSignUpError(): Flow<Boolean>
 

@@ -2,14 +2,14 @@ package com.miraeldev.di
 
 import android.content.Context
 import android.util.Log
-import com.miraeldev.domain.models.auth.AccessTokenDataModel
-import com.miraeldev.domain.models.auth.RefreshToken
 import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.di.qualifiers.AuthClient
 import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.domain.models.auth.AccessTokenDataModel
+import com.miraeldev.domain.models.auth.RefreshToken
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -138,12 +138,12 @@ internal object HttpClientModule {
                         } catch (e: Exception) {
 
                             userDataRepository.setUserUnAuthorizedStatus()
-                            AccessTokenDataModel(bearerToken = "")
+                            AccessTokenDataModel(bearerToken = "", refreshToken = "")
                         }
 
                         BearerTokens(
                             accessToken = accessTokenDataModel.bearerToken,
-                            refreshToken = refreshToken
+                            refreshToken = accessTokenDataModel.refreshToken
                         )
                     }
                 }

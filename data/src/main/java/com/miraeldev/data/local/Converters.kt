@@ -2,7 +2,10 @@ package com.miraeldev.data.local
 
 import androidx.room.TypeConverter
 import com.miraeldev.anime.Genre
+import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
+import com.miraeldev.data.local.models.ImageDbModel
+import com.miraeldev.data.local.models.toModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import kotlinx.collections.immutable.ImmutableList
@@ -21,6 +24,21 @@ internal class Converters {
 
     @TypeConverter
     fun stringToVideoInfoDataModel(value: String): VideoInfoDataModel {
+        return Json.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun imageDbModelToString(imageModel: ImageDbModel): String {
+        return Json.encodeToString(imageModel)
+    }
+
+    @TypeConverter
+    fun stringToImageDbModel(value: String): ImageDbModel {
+        return Json.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun stringToImageModel(value: String): ImageModel {
         return Json.decodeFromString(value)
     }
 

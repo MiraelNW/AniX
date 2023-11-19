@@ -53,7 +53,7 @@ internal class FilmCategoryRemoteMediator(
             LoadType.REFRESH -> {
 
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: 1
+                remoteKeys?.nextKey?.minus(1) ?: 0
             }
 
             LoadType.PREPEND -> {
@@ -81,7 +81,7 @@ internal class FilmCategoryRemoteMediator(
 
             val apiResponse = client.get {
                 val bearerToken = localTokenService.getBearerToken()
-                url("${ApiRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page_num=$page&page_size=${PAGE_SIZE}")
+                url("${ApiRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=${PAGE_SIZE}")
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $bearerToken")
                 }
@@ -92,14 +92,14 @@ internal class FilmCategoryRemoteMediator(
             val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
 
             val endOfPaginationReached =
-                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
+                anime.isEmpty() ||  apiResponse.isLast
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.filmCategoryRemoteKeysDao().clearRemoteKeys()
                     appDatabase.filmCategoryDao().clearAllAnime()
                 }
-                val prevKey = if (page > 1) page - 1 else null
+                val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val remoteKeys = anime.map {
                     FilmCategoryRemoteKeys(

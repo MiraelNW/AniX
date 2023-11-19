@@ -77,19 +77,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.runtime.compose)
 
-    //exoplayer
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-
-    //images
-    implementation(libs.coil)
-    implementation(libs.coil.video)
-    implementation(libs.coil.compose)
-    implementation(libs.landscapist.glide)
-    implementation(libs.landscapist.transformation)
-    implementation(libs.landscapist.animation)
-    implementation(libs.landscapist.palette)
-
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -109,12 +96,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.gson)
 
-    //retrofit
-    implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
-
-    implementation(libs.lifecycle.viewmodel.compose)
-
     //dagger hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -127,44 +108,14 @@ dependencies {
     //accompanist system ui
     implementation(libs.accompanist.systemuicontroller)
 
-    //accompanist pager
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pager.indicators)
-
-    //ktor
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.client.auth)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.ktor.client.logging.jvm)
-
-    //google oauth
-    implementation(libs.play.services.auth)
-
-    //vk auth
-    implementation(libs.vk.sdk.core)
-    implementation(libs.vk.sdk.api)
-
-    //room
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
-    implementation(libs.room.paging)
-
-    //lottie animations
-    implementation(libs.lottie.compose)
-
     //paging 3
     implementation(libs.paging.runtime.ktx)
-    implementation(libs.paging.compose)
+
+    //exoplayer
+    implementation(libs.media3.exoplayer)
 
     //data store
     implementation(libs.datastore.preferences)
-
-    //immutable list
-    implementation(libs.kotlinx.collections.immutable)
 
     implementation(project(":features:signIn"))
     implementation(project(":features:signUp"))

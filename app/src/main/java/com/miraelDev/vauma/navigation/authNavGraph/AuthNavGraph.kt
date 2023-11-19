@@ -10,9 +10,9 @@ fun AuthNavGraph(
     navHosController: NavHostController,
     signInScreenContent: @Composable () -> Unit,
     signUpScreenContent: @Composable () -> Unit,
-    resetPasswordScreenContent: @Composable () -> Unit,
+    resetPasswordScreenContent: @Composable (String) -> Unit,
     emailChooseScreenContent: @Composable () -> Unit,
-    codeVerifyScreenContent: @Composable (String) -> Unit,
+    codeVerifyScreenContent: @Composable (String,String) -> Unit,
     codeVerifyResetPasswordScreenContent: @Composable (String) -> Unit,
 ) {
     NavHost(

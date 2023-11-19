@@ -34,8 +34,6 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
     private val localTokenService: LocalTokenService
 ) : SearchAnimeDataRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     private var _filterMap = mutableMapOf<Int, String>()
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()
 

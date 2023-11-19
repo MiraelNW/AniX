@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraeldev.signup.domain.useCases.SignUpUseCase
 import com.miraeldev.signup.domain.useCases.UpdateUserUseCase
+import com.miraeldev.signup.domain.useCases.VerifyOtpCodeUseCase
+import com.miraeldev.user.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CodeVerifyViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val verifyOtpCodeUseCase: VerifyOtpCodeUseCase
 ) : ViewModel() {
 
     private var _otpText = mutableStateOf("")
@@ -24,13 +26,17 @@ class CodeVerifyViewModel @Inject constructor(
         _otpText.value = value
     }
 
-    fun verifyOtpCode() {
-
+    fun verifyOtpCode(otpCode: String, email: String, password: String) {
+        viewModelScope.launch {
+            verifyOtpCodeUseCase(
+                otpCode,
+                User(email = email, password = password, username = email.substringBefore("@"))
+            )
+        }
     }
 
     fun updateUser(email: String) {
         viewModelScope.launch {
-            signUpUseCase(password = "Vauma1234", email = email)
             updateUserUseCase(email)
         }
     }

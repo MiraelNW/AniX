@@ -2,6 +2,7 @@ package com.miraeldev.search.presentation
 
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.presentation.AnimeCard
 import com.miraeldev.presentation.ErrorAppendItem
 import com.miraeldev.presentation.shimmerList.ShimmerAnimeCard
 import com.miraeldev.presentation.shimmerList.ShimmerGrid
@@ -110,8 +112,6 @@ fun SearchAnimeScreen(
             onCloseSearchView = showInitialListAction,
             onFilterClicked = onFilterClicked
         )
-
-
 
         when (val results = searchScreenState) {
 
@@ -304,10 +304,10 @@ private fun InitialAnimeList(
                         if (initialList.itemCount > 0) {
                             items(count = initialList.itemCount) { index ->
                                 initialList[index]?.let {
-//                                    com.miraeldev.presentation.AnimeCard(
-//                                        animeItem = it,
-//                                        onAnimeItemClick = onAnimeItemClick
-//                                    )
+                                    AnimeCard(
+                                        animeItem = it,
+                                        onAnimeItemClick = onAnimeItemClick
+                                    )
                                 }
                             }
                         }

@@ -3,6 +3,8 @@ package com.miraeldev.data.local.models.favourite
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.data.local.models.ImageDbModel
+import com.miraeldev.data.local.models.toModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import com.miraeldev.domain.models.animeDataModels.toGenre
@@ -17,12 +19,12 @@ internal data class AnimeInfoDbModel(
     @PrimaryKey val id: Int,
     val nameEn: String,
     val nameRu: String,
-    val image: String,
+    val image: ImageDbModel,
     val kind: String,
     val score: Float,
     val status: String,
     val rating: String,
-    val airedOn: String,
+    val releasedOn: String,
     val episodes: Int,
     val duration: Int,
     val description: String,
@@ -39,13 +41,13 @@ internal fun AnimeInfoDbModel.toAnimeInfo(): AnimeInfo {
         description = this.description,
         rating = this.rating,
         score = this.score,
-        airedOn = this.airedOn,
+        releasedOn = this.releasedOn,
         status = this.status,
         kind = this.kind,
         genres = this.genres.map { it.toGenre() }.toImmutableList(),
         episodes = this.episodes,
         duration = this.duration,
-        image = this.image
+        image = this.image.toModel()
     )
 }
 

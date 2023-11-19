@@ -14,7 +14,7 @@ internal interface NewCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<NewCategoryAnimeInfoDbModel>)
 
-    @Query("Select * From new_category_anime Order By page, airedOn desc")
+    @Query("Select * From new_category_anime Order By page, releasedOn desc")
     fun getAnime(): PagingSource<Int, AnimeInfo>
 
     @Query("Delete From new_category_anime")

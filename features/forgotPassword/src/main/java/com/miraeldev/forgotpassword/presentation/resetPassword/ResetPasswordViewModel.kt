@@ -31,6 +31,9 @@ class ResetPasswordViewModel @Inject constructor(
     private val _isPasswordNotEqualsError = MutableStateFlow(true)
     val isPasswordNotEqualsError = _isPasswordNotEqualsError.asStateFlow()
 
+    private val _isPasswordSaveComplete = MutableStateFlow(true)
+    val isPasswordSaveComplete = _isPasswordSaveComplete.asStateFlow()
+
     fun updateNewPasswordText(value: String) {
         _newPassword.value = value
     }
@@ -39,9 +42,9 @@ class ResetPasswordViewModel @Inject constructor(
         _repeatedPassword.value = value
     }
 
-    fun saveNewPassword() {
+    fun saveNewPassword(email:String) {
         viewModelScope.launch {
-            saveNewPasswordUseCase(repeatedPassword.value)
+            saveNewPasswordUseCase(email = email, password = repeatedPassword.value)
         }
     }
 

@@ -1,27 +1,29 @@
 package com.miraeldev
 
+import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserAuthDataRepository {
 
-    suspend fun signUp(
-        name: String = "",
-        email: String,
-        password: String,
-        imagePath: String = ""
-    )
+    suspend fun signUp(user: User)
 
-    suspend fun signIn(email: String, password: String)
+    suspend fun verifyOtpCode(user: User,otpToken:String)
+
+    suspend fun signIn(username: String, password: String)
+
+    suspend fun logInWithGoogle(idToken:String)
 
     fun getSignInError(): Flow<Boolean>
 
     fun getSignUpError(): Flow<Boolean>
 
+    fun getRegistrationCompleteResult(): Flow<Boolean>
+
     suspend fun checkAuthState()
 
     suspend fun changePassword()
 
-    suspend fun checkVkAuthState()
+    suspend fun loginWithVk(accessToken:String,userId:String)
 
     suspend fun logOutUser()
 

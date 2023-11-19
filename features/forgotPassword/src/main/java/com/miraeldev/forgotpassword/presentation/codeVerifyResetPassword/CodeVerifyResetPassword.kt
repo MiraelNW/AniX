@@ -1,5 +1,6 @@
 package com.miraeldev.forgotpassword.presentation.codeVerifyResetPassword
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,16 +55,16 @@ fun CodeVerifyResetPassword(
     val otpText by remember { viewModel.otpText }
     val updateTextAction: (String) -> Unit = remember { { viewModel.updateOtpText(it) } }
     val onCompleteAction: () -> Unit = remember { { viewModel.verifyOtpCode() } }
-    val onSendNewCodeAction: () -> Unit = remember {
-        {
-            viewModel.sendNewOtpCode()
-        }
-    }
+    val onSendNewCodeAction: () -> Unit = remember { { viewModel.sendNewOtpCode() } }
+
+
+    Log.d("tag", isOtpCorrect.toString())
 
     LaunchedEffect(key1 = Unit) {
         snapshotFlow { isOtpCorrect }
             .collect { correct ->
                 if (correct) {
+                    Log.d("tag", "correct")
                     navigateToResetPasswordScreen()
                 }
             }

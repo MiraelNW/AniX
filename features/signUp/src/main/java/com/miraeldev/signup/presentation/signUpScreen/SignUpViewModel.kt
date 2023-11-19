@@ -1,16 +1,20 @@
 package com.miraeldev.signup.presentation.signUpScreen
 
+import android.net.Uri
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraeldev.exntensions.mergeWith
+import com.miraeldev.signup.domain.useCases.GetRegistrationCompleteUseCase
 import com.miraeldev.signup.domain.useCases.GetSignUpErrorUseCase
 import com.miraeldev.signup.domain.useCases.SignUpUseCase
+import com.miraeldev.user.User
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,8 +28,13 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUp: SignUpUseCase,
     private val signUpErrorUseCase: GetSignUpErrorUseCase,
+    private val getRegistrationCompleteUseCase: GetRegistrationCompleteUseCase,
     private val validatePassword: ValidatePassword,
 ) : ViewModel() {
+
+    private val errorHandler = CoroutineExceptionHandler { _, _ ->
+
+    }
 
     private val _imagePath = mutableStateOf("")
     val imagePath: State<String> = _imagePath
@@ -61,6 +70,13 @@ class SignUpViewModel @Inject constructor(
             false
         )
 
+    val registrationComplete = getRegistrationCompleteUseCase()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            false
+        )
+
     fun changeImagePath(imagePath: String) {
         _imagePath.value = imagePath
     }
@@ -86,7 +102,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun refreshPasswordError() {
-        viewModelScope.launch {
+        viewModelScope.launch(errorHandler) {
             isPasswordErrorFlow.emit(false)
         }
         _isPasswordNotEqualsError.value = true
@@ -116,17 +132,17 @@ class SignUpViewModel @Inject constructor(
 
 
     fun signUpUser() {
-        viewModelScope.launch {
-//            signUp(
-//                User(
-//                    username = nickNameTextState.value.ifBlank {
-//                        emailTextState.value.substringBefore("@")
-//                    },
-//                    userImagePath = imagePath.value,
-//                    password = passwordTextState.value,
-//                    email = emailTextState.value
-//                )
-//            )
+        viewModelScope.launch(errorHandler) {
+            signUp(
+                User(
+                    username = nickNameTextState.value.ifBlank {
+                        emailTextState.value.substringBefore("@")
+                    },
+                    userImagePath = imagePath.value,
+                    password = passwordTextState.value,
+                    email = emailTextState.value
+                )
+            )
         }
     }
 

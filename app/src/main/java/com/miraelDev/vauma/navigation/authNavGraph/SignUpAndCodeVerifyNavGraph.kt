@@ -10,7 +10,7 @@ import com.miraelDev.vauma.navigation.Screen
 
 fun NavGraphBuilder.signUpAndCodeVerifyNavGraph(
     signUpScreenContent: @Composable () -> Unit,
-    codeVerifyScreenContent: @Composable (String) -> Unit
+    codeVerifyScreenContent: @Composable (String,String) -> Unit
 ) {
     navigation(
         startDestination = Screen.SignUp.route,
@@ -25,11 +25,15 @@ fun NavGraphBuilder.signUpAndCodeVerifyNavGraph(
                 navArgument(name = Screen.KEY_EMAIL) {
                     type = NavType.StringType
                 },
+                navArgument(name = Screen.KEY_PASSWORD) {
+                    type = NavType.StringType
+                }
             )
         ) {
             val email = it.arguments?.getString(Screen.KEY_EMAIL) ?: ""
+            val password = it.arguments?.getString(Screen.KEY_PASSWORD) ?: ""
 
-            codeVerifyScreenContent(email)
+            codeVerifyScreenContent(email,password)
         }
     }
 }

@@ -5,11 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.miraeldev.exntensions.mergeWith
-import com.miraeldev.signin.domain.CheckVkAuthStateUseCase
+import com.miraeldev.signin.domain.LoginWithVkUseCase
 import com.miraeldev.signin.domain.GetSignInErrorUseCase
 import com.miraeldev.signin.domain.GetUserEmailUseCase
+import com.miraeldev.signin.domain.LogInWithGoogleUseCase
 import com.miraeldev.signin.domain.SignInUseCase
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
@@ -28,7 +28,8 @@ class SignInViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
     private val signInErrorUseCase: GetSignInErrorUseCase,
     private val getUserEmailUseCase: GetUserEmailUseCase,
-    private val checkVkAuthStateUseCase: CheckVkAuthStateUseCase,
+    private val loginWithVkUseCase: LoginWithVkUseCase,
+    private val logInWithGoogleUseCase: LogInWithGoogleUseCase,
     private val validatePassword: ValidatePassword
 ) : ViewModel() {
 
@@ -97,16 +98,22 @@ class SignInViewModel @Inject constructor(
 
     fun signIn() {
         viewModelScope.launch {
-            signInUseCase(email = loginTextState.value, password = passwordTextState.value)
+            signInUseCase(
+                username = loginTextState.value.substringBefore("@"),
+                password = passwordTextState.value
+            )
         }
     }
 
-    fun signInGoogleAccount(account: GoogleSignInAccount) {
+    fun signInGoogleAccount(idToken: String) {
+        viewModelScope.launch {
+            logInWithGoogleUseCase(idToken)
+        }
     }
 
-    fun signInVkAccount() {
+    fun signInVkAccount(accessToken:String,userId:String) {
         viewModelScope.launch {
-            checkVkAuthStateUseCase()
+            loginWithVkUseCase(accessToken,userId)
         }
     }
 

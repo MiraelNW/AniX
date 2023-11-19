@@ -52,7 +52,7 @@ internal class InitialSearchRemoteMediator(
             LoadType.REFRESH -> {
 
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: 1
+                remoteKeys?.nextKey?.minus(1) ?: 0
             }
 
             LoadType.PREPEND -> {
@@ -80,7 +80,7 @@ internal class InitialSearchRemoteMediator(
             val bearerToken = localTokenService.getBearerToken()
 
             val apiResponse = client.get {
-                url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page_num=$page&page_size=$PAGE_SIZE")
+                url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page=$page&page_size=$PAGE_SIZE")
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $bearerToken")
                 }
@@ -89,15 +89,14 @@ internal class InitialSearchRemoteMediator(
 
             val anime = apiResponse.results.map { it.mapToInitialSearchModel() }
 
-            val endOfPaginationReached =
-                anime.isEmpty() || (apiResponse.count?.compareTo(page * PAGE_SIZE) ?: 1) < 1
+            val endOfPaginationReached = anime.isEmpty() || apiResponse.isLast
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.initialSearchRemoteKeysDao().clearRemoteKeys()
                     appDatabase.initialSearchDao().clearAllAnime()
                 }
-                val prevKey = if (page > 1) page - 1 else null
+                val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val remoteKeys = anime.map {
                     InitialSearchRemoteKeys(

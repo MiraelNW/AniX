@@ -5,6 +5,7 @@ import javax.inject.Inject
 
 class SaveNewPasswordUseCase @Inject constructor(private val repository: ForgotPasswordRepository) {
 
-    suspend operator fun invoke(newPassword: String) = repository.saveNewPassword(newPassword)
+    suspend operator fun invoke(email: String, password: String) =
+        repository.saveNewPassword(email, password)
 
 }

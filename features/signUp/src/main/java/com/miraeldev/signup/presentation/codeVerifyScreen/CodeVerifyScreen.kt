@@ -1,5 +1,6 @@
 package com.miraeldev.signup.presentation.codeVerifyScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun CodeVerifyScreen(
     email: String,
+    password: String,
     onBackPressed: () -> Unit,
     viewModel: CodeVerifyViewModel = hiltViewModel()
 ) {
@@ -55,7 +57,7 @@ fun CodeVerifyScreen(
     val onCompleteAction: () -> Unit = remember {
         {
             viewModel.updateUser(email)
-            viewModel.verifyOtpCode()
+            viewModel.verifyOtpCode(otpText, email, password)
         }
     }
     val onSendNewCodeAction: () -> Unit = remember {

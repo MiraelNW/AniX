@@ -10,7 +10,7 @@ import com.miraelDev.vauma.navigation.Screen
 
 fun NavGraphBuilder.signInAndResetPasswordNavGraph(
     signInScreenContent: @Composable () -> Unit,
-    resetPasswordScreenContent: @Composable () -> Unit,
+    resetPasswordScreenContent: @Composable (String) -> Unit,
     emailChooseScreenContent: @Composable () -> Unit,
     codeVerifyResetPasswordScreenContent: @Composable (String) -> Unit,
 ) {

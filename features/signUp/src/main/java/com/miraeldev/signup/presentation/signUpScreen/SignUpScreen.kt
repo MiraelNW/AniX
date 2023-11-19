@@ -31,11 +31,13 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,7 +67,7 @@ import com.miraeldev.signup.R
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
-    signUp: (String) -> Unit,
+    navigateToOtpScreen: (String, String) -> Unit,
     onBackPressed: () -> Unit,
 ) {
     val imagePath = remember { { viewModel.imagePath.value } }
@@ -83,6 +85,7 @@ fun SignUpScreen(
     val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
     val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
     val isSignUpError by viewModel.signUpError.collectAsStateWithLifecycle()
+    val registrationComplete by viewModel.registrationComplete.collectAsStateWithLifecycle()
 
     val onBackPressedAction = remember { { onBackPressed() } }
     val updateNickNameAction: (String) -> Unit = remember { { viewModel.updateNickName(it) } }
@@ -98,7 +101,6 @@ fun SignUpScreen(
     val signUpUser = remember {
         {
             viewModel.signUpUser()
-            signUp(email())
         }
     }
 
@@ -117,6 +119,15 @@ fun SignUpScreen(
             }
         }
     )
+
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow { registrationComplete }
+            .collect {
+                if (it) {
+                    navigateToOtpScreen(email(), password())
+                }
+            }
+    }
 
     BackHandler(onBack = onBackPressedAction)
 

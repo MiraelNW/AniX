@@ -65,5 +65,6 @@ dependencies {
 
     implementation(project(":core:presentation"))
     implementation(project(":core:extensions"))
+    implementation(project(":core:models:user"))
     implementation(project(":core:utils"))
 }

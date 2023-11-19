@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,12 +23,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.Similar
 import com.miraeldev.exntensions.pressClickEffect
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -50,6 +58,19 @@ fun OtherAnime(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
+
+    val originalGlideUrl = remember {
+        GlideUrl(
+            animeItem.image.original
+        ) {
+            mapOf(
+                Pair(
+                    "Authorization",
+                    animeItem.image.token
+                )
+            )
+        }
+    }
 
     val animatedProgress = remember { Animatable(initialValue = 0f) }
     LaunchedEffect(Unit) {
@@ -75,16 +96,21 @@ private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
             elevation = 4.dp
         ) {
 
-//            AsyncImage(
-//                modifier = Modifier
-//                    .height(300.dp)
-//                    .width(230.dp)
-//                    .clip(RoundedCornerShape(16.dp)),
-//                model = animeItem.image,
-//                contentDescription = animeItem.nameEn,
-//                contentScale = ContentScale.FillBounds,
-//
-//                )
+            GlideImage(
+                modifier = Modifier
+                    .height(300.dp)
+                    .width(230.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                imageModel = { originalGlideUrl },
+                imageOptions = ImageOptions(
+                    contentDescription = "anime image preview",
+                    contentScale = ContentScale.FillBounds,
+                ),
+                requestOptions = {
+                    RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                },
+            )
 
         }
         Text(

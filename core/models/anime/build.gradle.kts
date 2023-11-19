@@ -2,6 +2,7 @@
 plugins {
     id("java-library")
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
+    id("kotlinx-serialization")
 }
 
 java {
@@ -13,4 +14,8 @@ dependencies {
 
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.core)
+
 }

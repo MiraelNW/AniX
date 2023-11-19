@@ -1,7 +1,9 @@
 package com.miraeldev.anime
 
+import kotlinx.serialization.Serializable
 
 
+@Serializable
 data class VideoInfo(
         val id: Int = 0,
         val imageUrl: String = "",

@@ -4,9 +4,9 @@ import com.miraeldev.data.BuildConfig
 
 internal object ApiRoutes {
 
-    const val SEARCH_URL_ANIME_LIST_ROUTE = BuildConfig.ANIME_LIST_URL
+    const val SEARCH_URL_ANIME_LIST_ROUTE = BuildConfig.SEARCH_URL
 
-    const val SEARCH_URL_ANIME_ID_ROUTE = BuildConfig.SEARCH_URL
+    const val SEARCH_URL_ANIME_ID_ROUTE = BuildConfig.GET_BY_ID
 
     const val GET_NEW_CATEGORY_LIST_ROUTE = BuildConfig.NEW_CATEGORY_URL
 

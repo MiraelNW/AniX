@@ -9,7 +9,7 @@ import androidx.navigation.navigation
 import com.miraelDev.vauma.navigation.Screen
 
 fun NavGraphBuilder.resetPasswordNavGraph(
-    resetPasswordScreenContent: @Composable () -> Unit,
+    resetPasswordScreenContent: @Composable (String) -> Unit,
     emailChooseScreenContent: @Composable () -> Unit,
     codeVerifyResetPasswordScreenContent: @Composable (String) -> Unit
 ) {
@@ -35,8 +35,17 @@ fun NavGraphBuilder.resetPasswordNavGraph(
             codeVerifyResetPasswordScreenContent(email)
         }
 
-        composable(route = Screen.ResetPassword.route) {
-            resetPasswordScreenContent()
+        composable(
+            route = Screen.ResetPassword.route,
+            arguments = listOf(
+                navArgument(name = Screen.KEY_EMAIL) {
+                    type = NavType.StringType
+                },
+            )
+        ) {
+            val email = it.arguments?.getString(Screen.KEY_EMAIL) ?: ""
+
+            resetPasswordScreenContent(email)
         }
     }
 }

@@ -33,7 +33,7 @@ internal class SearchApiServiceImpl @Inject constructor(
                 ApiResult.Success(
                     animeList = listOf(
                         client.get {
-                            url("${ApiRoutes.SEARCH_URL_ANIME_ID_ROUTE}$id/")
+                            url("${ApiRoutes.SEARCH_URL_ANIME_ID_ROUTE}$id")
                             headers {
                                 append(HttpHeaders.Authorization, "Bearer $bearerToken")
                             }

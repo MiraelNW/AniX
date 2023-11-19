@@ -21,6 +21,6 @@ data class PagingAnimeInfo(
             "С этого момента для Тандзиро и Нэдзуко начинается долгое и опасное путешествие, в котором мальчик намерен разыскать убийцу и узнать способ исцеления для своей сестры. Но в состоянии ли дети преодолеть все трудности и вернуться домой?",
     val videoUrls: VideoInfo = VideoInfo(),
     val genres: ImmutableList<Genre> = persistentListOf(
-        Genre(0,"en","ru")
+        Genre("en","ru")
     )
 )

@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class Response(
-        @SerialName("count") val count: Int?,
-        @SerialName("next") val next: String?,
-        @SerialName("previous") val previous: String?,
-        @SerialName("results") val results: List<AnimeInfoDto>,
+    @SerialName("isLast") val isLast: Boolean,
+    @SerialName("animeResponseDtoList") val results: List<AnimeInfoDto>,
 )

@@ -2,8 +2,8 @@ package com.miraelDev.vauma.glue.signUp.repositories
 
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
-import com.miraeldev.user.LocalUser
 import com.miraeldev.signup.data.SignUpRepository
+import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -12,21 +12,24 @@ class SignUpRepositoryImpl @Inject constructor(
     private val userDataRepository: UserDataRepository,
 ) : SignUpRepository {
 
-    override suspend fun signUp(
-        email: String,
-        password: String,
-        name: String,
-        imagePath: String
-    ) {
-        userAuthDataRepository.signUp(name, email, password, imagePath)
+    override suspend fun signUp(user: User){
+        userAuthDataRepository.signUp(user)
     }
 
     override suspend fun updateUser(email: String) {
         userDataRepository.updateUser(com.miraeldev.user.LocalUser(email))
     }
 
+    override suspend fun verifyOtpCode(otpToken: String, user: User) {
+        return userAuthDataRepository.verifyOtpCode(user = user, otpToken = otpToken)
+    }
+
     override fun getSignUpError(): Flow<Boolean> {
         return userAuthDataRepository.getSignUpError()
+    }
+
+    override fun getRegistrationCompleteResult(): Flow<Boolean> {
+        return userAuthDataRepository.getRegistrationCompleteResult()
     }
 
 }
