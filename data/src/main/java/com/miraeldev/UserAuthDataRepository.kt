@@ -23,7 +23,7 @@ interface UserAuthDataRepository {
 
     suspend fun changePassword()
 
-    suspend fun loginWithVk(accessToken:String,userId:String)
+    suspend fun loginWithVk(accessToken:String,userId:String,email:String?)
 
     suspend fun logOutUser()
 

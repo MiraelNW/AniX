@@ -74,13 +74,14 @@ internal class FilmCategoryRemoteMediator(
 
         try {
 
+            val bearerToken = localTokenService.getBearerToken()
+
             if (!networkHandler.isConnected.value) {
                 delay(1000)
                 return MediatorResult.Error(IOException())
             }
 
             val apiResponse = client.get {
-                val bearerToken = localTokenService.getBearerToken()
                 url("${ApiRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=${PAGE_SIZE}")
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $bearerToken")

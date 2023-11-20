@@ -111,9 +111,9 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInVkAccount(accessToken:String,userId:String) {
+    fun signInVkAccount(accessToken:String,userId:String,email:String?) {
         viewModelScope.launch {
-            loginWithVkUseCase(accessToken,userId)
+            loginWithVkUseCase(accessToken,userId,email)
         }
     }
 

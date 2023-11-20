@@ -18,8 +18,8 @@ class SignInRepositoryImpl @Inject constructor(
         return userAuthDataRepository.getSignInError()
     }
 
-    override suspend fun loginWithVk(accessToken:String, userId:String) {
-        userAuthDataRepository.loginWithVk(accessToken,userId)
+    override suspend fun loginWithVk(accessToken:String, userId:String,email:String?) {
+        userAuthDataRepository.loginWithVk(accessToken,userId,email)
     }
 
     override suspend fun getUserEmail(): String {

@@ -147,7 +147,7 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
             )
         }
 
-        if(logInWithGoogleResponse.status.isSuccess()){
+        if (logInWithGoogleResponse.status.isSuccess()) {
             logIn(logInWithGoogleResponse)
         }
     }
@@ -179,9 +179,9 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loginWithVk(accessToken: String, userId: String) {
+    override suspend fun loginWithVk(accessToken: String, userId: String,email:String?) {
         val logInWithVkResponse = client.post {
-            url(BuildConfig.AUTH_LOGIN_URL)
+            url(BuildConfig.VK_LOGIN)
             headers {
                 remove(HttpHeaders.Authorization)
             }
@@ -189,12 +189,13 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
             setBody(
                 mapOf(
                     Pair("accessToken", accessToken),
-                    Pair("userId", userId)
+                    Pair("userId", userId),
+                    Pair("email", email),
                 )
             )
         }
 
-        if(logInWithVkResponse.status.isSuccess()){
+        if (logInWithVkResponse.status.isSuccess()) {
             logIn(logInWithVkResponse)
         }
     }
@@ -207,7 +208,6 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
             headers {
                 append(HttpHeaders.Authorization, "Bearer $refreshToken")
             }
-            setBody(RefreshToken(refreshToken))
         }
         if (response.status.isSuccess()) {
             userDataRepository.setUserUnAuthorizedStatus()
@@ -247,10 +247,9 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
                 } != -1) {
                 outputStream.write(buffers, 0, read)
             }
-            Log.e("File Size", "Size " + file.length())
+
             inputStream?.close()
             outputStream.close()
-            Log.e("File Path", "Path " + file.path)
 
         } catch (e: java.lang.Exception) {
             Log.e("Exception", e.message!!)

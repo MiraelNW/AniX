@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "NEW_CATEGORY_URL", "${properties["NEW_CATEGORY_URl_KEY"]}")
         buildConfigField("String", "CHECK_EMAIL", "${properties["AUTH_CHECK_EMAIL_KEY"]}")
         buildConfigField("String", "GOOGLE_LOGIN", "${properties["AUTH_GOOGLE_LOGIN_URl_KEY"]}")
+        buildConfigField("String", "VK_LOGIN", "${properties["AUTH_VK_LOGIN_URl_KEY"]}")
         buildConfigField(
             "String",
             "CREATE_NEW_PASSWORD",

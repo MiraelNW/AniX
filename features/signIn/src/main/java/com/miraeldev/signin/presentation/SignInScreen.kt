@@ -1,6 +1,7 @@
 package com.miraeldev.signin.presentation
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
@@ -142,7 +143,12 @@ fun SignInScreen(
             onResult = {
                 when (it) {
                     is VKAuthenticationResult.Success -> {
-                        viewModel.signInVkAccount(it.token.accessToken, it.token.userId.toString())
+
+                        viewModel.signInVkAccount(
+                            it.token.accessToken,
+                            it.token.userId.toString(),
+                            it.token.email.toString()
+                        )
                     }
 
                     is VKAuthenticationResult.Failed -> {
