@@ -1,6 +1,5 @@
 package com.miraeldev.data.remoteMediator.categoriesLists
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -13,7 +12,7 @@ import com.miraeldev.data.local.models.newCategory.NewCategoryRemoteKeys
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
-import com.miraeldev.data.remote.dto.mapToNewCategoryModel
+import com.miraeldev.data.remote.dto.mapToPagingNewCategoryModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -85,14 +84,14 @@ internal class NewCategoryRemoteMediator(
             }
                 .body<Response>()
 
-            val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
+            val anime = apiResponse.results.map { it.mapToPagingNewCategoryModel() }
             val endOfPaginationReached =
                 anime.isEmpty() || apiResponse.isLast
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.newCategoryRemoteKeys().clearRemoteKeys()
-                    appDatabase.newCategoryDao().clearAllAnime()
+                    appDatabase.newCategoryPagingDao().clearAllAnime()
                 }
                 val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -106,7 +105,7 @@ internal class NewCategoryRemoteMediator(
                 }
 
                 appDatabase.newCategoryRemoteKeys().insertAll(remoteKeys)
-                appDatabase.newCategoryDao()
+                appDatabase.newCategoryPagingDao()
                     .insertAll(anime.onEachIndexed { ind, anime -> anime.page = page })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

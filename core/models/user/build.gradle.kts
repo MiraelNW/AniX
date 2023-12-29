@@ -14,4 +14,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
+
+    //immutable list
+    implementation(libs.kotlinx.collections.immutable)
+    
+    implementation(project(":core:models:anime"))
 }

@@ -1,12 +1,15 @@
 package com.miraeldev.account.presentation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.animation.with
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -27,6 +31,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,11 +46,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.account.R
+import com.miraeldev.account.domain.UserModel
 import com.miraeldev.account.presentation.settings.notificationsScreen.Switcher
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.theme.LocalTheme
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun AccountScreen(
@@ -55,6 +66,8 @@ fun AccountScreen(
 ) {
 
     val logOutAction = remember { { viewModel.logOut() } }
+
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     Column(
@@ -74,7 +87,7 @@ fun AccountScreen(
                 .padding(horizontal = 6.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ProfileNameAndImage()
+            ProfileNameAndImage(userInfo)
             AllSettings(
                 onSettingItemClick = onSettingItemClick,
                 onDarkThemeClick = onDarkThemeClick,
@@ -85,9 +98,7 @@ fun AccountScreen(
 }
 
 @Composable
-private fun ProfileNameAndImage() {
-
-    val imagePath = remember { "" }
+private fun ProfileNameAndImage(userInfo: UserModel) {
 
     Row(
         modifier = Modifier
@@ -96,25 +107,36 @@ private fun ProfileNameAndImage() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AsyncImage(
+        GlideImage(
             modifier = Modifier
                 .size(140.dp)
                 .clip(CircleShape),
-            model = imagePath.ifEmpty { R.drawable.ic_placeholder },
-            placeholder = painterResource(id = R.drawable.ic_account),
-            contentScale = ContentScale.Crop,
-            contentDescription = "Profile image"
+            imageModel = { userInfo.image },
+            requestOptions = {
+                RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            },
+            imageOptions = ImageOptions(
+                contentDescription = "profile image",
+                contentScale = ContentScale.Crop,
+            ),
+            failure = {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_placeholder),
+                    contentDescription = "place holder"
+                )
+            }
         )
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(
-                text = "Nick name",
+                text = userInfo.name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colors.onBackground,
                 fontSize = 24.sp
             )
             Text(
-                text = "goodworkinspclass@mail.ru",
+                text = userInfo.email.ifEmpty { "no email" },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colors.onBackground.copy(0.6f),
@@ -251,6 +273,8 @@ private fun DarkTheme(
 
     val isDarkTheme = LocalTheme.current
 
+    Log.d("tag", isDarkTheme.toString())
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,7 +296,7 @@ private fun DarkTheme(
                             scaleIn(
                                 initialScale = 0.4f,
                                 animationSpec = tween(300)
-                            ) with
+                            ) togetherWith
                             fadeOut(animationSpec = tween(150))
                 }, label = ""
             ) { darkTheme ->

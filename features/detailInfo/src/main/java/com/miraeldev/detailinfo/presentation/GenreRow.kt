@@ -17,24 +17,15 @@ import com.miraeldev.detailinfo.R
 fun GenreRow(animeItem: AnimeDetailInfo) {
 
 
-
     Row(
         modifier = Modifier.padding(8.dp)
     ) {
         Text(text = stringResource(R.string.genres), fontSize = 18.sp)
 
         Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState())
+            modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
-            animeItem.genres.forEachIndexed { index, genre ->
-                Text(
-                        text = if (index != (animeItem.genres.size-1) ) " ${genre.nameRu.lowercase()},"
-                        else " ${genre.nameRu.lowercase()}.",
-                        fontSize = 18.sp,
-                        maxLines = 1
-                )
-            }
+            Text(text = animeItem.genres.joinToString { it.nameRu }, fontSize = 18.sp, maxLines = 1)
         }
-
     }
 }

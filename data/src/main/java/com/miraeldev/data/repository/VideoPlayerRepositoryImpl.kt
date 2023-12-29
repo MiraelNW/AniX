@@ -3,10 +3,12 @@ package com.miraeldev.data.repository
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.VideoInfo
-import com.miraeldev.domain.models.PlayerWrapper
+import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.video.PlayerWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,11 +16,14 @@ import javax.inject.Inject
 
 @UnstableApi
 internal class VideoPlayerRepositoryImpl @Inject constructor(
-    private val player: ExoPlayer
+    private val player: ExoPlayer,
+    private val userDataRepository: UserDataRepository
 ) : VideoPlayerDataRepository {
 
     private val videoUrls = MutableStateFlow(VideoInfo())
     private val videoId = MutableStateFlow(0)
+
+    private var lastWatchedAnime = LastWatchedAnime(-1)
 
     private val playerWrapper = MutableStateFlow(
         PlayerWrapper(player, isFirstEpisode = false, isLastEpisode = false, title = "no name")
@@ -29,21 +34,32 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
         return playerWrapper.asStateFlow()
     }
 
-    override fun loadVideoId(id: Int) {
-        videoId.value = id
+    override fun loadVideoId(animeItem: AnimeInfo, videoId: Int) {
+        this.videoId.value = videoId
 
         playerWrapper.value =
             playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
 
-        if (id == (videoUrls.value.playerUrl.size - 1)) {
+        if (videoId == (videoUrls.value.playerUrl.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
         }
-        if (id == 0) {
+        if (videoId == 0) {
             playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
         }
 
-        val name = videoUrls.value.videoName[videoId.value]
-        val url = videoUrls.value.playerUrl[videoId.value]
+        val name = videoUrls.value.videoName[this.videoId.value]
+        val url = videoUrls.value.playerUrl[this.videoId.value]
+
+        lastWatchedAnime = lastWatchedAnime.copy(
+            id = animeItem.id,
+            imageUrl = animeItem.image.original,
+            nameEn = animeItem.nameEn,
+            nameRu = animeItem.nameRu,
+            genres = animeItem.genres,
+            isFavourite = animeItem.isFavourite,
+            episodeNumber = this.videoId.value,
+            videoUrl = url
+        )
 
         setMediaItem(name, url)
     }
@@ -71,6 +87,11 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
         val name = videoUrls.value.videoName[nextVideoId]
         val url = videoUrls.value.playerUrl[nextVideoId]
 
+        lastWatchedAnime = lastWatchedAnime.copy(
+            episodeNumber = nextVideoId,
+            videoUrl = url
+        )
+
         setMediaItem(name, url)
     }
 
@@ -88,11 +109,18 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
         val name = videoUrls.value.videoName[previousVideoId]
         val url = videoUrls.value.playerUrl[previousVideoId]
 
+        lastWatchedAnime = lastWatchedAnime.copy(
+            episodeNumber = previousVideoId,
+            videoUrl = url
+        )
+
         setMediaItem(name, url)
     }
 
-    override fun releasePlayer() {
+    override suspend fun releasePlayer() {
         player.stop()
+        userDataRepository.saveLastWatchedAnime(lastWatchedAnime)
+
     }
 
     override fun loadSpecificEpisode(specificEpisode: Int) {
@@ -114,6 +142,11 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
 
         val name = videoUrls.value.videoName[specificEpisode]
         val url = videoUrls.value.playerUrl[specificEpisode]
+
+        lastWatchedAnime = lastWatchedAnime.copy(
+            episodeNumber = specificEpisode,
+            videoUrl = url
+        )
 
         setMediaItem(name, url)
     }

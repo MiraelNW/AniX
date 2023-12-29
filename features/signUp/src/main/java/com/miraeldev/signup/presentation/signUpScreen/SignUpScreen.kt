@@ -313,11 +313,9 @@ private fun NameField(
     onNext: KeyboardActionScope.() -> Unit,
 ) {
 
-    val value = remember(text) { text() }
-
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = value,
+        value = text(),
         onValueChange = onValueChange,
         label = { Text(text = stringResource(R.string.your_name), fontSize = 14.sp) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),

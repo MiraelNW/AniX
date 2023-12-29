@@ -1,6 +1,6 @@
 package com.miraeldev.videoscreen.presentation
 
-import com.miraeldev.videoscreen.domain.models.PlayerWrapper
+import com.miraeldev.video.PlayerWrapper
 
 internal sealed class VideoViewScreenState {
 

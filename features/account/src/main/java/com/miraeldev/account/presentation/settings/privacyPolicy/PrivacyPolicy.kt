@@ -2,6 +2,7 @@ package com.miraeldev.account.presentation.settings.privacyPolicy
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,9 @@ import com.miraeldev.presentation.Toolbar
 fun PrivacyPolicyScreen(onBackPressed: () -> Unit) {
     BackHandler { onBackPressed() }
 
-    Column(modifier = Modifier.systemBarsPadding()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .systemBarsPadding()) {
         Toolbar(
             onBackPressed = onBackPressed,
             text = R.string.privacy_policy
@@ -27,7 +30,7 @@ fun PrivacyPolicyScreen(onBackPressed: () -> Unit) {
 }
 
 @Composable
-private fun PrivacyPolicyText(){
+private fun PrivacyPolicyText() {
     Column(
         modifier = Modifier
             .fillMaxWidth()

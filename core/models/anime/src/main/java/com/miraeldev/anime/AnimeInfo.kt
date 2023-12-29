@@ -8,7 +8,10 @@ data class AnimeInfo(
     val id: Int,
     val nameEn: String = "Kimetsu No Yaiba",
     val nameRu: String = "Истерибитель демонов",
-    val image: ImageModel = ImageModel("", ""),
+    val image: ImageModel = ImageModel(
+        "http://10.0.2.2:8080/api/v1/anime/images/original/1",
+        "http://10.0.2.2:8080/api/v1/anime/images/original/1"
+    ),
     val kind: String = "tv",
     val score: Float = 8.51f,
     val status: String = "released",
@@ -21,6 +24,25 @@ data class AnimeInfo(
             "С этого момента для Тандзиро и Нэдзуко начинается долгое и опасное путешествие, в котором мальчик намерен разыскать убийцу и узнать способ исцеления для своей сестры. Но в состоянии ли дети преодолеть все трудности и вернуться домой?",
     val videoUrls: VideoInfo = VideoInfo(),
     val genres: ImmutableList<Genre> = persistentListOf(
-        Genre("en", "ru")
-    )
+        Genre("en", "ru"),
+        Genre("en2", "ru"),
+        Genre("en3", "ru"),
+        Genre("en4", "ru"),
+        Genre("en5", "ru"),
+        Genre("en6", "ru"),
+    ),
+    val isFavourite: Boolean
 )
+
+fun AnimeInfo.toLastWatched():LastWatchedAnime{
+    return LastWatchedAnime(
+        id= this.id,
+        imageUrl = this.image.original,
+        nameRu = this.nameRu,
+        nameEn = this.nameEn,
+        genres = this.genres,
+        isFavourite = this.isFavourite,
+        videoUrl = this.videoUrls.playerUrl[0],
+        episodeNumber = 0
+    )
+}

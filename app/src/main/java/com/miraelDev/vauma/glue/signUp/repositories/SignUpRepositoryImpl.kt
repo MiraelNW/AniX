@@ -17,7 +17,7 @@ class SignUpRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUser(email: String) {
-        userDataRepository.updateUser(com.miraeldev.user.LocalUser(email))
+        userDataRepository.updateUser(com.miraeldev.user.UserEmail(email))
     }
 
     override suspend fun verifyOtpCode(otpToken: String, user: User) {

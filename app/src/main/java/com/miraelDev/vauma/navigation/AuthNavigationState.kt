@@ -20,11 +20,15 @@ class AuthNavigationState(
     }
 
     fun navigateToCodeVerifyScreen(email: String, password: String) {
-        navHostController.navigate(Screen.EmailCodeVerify.getRouteWithArgs(email, password))
+        navHostController.navigate(Screen.EmailCodeVerify.getRouteWithArgs(email, password)){
+            launchSingleTop = true
+        }
     }
 
     fun navigateToCodeVerifyResetPasswordScreen(email: String) {
-        navHostController.navigate(Screen.EmailCodeVerifyResetPassword.getRouteWithArgs(email))
+        navHostController.navigate(Screen.EmailCodeVerifyResetPassword.getRouteWithArgs(email)){
+            launchSingleTop = true
+        }
     }
 
     fun navigateToEmailChooseScreen() {

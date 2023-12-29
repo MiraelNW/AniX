@@ -4,16 +4,15 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
+import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
+import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.di.qualifiers.AuthClient
-import com.miraeldev.domain.models.auth.RefreshToken
 import com.miraeldev.domain.models.auth.Token
 import com.miraeldev.user.User
-import com.vk.api.sdk.VKPreferencesKeyValueStorage
-import com.vk.api.sdk.auth.VKAccessToken
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -26,6 +25,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,7 +38,9 @@ import javax.inject.Inject
 internal class UserAuthDataRepositoryImpl @Inject constructor(
     @AuthClient private val client: HttpClient,
     private val localService: LocalTokenService,
+    private val localUserDataRepository: LocalUserDataRepository,
     private val userDataRepository: UserDataRepository,
+    private val appDatabase: AppDatabase,
     private val context: Context
 ) : UserAuthDataRepository {
 
@@ -46,10 +48,11 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
     private val isSignUpError = MutableSharedFlow<Boolean>()
     private val registrationComplete = MutableSharedFlow<Boolean>()
 
+    override fun getSignInError(): Flow<Boolean> = isSignInError.asSharedFlow()
 
-    private val storage = VKPreferencesKeyValueStorage(context)
-    private val token
-        get() = VKAccessToken.restore(storage)
+    override fun getSignUpError(): Flow<Boolean> = isSignUpError.asSharedFlow()
+    override fun getRegistrationCompleteResult(): Flow<Boolean> =
+        registrationComplete.asSharedFlow()
 
     override suspend fun signUp(user: User) {
 
@@ -59,18 +62,23 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
                 MultiPartFormDataContent(
                     formData {
 
-                        val uri = Uri.parse(user.userImagePath)
-
-                        val file = File(getRealPathFromURI(uri, context) ?: "")
-
+                        append("name", user.name)
                         append("email", user.email)
                         append("username", user.username)
                         append("password", user.password)
 
-                        append("file", file.readBytes(), Headers.build {
-                            append(HttpHeaders.ContentType, "image/png")
-                            append(HttpHeaders.ContentDisposition, "filename=ok")
-                        })
+                        if (user.image != "") {
+                            val uri = Uri.parse(user.image)
+
+                            val fileBytes = File(getRealPathFromURI(uri, context) ?: "")
+                                .readBytes()
+
+                            append("file", fileBytes, Headers.build {
+                                append(HttpHeaders.ContentType, "image/png")
+                                append(HttpHeaders.ContentDisposition, "filename=ok")
+                            })
+                        }
+
                     },
                 )
             )
@@ -108,7 +116,7 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
                 setBody(signInUser)
             }
             if (signInResponse.status.isSuccess()) {
-                logIn(signInResponse)
+                logIn(response = signInResponse)
             }
         } else {
             isSignUpError.emit(true)
@@ -127,7 +135,7 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         }
 
         if (response.status.isSuccess()) {
-            logIn(response)
+            logIn(response = response)
         } else {
             isSignInError.emit(true)
         }
@@ -148,38 +156,21 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         }
 
         if (logInWithGoogleResponse.status.isSuccess()) {
-            logIn(logInWithGoogleResponse)
+            logIn(response = logInWithGoogleResponse)
         }
     }
-
-    override fun getSignInError(): Flow<Boolean> = isSignInError.asSharedFlow()
-
-    override fun getSignUpError(): Flow<Boolean> = isSignUpError.asSharedFlow()
-    override fun getRegistrationCompleteResult(): Flow<Boolean> =
-        registrationComplete.asSharedFlow()
 
     override suspend fun checkAuthState() {
         if (localService.getBearerToken().isNullOrEmpty() ||
             localService.getRefreshToken().isNullOrEmpty()
         ) {
-            userDataRepository.setUserUnAuthorizedStatus()
+            localUserDataRepository.setUserUnAuthorizedStatus()
         } else {
-            userDataRepository.setUserAuthorizedStatus()
+            localUserDataRepository.setUserAuthorizedStatus()
         }
     }
 
-    override suspend fun changePassword() {
-        val bearer = localService.getBearerToken()
-        client.post {
-            url(BuildConfig.AUTH_CHANGE_PASSWORD_URL)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearer")
-            }
-//            setBody()
-        }
-    }
-
-    override suspend fun loginWithVk(accessToken: String, userId: String,email:String?) {
+    override suspend fun loginWithVk(accessToken: String, userId: String, email: String?) {
         val logInWithVkResponse = client.post {
             url(BuildConfig.VK_LOGIN)
             headers {
@@ -196,7 +187,7 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         }
 
         if (logInWithVkResponse.status.isSuccess()) {
-            logIn(logInWithVkResponse)
+            logIn(response = logInWithVkResponse)
         }
     }
 
@@ -210,7 +201,9 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
             }
         }
         if (response.status.isSuccess()) {
-            userDataRepository.setUserUnAuthorizedStatus()
+            localUserDataRepository.setUserUnAuthorizedStatus()
+            delay(100)
+            appDatabase.userDao().deleteOldUser()
         }
     }
 
@@ -221,7 +214,14 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         localService.saveBearerToken(token.bearerToken)
         localService.saveRefreshToken(token.refreshToken)
 
-        userDataRepository.setUserAuthorizedStatus()
+
+        val isSuccess = userDataRepository.saveRemoteUser()
+
+        if (isSuccess) {
+            localUserDataRepository.setUserAuthorizedStatus()
+        }
+
+
     }
 
     private fun getRealPathFromURI(uri: Uri, context: Context): String? {

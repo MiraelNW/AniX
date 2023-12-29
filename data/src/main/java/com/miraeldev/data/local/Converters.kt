@@ -4,8 +4,8 @@ import androidx.room.TypeConverter
 import com.miraeldev.anime.Genre
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
-import com.miraeldev.data.local.models.ImageDbModel
-import com.miraeldev.data.local.models.toModel
+import com.miraeldev.data.local.models.user.ImageDbModel
+import com.miraeldev.data.local.models.user.LastWatchedAnimeDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import kotlinx.collections.immutable.ImmutableList
@@ -24,6 +24,16 @@ internal class Converters {
 
     @TypeConverter
     fun stringToVideoInfoDataModel(value: String): VideoInfoDataModel {
+        return Json.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun lastWatchedAnimeToString(lastWatchedAnimeDbModel: LastWatchedAnimeDbModel?): String {
+        return Json.encodeToString(lastWatchedAnimeDbModel)
+    }
+
+    @TypeConverter
+    fun stringToLastWatchedAnime(value: String): LastWatchedAnimeDbModel? {
         return Json.decodeFromString(value)
     }
 

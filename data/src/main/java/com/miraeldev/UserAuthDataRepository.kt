@@ -21,8 +21,6 @@ interface UserAuthDataRepository {
 
     suspend fun checkAuthState()
 
-    suspend fun changePassword()
-
     suspend fun loginWithVk(accessToken:String,userId:String,email:String?)
 
     suspend fun logOutUser()

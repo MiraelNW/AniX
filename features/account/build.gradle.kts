@@ -62,9 +62,12 @@ dependencies {
     //coil image
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    implementation(libs.landscapist.glide)
+    implementation(libs.landscapist.transformation)
 
     implementation(project(":core:presentation"))
     implementation(project(":core:extensions"))
     implementation(project(":core:theme"))
     implementation(project(":core:utils"))
+    implementation(project(":core:models:user"))
 }

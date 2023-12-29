@@ -47,12 +47,12 @@ fun Modifier.noRippleEffectClick(
     )
 }
 
-fun Modifier.shimmerEffect(targetValue:Float): Modifier = composed {
+fun Modifier.shimmerEffect(targetValue:Float,initialValue:Float = 0.98f): Modifier = composed {
 
     val infiniteTransition = rememberInfiniteTransition()
 
     val scale by infiniteTransition.animateFloat(
-        initialValue = 0.98f,
+        initialValue = initialValue,
         targetValue = targetValue,
         animationSpec = infiniteRepeatable(
             animation = tween(1200),

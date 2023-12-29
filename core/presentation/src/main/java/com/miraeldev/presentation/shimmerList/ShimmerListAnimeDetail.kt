@@ -63,7 +63,7 @@ private fun ShimmerAnimeImage() {
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(initialValue = 1.02f, targetValue = 1.05f)
     ) {
         Spacer(
             modifier = Modifier
@@ -81,7 +81,7 @@ private fun ShimmerAnimeNameAndShareButton() {
     Row(
         modifier = Modifier
             .fillMaxWidth(0.9f)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -119,7 +119,7 @@ private fun ShimmerPlayButton() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
             .height(72.dp)
     ) {
         Spacer(
@@ -139,7 +139,7 @@ private fun ShimmerRatingAndCategoriesRow() {
     Row(
         modifier = Modifier
             .fillMaxWidth(0.8f)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -179,7 +179,7 @@ private fun ShimmerGenreRow() {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
     ) {
         Spacer(
             modifier = Modifier
@@ -195,7 +195,7 @@ private fun ShimmerExpandableDescription() {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
     ) {
         Spacer(
             modifier = Modifier
@@ -211,7 +211,7 @@ private fun ShimmerOtherAnimeText() {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
     ) {
         Spacer(
             modifier = Modifier
@@ -227,7 +227,7 @@ private fun ShimmerOtherAnimes() {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .shimmerEffect(1.05f)
+            .shimmerEffect(1f)
             .horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -245,7 +245,7 @@ private fun AnimeCard() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shimmerEffect(1.05f),
+            .shimmerEffect(1f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {

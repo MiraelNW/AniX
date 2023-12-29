@@ -27,14 +27,14 @@ internal class AnimeListDataRepositoryImpl @Inject constructor(
 ) : AnimeListDataRepository {
 
 
-    override fun getNewAnimeList(): Flow<PagingData<AnimeInfo>> {
+    override fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>> {
 
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = { appDatabase.newCategoryDao().getAnime() },
+            pagingSourceFactory = { appDatabase.newCategoryPagingDao().getAnime() },
             remoteMediator = NewCategoryRemoteMediator(
                 client = httpClient,
                 appDatabase = appDatabase,
@@ -47,13 +47,13 @@ internal class AnimeListDataRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getPopularAnimeList(): Flow<PagingData<AnimeInfo>> {
+    override fun getPagingPopularAnimeList(): Flow<PagingData<AnimeInfo>> {
 
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
             ),
-            pagingSourceFactory = { appDatabase.popularCategoryDao().getAnime() },
+            pagingSourceFactory = { appDatabase.popularCategoryPagingDao().getAnime() },
             remoteMediator = PopularCategoryRemoteMediator(
                 client = httpClient,
                 appDatabase = appDatabase,
@@ -66,14 +66,14 @@ internal class AnimeListDataRepositoryImpl @Inject constructor(
 
     }
 
-    override fun getNameAnimeList(): Flow<PagingData<AnimeInfo>> {
+    override fun getPagingNameAnimeList(): Flow<PagingData<AnimeInfo>> {
 
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = { appDatabase.nameCategoryDao().getAnime() },
+            pagingSourceFactory = { appDatabase.nameCategoryPagingDao().getAnime() },
             remoteMediator = NameCategoryRemoteMediator(
                 client = httpClient,
                 appDatabase = appDatabase,
@@ -84,14 +84,14 @@ internal class AnimeListDataRepositoryImpl @Inject constructor(
 
     }
 
-    override fun getFilmsAnimeList(): Flow<PagingData<AnimeInfo>> {
+    override fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>> {
 
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = { appDatabase.filmCategoryDao().getAnime() },
+            pagingSourceFactory = { appDatabase.filmCategoryPagingDao().getAnime() },
             remoteMediator = FilmCategoryRemoteMediator(
                 client = httpClient,
                 appDatabase = appDatabase,

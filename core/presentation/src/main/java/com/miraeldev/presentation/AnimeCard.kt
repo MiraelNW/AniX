@@ -1,6 +1,5 @@
 package com.miraeldev.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,19 +46,6 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
         elevation = 4.dp
     ) {
 
-        val originalGlideUrl = remember {
-            GlideUrl(
-                animeItem.image.original
-            ) {
-                mapOf(
-                    Pair(
-                        "Authorization",
-                        animeItem.image.token
-                    )
-                )
-            }
-        }
-
         Column {
             Box {
 
@@ -67,7 +53,7 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
                     modifier = Modifier
                         .height(300.dp)
                         .width(200.dp),
-                    imageModel = { originalGlideUrl },
+                    imageModel = { animeItem.image.original },
                     imageOptions = ImageOptions(
                         contentDescription = animeItem.nameRu,
                         contentScale = ContentScale.FillBounds

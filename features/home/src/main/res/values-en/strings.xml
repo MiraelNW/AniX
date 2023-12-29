@@ -6,4 +6,9 @@
     <string name="popular">Popular</string>
     <string name="name">Name</string>
     <string name="films">Films</string>
+    <string name="play_icon">play icon</string>
+    <string name="favourite_button">Favourite button</string>
+    <string name="back">Back</string>
+    <string name="play_text">Play</string>
+    <string name="favourites">My list</string>
 </resources>

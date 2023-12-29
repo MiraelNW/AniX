@@ -1,6 +1,7 @@
 package com.miraeldev.theme
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,6 +11,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -44,12 +46,12 @@ private val DarkMainColorPalette = darkColors(
 val LocalOrientation = compositionLocalOf { Configuration.ORIENTATION_PORTRAIT }
 
 
-val LocalTheme = compositionLocalOf<Boolean> { false }
+val LocalTheme = compositionLocalOf { false }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HikariTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: State<Boolean>,
     content: @Composable () -> Unit,
 ) {
 
@@ -63,14 +65,14 @@ fun HikariTheme(
 
 
     MaterialTheme(
-        colors = if (darkTheme) DarkMainColorPalette else LightMainColorPalette,
+        colors = if (darkTheme.value) DarkMainColorPalette else LightMainColorPalette,
         shapes = Shapes,
         typography = Typography
     ) {
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null,
             LocalOrientation provides orientation,
-            LocalTheme provides darkTheme,
+            LocalTheme provides darkTheme.value,
             content = content
         )
     }

@@ -3,6 +3,7 @@ package com.miraeldev.detailinfo.presentation
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -55,7 +56,11 @@ fun AnimeDetailScreen(
     val onBackPressedAction = remember { { onBackPressed() } }
 
     val loadAnimeDetailAction: (Int) -> Unit = remember { { viewModel.loadAnimeDetail(it) } }
-    val loadAnimeVideoAction: (Int) -> Unit = remember { { viewModel.loadVideoId(it) } }
+    val loadAnimeVideoAction: (AnimeDetailInfo, Int) -> Unit = remember {
+        { animeItem, videoId ->
+            viewModel.loadVideoId(animeItem, videoId)
+        }
+    }
     val downloadEpisodeAction: (String, String) -> Unit =
         remember { { url, videoName -> viewModel.downloadEpisode(url, videoName) } }
 
@@ -66,46 +71,54 @@ fun AnimeDetailScreen(
 
     BackHandler(onBack = onBackPressedAction)
 
-    when (val results = screenState) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (val results = screenState) {
 
-        is AnimeDetailScreenState.SearchResult -> {
+            is AnimeDetailScreenState.SearchResult -> {
 
-            val selectAnimeItemAction: (Boolean) -> Unit =
-                remember {
-                    { isSelected -> viewModel.selectAnimeItem(isSelected, results.result.first()) }
+                val selectAnimeItemAction: (Boolean) -> Unit =
+                    remember {
+                        { isSelected ->
+                            viewModel.selectAnimeItem(
+                                isSelected,
+                                results.result.first()
+                            )
+                        }
+                    }
+
+                DetailScreen(
+                    animeDetail = results.result.first(),
+                    onBackPressed = onBackPressedAction,
+                    onAnimeItemClick = onAnimeItemClick,
+                    onSeriesClick = { videoId ->
+                        loadAnimeVideoAction(results.result.first(), videoId)
+                        onSeriesClick()
+                    },
+                    downloadAnimeEpisode = downloadEpisodeAction,
+                    onFavouriteIconCLick = selectAnimeItemAction
+
+                )
+            }
+
+            is AnimeDetailScreenState.SearchFailure -> {
+            }
+
+            is AnimeDetailScreenState.Loading -> {
+                loadAnimeDetailAction(animeId)
+
+                LaunchedEffect(key1 = Unit) {
+                    delay(200)
+                    shouldShowLoading = true
                 }
-
-            DetailScreen(
-                animeDetail = results.result.first(),
-                onBackPressed = onBackPressedAction,
-                onAnimeItemClick = onAnimeItemClick,
-                onSeriesClick = { videoId ->
-                    loadAnimeVideoAction(videoId)
-                    onSeriesClick()
-                },
-                downloadAnimeEpisode = downloadEpisodeAction,
-                onFavouriteIconCLick = selectAnimeItemAction
-
-            )
-        }
-
-        is AnimeDetailScreenState.SearchFailure -> {
-        }
-
-        is AnimeDetailScreenState.Loading -> {
-            loadAnimeDetailAction(animeId)
-
-            LaunchedEffect(key1 = Unit) {
-                delay(200)
-                shouldShowLoading = true
+                if (shouldShowLoading) {
+                    ShimmerListAnimeDetail()
+                }
             }
-            if (shouldShowLoading) {
-                ShimmerListAnimeDetail()
-            }
-        }
 
-        is AnimeDetailScreenState.Initial -> {}
+            is AnimeDetailScreenState.Initial -> {}
+        }
     }
+
 
 }
 
@@ -121,6 +134,8 @@ private fun DetailScreen(
 ) {
 
     var showSeriesDialog by remember { mutableStateOf(false) }
+
+    var showZoomableImage by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -167,7 +182,11 @@ private fun DetailScreen(
                     .navigationBarsPadding(),
             ) {
 
-                item { TopAnimeImage(animeItem = animeDetail) }
+                item {
+                    TopAnimeImage(
+                        animeItem = animeDetail,
+                        onImageClick = { showZoomableImage = true })
+                }
 
                 item {
                     AnimeNameAndShareButton(
@@ -247,6 +266,7 @@ private fun DetailScreen(
                     .align(Alignment.TopEnd)
                     .statusBarsPadding()
                     .padding(end = 8.dp, top = 8.dp),
+                selected = animeDetail.isFavourite,
                 onFavouriteIconClick = onFavouriteIconCLick
             )
 
@@ -256,6 +276,15 @@ private fun DetailScreen(
                         showSeriesDialog = false
                     },
                     onSeriesClick = onSeriesClick
+                )
+            }
+
+            if (showZoomableImage) {
+                ZoomableImage(
+                    image = animeDetail.image.original,
+                    onDismiss = {
+                        showZoomableImage = false
+                    },
                 )
             }
         }

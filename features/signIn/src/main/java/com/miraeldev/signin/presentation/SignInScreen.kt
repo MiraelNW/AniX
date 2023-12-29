@@ -147,7 +147,7 @@ fun SignInScreen(
                         viewModel.signInVkAccount(
                             it.token.accessToken,
                             it.token.userId.toString(),
-                            it.token.email.toString()
+                            it.token.email
                         )
                     }
 

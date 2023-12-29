@@ -138,6 +138,7 @@ dependencies {
     implementation(project(":core:models:auth"))
     implementation(project(":core:models:result"))
     implementation(project(":core:models:user"))
+    implementation(project(":core:models:video"))
 }
 
 hilt {

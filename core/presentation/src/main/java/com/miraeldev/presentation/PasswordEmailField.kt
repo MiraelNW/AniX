@@ -42,8 +42,6 @@ fun EmailField(
     placeholder: String = "Введите Вашу почту"
 ) {
 
-//    val value = remember(text){ text() }
-
     val leadingIcon = @Composable {
         Icon(
             Icons.Default.Email,

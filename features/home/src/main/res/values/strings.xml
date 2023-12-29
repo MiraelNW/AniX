@@ -6,4 +6,9 @@
     <string name="popular">Популярные</string>
     <string name="name">Название</string>
     <string name="films">Фильмы</string>
+    <string name="play_icon">Смотреть</string>
+    <string name="back">Назад</string>
+    <string name="play_text" translatable="false">Play</string>
+    <string name="favourites" translatable="false">Избранное</string>
+    <string name="favourite_button">Добавить в избранное</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.miraeldev.videoscreen.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
 import com.miraeldev.videoscreen.domain.useCases.GetVideoPlayerUseCase
 import com.miraeldev.videoscreen.domain.useCases.LoadNextEpisodeUseCase
@@ -8,6 +9,7 @@ import com.miraeldev.videoscreen.domain.useCases.LoadPreviousEpisodeUseCase
 import com.miraeldev.videoscreen.domain.useCases.LoadSpecificEpisodeUseCase
 import com.miraeldev.videoscreen.domain.useCases.ReleasePlayerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @UnstableApi
@@ -57,14 +59,15 @@ class VideoViewModel @Inject constructor(
         loadSpecificEpisodeUseCase(episodeId)
     }
 
-    //not read attention!!!!!!!!!!!!!!!!
+    //not ready attention!!!!!!!!!!!!!!!!
     fun loadVideoSelectedQuality(quality: String) {
         //TODO
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        releasePlayerUseCase()
+    fun releasePlayer() {
+        viewModelScope.launch {
+            releasePlayerUseCase()
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.miraeldev.detailinfo.presentation
 
 import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.result.FailureCauses
 import kotlinx.collections.immutable.ImmutableList
 

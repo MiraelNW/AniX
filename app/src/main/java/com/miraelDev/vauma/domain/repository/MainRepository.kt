@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.domain.repository
 
-import com.miraeldev.user.LocalUser
+import com.miraeldev.user.UserEmail
 import com.miraeldev.auth.AuthState
 import kotlinx.coroutines.flow.Flow
 
@@ -12,7 +12,7 @@ interface MainRepository {
 
     fun getUserStatus(): Flow<AuthState>
 
-    suspend fun getLocalUser(): LocalUser
+    suspend fun getLocalUser(): UserEmail
 
     suspend fun setDarkTheme(isDarkTheme: Boolean)
 

@@ -2,10 +2,11 @@ package com.miraelDev.vauma.glue.main.repository
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.miraelDev.vauma.domain.repository.MainRepository
+import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.PreferenceDataStoreAPI
-import com.miraeldev.user.LocalUser
+import com.miraeldev.user.UserEmail
 import com.miraeldev.auth.AuthState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -16,6 +17,7 @@ private const val DARK_THEME_KEY = "dark theme key"
 class MainRepositoryImpl @Inject constructor(
     private val userDataRepository: UserDataRepository,
     private val userAuthDataRepository: UserAuthDataRepository,
+    private val localUserAuthDataRepository: LocalUserDataRepository,
     private val preferenceDataStoreAPI: PreferenceDataStoreAPI
 ) : MainRepository {
     override suspend fun checkAuthState() {
@@ -29,11 +31,11 @@ class MainRepositoryImpl @Inject constructor(
     }
 
     override fun getUserStatus(): Flow<AuthState> {
-        return userDataRepository.getUserStatus()
+        return localUserAuthDataRepository.getUserStatus()
     }
 
-    override suspend fun getLocalUser(): LocalUser {
-        return userDataRepository.getLocalUser()
+    override suspend fun getLocalUser(): UserEmail {
+        return userDataRepository.getUserEmail()
     }
 
     override suspend fun setDarkTheme(isDarkTheme: Boolean) {

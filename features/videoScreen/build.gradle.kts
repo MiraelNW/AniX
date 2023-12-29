@@ -69,4 +69,5 @@ dependencies {
     implementation(project(":core:extensions"))
     implementation(project(":core:presentation"))
     implementation(project(":core:models:anime"))
+    implementation(project(":core:models:video"))
 }

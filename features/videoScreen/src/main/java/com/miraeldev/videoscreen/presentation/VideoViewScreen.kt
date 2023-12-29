@@ -41,7 +41,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.miraeldev.theme.LightGreen700
 import com.miraeldev.theme.LocalOrientation
-import com.miraeldev.videoscreen.domain.models.PlayerWrapper
 import com.miraeldev.videoscreen.presentation.playerControls.PlayerControls
 import com.miraeldev.videoscreen.presentation.utilis.setAutoOrientation
 import com.miraeldev.videoscreen.presentation.utilis.setLandscape
@@ -56,16 +55,10 @@ private const val LANDSCAPE = 1
 @Composable
 fun VideoViewScreen(
     navigateBack: () -> Unit,
-    viewModel:VideoViewModel = hiltViewModel()
+    viewModel: VideoViewModel = hiltViewModel()
 ) {
 
-    val playerWrapper by viewModel.screenState.collectAsStateWithLifecycle(
-        PlayerWrapper(
-            exoPlayer = ExoPlayer.Builder(
-                LocalContext.current
-            ).build()
-        )
-    )
+    val playerWrapper by viewModel.screenState.collectAsStateWithLifecycle()
 
 
 //    when (val res = screenState.value) {
@@ -77,7 +70,10 @@ fun VideoViewScreen(
         isFirstEpisode = playerWrapper.isFirstEpisode,
         isLastEpisode = playerWrapper.isLastEpisode,
         title = playerWrapper.title,
-        navigateBack = navigateBack,
+        navigateBack = {
+            viewModel.releasePlayer()
+            navigateBack()
+        },
         onNextVideoClick = viewModel::loadNextVideo,
         onPreviousVideoClick = viewModel::loadPreviousVideo,
         onEpisodeItemClick = viewModel::loadSpecificEpisode,

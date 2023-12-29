@@ -28,7 +28,15 @@ class NavigationState(
     }
 
     fun navigateToSettingsItem(route: String) {
-        navHostController.navigate(route) { launchSingleTop = true }
+        navHostController.navigate(route) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToCategories(categoryId: Int) {
+        navHostController.navigate(Screen.Categories.getRouteWithArgs(categoryId)) {
+            launchSingleTop = true
+        }
     }
 
     fun navigateToAnimeDetail(animeId: Int) {
@@ -37,6 +45,16 @@ class NavigationState(
 
     fun navigateToVideoView() {
         navHostController.navigate(Screen.VideoView.route) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToVideoViewThroughDetailScreen(id: Int) {
+        navHostController.navigate(Screen.AnimeDetail.getRouteWithArgs(id)) {
+            launchSingleTop = true
+        }
+        navHostController.navigate(Screen.VideoView.route) {
+            launchSingleTop = true
         }
     }
 }

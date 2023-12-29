@@ -12,7 +12,7 @@ import com.miraeldev.data.local.models.popularCategory.PopularCategoryRemoteKeys
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
-import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
+import com.miraeldev.data.remote.dto.mapToPagingPopularCategoryModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -86,14 +86,14 @@ internal class PopularCategoryRemoteMediator(
             }
                 .body<Response>()
 
-            val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
+            val anime = apiResponse.results.map { it.mapToPagingPopularCategoryModel() }
             val endOfPaginationReached =
                 anime.isEmpty() ||  apiResponse.isLast
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.popularCategoryRemoteKeysDao().clearRemoteKeys()
-                    appDatabase.popularCategoryDao().clearAllAnime()
+                    appDatabase.popularCategoryPagingDao().clearAllAnime()
                 }
                 val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -106,7 +106,7 @@ internal class PopularCategoryRemoteMediator(
                     )
                 }
                 appDatabase.popularCategoryRemoteKeysDao().insertAll(remoteKeys)
-                appDatabase.popularCategoryDao()
+                appDatabase.popularCategoryPagingDao()
                     .insertAll(anime.onEachIndexed { _, anime -> anime.page = page })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

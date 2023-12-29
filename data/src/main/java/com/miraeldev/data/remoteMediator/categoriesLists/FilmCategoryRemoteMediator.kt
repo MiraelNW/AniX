@@ -12,7 +12,7 @@ import com.miraeldev.data.local.models.filmCategory.FilmCategoryRemoteKeys
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
-import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
+import com.miraeldev.data.remote.dto.mapToPagingFilmCategoryModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -90,7 +90,7 @@ internal class FilmCategoryRemoteMediator(
                 .body<Response>()
 
 
-            val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
+            val anime = apiResponse.results.map { it.mapToPagingFilmCategoryModel() }
 
             val endOfPaginationReached =
                 anime.isEmpty() ||  apiResponse.isLast
@@ -98,7 +98,7 @@ internal class FilmCategoryRemoteMediator(
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.filmCategoryRemoteKeysDao().clearRemoteKeys()
-                    appDatabase.filmCategoryDao().clearAllAnime()
+                    appDatabase.filmCategoryPagingDao().clearAllAnime()
                 }
                 val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -112,7 +112,7 @@ internal class FilmCategoryRemoteMediator(
                 }
 
                 appDatabase.filmCategoryRemoteKeysDao().insertAll(remoteKeys)
-                appDatabase.filmCategoryDao()
+                appDatabase.filmCategoryPagingDao()
                     .insertAll(anime.onEachIndexed { _, movie -> movie.page = page })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

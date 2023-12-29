@@ -4,7 +4,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.Genre
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
-import com.miraeldev.data.local.models.ImageDbModel
+import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.data.local.models.favourite.AnimeInfoDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
@@ -29,6 +29,7 @@ internal class AnimeModelsMapper @Inject constructor() {
             description = animeInfo.description,
             videoUrls = mapVideoInfoToDataModel(animeInfo.videoUrls),
             genres = animeInfo.genres.map { mapGenreToDataModel(it) },
+            isFavourite = animeInfo.isFavourite,
             page = 0
         )
     }

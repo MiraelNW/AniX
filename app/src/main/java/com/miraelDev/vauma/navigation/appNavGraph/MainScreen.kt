@@ -17,7 +17,9 @@ import com.miraeldev.account.presentation.settings.downloadSettingsScreen.Downlo
 import com.miraeldev.account.presentation.settings.editProfileScreen.EditProfileScreen
 import com.miraeldev.account.presentation.settings.notificationsScreen.NotificationScreen
 import com.miraeldev.account.presentation.settings.privacyPolicy.PrivacyPolicyScreen
-import com.miraeldev.animelist.presentation.HomeScreen
+import com.miraeldev.animelist.presentation.categories.AnimeCategoriesScreen
+import com.miraeldev.animelist.presentation.home.HomeScreen
+import com.miraeldev.detailinfo.presentation.AnimeDetailScreen
 import com.miraeldev.favourites.presentation.FavouriteListScreen
 import com.miraeldev.search.presentation.SearchAnimeScreen
 import com.miraeldev.search.presentation.filterScreen.FilterScreen
@@ -62,12 +64,27 @@ fun MainScreen(
 
             AppNavGraph(
                 navHosController = navigationState.navHostController,
+
                 homeScreenContent = {
                     HomeScreen(
                         onAnimeItemClick = navigationState::navigateToAnimeDetail,
+                        onSeeAllClick = navigationState::navigateToCategories,
+                        onPlayClick = { id ->
+                            onVideoViewClick(ON_VIDEO_VIEW)
+                            navigationState.navigateToVideoViewThroughDetailScreen(id)
+                        }
                     )
                     shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
                     shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
+                },
+
+                homeCategoriesScreenContent = { id ->
+                    AnimeCategoriesScreen(
+                        categoryId = id,
+                        onAnimeItemClick = navigationState::navigateToAnimeDetail,
+                    )
+                    shouldShowBottomBar = false
+                    shouldShowNavRail = false
                 },
 
                 favouriteScreenContent = {
@@ -103,7 +120,7 @@ fun MainScreen(
                 animeDetailScreenContent = { animeId ->
                     shouldShowBottomBar = false
                     shouldShowNavRail = false
-                    com.miraeldev.detailinfo.presentation.AnimeDetailScreen(
+                    AnimeDetailScreen(
                         animeId = animeId,
                         onBackPressed = {
                             navigationState.navHostController.popBackStack()

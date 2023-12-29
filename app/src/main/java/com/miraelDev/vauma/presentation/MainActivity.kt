@@ -8,18 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,6 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.miraelDev.vauma.navigation.appNavGraph.MainScreen
 import com.miraelDev.vauma.navigation.authNavGraph.AuthScreen
@@ -38,6 +36,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
+val MainTheme = compositionLocalOf<Boolean> { error("no init") }
+
+@UnstableApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -51,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
         var readyToDrawStartScreen = false
 
-        splashScreen.setKeepOnScreenCondition { false }
+        splashScreen.setKeepOnScreenCondition { !readyToDrawStartScreen }
 
         setContent {
 
@@ -61,9 +62,9 @@ class MainActivity : ComponentActivity() {
 
             val darkModeUserChoice by viewModel.isDarkThemeFlow.collectAsState()
 
-            var darkTheme by rememberSaveable { mutableStateOf(false) }
+            var darkTheme = rememberSaveable { mutableStateOf(false) }
 
-            darkTheme = isSystemDark || darkModeUserChoice
+            darkTheme.value = isSystemDark || darkModeUserChoice
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
@@ -78,7 +79,7 @@ class MainActivity : ComponentActivity() {
             HikariTheme(darkTheme = darkTheme) {
 
                 var useDarkIcons by rememberSaveable { mutableStateOf(false) }
-                useDarkIcons = darkTheme
+                useDarkIcons = darkTheme.value
                 DisposableEffect(systemUiController, useDarkIcons) {
                     systemUiController.setSystemBarsColor(
                         color = Color.Transparent,
@@ -88,18 +89,18 @@ class MainActivity : ComponentActivity() {
                 }
 
                 when (authState) {
-                    is com.miraeldev.auth.AuthState.Authorized -> {
+                    is AuthState.Authorized -> {
                         MainScreen(
                             onThemeButtonClick = {
-                                darkTheme = !darkTheme
-                                viewModel.setThemeMode(darkTheme)
+                                darkTheme.value = !darkTheme.value
+                                viewModel.setThemeMode(darkTheme.value)
                                 useDarkIcons = !useDarkIcons
                             },
                             onReadyToDrawStartScreen = {
                                 readyToDrawStartScreen = true
                             },
                             onVideoViewClick = { isVideoViewOpen ->
-                                if (!darkTheme) {
+                                if (!darkTheme.value) {
                                     useDarkIcons = !useDarkIcons
                                 }
                                 when (isVideoViewOpen) {
@@ -117,6 +118,8 @@ class MainActivity : ComponentActivity() {
                     is AuthState.Initial -> {}
                 }
             }
+
+
 
             observeState(
                 isFullScreen = LocalOrientation.current,

@@ -59,9 +59,9 @@ class AnimeDetailViewModel @Inject constructor(
 
     }
 
-    fun loadVideoId(id: Int) {
+    fun loadVideoId(animeItem:AnimeDetailInfo, id: Int) {
         viewModelScope.launch {
-            loadVideoIdUseCase(id)
+            loadVideoIdUseCase(animeItem, id)
         }
     }
 

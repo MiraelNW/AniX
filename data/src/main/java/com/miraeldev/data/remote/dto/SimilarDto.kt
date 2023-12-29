@@ -20,13 +20,13 @@ internal data class SimilarDto(
     val nameRu: String,
 )
 
-internal fun SimilarDto.toSimilar(token:String): Similar {
+internal fun SimilarDto.toSimilar(): Similar {
     return Similar(
         id = this.id,
         kind = this.kind,
         nameEn = this.nameEn,
         nameRu = this.nameRu,
-        image = this.image.toModel(token),
+        image = this.image.toModel(),
         score = this.score
     )
 }

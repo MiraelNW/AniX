@@ -1,6 +1,7 @@
 package com.miraeldev.data.repository
 
 import com.miraeldev.ForgotPasswordDataRepository
+import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
@@ -21,7 +22,7 @@ import javax.inject.Inject
 internal class ForgotPasswordDataRepositoryImpl @Inject constructor(
     @AuthClient private val client: HttpClient,
     private val localService: LocalTokenService,
-    private val userDataRepository: UserDataRepository,
+    private val userDataRepository: LocalUserDataRepository,
 ) : ForgotPasswordDataRepository {
 
     override fun getSignUpError(): Flow<Boolean> {

@@ -4,21 +4,46 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.miraeldev.account.domain.ChangePasswordUseCase
 import com.miraeldev.account.domain.GetUserEmailUseCase
+import com.miraeldev.account.domain.GetUserInfoUseCase
+import com.miraeldev.account.domain.UserModel
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
     private val validatePassword: ValidatePassword,
-    private val getUserEmailUseCase: GetUserEmailUseCase
+    private val getUserEmailUseCase: GetUserEmailUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val changePasswordUseCase: ChangePasswordUseCase,
 ) : ViewModel() {
+
+    val userInfo = getUserInfoUseCase()
+        .map {
+            UserModel(
+                id = it.id,
+                username = it.username,
+                name = it.name,
+                image = it.image,
+                email = it.email
+            )
+        }
+        .onEach {
+            _emailState.value = it.email
+            _nickNameState.value = it.name
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, UserModel.Empty as UserModel)
 
     private val _nickNameState = mutableStateOf("")
     val nickNameState: State<String> = _nickNameState
@@ -43,6 +68,9 @@ class EditProfileViewModel @Inject constructor(
 
     private val _isEmailError = MutableStateFlow(false)
     val isEmailError: StateFlow<Boolean> = _isEmailError.asStateFlow()
+
+    private val _serverError = MutableStateFlow(false)
+    val serverError: StateFlow<Boolean> = _serverError.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -78,6 +106,7 @@ class EditProfileViewModel @Inject constructor(
         viewModelScope.launch {
 //            isPasswordErrorFlow.emit(false)
         }
+        _serverError.value = false
         _isPasswordNotEqualsError.value = true
         _isPasswordError.value = PasswordValidationState(
             hasMinimum = true,
@@ -106,7 +135,11 @@ class EditProfileViewModel @Inject constructor(
 
     fun changePassword() {
         viewModelScope.launch {
-
+            _serverError.value = changePasswordUseCase(
+                currentPassword = currentPassword.value,
+                newPassword = newPassword.value,
+                repeatedPassword = repeatedPassword.value
+            )
         }
     }
 

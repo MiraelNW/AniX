@@ -34,7 +34,11 @@ fun NotificationScreen(onBackPressed: () -> Unit) {
 
     BackHandler(onBack = onBackPressedAction)
 
-    Column(modifier = Modifier.systemBarsPadding()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+    ) {
         Toolbar(
             onBackPressed = onBackPressedAction,
             text = R.string.notification_settings
@@ -51,7 +55,7 @@ private fun NotificationsList() {
         modifier = Modifier.padding(8.dp)
     ) {
 
-        var isSelectedTitles by remember {  mutableStateOf(false) }
+        var isSelectedTitles by remember { mutableStateOf(false) }
 
         Column(modifier = Modifier.padding(4.dp)) {
 

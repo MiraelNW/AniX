@@ -114,7 +114,7 @@ internal class SearchPagingPagingSource(
 
 
             LoadResult.Page(
-                data = response.results.map { it.toAnimeInfo(bearerToken ?: "") },
+                data = response.results.map { it.toAnimeInfo() },
                 prevKey = if (page == 0) null else page.minus(1),
                 nextKey = if (response.isLast) null else page.plus(1),
             )

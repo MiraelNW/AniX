@@ -59,18 +59,18 @@ fun OtherAnime(
 @Composable
 private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
 
-    val originalGlideUrl = remember {
-        GlideUrl(
-            animeItem.image.original
-        ) {
-            mapOf(
-                Pair(
-                    "Authorization",
-                    animeItem.image.token
-                )
-            )
-        }
-    }
+//    val originalGlideUrl = remember {
+//        GlideUrl(
+//            animeItem.image.original
+//        ) {
+//            mapOf(
+//                Pair(
+//                    "Authorization",
+//                    animeItem.image.token
+//                )
+//            )
+//        }
+//    }
 
     val animatedProgress = remember { Animatable(initialValue = 0f) }
     LaunchedEffect(Unit) {
@@ -101,7 +101,7 @@ private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
                     .height(300.dp)
                     .width(230.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                imageModel = { originalGlideUrl },
+                imageModel = { animeItem.image.original },
                 imageOptions = ImageOptions(
                     contentDescription = "anime image preview",
                     contentScale = ContentScale.FillBounds,

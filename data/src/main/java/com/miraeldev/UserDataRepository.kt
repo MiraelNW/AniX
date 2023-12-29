@@ -1,22 +1,26 @@
 package com.miraeldev
 
-import com.miraeldev.auth.AuthState
-import com.miraeldev.user.LocalUser
+import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.user.User
+import com.miraeldev.user.UserEmail
 import kotlinx.coroutines.flow.Flow
 
 interface UserDataRepository {
 
-    fun getRemoteUser(): User
+    suspend fun saveRemoteUser(): Boolean
 
-    suspend fun getLocalUser(): LocalUser
+    suspend fun saveLastWatchedAnime(lastWatchedAnime: LastWatchedAnime)
 
-    fun getUserStatus(): Flow<AuthState>
+    fun getUserInfo(): Flow<User>
 
-    suspend fun setUserUnAuthorizedStatus()
+    suspend fun getUserEmail(): UserEmail
 
-    suspend fun setUserAuthorizedStatus()
+    suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        repeatedPassword: String
+    ):Boolean
 
-    suspend fun updateUser(localUser: LocalUser)
+    suspend fun updateUser(localUser: UserEmail)
 
 }

@@ -17,6 +17,7 @@ data class AnimeDetailInfo(
     val duration: Int,
     val description: String,
     val videoUrls: VideoInfo = VideoInfo(),
+    val isFavourite: Boolean,
     val genres: ImmutableList<Genre>,
     val similar: ImmutableList<Similar>
 )
@@ -37,6 +38,7 @@ fun AnimeDetailInfo.toAnimeInfo(): AnimeInfo {
         description = this.description,
         videoUrls = VideoInfo(),
         genres = this.genres,
+        isFavourite = this.isFavourite
     )
 }
 

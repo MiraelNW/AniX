@@ -38,18 +38,18 @@ fun SearchAnimeCard(
 //        )
 //    }
 
-    val originalGlideUrl = remember {
-        GlideUrl(
-            item.image.original
-        ) {
-            mapOf(
-                Pair(
-                    "Authorization",
-                    item.image.token
-                )
-            )
-        }
-    }
+//    val originalGlideUrl = remember {
+//        GlideUrl(
+//            item.image.original
+//        ) {
+//            mapOf(
+//                Pair(
+//                    "Authorization",
+//                    item.image.token
+//                )
+//            )
+//        }
+//    }
 
     Card(
         onClick = { onAnimeItemClick(item.id) },
@@ -71,7 +71,7 @@ fun SearchAnimeCard(
             ) {
                 GlideImage(
                     modifier = Modifier.fillMaxWidth(),
-                    imageModel = { originalGlideUrl },
+                    imageModel = { item.image.original },
                     imageOptions = ImageOptions(
                         contentDescription = item.nameRu,
                         contentScale = ContentScale.FillBounds

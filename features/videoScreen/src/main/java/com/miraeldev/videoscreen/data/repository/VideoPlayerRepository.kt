@@ -1,15 +1,12 @@
 package com.miraeldev.videoscreen.data.repository
 
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.videoscreen.domain.models.PlayerWrapper
-import kotlinx.coroutines.flow.Flow
+import com.miraeldev.video.PlayerWrapper
 import kotlinx.coroutines.flow.StateFlow
 
 interface VideoPlayerRepository {
 
-    fun getVideoPlayer(): Flow<PlayerWrapper>
-
-    fun loadVideoId(id :Int)
+    fun getVideoPlayer(): StateFlow<PlayerWrapper>
 
     fun loadVideoPlayer(animeInfo: AnimeInfo)
 
@@ -17,7 +14,7 @@ interface VideoPlayerRepository {
 
     fun loadPrevEpisode()
 
-    fun releasePlayer()
+    suspend fun releasePlayer()
 
     fun loadSpecificEpisode(specificEpisode: Int)
 

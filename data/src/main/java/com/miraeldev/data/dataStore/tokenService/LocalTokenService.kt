@@ -2,6 +2,7 @@ package com.miraeldev.data.dataStore.tokenService
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.miraeldev.PreferenceDataStoreAPI
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
@@ -21,6 +22,10 @@ internal class LocalTokenService @Inject constructor(
     suspend fun getBearerToken(): String? {
         return preferenceManager.getPreference(bearerTokenKey, "").firstOrNull()
     }
+
+//    fun getBearerTokenFlow(): Flow<String> {
+//        return preferenceManager.getPreference(bearerTokenKey, "")
+//    }
 
     suspend fun getRefreshToken(): String {
         return preferenceManager.getPreference(refreshTokenKey, "").first()

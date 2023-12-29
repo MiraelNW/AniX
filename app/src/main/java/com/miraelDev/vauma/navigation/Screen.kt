@@ -21,6 +21,7 @@ sealed class Screen(val route: String) {
 
     object ProfileAndSettings : Screen(ROUTE_PROFILE_AND_SETTINGS)
 
+    object HomeAndCategories : Screen(ROUTE_HOME_AND_CATEGORIES)
     object Home : Screen(ROUTE_HOME)
 
     object Search : Screen(ROUTE_SEARCH)
@@ -41,7 +42,15 @@ sealed class Screen(val route: String) {
 
     object PrivacyPolicy : Screen(ROUTE_PRIVACY_POLICY)
 
-    object ResetPassword : Screen(ROUTE_RESET_PASSWORD){
+    object Categories : Screen(ROUTE_CATEGORIES) {
+        private const val ROUTE_FOR_ARGS = "categories"
+
+        fun getRouteWithArgs(categoryId: Int): String {
+            return "${ROUTE_FOR_ARGS}/$categoryId"
+        }
+    }
+
+    object ResetPassword : Screen(ROUTE_RESET_PASSWORD) {
         private const val ROUTE_FOR_ARGS = "reset_password"
 
         fun getRouteWithArgs(email: String): String {
@@ -86,6 +95,7 @@ sealed class Screen(val route: String) {
         const val KEY_ANIME_DETAIL_ID = "anime_detail_id"
         const val KEY_EMAIL = "email"
         const val KEY_PASSWORD = "password"
+        const val KEY_CATEGORIES_ID = "category_id"
 
         private const val ROUTE_SIGN_IN = "sign_in"
         private const val ROUTE_SIGN_UP = "sign_up"
@@ -97,6 +107,7 @@ sealed class Screen(val route: String) {
         private const val ROUTE_HOME_AND_SETTINGS = "home_and_settings"
         private const val ROUTE_PROFILE_AND_SETTINGS = "profile_and_settings"
         private const val ROUTE_ANIME_DETAIL_AND_VIDEO_VIEW = "anime_detail_and_video_view"
+        private const val ROUTE_HOME_AND_CATEGORIES = "home_and_categories"
 
         private const val ROUTE_HOME = "home"
         private const val ROUTE_FAVOURITE = "favourite"
@@ -111,6 +122,7 @@ sealed class Screen(val route: String) {
         private const val ROUTE_ANIME_DETAIL = "anime_detail/{$KEY_ANIME_DETAIL_ID}"
         private const val ROUTE_EMAIL_CODE_VERIFY = "email_code_verify/{$KEY_EMAIL}/{$KEY_PASSWORD}"
         private const val ROUTE_RESET_PASSWORD = "reset_password/{$KEY_EMAIL}"
+        private const val ROUTE_CATEGORIES = "categories/{$KEY_CATEGORIES_ID}"
         private const val ROUTE_EMAIL_CODE_VERIFY_RESET_PASSWORD =
             "email_code_verify_reset_password/{$KEY_EMAIL}"
         private const val ROUTE_VIDEO_VIEW = "video_view"

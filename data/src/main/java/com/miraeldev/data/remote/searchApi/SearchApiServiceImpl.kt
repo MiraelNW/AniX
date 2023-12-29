@@ -1,6 +1,7 @@
 package com.miraeldev.data.remote.searchApi
 
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
+import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
@@ -16,11 +17,14 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 internal class SearchApiServiceImpl @Inject constructor(
     @CommonHttpClient private val client: HttpClient,
     private val networkHandler: NetworkHandler,
+    private val appDatabase: AppDatabase,
     private val localTokenService: LocalTokenService
 ) : SearchApiService {
 
@@ -28,12 +32,14 @@ internal class SearchApiServiceImpl @Inject constructor(
 
         val bearerToken = localTokenService.getBearerToken()
 
+        val user = appDatabase.userDao().getUserFlow().first()
+
         return if (networkHandler.isConnected.value) {
             try {
                 ApiResult.Success(
                     animeList = listOf(
                         client.get {
-                            url("${ApiRoutes.SEARCH_URL_ANIME_ID_ROUTE}$id")
+                            url("${ApiRoutes.SEARCH_URL_ANIME_ID_ROUTE}?anime_id=$id&user_id=${user.id}")
                             headers {
                                 append(HttpHeaders.Authorization, "Bearer $bearerToken")
                             }

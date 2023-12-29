@@ -1,12 +1,13 @@
 package com.miraeldev.data.local.dao.popularCategory
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.data.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.popularCategory.PopularCategoryAnimeInfoDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface PopularCategoryDao {
@@ -14,10 +15,10 @@ internal interface PopularCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<PopularCategoryAnimeInfoDbModel>)
 
-    @Query("Select * From popular_category_anime order By page, score desc")
-    fun getAnime(): PagingSource<Int, AnimeInfo>
+    @Query("Select * From popular_category_anime limit 15")
+    fun getAnimeList(): Flow<List<AnimeInfo>>
 
-    @Query("Delete From popular_category_anime")
-    suspend fun clearAllAnime()
+    @Query("SELECT (SELECT COUNT(*) FROM popular_category_anime) == 0")
+    suspend fun isEmpty(): Boolean
 
 }

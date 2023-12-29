@@ -10,6 +10,8 @@ import com.miraeldev.Downloader
 import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.FilterAnimeDataRepository
 import com.miraeldev.ForgotPasswordDataRepository
+import com.miraeldev.HomeDataRepository
+import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.UserAuthDataRepository
@@ -20,6 +22,7 @@ import com.miraeldev.data.dataStore.localUser.LocalUserStoreApi
 import com.miraeldev.data.dataStore.preference.PreferenceManager
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.downloadMananger.AndroidDownloader
+import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.remote.userApiService.UserApiService
 import com.miraeldev.data.remote.userApiService.UserApiServiceImpl
 import com.miraeldev.data.repository.AnimeDetailDataRepositoryImpl
@@ -27,6 +30,8 @@ import com.miraeldev.data.repository.AnimeListDataRepositoryImpl
 import com.miraeldev.data.repository.FavouriteAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.FilterDataRepositoryImpl
 import com.miraeldev.data.repository.ForgotPasswordDataRepositoryImpl
+import com.miraeldev.data.repository.HomeDataRepositoryImpl
+import com.miraeldev.data.repository.LocalUserDataRepositoryImpl
 import com.miraeldev.data.repository.SearchAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.UserAuthDataRepositoryImpl
 import com.miraeldev.data.repository.UserDataRepositoryImpl
@@ -80,6 +85,14 @@ internal abstract class DataModule {
 
     @Binds
     @Singleton
+    abstract fun bindHomeDataRepository(impl: HomeDataRepositoryImpl): HomeDataRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLocalUserDataRepository(impl: LocalUserDataRepositoryImpl): LocalUserDataRepository
+
+    @Binds
+    @Singleton
     abstract fun bindUserApiService(impl: UserApiServiceImpl): UserApiService
 
     @Binds
@@ -99,13 +112,17 @@ internal abstract class DataModule {
             @AuthClient client: HttpClient,
             localService: LocalTokenService,
             userRepository: UserDataRepository,
+            localUserRepository: LocalUserDataRepository,
+            appDatabase: AppDatabase,
             @ApplicationContext context: Context
         ): UserAuthDataRepository {
             return UserAuthDataRepositoryImpl(
                 client = client,
                 localService = localService,
                 userDataRepository = userRepository,
-                context = context
+                context = context,
+                localUserDataRepository = localUserRepository,
+                appDatabase = appDatabase
             )
         }
 

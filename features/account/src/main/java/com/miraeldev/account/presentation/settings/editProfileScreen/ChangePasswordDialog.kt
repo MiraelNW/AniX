@@ -50,6 +50,7 @@ fun ChangePasswordDialog(
     checkPasswordEquals: () -> Boolean,
     isPasswordError: PasswordValidationState,
     isPasswordNotEqualsError: Boolean,
+    serverError: Boolean,
     newPassword: () -> String,
     currentPassword: () -> String,
     repeatedPassword: () -> String,
@@ -159,7 +160,7 @@ fun ChangePasswordDialog(
                 ) {
                     PasswordField(
                         text = repeatedPassword,
-                        isPasswordError = !isPasswordNotEqualsError,
+                        isPasswordError = !isPasswordNotEqualsError || serverError,
                         onChange = onRepeatedPasswordChange,
                         iconRes = R.drawable.ic_lock,
                         iconSize = 20.dp,

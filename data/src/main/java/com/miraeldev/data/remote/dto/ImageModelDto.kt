@@ -10,10 +10,9 @@ data class ImageModelDto(
     @SerialName("original") val original: String
 )
 
-fun ImageModelDto.toModel(token: String): ImageModel {
+fun ImageModelDto.toModel(): ImageModel {
     return ImageModel(
         preview = this.preview,
         original = this.original,
-        token = "Bearer $token"
     )
 }

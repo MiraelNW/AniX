@@ -13,6 +13,6 @@ interface AnimeDetailRepository {
 
     suspend fun downloadVideo(url:String, videoName:String)
 
-    fun loadVideoId(videoId:Int)
+    fun loadVideoId(animeItem:AnimeDetailInfo, videoId:Int)
 
 }

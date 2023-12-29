@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeListDataRepository {
 
-    fun getNewAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getPopularAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingPopularAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getNameAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingNameAnimeList(): Flow<PagingData<AnimeInfo>>
 
-    fun getFilmsAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>>
 
 }

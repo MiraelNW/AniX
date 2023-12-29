@@ -1,5 +1,7 @@
 package com.miraelDev.vauma.navigation.appNavGraph
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,22 +21,27 @@ fun AppNavGraph(
     videoViewScreenContent: @Composable () -> Unit,
     editProfileScreenContent: @Composable () -> Unit,
     downloadVideoScreenContent: @Composable () -> Unit,
+    homeCategoriesScreenContent: @Composable (Int) -> Unit,
     accountScreen: @Composable () -> Unit,
 ) {
     NavHost(
         navController = navHosController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.HomeAndCategories.route
     ) {
 
-        composable(Screen.Home.route){
-            homeScreenContent()
-        }
+
+        homeAndCategoriesNavGraph(
+            homeScreenContent = homeScreenContent,
+            homeCategoriesScreenContent = homeCategoriesScreenContent
+        )
 
         searchAndFilterNavGraph(
             searchScreenContent = searchScreenContent,
             filterScreenContent = filterScreenContent
         )
-        composable(Screen.Favourite.route) {
+        composable(
+            Screen.Favourite.route,
+        ) {
             favouriteScreenContent()
         }
         profileNavGraph(

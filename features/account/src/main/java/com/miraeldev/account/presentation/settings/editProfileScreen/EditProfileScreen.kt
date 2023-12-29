@@ -55,12 +55,16 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.account.R
 import com.miraeldev.exntensions.NoRippleInteractionSource
 import com.miraeldev.exntensions.noRippleEffectClick
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.Toolbar
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun EditProfileScreen(
@@ -79,6 +83,8 @@ fun EditProfileScreen(
     val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
     val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
     val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+    val serverError by viewModel.serverError.collectAsStateWithLifecycle()
 
     val currentPassword = remember { { viewModel.currentPassword.value } }
     val newPassword = remember { { viewModel.newPassword.value } }
@@ -121,10 +127,7 @@ fun EditProfileScreen(
         }
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -156,14 +159,20 @@ fun EditProfileScreen(
                             )
                         }
                     ) {
-                        AsyncImage(
+
+                        GlideImage(
                             modifier = Modifier
                                 .size(160.dp)
                                 .clip(CircleShape),
-                            model = imagePath.ifEmpty { R.drawable.ic_placeholder },
-                            placeholder = painterResource(id = R.drawable.ic_account),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = "Profile image"
+                            imageModel = { userInfo.image.ifEmpty { R.drawable.ic_placeholder } },
+                            requestOptions = {
+                                RequestOptions()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            },
+                            imageOptions = ImageOptions(
+                                contentDescription = "profile image",
+                                contentScale = ContentScale.Crop,
+                            ),
                         )
                         Icon(
                             modifier = Modifier
@@ -246,6 +255,7 @@ fun EditProfileScreen(
                 checkNewPasswordValid = isNewPasswordValidAction,
                 checkPasswordEquals = isPasswordEqualsAction,
                 newPassword = newPassword,
+                serverError = serverError,
                 currentPassword = currentPassword,
                 repeatedPassword = repeatedPassword,
                 onCurrentPasswordChange = updateCurrentPasswordAction,
@@ -294,11 +304,9 @@ private fun NameField(
     onNext: KeyboardActionScope.() -> Unit,
 ) {
 
-    val value = remember(text) { text() }
-
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = value,
+        value = text(),
         onValueChange = onValueChange,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(

@@ -5,15 +5,15 @@ import androidx.room.Room
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.local.dao.SearchHistoryAnimeDao
-import com.miraeldev.data.local.dao.filmCategory.FilmCategoryDao
+import com.miraeldev.data.local.dao.filmCategory.FilmCategoryPagingDao
 import com.miraeldev.data.local.dao.filmCategory.FilmCategoryRemoteKeysDao
-import com.miraeldev.data.local.dao.initialSearch.InitialSearchDao
+import com.miraeldev.data.local.dao.initialSearch.InitialSearchPagingDao
 import com.miraeldev.data.local.dao.initialSearch.InitialSearchRemoteKeysDao
-import com.miraeldev.data.local.dao.nameCategory.NameCategoryDao
+import com.miraeldev.data.local.dao.nameCategory.NameCategoryPagingDao
 import com.miraeldev.data.local.dao.nameCategory.NameCategoryRemoteKeysDao
-import com.miraeldev.data.local.dao.newCategory.NewCategoryDao
+import com.miraeldev.data.local.dao.newCategory.NewCategoryPagingDao
 import com.miraeldev.data.local.dao.newCategory.NewCategoryRemoteKeysDao
-import com.miraeldev.data.local.dao.popularCategory.PopularCategoryDao
+import com.miraeldev.data.local.dao.popularCategory.PopularCategoryPagingDao
 import com.miraeldev.data.local.dao.popularCategory.PopularCategoryRemoteKeysDao
 import dagger.Module
 import dagger.Provides
@@ -61,8 +61,8 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNewCategoryDao(database: AppDatabase): NewCategoryDao {
-        return database.newCategoryDao()
+    fun provideNewCategoryDao(database: AppDatabase): NewCategoryPagingDao {
+        return database.newCategoryPagingDao()
     }
 
     @Provides
@@ -73,8 +73,8 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providePopularCategoryDao(database: AppDatabase): PopularCategoryDao {
-        return database.popularCategoryDao()
+    fun providePopularCategoryDao(database: AppDatabase): PopularCategoryPagingDao {
+        return database.popularCategoryPagingDao()
     }
 
     @Provides
@@ -85,8 +85,8 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideFilmCategoryDao(database: AppDatabase): FilmCategoryDao {
-        return database.filmCategoryDao()
+    fun provideFilmCategoryDao(database: AppDatabase): FilmCategoryPagingDao {
+        return database.filmCategoryPagingDao()
     }
 
     @Provides
@@ -97,8 +97,8 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNameCategoryDao(database: AppDatabase): NameCategoryDao {
-        return database.nameCategoryDao()
+    fun provideNameCategoryDao(database: AppDatabase): NameCategoryPagingDao {
+        return database.nameCategoryPagingDao()
     }
 
     @Provides
@@ -109,7 +109,7 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideInitialSearchDao(database: AppDatabase): InitialSearchDao {
+    fun provideInitialSearchDao(database: AppDatabase): InitialSearchPagingDao {
         return database.initialSearchDao()
     }
 

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ImageModel(
     val preview: String,
     val original: String,
-    val token: String = ""
+//    val token:Flow<String>
 )

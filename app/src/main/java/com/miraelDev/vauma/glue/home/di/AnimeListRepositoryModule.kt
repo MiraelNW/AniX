@@ -1,8 +1,8 @@
 package com.miraelDev.vauma.glue.home.di
 
 
-import com.miraelDev.vauma.glue.home.repository.AnimeListRepositoryImpl
-import com.miraeldev.animelist.data.AnimeListRepository
+import com.miraelDev.vauma.glue.home.repository.HomeRepositoryImpl
+import com.miraeldev.animelist.data.HomeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,6 +14,6 @@ import dagger.hilt.components.SingletonComponent
 interface AnimeListRepositoryModule {
 
     @Binds
-    fun bindAnimeListRepository(impl: AnimeListRepositoryImpl): AnimeListRepository
+    fun bindAnimeListRepository(impl: HomeRepositoryImpl): HomeRepository
 
 }

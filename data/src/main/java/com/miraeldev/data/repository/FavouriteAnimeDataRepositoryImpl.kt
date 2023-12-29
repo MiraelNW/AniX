@@ -2,6 +2,8 @@ package com.miraeldev.data.repository
 
 import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.local.models.favourite.toAnimeInfo
 import com.miraeldev.data.mapper.AnimeModelsMapper
@@ -10,6 +12,7 @@ import com.miraeldev.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -47,6 +50,19 @@ internal class FavouriteAnimeDataRepositoryImpl @Inject constructor(
         if (isSelected) {
             favouriteAnimeDao.insertFavouriteAnimeItem(
                 animeModelsMapper.mapAnimeInfoToAnimeDbModel(animeInfo)
+            )
+        } else {
+            favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
+        }
+
+        favouriteListIsNeeded.emit(Unit)
+    }
+
+    override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: LastWatchedAnime) {
+
+        if (isSelected) {
+            favouriteAnimeDao.insertFavouriteAnimeItem(
+                animeModelsMapper.mapAnimeInfoToAnimeDbModel(animeInfo.toAnimeInfo())
             )
         } else {
             favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)

@@ -3,8 +3,8 @@ package com.miraeldev.data.local.models.favourite
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.models.ImageDbModel
-import com.miraeldev.data.local.models.toModel
+import com.miraeldev.data.local.models.user.ImageDbModel
+import com.miraeldev.data.local.models.user.toModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import com.miraeldev.domain.models.animeDataModels.toGenre
@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 
 @Entity(tableName = "favList")
 @Serializable
-internal data class AnimeInfoDbModel(
+data class AnimeInfoDbModel(
 
     @PrimaryKey val id: Int,
     val nameEn: String,
@@ -30,6 +30,7 @@ internal data class AnimeInfoDbModel(
     val description: String,
     val videoUrls: VideoInfoDataModel = VideoInfoDataModel(),
     val genres: List<GenreDataModel>,
+    val isFavourite: Boolean,
     var page: Int
 )
 
@@ -47,7 +48,8 @@ internal fun AnimeInfoDbModel.toAnimeInfo(): AnimeInfo {
         genres = this.genres.map { it.toGenre() }.toImmutableList(),
         episodes = this.episodes,
         duration = this.duration,
-        image = this.image.toModel()
+        image = this.image.toModel(),
+        isFavourite = this.isFavourite
     )
 }
 

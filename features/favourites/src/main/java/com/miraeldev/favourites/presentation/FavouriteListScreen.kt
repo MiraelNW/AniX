@@ -86,8 +86,6 @@ fun FavouriteListScreen(
 
     val searchTextState = remember { { viewModel.searchTextState.value } }
 
-    Log.d("tag", searchTextState().toString())
-
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
 
     var resultAfterSearch by rememberSaveable { mutableStateOf(false) }
@@ -123,6 +121,7 @@ fun FavouriteListScreen(
     }
 
     Column(
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -394,7 +393,7 @@ private fun AnimeCard(
                         .height(300.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp)),
-                    imageModel = { item.image },
+                    imageModel = { item.image.original },
                     imageOptions = ImageOptions(
                         contentDescription = item.nameRu,
                     ),

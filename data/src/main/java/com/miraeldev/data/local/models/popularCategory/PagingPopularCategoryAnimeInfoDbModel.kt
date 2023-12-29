@@ -1,0 +1,31 @@
+package com.miraeldev.data.local.models.popularCategory
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.miraeldev.data.local.models.user.ImageDbModel
+import com.miraeldev.domain.models.animeDataModels.GenreDataModel
+import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
+import kotlinx.serialization.Serializable
+
+
+@Entity(tableName = "paging_popular_category_anime")
+@Serializable
+internal data class PagingPopularCategoryAnimeInfoDbModel(
+
+    @PrimaryKey val id: Int,
+    val nameEn: String,
+    val nameRu: String,
+    val image: ImageDbModel,
+    val kind: String,
+    val score: Float,
+    val status: String,
+    val rating: String,
+    val releasedOn: String,
+    val episodes: Int,
+    val duration: Int,
+    val description: String,
+    val videoUrls: VideoInfoDataModel = VideoInfoDataModel(),
+    val genres: List<GenreDataModel>,
+    val isFavourite:Boolean,
+    var page: Int,
+)

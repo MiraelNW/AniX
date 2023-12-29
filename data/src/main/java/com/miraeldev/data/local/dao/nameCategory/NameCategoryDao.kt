@@ -7,6 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.nameCategory.NameCategoryAnimeInfoDbModel
+import com.miraeldev.data.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface NameCategoryDao {
@@ -14,10 +16,10 @@ internal interface NameCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<NameCategoryAnimeInfoDbModel>)
 
-    @Query("Select * From name_category_anime Order By page, nameRu")
-    fun getAnime(): PagingSource<Int, AnimeInfo>
+    @Query("Select * From name_category_anime limit 15")
+    fun getAnimeList(): Flow<List<AnimeInfo>>
 
-    @Query("Delete From name_category_anime")
-    suspend fun clearAllAnime()
+    @Query("SELECT (SELECT COUNT(*) FROM name_category_anime) == 0")
+    suspend fun isEmpty(): Boolean
 
 }

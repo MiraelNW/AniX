@@ -2,6 +2,7 @@ package com.miraeldev.di
 
 import android.content.Context
 import android.util.Log
+import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
@@ -104,7 +105,7 @@ internal object HttpClientModule {
     @CommonHttpClient
     internal fun provideHttpClient(
         localTokenService: LocalTokenService,
-        userDataRepository: UserDataRepository
+        userDataRepository: LocalUserDataRepository
     ): HttpClient {
 
         return HttpClient(Android).config {

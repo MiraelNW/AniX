@@ -3,12 +3,15 @@ package com.miraeldev.data.remote.dto
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.filmCategory.FilmCategoryAnimeInfoDbModel
-import com.miraeldev.data.local.models.initialSearch.InitialSearchAnimeInfoDbModel
+import com.miraeldev.data.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
+import com.miraeldev.data.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
 import com.miraeldev.data.local.models.nameCategory.NameCategoryAnimeInfoDbModel
+import com.miraeldev.data.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.newCategory.NewCategoryAnimeInfoDbModel
+import com.miraeldev.data.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
+import com.miraeldev.data.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.popularCategory.PopularCategoryAnimeInfoDbModel
-import com.miraeldev.data.local.models.toDbModel
-import kotlinx.collections.immutable.toImmutableList
+import com.miraeldev.data.local.models.user.toDbModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,28 +46,11 @@ internal data class AnimeInfoDto(
     @SerialName("genres") val genres: List<GenreDto>,
 
     @SerialName("similar") val similar: List<SimilarDto>,
+
+    @SerialName("favoured") val isFavourite: Boolean,
 )
 
-internal fun AnimeInfoDto.toAnimeDetailInfo(token:String): AnimeDetailInfo {
-    return AnimeDetailInfo(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenre() }.toImmutableList(),
-        episodes = this.episodes,
-        image = this.image.toModel(token),
-        duration = this.duration,
-        similar = this.similar.map { it.toSimilar(token) }.toPersistentList()
-    )
-}
-
-internal fun AnimeInfoDto.toAnimeInfo(token:String): AnimeInfo {
+internal fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
     return AnimeInfo(
         id = this.id,
         nameRu = this.russianName,
@@ -77,8 +63,49 @@ internal fun AnimeInfoDto.toAnimeInfo(token:String): AnimeInfo {
         kind = this.kind,
         genres = this.genres.map { it.toGenre() }.toPersistentList(),
         episodes = this.episodes,
-        image = this.image.toModel(token),
+        image = this.image.toModel(),
         duration = this.duration,
+        isFavourite = this.isFavourite
+    )
+}
+
+internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
+    return AnimeDetailInfo(
+        id = this.id,
+        nameRu = this.russianName,
+        nameEn = this.name,
+        description = this.description ?: "",
+        rating = this.rating,
+        score = this.score,
+        releasedOn = this.releasedOn,
+        status = this.status,
+        kind = this.kind,
+        genres = this.genres.map { it.toGenre() }.toPersistentList(),
+        episodes = this.episodes,
+        image = this.image.toModel(),
+        duration = this.duration,
+        isFavourite = this.isFavourite,
+        similar = this.similar.map { it.toSimilar() }.toPersistentList()
+    )
+}
+
+internal fun AnimeInfoDto.mapToPagingNewCategoryModel(): PagingNewCategoryAnimeInfoDbModel {
+    return PagingNewCategoryAnimeInfoDbModel(
+        id = this.id,
+        nameRu = this.russianName,
+        nameEn = this.name,
+        description = this.description ?: "",
+        rating = this.rating,
+        score = this.score,
+        releasedOn = this.releasedOn,
+        status = this.status,
+        kind = this.kind,
+        genres = this.genres.map { it.toGenreDataModel() },
+        episodes = this.episodes,
+        image = this.image.toDbModel(),
+        duration = this.duration,
+        isFavourite = this.isFavourite,
+        page = 0
     )
 }
 
@@ -97,6 +124,27 @@ internal fun AnimeInfoDto.mapToNewCategoryModel(): NewCategoryAnimeInfoDbModel {
         episodes = this.episodes,
         image = this.image.toDbModel(),
         duration = this.duration,
+        isFavourite = this.isFavourite,
+        createTime = System.currentTimeMillis()
+    )
+}
+
+internal fun AnimeInfoDto.mapToPagingPopularCategoryModel(): PagingPopularCategoryAnimeInfoDbModel {
+    return PagingPopularCategoryAnimeInfoDbModel(
+        id = this.id,
+        nameRu = this.russianName,
+        nameEn = this.name,
+        description = this.description ?: "",
+        rating = this.rating,
+        score = this.score,
+        releasedOn = this.releasedOn,
+        status = this.status,
+        kind = this.kind,
+        genres = this.genres.map { it.toGenreDataModel() },
+        episodes = this.episodes,
+        image = this.image.toDbModel(),
+        duration = this.duration,
+        isFavourite = this.isFavourite,
         page = 0
     )
 }
@@ -116,6 +164,26 @@ internal fun AnimeInfoDto.mapToPopularCategoryModel(): PopularCategoryAnimeInfoD
         episodes = this.episodes,
         image = this.image.toDbModel(),
         duration = this.duration,
+        isFavourite = this.isFavourite
+    )
+}
+
+internal fun AnimeInfoDto.mapToPagingFilmCategoryModel(): PagingFilmCategoryAnimeInfoDbModel {
+    return PagingFilmCategoryAnimeInfoDbModel(
+        id = this.id,
+        nameRu = this.russianName,
+        nameEn = this.name,
+        description = this.description ?: "",
+        rating = this.rating,
+        score = this.score,
+        releasedOn = this.releasedOn,
+        status = this.status,
+        kind = this.kind,
+        genres = this.genres.map { it.toGenreDataModel() },
+        episodes = this.episodes,
+        image = this.image.toDbModel(),
+        duration = this.duration,
+        isFavourite = this.isFavourite,
         page = 0
     )
 }
@@ -135,6 +203,26 @@ internal fun AnimeInfoDto.mapToFilmCategoryModel(): FilmCategoryAnimeInfoDbModel
         episodes = this.episodes,
         image = this.image.toDbModel(),
         duration = this.duration,
+        isFavourite = this.isFavourite
+    )
+}
+
+internal fun AnimeInfoDto.mapToPagingNameCategoryModel(): PagingNameCategoryAnimeInfoDbModel {
+    return PagingNameCategoryAnimeInfoDbModel(
+        id = this.id,
+        nameRu = this.russianName,
+        nameEn = this.name,
+        description = this.description ?: "",
+        rating = this.rating,
+        score = this.score,
+        releasedOn = this.releasedOn,
+        status = this.status,
+        kind = this.kind,
+        genres = this.genres.map { it.toGenreDataModel() },
+        episodes = this.episodes,
+        image = this.image.toDbModel(),
+        duration = this.duration,
+        isFavourite = this.isFavourite,
         page = 0
     )
 }
@@ -154,12 +242,12 @@ internal fun AnimeInfoDto.mapToNameCategoryModel(): NameCategoryAnimeInfoDbModel
         episodes = this.episodes,
         image = this.image.toDbModel(),
         duration = this.duration,
-        page = 0
+        isFavourite = this.isFavourite
     )
 }
 
-internal fun AnimeInfoDto.mapToInitialSearchModel(): InitialSearchAnimeInfoDbModel {
-    return InitialSearchAnimeInfoDbModel(
+internal fun AnimeInfoDto.mapToInitialSearchModel(): PagingInitialSearchAnimeInfoDbModel {
+    return PagingInitialSearchAnimeInfoDbModel(
         id = this.id,
         nameRu = this.russianName,
         nameEn = this.name,
@@ -173,6 +261,7 @@ internal fun AnimeInfoDto.mapToInitialSearchModel(): InitialSearchAnimeInfoDbMod
         episodes = this.episodes,
         image = this.image.toDbModel(),
         duration = this.duration,
+        isFavourite = this.isFavourite,
         page = 0
     )
 }

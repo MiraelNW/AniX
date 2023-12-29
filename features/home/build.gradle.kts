@@ -73,4 +73,5 @@ dependencies {
     implementation(project(":core:theme"))
     implementation(project(":core:extensions"))
     implementation(project(":core:models:anime"))
+    implementation(project(":core:models:user"))
 }

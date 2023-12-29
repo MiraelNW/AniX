@@ -23,7 +23,7 @@ class SignInRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserEmail(): String {
-        return userDataRepository.getLocalUser().email
+        return userDataRepository.getUserEmail().email
     }
 
     override suspend fun logInWithGoogle(idToken: String) {

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 internal interface FavouriteAnimeDao {
 
     @Query("SELECT * FROM favList LIMIT 10 OFFSET :offset")
-    fun getFavouriteAnimeList(offset:Int=0): Flow<List<AnimeInfoDbModel>>
+    fun getFavouriteAnimeList(offset: Int = 0): Flow<List<AnimeInfoDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavouriteAnimeItem(animeItem: AnimeInfoDbModel)
@@ -22,5 +22,5 @@ internal interface FavouriteAnimeDao {
     suspend fun deleteFavouriteAnimeItem(animeItemId: Int)
 
     @Query("SELECT * FROM favList WHERE nameEn LIKE ('%' || :name || '%') OR nameRu LIKE ('%' || :name || '%') ")
-    suspend fun searchAnimeItem(name : String):List<AnimeInfoDbModel>
+    suspend fun searchAnimeItem(name: String): List<AnimeInfoDbModel>
 }

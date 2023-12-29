@@ -1,6 +1,5 @@
 package com.miraeldev.signup.presentation.signUpScreen
 
-import android.net.Uri
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -135,10 +134,11 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(errorHandler) {
             signUp(
                 User(
-                    username = nickNameTextState.value.ifBlank {
+                    name = nickNameTextState.value.ifBlank {
                         emailTextState.value.substringBefore("@")
                     },
-                    userImagePath = imagePath.value,
+                    username = emailTextState.value.substringBefore("@"),
+                    image = imagePath.value,
                     password = passwordTextState.value,
                     email = emailTextState.value
                 )

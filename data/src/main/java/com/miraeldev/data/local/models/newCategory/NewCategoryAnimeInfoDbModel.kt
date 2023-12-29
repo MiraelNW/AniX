@@ -2,7 +2,7 @@ package com.miraeldev.data.local.models.newCategory
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.miraeldev.data.local.models.ImageDbModel
+import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import kotlinx.serialization.Serializable
@@ -26,5 +26,6 @@ internal data class NewCategoryAnimeInfoDbModel(
     val description: String,
     val videoUrls: VideoInfoDataModel = VideoInfoDataModel(),
     val genres: List<GenreDataModel>,
-    var page: Int
+    val isFavourite:Boolean,
+    val createTime:Long
 )
