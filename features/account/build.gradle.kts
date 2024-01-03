@@ -64,6 +64,10 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.landscapist.glide)
     implementation(libs.landscapist.transformation)
+    
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
 
     implementation(project(":core:presentation"))
     implementation(project(":core:extensions"))

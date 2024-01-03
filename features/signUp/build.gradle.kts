@@ -63,6 +63,10 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
 
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
+
     implementation(project(":core:presentation"))
     implementation(project(":core:extensions"))
     implementation(project(":core:models:user"))

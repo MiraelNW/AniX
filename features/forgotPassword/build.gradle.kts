@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.runtime.compose)
 
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
+
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

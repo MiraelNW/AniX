@@ -65,6 +65,25 @@ dependencies {
     implementation(libs.vk.sdk.core)
     implementation(libs.vk.sdk.api)
 
+    //test
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
+
+    //mockito
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.test.manifest)
+
     implementation(project(":core:presentation"))
     implementation(project(":core:extensions"))
     implementation(project(":core:utils"))
