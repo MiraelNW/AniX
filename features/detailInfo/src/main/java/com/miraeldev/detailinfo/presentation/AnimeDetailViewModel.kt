@@ -3,6 +3,7 @@ package com.miraeldev.detailinfo.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.detailinfo.data.repositories.Logger
 import com.miraeldev.detailinfo.domain.useCases.DownloadAnimeEpisodeUseCase
 import com.miraeldev.detailinfo.domain.useCases.GetAnimeDetailUseCase
 import com.miraeldev.detailinfo.domain.useCases.LoadAnimeDetailUseCase
@@ -11,6 +12,7 @@ import com.miraeldev.detailinfo.domain.useCases.SelectAnimeItemUseCase
 import com.miraeldev.result.ResultAnimeDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -25,7 +27,12 @@ class AnimeDetailViewModel @Inject constructor(
     private val loadVideoIdUseCase: LoadVideoIdUseCase,
     private val loadAnimeDetailUseCase: LoadAnimeDetailUseCase,
     private val downloadAnimeEpisodeUseCase: DownloadAnimeEpisodeUseCase,
+    private val logger: Logger
 ) : ViewModel() {
+
+    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        logger.logError(throwable.message ?: "", throwable)
+    }
 
     val animeDetail = getAnimeDetailUseCase()
         .map {
@@ -53,26 +60,26 @@ class AnimeDetailViewModel @Inject constructor(
         )
 
     fun downloadEpisode(url: String, videoName: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             downloadAnimeEpisodeUseCase(url, videoName)
         }
 
     }
 
-    fun loadVideoId(animeItem:AnimeDetailInfo, id: Int) {
-        viewModelScope.launch {
+    fun loadVideoId(animeItem: AnimeDetailInfo, id: Int) {
+        viewModelScope.launch(exceptionHandler) {
             loadVideoIdUseCase(animeItem, id)
         }
     }
 
     fun loadAnimeDetail(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             loadAnimeDetailUseCase(id)
         }
     }
 
     fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeDetailInfo) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             selectAnimeItemUseCase(isSelected, animeInfo)
         }
     }

@@ -7,6 +7,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -92,6 +94,11 @@ dependencies {
     debugImplementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.test.manifest)
 
+    //firebase crashlytics
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+
     //navigation
     implementation(libs.navigation.compose)
     implementation(libs.gson)
@@ -128,6 +135,8 @@ dependencies {
     implementation(project(":features:videoScreen"))
 
     implementation(project(":data"))
+
+    implementation(project(":logger"))
 
     implementation(project(":core:theme"))
     implementation(project(":core:utils"))

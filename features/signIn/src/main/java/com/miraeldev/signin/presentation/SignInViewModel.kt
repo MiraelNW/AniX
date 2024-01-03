@@ -6,10 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraeldev.exntensions.mergeWith
-import com.miraeldev.signin.domain.LoginWithVkUseCase
+import com.miraeldev.signin.data.repositories.Logger
 import com.miraeldev.signin.domain.GetSignInErrorUseCase
 import com.miraeldev.signin.domain.GetUserEmailUseCase
 import com.miraeldev.signin.domain.LogInWithGoogleUseCase
+import com.miraeldev.signin.domain.LoginWithVkUseCase
 import com.miraeldev.signin.domain.SignInUseCase
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
@@ -30,7 +31,8 @@ class SignInViewModel @Inject constructor(
     private val getUserEmailUseCase: GetUserEmailUseCase,
     private val loginWithVkUseCase: LoginWithVkUseCase,
     private val logInWithGoogleUseCase: LogInWithGoogleUseCase,
-    private val validatePassword: ValidatePassword
+    private val validatePassword: ValidatePassword,
+    private val logger: Logger
 ) : ViewModel() {
 
     private val _loginTextState = mutableStateOf("")
@@ -58,8 +60,8 @@ class SignInViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             updateLoginTextState(getUserEmailUseCase())
-        }
 
+        }
     }
 
     fun updateLoginTextState(value: String) {
@@ -86,7 +88,8 @@ class SignInViewModel @Inject constructor(
     }
 
     fun isEmailValid(): Boolean {
-        _isEmailError.value = !Patterns.EMAIL_ADDRESS.matcher(loginTextState.value.trim()).matches()
+        _isEmailError.value =
+            !Patterns.EMAIL_ADDRESS.matcher(loginTextState.value.trim()).matches()
         return Patterns.EMAIL_ADDRESS.matcher(loginTextState.value).matches()
     }
 
@@ -111,10 +114,9 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInVkAccount(accessToken:String,userId:String,email:String?) {
+    fun signInVkAccount(accessToken: String, userId: String, email: String?) {
         viewModelScope.launch {
-            loginWithVkUseCase(accessToken,userId,email)
+            loginWithVkUseCase(accessToken, userId, email)
         }
     }
-
 }

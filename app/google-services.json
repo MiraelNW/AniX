@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "794152494651",
+    "project_id": "anix-93ed2",
+    "storage_bucket": "anix-93ed2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794152494651:android:003e367b5dd4ba8d519e1e",
+        "android_client_info": {
+          "package_name": "com.miraelDev.vauma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794152494651-1po7g0ed40icebbdkhsinsckroc1injj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNHvDRsM0VlG9QUBenEbOjQDbjUSeXe9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794152494651-1po7g0ed40icebbdkhsinsckroc1injj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
