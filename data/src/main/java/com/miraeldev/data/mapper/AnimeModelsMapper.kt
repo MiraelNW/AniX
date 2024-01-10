@@ -1,13 +1,13 @@
 package com.miraeldev.data.mapper
 
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.Genre
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
-import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.data.local.models.favourite.AnimeInfoDbModel
+import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
+import com.miraeldev.models.anime.Genre
 import javax.inject.Inject
 
 internal class AnimeModelsMapper @Inject constructor() {
@@ -37,8 +37,10 @@ internal class AnimeModelsMapper @Inject constructor() {
     private fun mapVideoInfoToDataModel(videoInfo: VideoInfo): VideoInfoDataModel {
         return VideoInfoDataModel(
             id = videoInfo.id,
-            imageUrl = videoInfo.imageUrl,
-            playerUrl = videoInfo.playerUrl,
+            videoImage = videoInfo.videoImage,
+            videoUrl480 = videoInfo.videoUrl480,
+            videoUrl720 = videoInfo.videoUrl720,
+            videoUrl1080 = videoInfo.videoUrl1080,
             videoName = videoInfo.videoName,
         )
     }

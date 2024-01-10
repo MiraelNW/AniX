@@ -1,13 +1,11 @@
 package com.miraeldev.data.local.dao.newCategory
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.newCategory.NewCategoryAnimeInfoDbModel
-import com.miraeldev.data.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao

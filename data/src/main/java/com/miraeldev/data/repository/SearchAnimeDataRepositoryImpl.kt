@@ -15,8 +15,6 @@ import com.miraeldev.data.remote.searchApi.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
 import com.miraeldev.di.qualifiers.CommonHttpClient
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

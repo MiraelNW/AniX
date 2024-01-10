@@ -6,7 +6,7 @@ import com.miraelDev.vauma.domain.usecases.CheckUserAuthStateUseCase
 import com.miraelDev.vauma.domain.usecases.GetDarkThemeUseCase
 import com.miraelDev.vauma.domain.usecases.GetUserAuthStateUseCase
 import com.miraelDev.vauma.domain.usecases.SetDarkThemeUseCase
-import com.miraeldev.auth.AuthState
+import com.miraeldev.models.auth.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

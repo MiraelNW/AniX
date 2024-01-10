@@ -3,11 +3,11 @@ package com.miraelDev.vauma.glue.main.repository
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.miraelDev.vauma.domain.repository.MainRepository
 import com.miraeldev.LocalUserDataRepository
+import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
-import com.miraeldev.PreferenceDataStoreAPI
+import com.miraeldev.models.auth.AuthState
 import com.miraeldev.user.UserEmail
-import com.miraeldev.auth.AuthState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject

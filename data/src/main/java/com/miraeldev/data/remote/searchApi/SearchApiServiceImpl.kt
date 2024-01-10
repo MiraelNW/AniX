@@ -17,7 +17,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 

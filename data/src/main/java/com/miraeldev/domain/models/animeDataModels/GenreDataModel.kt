@@ -1,6 +1,6 @@
 package com.miraeldev.domain.models.animeDataModels
 
-import com.miraeldev.anime.Genre
+import com.miraeldev.models.anime.Genre
 import kotlinx.serialization.Serializable
 
 

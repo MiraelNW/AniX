@@ -2,6 +2,7 @@ package com.miraeldev.data.remote.dto
 
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.data.local.models.filmCategory.FilmCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
@@ -20,33 +21,20 @@ import kotlinx.serialization.Serializable
 internal data class AnimeInfoDto(
 
     @SerialName("id") val id: Int,
-
     @SerialName("name") val name: String,
-
     @SerialName("russian") val russianName: String,
-
     @SerialName("image") val image: ImageModelDto,
-
     @SerialName("kind") val kind: String,
-
     @SerialName("score") val score: Float,
-
     @SerialName("released_on") val releasedOn: String,
-
     @SerialName("status") val status: String,
-
     @SerialName("episodes") val episodes: Int,
-
     @SerialName("rating") val rating: String,
-
     @SerialName("description") val description: String?,
-
     @SerialName("duration") val duration: Int,
-
     @SerialName("genres") val genres: List<GenreDto>,
-
     @SerialName("similar") val similar: List<SimilarDto>,
-
+    @SerialName("videos") val videos: List<VideoDto>,
     @SerialName("favoured") val isFavourite: Boolean,
 )
 
@@ -69,6 +57,19 @@ internal fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
     )
 }
 
+internal fun AnimeDetailInfo.toLastWatched(): LastWatchedAnime {
+    return LastWatchedAnime(
+        id= this.id,
+        imageUrl = this.image.original,
+        nameRu = this.nameRu,
+        nameEn = this.nameEn,
+        genres = this.genres,
+        isFavourite = this.isFavourite,
+        video = this.videos[0],
+        episodeNumber = 0
+    )
+}
+
 internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
     return AnimeDetailInfo(
         id = this.id,
@@ -85,7 +86,8 @@ internal fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
         image = this.image.toModel(),
         duration = this.duration,
         isFavourite = this.isFavourite,
-        similar = this.similar.map { it.toSimilar() }.toPersistentList()
+        similar = this.similar.map { it.toVideoInfo() }.toPersistentList(),
+        videos = this.videos.map { it.toVideoInfo() }.toPersistentList()
     )
 }
 

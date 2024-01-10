@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.common.collect.ImmutableList
-import com.miraeldev.exntensions.noRippleEffectClick
+import com.miraeldev.extensions.noRippleEffectClick
 import com.miraelDev.vauma.navigation.NavigationState
 
 @Composable

@@ -1,13 +1,13 @@
 package com.miraeldev.data.local
 
 import androidx.room.TypeConverter
-import com.miraeldev.anime.Genre
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.data.local.models.user.LastWatchedAnimeDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
+import com.miraeldev.models.anime.Genre
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.ExperimentalSerializationApi

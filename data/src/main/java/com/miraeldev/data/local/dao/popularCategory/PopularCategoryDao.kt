@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
 import com.miraeldev.data.local.models.popularCategory.PopularCategoryAnimeInfoDbModel
 import kotlinx.coroutines.flow.Flow
 

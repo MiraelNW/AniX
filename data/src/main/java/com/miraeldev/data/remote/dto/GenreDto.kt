@@ -1,7 +1,7 @@
 package com.miraeldev.data.remote.dto
 
-import com.miraeldev.anime.Genre
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.anime.Genre
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -94,12 +94,8 @@ android {
 
 dependencies {
 
-    implementation(project(":core:extensions"))
-    implementation(project(":core:models:anime"))
-    implementation(project(":core:models:result"))
-    implementation(project(":core:models:auth"))
-    implementation(project(":core:models:user"))
-    implementation(project(":core:models:video"))
+    implementation(project(":core-extensions"))
+    implementation(project(":core-models"))
 
     //kotlin
     implementation(libs.core.ktx)

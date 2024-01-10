@@ -3,9 +3,10 @@ package com.miraeldev.data.repository
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.util.EventLogger
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.video.PlayerWrapper
@@ -20,7 +21,7 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
     private val userDataRepository: UserDataRepository
 ) : VideoPlayerDataRepository {
 
-    private val videoUrls = MutableStateFlow(VideoInfo())
+    private val videoModel = MutableStateFlow(listOf(VideoInfo()))
     private val videoId = MutableStateFlow(0)
 
     private var lastWatchedAnime = LastWatchedAnime(-1)
@@ -31,24 +32,26 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
 
     override fun getVideoPlayer(): StateFlow<PlayerWrapper> {
         player.prepare()
+        player.addAnalyticsListener(EventLogger())
         return playerWrapper.asStateFlow()
     }
 
-    override fun loadVideoId(animeItem: AnimeInfo, videoId: Int) {
+    override fun loadVideoId(animeItem: AnimeDetailInfo, videoId: Int) {
         this.videoId.value = videoId
+        videoModel.value = animeItem.videos.toList()
 
         playerWrapper.value =
             playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
 
-        if (videoId == (videoUrls.value.playerUrl.size - 1)) {
+        if (videoId == (videoModel.value.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
         }
         if (videoId == 0) {
             playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
         }
 
-        val name = videoUrls.value.videoName[this.videoId.value]
-        val url = videoUrls.value.playerUrl[this.videoId.value]
+        val name = videoModel.value[this.videoId.value].videoName
+        val url = videoModel.value[this.videoId.value].videoUrl480
 
         lastWatchedAnime = lastWatchedAnime.copy(
             id = animeItem.id,
@@ -58,17 +61,17 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
             genres = animeItem.genres,
             isFavourite = animeItem.isFavourite,
             episodeNumber = this.videoId.value,
-            videoUrl = url
+            video = videoModel.value[this.videoId.value]
         )
 
         setMediaItem(name, url)
     }
 
-    override fun loadVideoPlayer(animeInfo: AnimeInfo) {
-        videoUrls.value = animeInfo.videoUrls
+    override fun loadVideoPlayer(animeInfo: AnimeDetailInfo) {
+        videoModel.value = animeInfo.videos
 
-        val name = videoUrls.value.videoName[videoId.value]
-        val url = videoUrls.value.playerUrl[videoId.value]
+        val name = videoModel.value[videoId.value].videoName
+        val url = videoModel.value[videoId.value].videoUrl480
 
         setMediaItem(name, url)
     }
@@ -80,16 +83,16 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
         playerWrapper.value =
             playerWrapper.value.copy(isLastEpisode = false, isFirstEpisode = false)
 
-        if (nextVideoId == (videoUrls.value.playerUrl.size - 1)) {
+        if (nextVideoId == (videoModel.value.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
         }
 
-        val name = videoUrls.value.videoName[nextVideoId]
-        val url = videoUrls.value.playerUrl[nextVideoId]
+        val name = videoModel.value[nextVideoId].videoName
+        val url = videoModel.value[nextVideoId].videoUrl1080
 
         lastWatchedAnime = lastWatchedAnime.copy(
             episodeNumber = nextVideoId,
-            videoUrl = url
+            video = videoModel.value[nextVideoId]
         )
 
         setMediaItem(name, url)
@@ -106,12 +109,12 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
             playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
         }
 
-        val name = videoUrls.value.videoName[previousVideoId]
-        val url = videoUrls.value.playerUrl[previousVideoId]
+        val name = videoModel.value[previousVideoId].videoName
+        val url = videoModel.value[previousVideoId].videoUrl480
 
         lastWatchedAnime = lastWatchedAnime.copy(
             episodeNumber = previousVideoId,
-            videoUrl = url
+            video = videoModel.value[previousVideoId]
         )
 
         setMediaItem(name, url)
@@ -136,16 +139,16 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
             playerWrapper.value = playerWrapper.value.copy(isFirstEpisode = true)
         }
 
-        if (specificEpisode == (videoUrls.value.playerUrl.size - 1)) {
+        if (specificEpisode == (videoModel.value.size - 1)) {
             playerWrapper.value = playerWrapper.value.copy(isLastEpisode = true)
         }
 
-        val name = videoUrls.value.videoName[specificEpisode]
-        val url = videoUrls.value.playerUrl[specificEpisode]
+        val name = videoModel.value[specificEpisode].videoName
+        val url = videoModel.value[specificEpisode].videoUrl480
 
         lastWatchedAnime = lastWatchedAnime.copy(
             episodeNumber = specificEpisode,
-            videoUrl = url
+            video = videoModel.value[specificEpisode]
         )
 
         setMediaItem(name, url)

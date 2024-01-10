@@ -1,8 +1,6 @@
 package com.miraeldev
 
-import com.miraeldev.auth.AuthState
-import com.miraeldev.user.User
-import com.miraeldev.user.UserEmail
+import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.flow.Flow
 
 interface LocalUserDataRepository {

@@ -8,9 +8,8 @@ import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.anime.toAnimeDetailInfo
 import com.miraeldev.user.User
-import com.miraeldev.anime.toAnimeInfo
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -65,6 +64,6 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override fun loadVideoId(animeItem: LastWatchedAnime) {
-        videoPlayerDataRepository.loadVideoId(animeItem.toAnimeInfo(), animeItem.episodeNumber)
+        videoPlayerDataRepository.loadVideoId(animeItem.toAnimeDetailInfo(), animeItem.episodeNumber)
     }
 }

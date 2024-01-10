@@ -24,6 +24,7 @@ import com.miraeldev.favourites.presentation.FavouriteListScreen
 import com.miraeldev.search.presentation.SearchAnimeScreen
 import com.miraeldev.search.presentation.filterScreen.FilterScreen
 import com.miraeldev.theme.LocalOrientation
+import com.miraeldev.video.presentation.VideoViewScreen
 
 private const val BACK = 0
 private const val ON_VIDEO_VIEW = 1
@@ -136,7 +137,7 @@ fun MainScreen(
                 videoViewScreenContent = {
                     shouldShowBottomBar = false
                     shouldShowNavRail = false
-                    com.miraeldev.videoscreen.presentation.VideoViewScreen(
+                    VideoViewScreen(
                         navigateBack = {
                             onVideoViewClick(BACK)
                             navigationState.navHostController.popBackStack()

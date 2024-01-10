@@ -128,30 +128,30 @@ dependencies {
     //data store
     implementation(libs.datastore.preferences)
 
-    implementation(project(":features:signIn"))
-    implementation(project(":features:signUp"))
-    implementation(project(":features:forgotPassword"))
-    implementation(project(":features:account"))
-    implementation(project(":features:home"))
-    implementation(project(":features:favourites"))
-    implementation(project(":features:detailInfo"))
-    implementation(project(":features:search"))
-    implementation(project(":features:videoScreen"))
+    implementation(project(":features-signin"))
+    implementation(project(":features-signup"))
+    implementation(project(":features-forgotPassword"))
+    implementation(project(":features-account"))
+    implementation(project(":features-home"))
+    implementation(project(":features-favourites"))
+    implementation(project(":features-detailInfo"))
+    implementation(project(":features-search"))
+    implementation(project(":features-video"))
 
     implementation(project(":data"))
 
     implementation(project(":logger"))
 
-    implementation(project(":core:theme"))
-    implementation(project(":core:utils"))
-    implementation(project(":core:extensions"))
-    implementation(project(":core:presentation"))
+    implementation(project(":core-theme"))
+    implementation(project(":core-utils"))
+    implementation(project(":core-extensions"))
+    implementation(project(":core-presentation"))
 
-    implementation(project(":core:models:anime"))
-    implementation(project(":core:models:auth"))
-    implementation(project(":core:models:result"))
-    implementation(project(":core:models:user"))
-    implementation(project(":core:models:video"))
+    implementation(project(":core-models"))
+    implementation(project(":core-models"))
+    implementation(project(":core-models"))
+    implementation(project(":core-models"))
+    implementation(project(":core-models"))
 }
 
 hilt {

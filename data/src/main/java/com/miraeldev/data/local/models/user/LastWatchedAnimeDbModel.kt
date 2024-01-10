@@ -2,10 +2,12 @@ package com.miraeldev.data.local.models.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.miraeldev.anime.Genre
+import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.anime.VideoInfo
+import com.miraeldev.data.local.models.VideoDbModel
 import com.miraeldev.domain.models.animeDataModels.GenreDataModel
 import com.miraeldev.domain.models.animeDataModels.toGenre
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.Genre
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
@@ -21,7 +23,7 @@ data class LastWatchedAnimeDbModel(
     val genres: List<GenreDataModel>,
     val isFavourite: Boolean,
     val episodeNumber: Int,
-    val videoUrl: String
+    val video: VideoDbModel
 )
 
 fun LastWatchedAnimeDbModel.toModel(): LastWatchedAnime {
@@ -33,7 +35,7 @@ fun LastWatchedAnimeDbModel.toModel(): LastWatchedAnime {
         genres = this.genres.map { it.toGenre() }.toImmutableList(),
         isFavourite = this.isFavourite,
         episodeNumber = this.episodeNumber,
-        videoUrl = this.videoUrl
+        video = this.video.toVideoInfo()
     )
 }
 
@@ -46,7 +48,7 @@ fun LastWatchedAnime.toDbModel(): LastWatchedAnimeDbModel {
         genres = this.genres.map { it.toDbModel() },
         isFavourite = this.isFavourite,
         episodeNumber = this.episodeNumber,
-        videoUrl = this.videoUrl
+        video = this.video.toVideoDbModel()
     )
 }
 
@@ -54,5 +56,26 @@ fun Genre.toDbModel(): GenreDataModel {
     return GenreDataModel(
         nameRu = this.nameRu,
         nameEn = this.nameEn
+    )
+}
+
+fun VideoDbModel.toVideoInfo():VideoInfo{
+    return VideoInfo(
+        id = this.id,
+        videoName = this.videoName,
+        videoImage = this.videoImage,
+        videoUrl480 = this.videoUrl480,
+        videoUrl720 = this.videoUrl720,
+        videoUrl1080 = this.videoUrl1080
+    )
+}
+fun VideoInfo.toVideoDbModel():VideoDbModel{
+    return VideoDbModel(
+        id = this.id,
+        videoName = this.videoName,
+        videoImage = this.videoImage,
+        videoUrl480 = this.videoUrl480,
+        videoUrl720 = this.videoUrl720,
+        videoUrl1080 = this.videoUrl1080
     )
 }

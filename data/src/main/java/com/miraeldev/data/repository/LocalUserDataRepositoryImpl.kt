@@ -1,14 +1,8 @@
 package com.miraeldev.data.repository
 
-import android.util.Log
 import com.miraeldev.LocalUserDataRepository
-import com.miraeldev.auth.AuthState
-import com.miraeldev.data.dataStore.localUser.LocalUserStoreApi
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
-import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.mapper.UserModelsMapper
-import com.miraeldev.di.qualifiers.CommonHttpClient
-import io.ktor.client.HttpClient
+import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

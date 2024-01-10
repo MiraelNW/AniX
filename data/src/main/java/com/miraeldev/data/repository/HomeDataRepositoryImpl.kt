@@ -1,18 +1,20 @@
 package com.miraeldev.data.repository
 
-import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.HomeDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.toLastWatched
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
+import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
 import com.miraeldev.data.remote.dto.mapToNameCategoryModel
 import com.miraeldev.data.remote.dto.mapToNewCategoryModel
 import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
+import com.miraeldev.data.remote.dto.toAnimeDetailInfo
+import com.miraeldev.data.remote.dto.toLastWatched
+import com.miraeldev.data.remote.searchApi.SearchApiService
 import com.miraeldev.di.qualifiers.CommonHttpClient
 import com.miraeldev.user.User
 import io.ktor.client.HttpClient
@@ -29,6 +31,7 @@ import javax.inject.Inject
 internal class HomeDataRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
     @CommonHttpClient private val client: HttpClient,
+    private val searchApiService: SearchApiService,
     private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository
 ) : HomeDataRepository {
@@ -131,8 +134,17 @@ internal class HomeDataRepositoryImpl @Inject constructor(
         return userDataRepository.getUserInfo()
             .map { user ->
                 if (user.lastWatchedAnime == null) {
-                    val animeInfo = getPopularAnimeList().first()[0]
-                    user.copy(lastWatchedAnime = animeInfo.toLastWatched())
+                    val animeId = getPopularAnimeList().first()[0].id
+                    when (val apiResult = searchApiService.getAnimeById(animeId)) {
+                        is ApiResult.Success -> {
+                            val animeList = apiResult.animeList.map { it.toAnimeDetailInfo() }
+                            user.copy(lastWatchedAnime = animeList[0].toLastWatched())
+                        }
+                        is ApiResult.Failure -> {
+                            user
+                        }
+                    }
+
                 } else {
                     user
                 }

@@ -2,7 +2,6 @@ package com.miraeldev
 
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.data.local.models.favourite.AnimeInfoDbModel
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 

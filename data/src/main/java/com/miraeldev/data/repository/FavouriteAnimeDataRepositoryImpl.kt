@@ -7,12 +7,11 @@ import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.local.models.favourite.toAnimeInfo
 import com.miraeldev.data.mapper.AnimeModelsMapper
-import com.miraeldev.exntensions.mergeWith
+import com.miraeldev.extensions.mergeWith
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

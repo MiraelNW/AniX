@@ -2,13 +2,11 @@ package com.miraelDev.vauma.presentation
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
@@ -29,7 +27,7 @@ import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.miraelDev.vauma.navigation.appNavGraph.MainScreen
 import com.miraelDev.vauma.navigation.authNavGraph.AuthScreen
-import com.miraeldev.auth.AuthState
+import com.miraeldev.models.auth.AuthState
 import com.miraeldev.theme.HikariTheme
 import com.miraeldev.theme.LocalOrientation
 import dagger.hilt.android.AndroidEntryPoint

@@ -2,7 +2,6 @@ package com.miraeldev.data.remote.userApiService
 
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.user.User
 import io.ktor.client.HttpClient
 import javax.inject.Inject
 

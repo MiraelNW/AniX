@@ -4,7 +4,6 @@ import com.miraeldev.AnimeDetailDataRepository
 import com.miraeldev.Downloader
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.detailinfo.data.repositories.AnimeDetailRepository
 import com.miraeldev.result.ResultAnimeDetail
@@ -33,6 +32,6 @@ class AnimeDetailInfoRepositoryImpl @Inject constructor(
     }
 
     override fun loadVideoId(animeItem:AnimeDetailInfo, videoId: Int) {
-        videoPlayerDataRepository.loadVideoId(animeItem.toAnimeInfo(),videoId)
+        videoPlayerDataRepository.loadVideoId(animeItem,videoId)
     }
 }
