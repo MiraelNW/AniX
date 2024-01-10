@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.miraeldev.presentation"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -63,4 +63,19 @@ dependencies {
 
     //lottie animations
     implementation(libs.lottie.compose)
+
+    //test
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+
+    //mockito
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
 }

@@ -44,4 +44,19 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
+
+    //test
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+
+    //mockito
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+
+    //ui tests kaspresso
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
 }
