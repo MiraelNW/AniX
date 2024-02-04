@@ -62,10 +62,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.pressClickEffect
+import com.miraeldev.navigation.decompose.authComponent.signInComponent.SignInComponent
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.PasswordField
 import com.miraeldev.signin.R
+import com.miraeldev.signin.presentation.store.SignInStore
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
 import com.vk.api.sdk.auth.VKScope
@@ -76,19 +78,12 @@ private const val GOOGLE_AUTH_REQUEST_CODE = 1
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = hiltViewModel(),
-    navigateToSignUpScreen: () -> Unit,
-    onForgetPasswordClick: () -> Unit,
+    component: SignInComponent,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
+    val model by component.model.collectAsStateWithLifecycle()
 
     Surface {
-
-        val loginText = remember { { viewModel.loginTextState.value } }
-        val passwordText = remember { { viewModel.passwordTextState.value } }
-
-        val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
-        val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
-        val isSignInError by viewModel.signInError.collectAsStateWithLifecycle()
 
         val loginFocusRequester = remember { FocusRequester() }
         val passwordFocusRequester = remember { FocusRequester() }
@@ -97,14 +92,6 @@ fun SignInScreen(
 
         val isEmailValidAction = remember { { viewModel.isEmailValid() } }
         val isPasswordValidAction = remember { { viewModel.isPasswordValid() } }
-        val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
-        val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
-        val signInAction = remember { { viewModel.signIn() } }
-        val updatePasswordAction: (String) -> Unit =
-            remember { { viewModel.updatePasswordTextState(it) } }
-        val updateEmailAction: (String) -> Unit =
-            remember { { viewModel.updateLoginTextState(it) } }
-        val navigateToSignUp = remember { { navigateToSignUpScreen() } }
 
         val focusManager = LocalFocusManager.current
         val context = LocalContext.current
@@ -217,19 +204,19 @@ fun SignInScreen(
                                 .focusRequester(loginFocusRequester)
                                 .onFocusEvent {
                                     if (it.isFocused) {
-                                        refreshEmailErrorAction()
+                                        component.refreshEmailError()
                                     }
                                 },
-                            text = loginText,
-                            isLoginError = isEmailError,
+                            text = { model.email },
+                            isLoginError = model.isEmailError,
                             onNext = moveFocusDown,
-                            onChange = updateEmailAction
+                            onChange = { component.onEmailChanged(it) }
 
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = isEmailError,
+                            isError = model.isEmailError,
                             error = stringResource(id = R.string.invalid_mail)
                         )
                     }
@@ -242,35 +229,35 @@ fun SignInScreen(
                         horizontalAlignment = Alignment.Start
                     ) {
                         PasswordField(
-                            text = passwordText,
-                            isPasswordError = !isPasswordError.successful,
-                            onChange = updatePasswordAction,
+                            text = { model.password },
+                            isPasswordError = model.isPasswordError,
+                            onChange = { component.onPasswordChanged(it) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .focusRequester(passwordFocusRequester)
                                 .onFocusEvent {
                                     if (it.isFocused) {
                                         isLoginInFocus = true
-                                        refreshPasswordErrorAction()
+                                        component.refreshPasswordError()
                                     }
                                 }
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = isSignInError,
+                            isError = model.isSignInError,
                             error = stringResource(R.string.incorrect_password_or_email_entered)
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = !isPasswordError.hasMinimum,
+                            isError = model.isPasswordError,
                             error = stringResource(R.string.password_must_be_more_than_6_characters)
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = !isPasswordError.hasCapitalizedLetter,
+                            isError = model.isPasswordError,
                             error = stringResource(R.string.the_password_must_contain_capital_letters)
                         )
                     }
@@ -286,18 +273,16 @@ fun SignInScreen(
                             if (!isEmailValid || !isPasswordValid) {
                                 freeFocus()
                             } else {
-                                signInAction()
+                                component.onSignInClick(model.email, model.password)
                             }
                         },
                         onSignUpClick = {
                             clearFocus()
-                            refreshEmailErrorAction()
-                            refreshPasswordErrorAction()
-                            navigateToSignUp()
+                            component.onSignUpClick()
                         }
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    ForgetPassword(onForgetPasswordClick = onForgetPasswordClick)
+                    ForgetPassword(onForgetPasswordClick = { TODO() })
                 }
 
                 Column(

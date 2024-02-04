@@ -58,6 +58,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.miraeldev.extensions.noRippleEffectClick
+import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.PasswordField
@@ -66,15 +67,12 @@ import com.miraeldev.signup.R
 
 @Composable
 fun SignUpScreen(
-    viewModel: SignUpViewModel = hiltViewModel(),
-    navigateToOtpScreen: (String, String) -> Unit,
-    onBackPressed: () -> Unit,
+    component: SignUpComponent,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
+    val model by component.model.collectAsStateWithLifecycle()
+
     val imagePath = remember { { viewModel.imagePath.value } }
-    val nickName = remember { { viewModel.nickNameTextState.value } }
-    val email = remember { { viewModel.emailTextState.value } }
-    val repeatedPassword = remember { { viewModel.repeatedPasswordTextState.value } }
-    val password = remember { { viewModel.passwordTextState.value } }
 
     val loginFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -87,12 +85,6 @@ fun SignUpScreen(
     val isSignUpError by viewModel.signUpError.collectAsStateWithLifecycle()
     val registrationComplete by viewModel.registrationComplete.collectAsStateWithLifecycle()
 
-    val onBackPressedAction = remember { { onBackPressed() } }
-    val updateNickNameAction: (String) -> Unit = remember { { viewModel.updateNickName(it) } }
-    val updateEmailAction: (String) -> Unit = remember { { viewModel.updateEmail(it) } }
-    val updatePasswordAction: (String) -> Unit = remember { { viewModel.updatePassword(it) } }
-    val updateRepeatedPasswordAction: (String) -> Unit =
-        remember { { viewModel.updateRepeatedPassword(it) } }
     val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
     val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
     val isEmailValidAction = remember { { viewModel.isEmailValid() } }
@@ -124,12 +116,12 @@ fun SignUpScreen(
         snapshotFlow { registrationComplete }
             .collect {
                 if (it) {
-                    navigateToOtpScreen(email(), password())
+                    component.onSignUpClick(model.email, model.password)
                 }
             }
     }
 
-    BackHandler(onBack = onBackPressedAction)
+    BackHandler(onBack = component::onBackClick)
 
     Column(
         modifier = Modifier
@@ -138,7 +130,7 @@ fun SignUpScreen(
             .systemBarsPadding(),
     ) {
         Toolbar(
-            onBackPressed = onBackPressed,
+            onBackPressed = component::onBackClick,
             text = R.string.sign_up
         )
         Column(
@@ -183,8 +175,8 @@ fun SignUpScreen(
                 }
 
                 NameField(
-                    text = nickName,
-                    onValueChange = updateNickNameAction,
+                    text = { model.username },
+                    onValueChange = component::onChangeUsername,
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
 
@@ -201,10 +193,10 @@ fun SignUpScreen(
                                     refreshEmailErrorAction()
                                 }
                             },
-                        text = email,
+                        text = { model.email },
                         isLoginError = isEmailError,
                         onNext = moveFocusDown,
-                        onChange = updateEmailAction
+                        onChange = component::onChangeEmail
 
                     )
 
@@ -220,9 +212,9 @@ fun SignUpScreen(
                     horizontalAlignment = Alignment.Start
                 ) {
                     PasswordField(
-                        text = password,
+                        text = { model.password },
                         isPasswordError = !isPasswordError.successful,
-                        onChange = updatePasswordAction,
+                        onChange = component::onChangePassword,
                         imeAction = ImeAction.Next,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -259,9 +251,9 @@ fun SignUpScreen(
                     horizontalAlignment = Alignment.Start
                 ) {
                     PasswordField(
-                        text = repeatedPassword,
+                        text = { model.repeatedPassword },
                         isPasswordError = !isPasswordNotEqualsError,
-                        onChange = updateRepeatedPasswordAction,
+                        onChange = component::onChangeRepeatedPassword,
                         iconRes = R.drawable.ic_lock,
                         iconSize = 20.dp,
                         modifier = Modifier

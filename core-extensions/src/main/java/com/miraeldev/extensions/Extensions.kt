@@ -27,6 +27,12 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnDestroy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 
@@ -104,4 +110,10 @@ inline fun <reified Activity : ComponentActivity> Context.getActivity(): Activit
         context = context.baseContext
     }
     throw IllegalStateException("no activity")
+}
+
+fun ComponentContext.componentScope(): CoroutineScope = CoroutineScope(
+    Dispatchers.Main.immediate + SupervisorJob()
+).apply {
+    doOnDestroy { cancel() }
 }

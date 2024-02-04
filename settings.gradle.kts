@@ -18,7 +18,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Vauma"
-include ("app")
+include ("vauma")
 include(":data")
 include(":logger")
 include(":core-extensions")

@@ -2,15 +2,15 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("kotlinx-serialization")
 }
 
 android {
-    namespace = "com.miraeldev.extensions"
+    namespace = "com.miraeldev.navigation"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
-        compileSdkPreview = "UpsideDownCake"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,40 +32,23 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
-    }
 }
 
 dependencies {
 
     implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(libs.ui)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.ui.util)
-    implementation(libs.material)
-    implementation(libs.lifecycle.runtime.compose)
-
-    //decompose
-    implementation (libs.decompose)
-
-    //test
+    implementation(libs.appcompat)
+    implementation(libs.com.google.android.material.material)
     testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    //mockito
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
-
-    //ui tests kaspresso
-    androidTestImplementation(libs.kaspresso)
-    androidTestImplementation(libs.kaspresso.compose)
+    //decompose
+    implementation (libs.decompose)
+    implementation(libs.decompose.jetpack.compose)
+    
+    //mvi kotlin
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.coroutine.extensions)
 }
