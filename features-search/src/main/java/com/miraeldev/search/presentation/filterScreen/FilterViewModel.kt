@@ -3,8 +3,7 @@ package com.miraeldev.search.presentation.filterScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miraeldev.search.domain.usecases.filterUseCase.AddToFilterListUseCase
-import com.miraeldev.search.domain.usecases.filterUseCase.ClearAllFiltersInFilterRepositoryUseCase
-import com.miraeldev.search.domain.usecases.filterUseCase.ClearAllFiltersInSearchRepositoryUseCase
+import com.miraeldev.search.domain.usecases.filterUseCase.ClearAllFiltersUseCase
 import com.miraeldev.search.domain.usecases.filterUseCase.GetGenreListUseCase
 import com.miraeldev.search.domain.usecases.filterUseCase.GetSortByCategoryUseCase
 import com.miraeldev.search.domain.usecases.filterUseCase.GetYearCategoryUseCase
@@ -26,8 +25,7 @@ class FilterViewModel @Inject constructor(
 
     private val selectCategoryUseCase: SelectCategoryUseCase,
 
-    private val clearAllFiltersInFilterRepository: ClearAllFiltersInFilterRepositoryUseCase,
-    private val clearAllFiltersInSearchRepository: ClearAllFiltersInSearchRepositoryUseCase
+    private val clearAllFiltersInFilterRepository: ClearAllFiltersUseCase
 
 ) : ViewModel() {
 
@@ -51,7 +49,6 @@ class FilterViewModel @Inject constructor(
     fun clearAllFilters() {
         viewModelScope.launch {
             clearAllFiltersInFilterRepository()
-            clearAllFiltersInSearchRepository()
         }
     }
 }

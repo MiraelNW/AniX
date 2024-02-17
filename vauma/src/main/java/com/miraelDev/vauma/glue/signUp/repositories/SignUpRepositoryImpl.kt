@@ -12,24 +12,20 @@ class SignUpRepositoryImpl @Inject constructor(
     private val userDataRepository: UserDataRepository,
 ) : SignUpRepository {
 
-    override suspend fun signUp(user: User){
-        userAuthDataRepository.signUp(user)
+    override suspend fun signUp(user: User): Boolean {
+        return userAuthDataRepository.signUp(user)
     }
 
     override suspend fun updateUser(email: String) {
         userDataRepository.updateUser(com.miraeldev.user.UserEmail(email))
     }
 
-    override suspend fun verifyOtpCode(otpToken: String, user: User) {
+    override suspend fun verifyOtpCode(otpToken: String, user: User): Boolean {
         return userAuthDataRepository.verifyOtpCode(user = user, otpToken = otpToken)
     }
 
     override fun getSignUpError(): Flow<Boolean> {
         return userAuthDataRepository.getSignUpError()
-    }
-
-    override fun getRegistrationCompleteResult(): Flow<Boolean> {
-        return userAuthDataRepository.getRegistrationCompleteResult()
     }
 
 }

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -62,6 +63,15 @@ dependencies {
     //coil image
     implementation(libs.coil)
     implementation(libs.coil.compose)
+
+    //decompose
+    implementation (libs.decompose)
+    implementation(libs.decompose.jetpack.compose)
+
+    //mvi kotlin
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.coroutine.extensions)
 
     //test
     testImplementation(libs.junit)

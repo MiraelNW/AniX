@@ -14,6 +14,8 @@ internal interface UserDao {
 
     @Query("SELECT * FROM user")
     fun getUserFlow(): Flow<UserDbModel>
+    @Query("SELECT * FROM user")
+    suspend fun getUser(): UserDbModel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserDbModel)

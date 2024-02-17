@@ -65,6 +65,15 @@ dependencies {
     implementation(libs.landscapist.glide)
     implementation(libs.landscapist.transformation)
 
+    //decompose
+    implementation (libs.decompose)
+    implementation(libs.decompose.jetpack.compose)
+
+    //mvi kotlin
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.coroutine.extensions)
+
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)

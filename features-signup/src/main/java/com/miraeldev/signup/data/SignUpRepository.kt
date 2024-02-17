@@ -5,14 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface SignUpRepository {
 
-    suspend fun signUp(user: User)
+    suspend fun signUp(user: User): Boolean
 
     suspend fun updateUser(email: String)
 
-    suspend fun verifyOtpCode(otpToken: String, user: User)
+    suspend fun verifyOtpCode(otpToken: String, user: User): Boolean
 
     fun getSignUpError(): Flow<Boolean>
-
-    fun getRegistrationCompleteResult(): Flow<Boolean>
 
 }

@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
 
-    suspend fun logOutUser()
+    suspend fun logOutUser(): Boolean
 
-    fun getUserInfo():Flow<User>
+    suspend fun getUserInfo():User
 
     suspend fun getUserEmail(): String
 

@@ -12,6 +12,7 @@ import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.di.qualifiers.AuthClient
 import com.miraeldev.domain.models.auth.Token
+import com.miraeldev.extensions.sendRequest
 import com.miraeldev.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 
@@ -46,52 +48,45 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
 
     private val isSignInError = MutableSharedFlow<Boolean>()
     private val isSignUpError = MutableSharedFlow<Boolean>()
-    private val registrationComplete = MutableSharedFlow<Boolean>()
 
     override fun getSignInError(): Flow<Boolean> = isSignInError.asSharedFlow()
 
     override fun getSignUpError(): Flow<Boolean> = isSignUpError.asSharedFlow()
-    override fun getRegistrationCompleteResult(): Flow<Boolean> =
-        registrationComplete.asSharedFlow()
 
-    override suspend fun signUp(user: User) {
+    override suspend fun signUp(user: User): Boolean {
+        return sendRequest {
+            val signUpResponse = client.post {
+                url(BuildConfig.AUTH_REGISTER_URL)
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
 
-        val signUpResponse = client.post {
-            url(BuildConfig.AUTH_REGISTER_URL)
-            setBody(
-                MultiPartFormDataContent(
-                    formData {
+                            append("name", user.name)
+                            append("email", user.email)
+                            append("username", user.email)
+                            append("password", user.password)
 
-                        append("name", user.name)
-                        append("email", user.email)
-                        append("username", user.username)
-                        append("password", user.password)
+                            if (user.image != "") {
+                                val uri = Uri.parse(user.image)
 
-                        if (user.image != "") {
-                            val uri = Uri.parse(user.image)
+                                val fileBytes = File(getRealPathFromURI(uri, context) ?: "")
+                                    .readBytes()
 
-                            val fileBytes = File(getRealPathFromURI(uri, context) ?: "")
-                                .readBytes()
+                                append("file", fileBytes, Headers.build {
+                                    append(HttpHeaders.ContentType, "image/png")
+                                    append(HttpHeaders.ContentDisposition, "filename=ok")
+                                })
+                            }
 
-                            append("file", fileBytes, Headers.build {
-                                append(HttpHeaders.ContentType, "image/png")
-                                append(HttpHeaders.ContentDisposition, "filename=ok")
-                            })
-                        }
-
-                    },
+                        },
+                    )
                 )
-            )
-        }
-
-        if (signUpResponse.status.value in 200..299) {
-            registrationComplete.emit(true)
-        } else {
-            isSignUpError.emit(true)
+            }
+            signUpResponse.status.isSuccess()
         }
     }
 
-    override suspend fun verifyOtpCode(user: User, otpToken: String) {
+    override suspend fun verifyOtpCode(user: User, otpToken: String): Boolean {
 
         val verifyOtpResponse = client.post {
             url(BuildConfig.AUTH_VERIFY_OTP_URL)
@@ -106,25 +101,30 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
             )
         }
 
-        if (verifyOtpResponse.status.value in 200..299) {
+        if (verifyOtpResponse.status.isSuccess()) {
             val signInResponse = client.post {
-                val signInUser = User(password = user.password, username = user.username)
+                val signInUser =
+                    User(password = user.password, username = user.email)
                 url(BuildConfig.AUTH_LOGIN_URL)
                 headers {
                     remove(HttpHeaders.Authorization)
                 }
                 setBody(signInUser)
             }
-            if (signInResponse.status.isSuccess()) {
+
+            return if (signInResponse.status.isSuccess()) {
                 logIn(response = signInResponse)
+                true
+            } else {
+                false
             }
         } else {
-            isSignUpError.emit(true)
+            return false
         }
     }
 
-    override suspend fun signIn(username: String, password: String) {
-        val user = User(username = username, password = password)
+    override suspend fun signIn(email: String, password: String): Boolean {
+        val user = User(username = email, password = password)
 
         val response = client.post {
             url(BuildConfig.AUTH_LOGIN_URL)
@@ -136,9 +136,9 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
 
         if (response.status.isSuccess()) {
             logIn(response = response)
-        } else {
-            isSignInError.emit(true)
         }
+
+        return response.status.isSuccess()
     }
 
     override suspend fun logInWithGoogle(idToken: String) {
@@ -191,19 +191,21 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logOutUser() {
-
-        val refreshToken = localService.getRefreshToken()
-        val response = client.post {
-            url(BuildConfig.AUTH_LOGOUT_URL)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $refreshToken")
+    override suspend fun logOutUser(): Boolean {
+        return sendRequest {
+            val refreshToken = localService.getRefreshToken()
+            val response = client.post {
+                url(BuildConfig.AUTH_LOGOUT_URL)
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                }
             }
-        }
-        if (response.status.isSuccess()) {
-            localUserDataRepository.setUserUnAuthorizedStatus()
-            delay(100)
-            appDatabase.userDao().deleteOldUser()
+            if (response.status.isSuccess()) {
+                localUserDataRepository.setUserUnAuthorizedStatus()
+                delay(100)
+                appDatabase.userDao().deleteOldUser()
+            }
+            response.status.isSuccess()
         }
     }
 
@@ -220,8 +222,6 @@ internal class UserAuthDataRepositoryImpl @Inject constructor(
         if (isSuccess) {
             localUserDataRepository.setUserAuthorizedStatus()
         }
-
-
     }
 
     private fun getRealPathFromURI(uri: Uri, context: Context): String? {

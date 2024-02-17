@@ -11,7 +11,7 @@ interface UserDataRepository {
 
     suspend fun saveLastWatchedAnime(lastWatchedAnime: LastWatchedAnime)
 
-    fun getUserInfo(): Flow<User>
+    suspend fun getUserInfo(): User
 
     suspend fun getUserEmail(): UserEmail
 

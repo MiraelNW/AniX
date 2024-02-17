@@ -35,24 +35,8 @@ class HomeRepositoryImpl @Inject constructor(
         return animeListDataRepository.getPagingFilmsAnimeList()
     }
 
-    override suspend fun loadData() {
-        homeDataRepository.loadData()
-    }
-
-    override fun getNewAnimeList(): Flow<List<AnimeInfo>> {
-        return homeDataRepository.getNewAnimeList()
-    }
-
-    override fun getPopularAnimeList(): Flow<List<AnimeInfo>> {
-        return homeDataRepository.getPopularAnimeList()
-    }
-
-    override fun getNameAnimeList(): Flow<List<AnimeInfo>> {
-        return homeDataRepository.getNameAnimeList()
-    }
-
-    override fun getFilmsAnimeList(): Flow<List<AnimeInfo>> {
-        return homeDataRepository.getFilmsAnimeList()
+    override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
+        return homeDataRepository.loadData()
     }
 
     override suspend fun addAnimeToList(isSelected: Boolean, animeInfo: LastWatchedAnime) {

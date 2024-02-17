@@ -45,9 +45,6 @@ fun ChangePasswordDialog(
     onDismiss: () -> Unit,
     onChangeClick: () -> Unit,
     refreshPasswordError: () -> Unit,
-    checkNewPasswordValid: () -> Boolean,
-    checkCurrentPasswordValid: () -> Boolean,
-    checkPasswordEquals: () -> Boolean,
     isPasswordError: PasswordValidationState,
     isPasswordNotEqualsError: Boolean,
     serverError: Boolean,
@@ -200,14 +197,7 @@ fun ChangePasswordDialog(
                     Spacer(modifier = Modifier.width(4.dp))
                     OutlinedButton(
                         modifier = Modifier.weight(1f),
-                        onClick = {
-                            val isCurrentPasswordValid = checkCurrentPasswordValid()
-                            val isNewPasswordValid = checkNewPasswordValid()
-                            val isPasswordsEquals = checkPasswordEquals()
-                            if (isCurrentPasswordValid && isNewPasswordValid && isPasswordsEquals) {
-                                onChangeClick()
-                            }
-                        },
+                        onClick = onChangeClick,
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.primary,

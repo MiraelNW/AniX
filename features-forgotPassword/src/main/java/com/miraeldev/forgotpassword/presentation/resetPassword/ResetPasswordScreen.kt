@@ -17,57 +17,34 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.forgotpassword.R
+import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordComponent
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.PasswordField
 import com.miraeldev.presentation.Toolbar
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ResetPasswordScreen(
-    onBackPressed: () -> Unit,
-    email:String,
-    viewModel: ResetPasswordViewModel = hiltViewModel()
+    component: ResetPasswordComponent,
+    email: String
 ) {
 
-    val newPassword = remember { { viewModel.newPassword.value } }
-    val repeatedPassword = remember { { viewModel.repeatedPassword.value } }
-
-    val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
-    val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
-    val onNewPasswordChange: (String) -> Unit = remember {
-        {
-            viewModel.refreshPasswordError()
-            viewModel.updateNewPasswordText(it)
-        }
-    }
-    val onContinueButtonClick = remember {
-        {
-            val newPasswordValid = viewModel.isNewPasswordValid()
-            val passwordEquals = viewModel.isPasswordEquals()
-            if (newPasswordValid && passwordEquals) {
-                viewModel.saveNewPassword(email)
-            }
-        }
-    }
-
-    val onRepeatedPasswordChange: (String) -> Unit =
-        remember { { viewModel.updateRepeatedPasswordText(it) } }
+    val model by component.model.collectAsStateWithLifecycle()
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
@@ -81,7 +58,7 @@ fun ResetPasswordScreen(
     ) {
 
         Toolbar(
-            onBackPressed = onBackPressed,
+            onBackPressed = component::onBackClicked,
             text = R.string.create_password
         )
 
@@ -101,22 +78,28 @@ fun ResetPasswordScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 PasswordField(
-                    text = newPassword,
-                    isPasswordError = !isPasswordError.successful,
-                    onChange = onNewPasswordChange,
+                    text = { model.password },
+                    isPasswordError = model.resetPasswordErrorModel.passwordError,
+                    onChange = component::onPasswordChange,
                     imeAction = ImeAction.Next,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                component.refreshPasswordError()
+                            }
+                        },
                 )
 
                 ErrorValidField(
                     modifier = Modifier.padding(start = 16.dp),
-                    isError = !isPasswordError.hasMinimum,
+                    isError = model.resetPasswordErrorModel.passwordLengthError,
                     error = stringResource(R.string.password_must_be_more_than_6_characters)
                 )
 
                 ErrorValidField(
                     modifier = Modifier.padding(start = 16.dp),
-                    isError = !isPasswordError.hasCapitalizedLetter,
+                    isError = model.resetPasswordErrorModel.passwordHasCapitalizedLetterError,
                     error = stringResource(R.string.the_password_must_contain_capital_letters)
                 )
             }
@@ -127,26 +110,45 @@ fun ResetPasswordScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 PasswordField(
-                    text = repeatedPassword,
-                    isPasswordError = !isPasswordNotEqualsError,
-                    onChange = onRepeatedPasswordChange,
+                    text = { model.repeatedPassword },
+                    isPasswordError = model.resetPasswordErrorModel.repeatedPasswordError,
+                    onChange = component::onRepeatedPasswordChange,
                     iconRes = R.drawable.ic_lock,
                     placeholder = stringResource(R.string.repeat_password),
                     iconSize = 20.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                component.refreshRepeatedPasswordError()
+                            }
+                        },
                 )
 
                 ErrorValidField(
                     modifier = Modifier.padding(start = 16.dp),
-                    isError = !isPasswordNotEqualsError,
+                    isError = model.resetPasswordErrorModel.repeatedPasswordError,
                     error = stringResource(R.string.password_mismatch)
+                )
+
+                ErrorValidField(
+                    modifier = Modifier.padding(start = 16.dp),
+                    isError = model.resetPasswordErrorModel.networkError,
+                    error = stringResource(R.string.network_error)
                 )
             }
         }
 
         ContinueButton(
             modifier = Modifier,
-            onVerifyButtonClick = onContinueButtonClick
+            onVerifyButtonClick = {
+                focusManager.clearFocus()
+                component.saveNewPassword(
+                    email,
+                    model.password,
+                    model.repeatedPassword
+                )
+            }
         )
     }
 }

@@ -69,6 +69,15 @@ dependencies {
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
 
+    //decompose
+    implementation (libs.decompose)
+    implementation(libs.decompose.jetpack.compose)
+
+    //mvi kotlin
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.coroutine.extensions)
+
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

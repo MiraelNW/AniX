@@ -15,7 +15,7 @@ internal interface PopularCategoryDao {
     suspend fun insertAll(anime: List<PopularCategoryAnimeInfoDbModel>)
 
     @Query("Select * From popular_category_anime limit 15")
-    fun getAnimeList(): Flow<List<AnimeInfo>>
+    suspend fun getAnimeList(): List<AnimeInfo>
 
     @Query("SELECT (SELECT COUNT(*) FROM popular_category_anime) == 0")
     suspend fun isEmpty(): Boolean

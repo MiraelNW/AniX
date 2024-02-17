@@ -51,11 +51,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.account.R
+import com.miraeldev.account.presentation.settings.editProfileScreen.EditProfileComponent.EditProfileComponent
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.presentation.EmailField
@@ -65,61 +65,22 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun EditProfileScreen(
-    onBackPressed: () -> Unit,
-    viewModel: EditProfileViewModel = hiltViewModel(),
-) {
-
-    val nickName = remember { { viewModel.nickNameState.value } }
-    val email = remember { { viewModel.emailState.value } }
+fun EditProfileScreen(component: EditProfileComponent) {
+    val model by component.model.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
     var shouldShowChangePasswordDialog by rememberSaveable { mutableStateOf(false) }
 
-    val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
-    val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
-    val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
-    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
-    val serverError by viewModel.serverError.collectAsStateWithLifecycle()
-
-    val currentPassword = remember { { viewModel.currentPassword.value } }
-    val newPassword = remember { { viewModel.newPassword.value } }
-    val repeatedPassword = remember { { viewModel.repeatedPassword.value } }
-
-    val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
-    val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
-
-    val updateEmailAction: (String) -> Unit = remember { { viewModel.updateEmail(it) } }
-    val updateNickNameAction: (String) -> Unit = remember { { viewModel.updateNickName(it) } }
-
-    val resetAllChangesAction = remember { { viewModel.resetAllChanges() } }
-    val changePasswordAction = remember { { viewModel.changePassword() } }
-
-    val isNewPasswordValidAction = remember { { viewModel.isNewPasswordValid() } }
-    val isCurrentPasswordValidAction = remember { { viewModel.isCurrentPasswordValid() } }
-    val isPasswordEqualsAction = remember { { viewModel.isPasswordEquals() } }
-
-    val updateCurrentPasswordAction: (String) -> Unit =
-        remember { { viewModel.updateCurrentPassword(it) } }
-    val updateNewPasswordAction: (String) -> Unit = remember { { viewModel.updateNewPassword(it) } }
-    val updateRepeatedPasswordAction: (String) -> Unit =
-        remember { { viewModel.updateRepeatedPassword(it) } }
-
-
     val moveFocusDown: KeyboardActionScope.() -> Unit =
         remember { { focusManager.moveFocus(FocusDirection.Down) } }
-
-    var imagePath by rememberSaveable {
-        mutableStateOf("")
-    }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             uri?.let {
-                imagePath = it.toString()
+                component.onChangeImage(it.toString())
             }
 
         }
@@ -132,7 +93,7 @@ fun EditProfileScreen(
                 .systemBarsPadding(),
         ) {
             Toolbar(
-                onBackPressed = onBackPressed,
+                onBackPressed = component::onBackClick,
                 text = R.string.edit_profile
             )
             Column(
@@ -162,7 +123,7 @@ fun EditProfileScreen(
                             modifier = Modifier
                                 .size(160.dp)
                                 .clip(CircleShape),
-                            imageModel = { userInfo.image.ifEmpty { R.drawable.ic_placeholder } },
+                            imageModel = { model.userModel.image.ifEmpty { R.drawable.ic_placeholder } },
                             requestOptions = {
                                 RequestOptions()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -184,8 +145,8 @@ fun EditProfileScreen(
 
 
                     NameField(
-                        text = nickName,
-                        onValueChange = updateNickNameAction,
+                        text = { model.username },
+                        onValueChange = component::onChangeUsername,
                         onNext = moveFocusDown
                     )
 
@@ -199,19 +160,19 @@ fun EditProfileScreen(
                                 .focusRequester(focusRequester)
                                 .onFocusEvent {
                                     if (it.isFocused) {
-                                        refreshEmailErrorAction()
+                                        component.refreshEmailError()
                                     }
                                 },
-                            text = email,
-                            isLoginError = isEmailError,
+                            text = { model.email },
+                            isLoginError = model.editProfileErrorModel.emailError,
                             onNext = moveFocusDown,
-                            onChange = updateEmailAction
+                            onChange = component::onChangeEmail
 
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = isEmailError,
+                            isError = model.editProfileErrorModel.emailError,
                             error = stringResource(id = R.string.invalid_mail)
                         )
                     }
@@ -229,7 +190,11 @@ fun EditProfileScreen(
 
                     UpdateButton(
                         onUpdateButtonClick = {
-                            // save in db
+                            component.updateUserInfo(
+                                model.image,
+                                model.email,
+                                model.username
+                            )
                         }
                     )
                 }
@@ -239,26 +204,27 @@ fun EditProfileScreen(
         if (shouldShowChangePasswordDialog) {
             ChangePasswordDialog(
                 onDismiss = {
-                    resetAllChangesAction()
+                    component.resetAllChanges()
                     shouldShowChangePasswordDialog = false
                 },
-                refreshPasswordError = refreshPasswordErrorAction,
-                isPasswordError = isPasswordError,
-                isPasswordNotEqualsError = isPasswordNotEqualsError,
+                refreshPasswordError = component::refreshPasswordError,
+                isPasswordError = model.editProfileErrorModel.passwordError,
+                isPasswordNotEqualsError = model.editProfileErrorModel.repeatedPasswordError,
                 onChangeClick = {
-                    changePasswordAction()
+                    component.onChangePasswordClick(
+                        model.currentPassword,
+                        model.password,
+                        model.repeatedPassword
+                    )
                     shouldShowChangePasswordDialog = false
                 },
-                checkCurrentPasswordValid = isCurrentPasswordValidAction,
-                checkNewPasswordValid = isNewPasswordValidAction,
-                checkPasswordEquals = isPasswordEqualsAction,
-                newPassword = newPassword,
-                serverError = serverError,
-                currentPassword = currentPassword,
-                repeatedPassword = repeatedPassword,
-                onCurrentPasswordChange = updateCurrentPasswordAction,
-                onNewPasswordChange = updateNewPasswordAction,
-                onRepeatedPasswordChange = updateRepeatedPasswordAction
+                newPassword = { model.password },
+                serverError = model.editProfileErrorModel.passwordNetworkError,
+                currentPassword = { model.currentPassword },
+                repeatedPassword = { model.repeatedPassword },
+                onCurrentPasswordChange = component::onChangeCurrentPassword,
+                onNewPasswordChange = component::onChangePassword,
+                onRepeatedPasswordChange = component::onChangeRepeatedPassword
             )
         }
     }
@@ -266,7 +232,6 @@ fun EditProfileScreen(
 
 @Composable
 private fun ChangePassword(onChangePasswordClick: () -> Unit) {
-
 
     OutlinedButton(
         modifier = Modifier.fillMaxWidth(0.9f),

@@ -13,6 +13,7 @@ import com.miraeldev.data.remote.dto.mapToNameCategoryModel
 import com.miraeldev.data.remote.dto.mapToNewCategoryModel
 import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
+import com.miraeldev.data.remote.dto.toAnimeInfo
 import com.miraeldev.data.remote.dto.toLastWatched
 import com.miraeldev.data.remote.searchApi.SearchApiService
 import com.miraeldev.di.qualifiers.CommonHttpClient
@@ -24,7 +25,7 @@ import io.ktor.client.request.headers
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ internal class HomeDataRepositoryImpl @Inject constructor(
     private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository
 ) : HomeDataRepository {
-    override suspend fun loadData() {
+    override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
 
         val bearerToken = localTokenService.getBearerToken()
 
@@ -43,34 +44,23 @@ internal class HomeDataRepositoryImpl @Inject constructor(
 
         val firstDbModel = appDatabase.newCategoryDao().getCreateTime()
 
-        if (isNewEmpty) {
-            loadNewAnimeList(bearerToken)
-            loadPopularAnimeList(bearerToken)
-            loadNameAnimeList(bearerToken)
-            loadFilmAnimeList(bearerToken)
-        } else if (System.currentTimeMillis() - firstDbModel.createTime > FIVE_HOURS_IN_MILLIS) {
-            loadNewAnimeList(bearerToken)
-            loadPopularAnimeList(bearerToken)
-            loadNameAnimeList(bearerToken)
-            loadFilmAnimeList(bearerToken)
-        }
-    }
+        return when {
+            isNewEmpty || System.currentTimeMillis() - firstDbModel.createTime > FIVE_HOURS_IN_MILLIS -> {
+                val map = mutableMapOf<Int, List<AnimeInfo>>()
+                map[0] = loadNewAnimeList(bearerToken)
+                map[1] = loadPopularAnimeList(bearerToken)
+                map[2] = loadNameAnimeList(bearerToken)
+                map[3] = loadFilmAnimeList(bearerToken)
+                map
+            }
 
-    private suspend fun loadNewAnimeList(bearerToken: String?) {
-        val apiResponse = client.get {
-            url("${ApiRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=0&page_size=15")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
+            else -> {
+                getAnimeListForCategory()
             }
         }
-            .body<Response>()
-
-        val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
-
-        appDatabase.popularCategoryDao().insertAll(anime)
     }
 
-    private suspend fun loadPopularAnimeList(bearerToken: String?) {
+    private suspend fun loadNewAnimeList(bearerToken: String?): List<AnimeInfo> {
         val apiResponse = client.get {
             url("${ApiRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=0&page_size=15")
             headers {
@@ -82,9 +72,27 @@ internal class HomeDataRepositoryImpl @Inject constructor(
         val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
 
         appDatabase.newCategoryDao().insertAll(anime)
+
+        return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-    private suspend fun loadNameAnimeList(bearerToken: String?) {
+    private suspend fun loadPopularAnimeList(bearerToken: String?): List<AnimeInfo> {
+        val apiResponse = client.get {
+            url("${ApiRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=0&page_size=15")
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $bearerToken")
+            }
+        }
+            .body<Response>()
+
+        val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
+
+        appDatabase.popularCategoryDao().insertAll(anime)
+
+        return apiResponse.results.map { it.toAnimeInfo() }
+    }
+
+    private suspend fun loadNameAnimeList(bearerToken: String?): List<AnimeInfo> {
         val apiResponse = client.get {
             url("${ApiRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=0&page_size=15")
             headers {
@@ -96,9 +104,11 @@ internal class HomeDataRepositoryImpl @Inject constructor(
         val anime = apiResponse.results.map { it.mapToNameCategoryModel() }
 
         appDatabase.nameCategoryDao().insertAll(anime)
+
+        return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-    private suspend fun loadFilmAnimeList(bearerToken: String?) {
+    private suspend fun loadFilmAnimeList(bearerToken: String?): List<AnimeInfo> {
         val apiResponse = client.get {
             url("${ApiRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=0&page_size=15")
             headers {
@@ -110,36 +120,39 @@ internal class HomeDataRepositoryImpl @Inject constructor(
         val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
 
         appDatabase.filmCategoryDao().insertAll(anime)
+
+        return apiResponse.results.map { it.toAnimeInfo() }
     }
 
 
-    override fun getNewAnimeList(): Flow<List<AnimeInfo>> {
-        return appDatabase.newCategoryDao().getAnimeList()
-    }
+    private suspend fun getAnimeListForCategory(): Map<Int, List<AnimeInfo>> {
 
+        val newAnimeList = appDatabase.newCategoryDao().getAnimeList()
+        val popularAnimeList = appDatabase.popularCategoryDao().getAnimeList()
+        val nameAnimeList = appDatabase.nameCategoryDao().getAnimeList()
+        val filmsAnimeList = appDatabase.filmCategoryDao().getAnimeList()
 
-    override fun getPopularAnimeList(): Flow<List<AnimeInfo>> {
-        return appDatabase.popularCategoryDao().getAnimeList()
-    }
+        val map = mutableMapOf<Int, List<AnimeInfo>>()
 
-    override fun getNameAnimeList(): Flow<List<AnimeInfo>> {
-        return appDatabase.nameCategoryDao().getAnimeList()
-    }
+        map[0] = newAnimeList
+        map[1] = popularAnimeList
+        map[2] = nameAnimeList
+        map[3] = filmsAnimeList
 
-    override fun getFilmsAnimeList(): Flow<List<AnimeInfo>> {
-        return appDatabase.filmCategoryDao().getAnimeList()
+        return map
     }
 
     override fun getUserInfo(): Flow<User> {
-        return userDataRepository.getUserInfo()
+        return flow { emit(userDataRepository.getUserInfo()) }
             .map { user ->
                 if (user.lastWatchedAnime == null) {
-                    val animeId = getPopularAnimeList().first()[0].id
+                    val animeId = appDatabase.popularCategoryDao().getAnimeList()[0].id
                     when (val apiResult = searchApiService.getAnimeById(animeId)) {
                         is ApiResult.Success -> {
                             val animeList = apiResult.animeList.map { it.toAnimeDetailInfo() }
                             user.copy(lastWatchedAnime = animeList[0].toLastWatched())
                         }
+
                         is ApiResult.Failure -> {
                             user
                         }
@@ -153,7 +166,7 @@ internal class HomeDataRepositoryImpl @Inject constructor(
 
 
     companion object {
-        private const val FIVE_HOURS_IN_MILLIS = 18000000
+        private const val FIVE_HOURS_IN_MILLIS = 24 * 60 * 60 * 1000
     }
 
 }

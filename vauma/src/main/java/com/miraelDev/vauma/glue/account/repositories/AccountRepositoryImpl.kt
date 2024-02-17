@@ -16,11 +16,11 @@ class AccountRepositoryImpl @Inject constructor(
     private val preferenceDataStoreAPI: PreferenceDataStoreAPI
 ) : AccountRepository {
 
-    override suspend fun logOutUser() {
-        userAuthDataRepository.logOutUser()
+    override suspend fun logOutUser(): Boolean {
+        return userAuthDataRepository.logOutUser()
     }
 
-    override fun getUserInfo(): Flow<User> {
+    override suspend fun getUserInfo(): User {
         return userDataRepository.getUserInfo()
     }
 

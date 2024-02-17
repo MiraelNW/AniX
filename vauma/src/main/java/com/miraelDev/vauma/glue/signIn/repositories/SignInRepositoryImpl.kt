@@ -10,8 +10,8 @@ class SignInRepositoryImpl @Inject constructor(
     private val userAuthDataRepository: UserAuthDataRepository,
     private val userDataRepository: UserDataRepository
 ) : SignInRepository {
-    override suspend fun signIn(username: String, password: String) {
-        userAuthDataRepository.signIn(username, password)
+    override suspend fun signIn(email: String, password: String): Boolean {
+        return userAuthDataRepository.signIn(email, password)
     }
 
     override fun getSignInError(): Flow<Boolean> {

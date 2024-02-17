@@ -63,8 +63,8 @@ internal class UserDataRepositoryImpl @Inject constructor(
         appDatabase.userDao().insertUser(user)
     }
 
-    override fun getUserInfo(): Flow<User> {
-        return appDatabase.userDao().getUserFlow().map { it?.let { it.toUserModel() } ?: User() }
+    override suspend fun getUserInfo(): User {
+        return appDatabase.userDao().getUser()?.toUserModel() ?: User()
     }
 
     override suspend fun getUserEmail(): UserEmail {

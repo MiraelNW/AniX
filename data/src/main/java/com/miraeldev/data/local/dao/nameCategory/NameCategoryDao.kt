@@ -15,7 +15,7 @@ internal interface NameCategoryDao {
     suspend fun insertAll(anime: List<NameCategoryAnimeInfoDbModel>)
 
     @Query("Select * From name_category_anime limit 15")
-    fun getAnimeList(): Flow<List<AnimeInfo>>
+    suspend fun getAnimeList(): List<AnimeInfo>
 
     @Query("SELECT (SELECT COUNT(*) FROM name_category_anime) == 0")
     suspend fun isEmpty(): Boolean

@@ -1,5 +1,6 @@
 package com.miraeldev.signup.presentation.codeVerifyScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,87 +31,73 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.presentation.OutlinedOtpTextField
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.signup.R
+import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyComponent
+import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.DefaultCodeVerifyComponent
+import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.store.CodeVerifyStoreFactory
 import kotlinx.coroutines.delay
 
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CodeVerifyScreen(
+    component: CodeVerifyComponent,
     email: String,
-    password: String,
-    onBackPressed: () -> Unit,
-    viewModel: CodeVerifyViewModel = hiltViewModel()
+    password: String
 ) {
 
-    val scrollState = rememberScrollState()
+    val model by component.model.collectAsStateWithLifecycle()
 
     var enabled by rememberSaveable { mutableStateOf(true) }
 
-    val otpText by remember { viewModel.otpText }
-    val updateTextAction: (String) -> Unit = remember { { viewModel.updateOtpText(it) } }
-    val onCompleteAction: () -> Unit = remember {
-        {
-            viewModel.updateUser(email)
-            viewModel.verifyOtpCode(otpText, email, password)
+    val onCompleteAction: (String) -> Unit = remember {
+        { otp ->
+            component.updateUser(email)
+            component.verifyOtp(otp, email, password)
         }
     }
-    val onSendNewCodeAction: () -> Unit = remember {
-        {
-            viewModel.sendNewOtpCode()
-        }
-    }
-
-    Column(
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding()
-            .verticalScroll(scrollState)
             .padding(horizontal = 6.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+        topBar = {
+            Toolbar(
+                onBackPressed = component::onBackClicked,
+                text = R.string.email_code_verify
+            )
+        }
     ) {
-
-        Toolbar(
-            onBackPressed = onBackPressed,
-            text = R.string.email_code_verify
-        )
-
         Column(
-            verticalArrangement = Arrangement.spacedBy(56.dp),
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Code has been send to $email"
+                text = "Code has been send to $email",
+                fontSize = 22.sp
             )
 
             OutlinedOtpTextField(
-                value = otpText,
-                onValueChange = updateTextAction,
-                onFilled = {
+                value = model.otpText,
+                onValueChange = component::onOtpChange,
+                onFilled = { otp ->
                     enabled = false
-                    onCompleteAction()
+                    onCompleteAction(otp)
                 },
                 requestFocus = true,
                 clearFocusWhenFilled = false
             )
 
-            CodeRecent(sendNewCode = onSendNewCodeAction)
+            CodeRecent(sendNewCode = component::sendNewOtp)
         }
-
-        VerifyCodeButton(
-            enabled = enabled,
-            onVerifyButtonClick = {
-                enabled = false
-                onCompleteAction()
-            }
-        )
     }
 }
 
@@ -137,11 +125,13 @@ private fun CodeRecent(sendNewCode: () -> Unit) {
         if (!needSendNewCode) {
 
             Text(
-                text = "Resend code in "
+                text = "Resend code in ",
+                fontSize = 18.sp
             )
             Text(
                 text = "$timer sec",
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                fontSize = 18.sp
             )
 
         } else {
@@ -152,33 +142,10 @@ private fun CodeRecent(sendNewCode: () -> Unit) {
                     sendNewCode()
                 },
                 text = "Send new code",
+                fontSize = 18.sp,
                 color = MaterialTheme.colors.primary
             )
 
         }
-    }
-}
-
-
-@Composable
-private fun VerifyCodeButton(enabled: Boolean, onVerifyButtonClick: () -> Unit) {
-    OutlinedButton(
-        modifier = Modifier
-            .fillMaxWidth(0.9f)
-            .padding(top = 48.dp),
-        enabled = enabled,
-        onClick = onVerifyButtonClick,
-        shape = RoundedCornerShape(36.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            disabledBackgroundColor = MaterialTheme.colors.primary.copy(0.6f)
-        )
-    ) {
-        Text(
-            modifier = Modifier.padding(6.dp),
-            text = stringResource(R.string.verify_code),
-            fontSize = 20.sp,
-            color = Color.White
-        )
     }
 }

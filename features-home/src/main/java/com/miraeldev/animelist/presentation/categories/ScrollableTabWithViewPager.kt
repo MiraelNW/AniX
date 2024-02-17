@@ -58,9 +58,9 @@ private const val SMALL_ANIMATION = 1.015f
 @Composable
 fun ScrollableTabWithViewPager(
     newCategoryList: LazyPagingItems<AnimeInfo>,
-    filmsAnimeList: LazyPagingItems<AnimeInfo>,
     popularAnimeList: LazyPagingItems<AnimeInfo>,
     nameAnimeList: LazyPagingItems<AnimeInfo>,
+    filmsAnimeList: LazyPagingItems<AnimeInfo>,
     categoryId: Int,
     onAnimeItemClick: (Int) -> Unit
 ) {
@@ -141,8 +141,15 @@ fun ScrollableTabWithViewPager(
         pageContent = { page ->
             when (page) {
 
+                0 -> {
+                    AnimeList(
+                        categoryList = newCategoryList,
+                        onAnimeItemClick = onAnimeItemClick,
+                        changeScrollPossibility = { scrollEnable = it },
+                        onClickRetry = { shouldRetry = true }
+                    )
+                }
                 1 -> {
-
                     AnimeList(
                         categoryList = popularAnimeList,
                         onAnimeItemClick = onAnimeItemClick,
@@ -161,7 +168,6 @@ fun ScrollableTabWithViewPager(
                 }
 
                 3 -> {
-
                     AnimeList(
                         categoryList = filmsAnimeList,
                         onAnimeItemClick = onAnimeItemClick,

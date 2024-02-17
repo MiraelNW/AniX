@@ -73,12 +73,12 @@ internal object HttpClientModule {
             install(HttpCache)
 
             install(HttpRequestRetry) {
-                maxRetries = 3
+                maxRetries = 1
                 retryIf { request, response ->
                     !response.status.isSuccess() && response.status.value != 401
                 }
-                delayMillis { retry ->
-                    retry * 1000L
+                delayMillis {
+                    500L
                 }
             }
 
@@ -92,9 +92,9 @@ internal object HttpClientModule {
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 10000L
+                requestTimeoutMillis = 2000L
                 connectTimeoutMillis = 10000L
-                socketTimeoutMillis = 10000L
+                socketTimeoutMillis = 5000L
             }
 
         }

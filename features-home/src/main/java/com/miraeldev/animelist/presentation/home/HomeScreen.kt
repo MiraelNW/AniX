@@ -50,59 +50,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.animelist.R
+import com.miraeldev.animelist.presentation.home.homeComponent.HomeComponent
+import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.presentation.shimmerList.ShimmerHome
-import com.miraeldev.user.User
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun HomeScreen(
-    onAnimeItemClick: (Int) -> Unit,
-    onSeeAllClick: (Int) -> Unit,
-    onPlayClick: (Int) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
-) {
+fun HomeScreen(component: HomeComponent) {
 
-    val newCategoryList by
-    viewModel.newAnimeList.collectAsStateWithLifecycle()
+    val model by component.model.collectAsStateWithLifecycle()
 
-    val filmsAnimeList by
-    viewModel.filmsAnimeList.collectAsStateWithLifecycle()
+    when (val state = model.screenState) {
 
-    val popularAnimeList by
-    viewModel.popularAnimeList.collectAsStateWithLifecycle()
-
-    val nameAnimeList by
-    viewModel.nameAnimeList.collectAsStateWithLifecycle()
-
-    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
-
-    val addToListAction: (User, Boolean, LastWatchedAnime) -> Unit = remember {
-        { user, isSelected, animeItem ->
-            viewModel.addAnimeToList(
-                user.copy(lastWatchedAnime = user.lastWatchedAnime?.copy(isFavourite = isSelected)),
-                isSelected,
-                animeItem
-            )
-        }
-    }
-
-    val loadAnimeVideoAction: (LastWatchedAnime) -> Unit =
-        remember { { viewModel.loadVideoId(it) } }
-
-    when (val state = screenState) {
-
-        is HomeScreenState.Success -> {
+        is HomeStore.State.HomeScreenState.HomeLoaded -> {
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -110,67 +80,60 @@ fun HomeScreen(
                     .padding(bottom = 64.dp)
             ) {
                 LastWatchedVideoImage(
-                    animeItem = state.result.lastWatchedAnime ?: LastWatchedAnime(-1),
+                    animeItem = state.user.lastWatchedAnime ?: LastWatchedAnime(-1),
                     onPlayClick = {
-                        state.result.lastWatchedAnime?.let {
-                            loadAnimeVideoAction(it)
-                            onPlayClick(it.id)
+                        state.user.lastWatchedAnime?.let {
+                            component.loadAnimeVideo(it)
+                            component.onPlayClick(it.id)
                         }
                     },
                     addToList = {
-                        addToListAction(
-                            state.result,
+                        component.addAnimeToList(
+                            state.user,
                             it,
-                            state.result.lastWatchedAnime ?: LastWatchedAnime(-1)
+                            state.user.lastWatchedAnime ?: LastWatchedAnime(-1)
                         )
                     },
-                    onAnimeClick = { id ->
-                        onAnimeItemClick(id)
-                    }
+                    onAnimeClick = component::onAnimeItemClick
                 )
 
                 AnimeList(
-                    animeList = newCategoryList,
-                    onAnimeItemClick = onAnimeItemClick,
+                    animeList = state.newAnimeList,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     listName = "New anime",
-                    onSeeAllClick = { onSeeAllClick(0) }
+                    onSeeAllClick = { component.onSeeAllClick(0) }
                 )
 
                 AnimeList(
-                    animeList = popularAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
+                    animeList = state.popularAnimeList,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Popular anime",
-                    onSeeAllClick = { onSeeAllClick(1) }
+                    onSeeAllClick = { component.onSeeAllClick(1) }
                 )
 
                 AnimeList(
-                    animeList = nameAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
+                    animeList = state.nameAnimeList,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Name anime",
-                    onSeeAllClick = { onSeeAllClick(2) }
+                    onSeeAllClick = { component.onSeeAllClick(2) }
                 )
 
                 AnimeList(
-                    animeList = filmsAnimeList,
-                    onAnimeItemClick = onAnimeItemClick,
+                    animeList = state.filmsAnimeList,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Films",
-                    onSeeAllClick = { onSeeAllClick(3) }
+                    onSeeAllClick = { component.onSeeAllClick(3) }
                 )
 
             }
         }
 
-        is HomeScreenState.Loading -> {
+        is HomeStore.State.HomeScreenState.Loading -> {
             ShimmerHome()
         }
 
-        is HomeScreenState.Initial -> {
-
-        }
-
+        is HomeStore.State.HomeScreenState.Initial -> {}
     }
-
-
 }
 
 @Composable

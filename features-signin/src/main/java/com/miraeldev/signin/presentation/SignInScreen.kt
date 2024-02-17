@@ -3,6 +3,7 @@ package com.miraeldev.signin.presentation
 import android.annotation.SuppressLint
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -62,12 +63,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.pressClickEffect
-import com.miraeldev.navigation.decompose.authComponent.signInComponent.SignInComponent
+import com.miraeldev.signin.presentation.signInComponent.SignInComponent
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.PasswordField
 import com.miraeldev.signin.R
-import com.miraeldev.signin.presentation.store.SignInStore
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
 import com.vk.api.sdk.auth.VKScope
@@ -77,21 +77,13 @@ private const val GOOGLE_AUTH_REQUEST_CODE = 1
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SignInScreen(
-    component: SignInComponent,
-    viewModel: SignInViewModel = hiltViewModel()
-) {
+fun SignInScreen(component: SignInComponent) {
     val model by component.model.collectAsStateWithLifecycle()
 
     Surface {
 
         val loginFocusRequester = remember { FocusRequester() }
         val passwordFocusRequester = remember { FocusRequester() }
-
-        var isLoginInFocus by rememberSaveable { mutableStateOf(true) }
-
-        val isEmailValidAction = remember { { viewModel.isEmailValid() } }
-        val isPasswordValidAction = remember { { viewModel.isPasswordValid() } }
 
         val focusManager = LocalFocusManager.current
         val context = LocalContext.current
@@ -110,7 +102,7 @@ fun SignInScreen(
                 try {
                     val account = task?.getResult(ApiException::class.java)
                     if (account != null) {
-                        account.idToken?.let { viewModel.signInGoogleAccount(it) }
+                        account.idToken?.let { component.authViaGoogle(it) }
                     } else {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar(context.getString(R.string.google_auth_went_wrong))
@@ -129,8 +121,7 @@ fun SignInScreen(
             onResult = {
                 when (it) {
                     is VKAuthenticationResult.Success -> {
-
-                        viewModel.signInVkAccount(
+                        component.authViaVk(
                             it.token.accessToken,
                             it.token.userId.toString(),
                             it.token.email
@@ -208,7 +199,7 @@ fun SignInScreen(
                                     }
                                 },
                             text = { model.email },
-                            isLoginError = model.isEmailError,
+                            isLoginError = model.signInError.emailError,
                             onNext = moveFocusDown,
                             onChange = { component.onEmailChanged(it) }
 
@@ -216,7 +207,7 @@ fun SignInScreen(
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = model.isEmailError,
+                            isError = model.signInError.emailError,
                             error = stringResource(id = R.string.invalid_mail)
                         )
                     }
@@ -230,14 +221,13 @@ fun SignInScreen(
                     ) {
                         PasswordField(
                             text = { model.password },
-                            isPasswordError = model.isPasswordError,
+                            isPasswordError = model.signInError.passwordError,
                             onChange = { component.onPasswordChanged(it) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .focusRequester(passwordFocusRequester)
                                 .onFocusEvent {
                                     if (it.isFocused) {
-                                        isLoginInFocus = true
                                         component.refreshPasswordError()
                                     }
                                 }
@@ -245,19 +235,19 @@ fun SignInScreen(
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = model.isSignInError,
+                            isError = model.signInError.networkError,
                             error = stringResource(R.string.incorrect_password_or_email_entered)
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = model.isPasswordError,
+                            isError = model.signInError.passwordLengthError,
                             error = stringResource(R.string.password_must_be_more_than_6_characters)
                         )
 
                         ErrorValidField(
                             modifier = Modifier.padding(start = 16.dp),
-                            isError = model.isPasswordError,
+                            isError = model.signInError.passwordHasCapitalizedLetterError,
                             error = stringResource(R.string.the_password_must_contain_capital_letters)
                         )
                     }
@@ -268,13 +258,7 @@ fun SignInScreen(
                     SignInAndSignUpButtons(
                         onSignInClick = {
                             clearFocus()
-                            val isEmailValid = isEmailValidAction()
-                            val isPasswordValid = isPasswordValidAction()
-                            if (!isEmailValid || !isPasswordValid) {
-                                freeFocus()
-                            } else {
-                                component.onSignInClick(model.email, model.password)
-                            }
+                            component.onSignInClick(model.email, model.password)
                         },
                         onSignUpClick = {
                             clearFocus()
@@ -282,7 +266,7 @@ fun SignInScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    ForgetPassword(onForgetPasswordClick = { TODO() })
+                    ForgetPassword(onForgetPasswordClick = component::forgetPasswordClick)
                 }
 
                 Column(
@@ -337,7 +321,7 @@ private fun SignInSocialMedia(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-//
+
         IconButton(
             onClick = { vkAuthResultLauncher.launch(listOf(VKScope.WALL, VKScope.EMAIL)) },
             interactionSource = NoRippleInteractionSource()
@@ -348,7 +332,7 @@ private fun SignInSocialMedia(
                 contentDescription = null
             )
         }
-//
+
         IconButton(
             onClick = { googleAuthResultLauncher.launch(GOOGLE_AUTH_REQUEST_CODE) },
             interactionSource = NoRippleInteractionSource()
@@ -388,7 +372,8 @@ private fun SignInAndSignUpButtons(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.background,
                 contentColor = MaterialTheme.colors.primary
-            )
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colors.primary)
         ) {
             Text(stringResource(R.string.sign_up), fontSize = 18.sp)
         }

@@ -7,17 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -29,21 +24,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.arkivanov.decompose.defaultComponentContext
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.miraeldev.navigation.decompose.authComponent.AuthRootComponent
-import com.miraeldev.navigation.decompose.authComponent.DefaultAuthRootComponent
+import com.miraelDev.vauma.navigation.DefaultAppRootComponent
+import com.miraelDev.vauma.navigation.AppRootContent
 import com.miraeldev.models.auth.AuthState
-import com.miraeldev.signin.presentation.SignInScreen
-import com.miraeldev.signup.presentation.signUpScreen.SignUpScreen
-import com.miraeldev.theme.VaumaTheme
 import com.miraeldev.theme.LocalOrientation
+import com.miraeldev.theme.VaumaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @UnstableApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var appRootComponentFactory: DefaultAppRootComponent.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -57,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { !readyToDrawStartScreen }
 
-        val component = DefaultAuthRootComponent(defaultComponentContext())
+        val componentContext = defaultComponentContext()
 
         setContent {
 
@@ -73,8 +69,7 @@ class MainActivity : ComponentActivity() {
 
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
 
-
-            val authState by viewModel.authState.collectAsStateWithLifecycle()
+            val isUserAuthorized = false
 
             DisposableEffect(Unit) {
                 enableEdgeToEdge()
@@ -93,17 +88,20 @@ class MainActivity : ComponentActivity() {
                     onDispose {}
                 }
 
-                when (authState) {
-                    is AuthState.Authorized -> {
+                AppRootContent(
+                    component = appRootComponentFactory.create(
+                        componentContext = componentContext,
+                        isUserAuthorized = isUserAuthorized,
+                        onDarkThemeClick = {
+                            darkTheme.value = !darkTheme.value
+                            viewModel.setThemeMode(darkTheme.value)
+                            useDarkIcons = !useDarkIcons
+                        }
+                    ),
+                    onReadyToDrawStartScreen = { readyToDrawStartScreen = true }
+                )
+
 //                        MainScreen(
-//                            onThemeButtonClick = {
-//                                darkTheme.value = !darkTheme.value
-//                                viewModel.setThemeMode(darkTheme.value)
-//                                useDarkIcons = !useDarkIcons
-//                            },
-//                            onReadyToDrawStartScreen = {
-//                                readyToDrawStartScreen = true
-//                            },
 //                            onVideoViewClick = { isVideoViewOpen ->
 //                                if (!darkTheme.value) {
 //                                    useDarkIcons = !useDarkIcons
@@ -114,15 +112,7 @@ class MainActivity : ComponentActivity() {
 //                                }
 //                            }
 //                        )
-                    }
-
-                    is AuthState.NotAuthorized -> {
-                            AuthRootContent(component, onReadyToDrawStartScreen = { readyToDrawStartScreen = true })
-//                        AuthScreen(onReadyToDrawStartScreen = { readyToDrawStartScreen = true })
-                    }
-
-                    is AuthState.Initial -> {}
-                }
+//                    }
             }
 
 
@@ -164,30 +154,5 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val BACK = 0
         private const val ON_VIDEO_VIEW = 1
-    }
-}
-
-@Composable
-private fun AuthRootContent(component: DefaultAuthRootComponent, onReadyToDrawStartScreen: () -> Unit) {
-
-    LaunchedEffect(key1 = Unit) {
-        onReadyToDrawStartScreen()
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Children(
-            stack = component.stack
-        ) {
-            when (val instance = it.instance) {
-                is AuthRootComponent.Child.SignIn -> {
-                    SignInScreen(component = instance.component)
-                }
-                is AuthRootComponent.Child.SignUp -> {
-                    SignUpScreen(component = instance.component)
-                }
-            }
-        }
     }
 }

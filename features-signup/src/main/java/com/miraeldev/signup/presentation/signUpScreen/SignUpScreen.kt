@@ -66,36 +66,13 @@ import com.miraeldev.presentation.Toolbar
 import com.miraeldev.signup.R
 
 @Composable
-fun SignUpScreen(
-    component: SignUpComponent,
-    viewModel: SignUpViewModel = hiltViewModel()
-) {
+fun SignUpScreen(component: SignUpComponent) {
     val model by component.model.collectAsStateWithLifecycle()
-
-    val imagePath = remember { { viewModel.imagePath.value } }
 
     val loginFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
     var isLoginInFocus by rememberSaveable { mutableStateOf(true) }
-
-    val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
-    val isPasswordError by viewModel.isPasswordError.collectAsStateWithLifecycle()
-    val isPasswordNotEqualsError by viewModel.isPasswordNotEqualsError.collectAsStateWithLifecycle()
-    val isSignUpError by viewModel.signUpError.collectAsStateWithLifecycle()
-    val registrationComplete by viewModel.registrationComplete.collectAsStateWithLifecycle()
-
-    val refreshPasswordErrorAction = remember { { viewModel.refreshPasswordError() } }
-    val refreshEmailErrorAction = remember { { viewModel.refreshEmailError() } }
-    val isEmailValidAction = remember { { viewModel.isEmailValid() } }
-    val isPasswordValidAction = remember { { viewModel.isPasswordValid() } }
-    val isPasswordEqualsAction = remember { { viewModel.isPasswordEquals() } }
-    val signUpUser = remember {
-        {
-            viewModel.signUpUser()
-        }
-    }
-
 
     val focusManager = LocalFocusManager.current
 
@@ -107,19 +84,10 @@ fun SignUpScreen(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             uri?.let {
-                viewModel.changeImagePath(uri.toString())
+                component.onChangeImage(uri.toString())
             }
         }
     )
-
-    LaunchedEffect(key1 = Unit) {
-        snapshotFlow { registrationComplete }
-            .collect {
-                if (it) {
-                    component.onSignUpClick(model.email, model.password)
-                }
-            }
-    }
 
     BackHandler(onBack = component::onBackClick)
 
@@ -159,7 +127,7 @@ fun SignUpScreen(
                         modifier = Modifier
                             .size(160.dp)
                             .clip(CircleShape),
-                        model = imagePath().ifEmpty { R.drawable.ic_placeholder },
+                        model = model.image.ifEmpty { R.drawable.ic_placeholder },
                         placeholder = painterResource(id = R.drawable.ic_placeholder),
                         contentScale = ContentScale.FillBounds,
                         contentDescription = stringResource(R.string.profile_image)
@@ -190,11 +158,11 @@ fun SignUpScreen(
                             .focusRequester(loginFocusRequester)
                             .onFocusEvent {
                                 if (it.isFocused) {
-                                    refreshEmailErrorAction()
+                                    component.refreshEmailError()
                                 }
                             },
                         text = { model.email },
-                        isLoginError = isEmailError,
+                        isLoginError = model.signUpError.emailError,
                         onNext = moveFocusDown,
                         onChange = component::onChangeEmail
 
@@ -202,7 +170,7 @@ fun SignUpScreen(
 
                     ErrorValidField(
                         modifier = Modifier.padding(start = 16.dp),
-                        isError = isEmailError,
+                        isError = model.signUpError.emailError,
                         error = stringResource(R.string.invalid_mail)
                     )
                 }
@@ -213,7 +181,7 @@ fun SignUpScreen(
                 ) {
                     PasswordField(
                         text = { model.password },
-                        isPasswordError = !isPasswordError.successful,
+                        isPasswordError = model.signUpError.passwordError,
                         onChange = component::onChangePassword,
                         imeAction = ImeAction.Next,
                         modifier = Modifier
@@ -222,26 +190,26 @@ fun SignUpScreen(
                             .onFocusEvent {
                                 if (it.isFocused) {
                                     isLoginInFocus = true
-                                    refreshPasswordErrorAction()
+                                    component.refreshPasswordError()
                                 }
                             }
                     )
 
                     ErrorValidField(
                         modifier = Modifier.padding(start = 16.dp),
-                        isError = isSignUpError,
+                        isError = model.signUpError.networkError,
                         error = stringResource(R.string.incorrect_password_or_email_entered)
                     )
 
                     ErrorValidField(
                         modifier = Modifier.padding(start = 16.dp),
-                        isError = !isPasswordError.hasMinimum,
+                        isError = model.signUpError.passwordLengthError,
                         error = stringResource(R.string.password_must_be_more_than_6_characters)
                     )
 
                     ErrorValidField(
                         modifier = Modifier.padding(start = 16.dp),
-                        isError = !isPasswordError.hasCapitalizedLetter,
+                        isError = model.signUpError.passwordHasCapitalizedLetterError,
                         error = stringResource(R.string.the_password_must_contain_capital_letters)
                     )
                 }
@@ -252,7 +220,7 @@ fun SignUpScreen(
                 ) {
                     PasswordField(
                         text = { model.repeatedPassword },
-                        isPasswordError = !isPasswordNotEqualsError,
+                        isPasswordError = model.signUpError.repeatedPasswordError,
                         onChange = component::onChangeRepeatedPassword,
                         iconRes = R.drawable.ic_lock,
                         iconSize = 20.dp,
@@ -262,34 +230,35 @@ fun SignUpScreen(
                             .onFocusEvent {
                                 if (it.isFocused) {
                                     isLoginInFocus = true
-                                    refreshPasswordErrorAction()
+                                    component.refreshRepeatedPasswordError()
                                 }
                             }
                     )
 
                     ErrorValidField(
                         modifier = Modifier.padding(start = 16.dp),
-                        isError = !isPasswordNotEqualsError,
+                        isError = model.signUpError.repeatedPasswordError,
                         error = stringResource(R.string.password_mismatch)
                     )
 
-                    ErrorValidField(
-                        modifier = Modifier.padding(start = 16.dp),
-                        isError = isSignUpError,
-                        error = stringResource(R.string.error_try_again_later)
-                    )
+//                    ErrorValidField(
+//                        modifier = Modifier.padding(start = 16.dp),
+//                        isError = model.signUpError.networkError,
+//                        error = stringResource(R.string.error_try_again_later)
+//                    )
                 }
             }
 
             RegistrationButton(
                 onSignUpButtonClick = {
                     clearFocus()
-                    val isEmailValid = isEmailValidAction()
-                    val isPasswordValid = isPasswordValidAction()
-                    val isPasswordEquals = isPasswordEqualsAction()
-                    if (isEmailValid && isPasswordValid && isPasswordEquals) {
-                        signUpUser()
-                    }
+                    component.onSignUpClick(
+                        model.image,
+                        model.username,
+                        model.email,
+                        model.password,
+                        model.repeatedPassword
+                    )
                 }
             )
         }

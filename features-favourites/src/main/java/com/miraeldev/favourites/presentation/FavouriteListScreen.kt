@@ -67,6 +67,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.favourites.R
+import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponent
+import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteComponent
+import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore
 import com.miraeldev.presentation.FavouriteIcon
 import com.miraeldev.presentation.shimmerList.ShimmerListFavouriteAnime
 import com.miraeldev.result.FailureCauses
@@ -77,30 +80,14 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
-fun FavouriteListScreen(
-    onAnimeItemClick: (Int) -> Unit,
-    navigateToSearchScreen: () -> Unit,
-    viewModel: FavouriteAnimeViewModel = hiltViewModel(),
-) {
-
-    val searchTextState = remember { { viewModel.searchTextState.value } }
-
-    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
+fun FavouriteListScreen(component: FavouriteComponent) {
+    val model by component.model.collectAsStateWithLifecycle()
 
     var resultAfterSearch by rememberSaveable { mutableStateOf(false) }
 
     var isResultEmpty by rememberSaveable { mutableStateOf(false) }
 
     var isSearchButtonClicked by rememberSaveable { mutableStateOf(false) }
-
-    val searchAnimeByNameAction: (String) -> Unit = remember { { viewModel.searchAnimeByName(it) } }
-    val updateSearchTextStateAction: (String) -> Unit =
-        remember { { viewModel.updateSearchTextState(it) } }
-    val navigateToSearchScreenAction = remember { { navigateToSearchScreen() } }
-    val selectAnimeItemAction: (AnimeInfo) -> Unit = remember { { viewModel.selectAnimeItem(it) } }
-    val searchAnimeItemInDatabaseAction: (String) -> Unit =
-        remember { { viewModel.searchAnimeItemInDatabase(it) } }
-    val loadAnimeListAction = remember { { viewModel.loadAnimeList() } }
 
     val searchButtonIsClickedAction = remember { { isSearchButtonClicked = true } }
     val searchButtonIsNotClickedAction = remember { { isSearchButtonClicked = false } }
@@ -109,11 +96,11 @@ fun FavouriteListScreen(
         snapshotFlow { isSearchButtonClicked }
             .collect { clicked ->
                 if (clicked) {
-                    searchAnimeByNameAction(searchTextState())
+                    component.searchAnimeByName(model.search)
                     delay(800)
-                    navigateToSearchScreenAction()
-                    loadAnimeListAction()
-                    updateSearchTextStateAction("")
+                    component.navigateToSearchScreen()
+                    component.loadAnimeList()
+                    component.updateSearchTextState("")
                     searchButtonIsNotClickedAction()
                 }
             }
@@ -125,30 +112,30 @@ fun FavouriteListScreen(
     ) {
 
         Toolbar(
-            text = searchTextState,
-            onTextChange = updateSearchTextStateAction,
+            text = { model.search },
+            onTextChange = component::updateSearchTextState,
             onSearchClicked = {
                 resultAfterSearch = true
-                searchAnimeItemInDatabaseAction(it)
+                component.searchAnimeItemInDatabase(it)
             },
-            onCloseSearchView = loadAnimeListAction
+            onCloseSearchView = component::loadAnimeList
         )
 
-        when (val res = screenState) {
+        when (val res = model.screenState) {
 
-            is FavouriteListScreenState.Result -> {
+            is FavouriteStore.State.FavouriteListScreenState.Result -> {
 
                 isResultEmpty = false
 
                 FavouriteList(
                     favouriteAnimeList = res.result,
-                    onAnimeItemClick = onAnimeItemClick,
-                    onFavouriteIconClick = selectAnimeItemAction
+                    onAnimeItemClick = component::onAnimeItemClick,
+                    onFavouriteIconClick = component::selectAnimeItem
                 )
 
             }
 
-            is FavouriteListScreenState.Failure -> {
+            is FavouriteStore.State.FavouriteListScreenState.Failure -> {
 
                 if (res.failure is FailureCauses.NotFound) isResultEmpty = true
 
@@ -161,11 +148,11 @@ fun FavouriteListScreen(
 
             }
 
-            is FavouriteListScreenState.Loading -> {
+            is FavouriteStore.State.FavouriteListScreenState.Loading -> {
                 ShimmerListFavouriteAnime()
             }
 
-            is FavouriteListScreenState.Initial -> {}
+            is FavouriteStore.State.FavouriteListScreenState.Initial -> {}
 
         }
     }

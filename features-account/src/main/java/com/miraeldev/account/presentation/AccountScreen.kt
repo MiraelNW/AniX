@@ -30,7 +30,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,12 +41,12 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.account.R
 import com.miraeldev.account.domain.UserModel
+import com.miraeldev.account.presentation.accountComponent.AccountComponent
 import com.miraeldev.account.presentation.settings.notificationsScreen.Switcher
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.theme.LocalTheme
@@ -55,15 +54,9 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun AccountScreen(
-    onSettingItemClick: (Int) -> Unit,
-    onDarkThemeClick: () -> Unit,
-    viewModel: AccountScreenViewModel = hiltViewModel()
-) {
+fun AccountScreen(component: AccountComponent) {
 
-    val logOutAction = remember { { viewModel.logOut() } }
-
-    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+    val model by component.model.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     Column(
@@ -83,11 +76,11 @@ fun AccountScreen(
                 .padding(horizontal = 6.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ProfileNameAndImage(userInfo)
+            ProfileNameAndImage(model.userModel)
             AllSettings(
-                onSettingItemClick = onSettingItemClick,
-                onDarkThemeClick = onDarkThemeClick,
-                onLogOutClick = logOutAction
+                onSettingItemClick = component::onSettingItemClick,
+                onDarkThemeClick = component::onDarkThemeClick,
+                onLogOutClick = component::logOut
             )
         }
     }

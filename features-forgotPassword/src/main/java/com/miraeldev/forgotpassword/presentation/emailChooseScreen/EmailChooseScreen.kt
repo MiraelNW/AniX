@@ -16,16 +16,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -33,38 +33,19 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.forgotpassword.R
+import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.EmailChooseComponent
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.Toolbar
 
 
 @Composable
-fun EmailChooseScreen(
-    onBackPressed: () -> Unit,
-    navigateToCodeVerify: (String) -> Unit,
-    viewModel: EmailChooseViewModel = hiltViewModel()
-) {
+fun EmailChooseScreen(component: EmailChooseComponent) {
 
-    val email by remember { viewModel.email }
+    val model by component.model.collectAsStateWithLifecycle()
+
     val loginFocusRequester = remember { FocusRequester() }
-    val isEmailError by viewModel.isEmailError.collectAsStateWithLifecycle()
-    val isEmailCheckComplete by viewModel.isEmailCheckComplete.collectAsStateWithLifecycle()
-    val updateTextAction: (String) -> Unit = remember {
-        {
-            viewModel.refreshEmailError()
-            viewModel.updateEmailText(it)
-        }
-    }
-    val onCompleteAction: () -> Unit = remember { { viewModel.checkEmailExist() } }
-
-    LaunchedEffect(key1 = Unit) {
-        snapshotFlow { isEmailCheckComplete }
-            .collect { completeSuccess ->
-                if (completeSuccess) {
-                    navigateToCodeVerify(email)
-                }
-            }
-    }
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
@@ -78,7 +59,7 @@ fun EmailChooseScreen(
     ) {
 
         Toolbar(
-            onBackPressed = onBackPressed,
+            onBackPressed = component::onBackClicked,
             text = R.string.choose_email
         )
 
@@ -99,26 +80,38 @@ fun EmailChooseScreen(
                 EmailField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .focusRequester(loginFocusRequester),
+                        .focusRequester(loginFocusRequester)
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                component.refreshEmailError()
+                            }
+                        },
                     unfocusedBorderColor = Color.Transparent,
-                    text = { email },
-                    isLoginError = isEmailError,
+                    text = { model.email },
+                    isLoginError = model.emailChooseErrorModel.emailNotValidError,
                     onNext = {},
-                    onChange = updateTextAction
+                    onChange = component::onEmailChange
 
                 )
 
                 ErrorValidField(
                     modifier = Modifier.padding(start = 16.dp),
-                    isError = isEmailError,
+                    isError = model.emailChooseErrorModel.emailNotValidError,
                     error = stringResource(id = R.string.invalid_mail)
+                )
+
+                ErrorValidField(
+                    modifier = Modifier.padding(start = 16.dp),
+                    isError = model.emailChooseErrorModel.emailNotExistError,
+                    error = stringResource(id = R.string.mail_not_exist)
                 )
             }
         }
 
         ContinueButton(
             onVerifyButtonClick = {
-                onCompleteAction()
+                focusManager.clearFocus()
+                component.checkEmailExist(model.email)
             }
         )
     }

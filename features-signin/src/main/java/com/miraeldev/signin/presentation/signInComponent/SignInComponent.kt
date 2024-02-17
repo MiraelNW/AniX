@@ -1,4 +1,4 @@
-package com.miraeldev.navigation.decompose.authComponent.signInComponent
+package com.miraeldev.signin.presentation.signInComponent
 
 import com.miraeldev.signin.presentation.store.SignInStore
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,13 @@ interface SignInComponent {
 
     fun onPasswordChanged(password: String)
 
+    fun authViaGoogle(idToken: String)
+
+    fun authViaVk(accessToken: String, userId: String, email: String?)
+
     fun refreshPasswordError()
 
     fun refreshEmailError()
+
+    fun forgetPasswordClick()
 }

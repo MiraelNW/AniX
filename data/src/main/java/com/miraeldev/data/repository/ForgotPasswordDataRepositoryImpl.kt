@@ -7,6 +7,7 @@ import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.di.qualifiers.AuthClient
 import com.miraeldev.domain.models.auth.Token
+import com.miraeldev.extensions.sendRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -29,19 +30,22 @@ internal class ForgotPasswordDataRepositoryImpl @Inject constructor(
         return emptyFlow()
     }
 
-    override suspend fun saveNewPassword(email: String, newPassword: String) {
-        val saveNewPasswordResponse = client.post {
-            url(BuildConfig.CREATE_NEW_PASSWORD)
-            setBody(
-                mapOf(
-                    Pair("email", email),
-                    Pair("password", newPassword),
+    override suspend fun saveNewPassword(email: String, newPassword: String):Boolean {
+        return sendRequest {
+            val saveNewPasswordResponse = client.post {
+                url(BuildConfig.CREATE_NEW_PASSWORD)
+                setBody(
+                    mapOf(
+                        Pair("email", email),
+                        Pair("password", newPassword),
+                    )
                 )
-            )
-        }
+            }
 
-        if (saveNewPasswordResponse.status.isSuccess()) {
-            logIn(saveNewPasswordResponse)
+            if (saveNewPasswordResponse.status.isSuccess()) {
+                logIn(saveNewPasswordResponse)
+            }
+            saveNewPasswordResponse.status.isSuccess()
         }
     }
 
@@ -50,30 +54,32 @@ internal class ForgotPasswordDataRepositoryImpl @Inject constructor(
     }
 
     override suspend fun verifyOtp(otp: String): Boolean {
-        val verifyOtpResponse = client.post {
-            url(BuildConfig.VERIFY_OTP_FORGOT_PASSWORD)
-            setBody(
-                mapOf(
-                    Pair("token", otp)
+        return sendRequest {
+            val verifyOtpResponse = client.post {
+                url(BuildConfig.VERIFY_OTP_FORGOT_PASSWORD)
+                setBody(
+                    mapOf(
+                        Pair("token", otp)
+                    )
                 )
-            )
-        }
+            }
 
-        return verifyOtpResponse.status.value in 200..299
+            verifyOtpResponse.status.isSuccess()
+        }
     }
 
     override suspend fun checkEmailExist(email: String): Boolean {
-
-        val checkEmailExistResponse = client.post {
-            url(BuildConfig.CHECK_EMAIL)
-            setBody(
-                mapOf(
-                    Pair("email", email)
+        return sendRequest {
+            val checkEmailExistResponse = client.post {
+                url(BuildConfig.CHECK_EMAIL)
+                setBody(
+                    mapOf(
+                        Pair("email", email)
+                    )
                 )
-            )
+            }
+            checkEmailExistResponse.status.isSuccess()
         }
-
-        return checkEmailExistResponse.status.value in 200..299
     }
 
     private suspend fun logIn(response: HttpResponse) {

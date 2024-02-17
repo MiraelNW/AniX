@@ -56,6 +56,8 @@ import com.miraeldev.presentation.shimmerList.ShimmerItem
 import com.miraeldev.search.R
 import com.miraeldev.search.presentation.animeCard.LastSearchedAnime
 import com.miraeldev.search.presentation.animeCard.SearchAnimeCard
+import com.miraeldev.search.presentation.searchComponent.SearchAnimeComponent
+import com.miraeldev.search.presentation.searchComponent.SearchAnimeStore
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -66,24 +68,10 @@ import java.io.IOException
 
 private const val SMALL_ANIMATION = 1.015f
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
-fun SearchAnimeScreen(
-    onFilterClicked: () -> Unit,
-    onAnimeItemClick: (Int) -> Unit,
-    viewModel: SearchAnimeViewModel = hiltViewModel(),
-) {
-
-    val searchTextState = remember { { viewModel.searchTextState.value } }
-    val searchScreenState by viewModel.screenState.collectAsStateWithLifecycle()
-    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
-    val filterList by viewModel.filterList.collectAsStateWithLifecycle()
-
-    val updateSearchTextAction: (String) -> Unit =
-        remember { { viewModel.updateSearchTextState(it) } }
-    val searchAnimeByNameAction: (String) -> Unit = remember { { viewModel.searchAnimeByName(it) } }
-    val showSearchHistoryAction = remember { { viewModel.showSearchHistory() } }
-    val showInitialListAction = remember { { viewModel.showInitialList() } }
+fun SearchAnimeScreen(component: SearchAnimeComponent) {
+    val model by component.model.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -93,69 +81,67 @@ fun SearchAnimeScreen(
 
         var open by rememberSaveable { mutableStateOf(false) }
 
-        var isSearchHistoryItemClick by rememberSaveable {
-            mutableStateOf(false)
-        }
+        var isSearchHistoryItemClick by rememberSaveable { mutableStateOf(false) }
 
         AnimeSearchView(
-            text = searchTextState,
+            text = { model.search },
             isSearchHistoryItemClick = isSearchHistoryItemClick,
             showFilter = open,
-            onTextChange = updateSearchTextAction,
-            onClearText = showSearchHistoryAction,
+            onTextChange = component::onSearchChange,
+            onClearText = component::showSearchHistory,
             onSearchClicked = {
-                searchAnimeByNameAction(it)
+                component.searchAnimeByName(it)
                 isSearchHistoryItemClick = false
             },
-            clickOnSearchView = showSearchHistoryAction,
-            onCloseSearchView = showInitialListAction,
-            onFilterClicked = onFilterClicked
+            clickOnSearchView = component::showSearchHistory,
+            onCloseSearchView = component::showInitialList,
+            onFilterClicked = component::onFilterClicked
         )
 
-        when (val results = searchScreenState) {
+        when (val results = model.screenState) {
 
-            is SearchAnimeScreenState.SearchResult -> {
+            is SearchAnimeStore.State.SearchAnimeScreenState.SearchResult -> {
                 open = true
 
                 val resultList = results.result.collectAsLazyPagingItems()
                 Column {
-                    Filters(filterList = filterList.toPersistentList())
+                    Filters(filterList = model.filterList)
                     SearchResult(
                         searchResults = resultList,
-                        onAnimeItemClick = onAnimeItemClick,
+                        onAnimeItemClick = component::onAnimeItemClick,
                         onRetry = resultList::retry
                     )
                 }
 
             }
 
-            is SearchAnimeScreenState.InitialList -> {
+            is SearchAnimeStore.State.SearchAnimeScreenState.InitialList -> {
 
                 open = false
                 val resultList = results.result.collectAsLazyPagingItems()
                 InitialAnimeList(
                     initialList = resultList,
-                    onAnimeItemClick = onAnimeItemClick,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     onClickRetry = resultList::retry
                 )
 
             }
 
-            is SearchAnimeScreenState.SearchHistory -> {
+            is SearchAnimeStore.State.SearchAnimeScreenState.SearchHistory -> {
                 open = true
                 Column {
-                    Filters(filterList = filterList.toImmutableList())
+                    Filters(filterList = model.filterList)
                     SearchHistory(
-                        searchHistory = searchHistory.toImmutableList(),
+                        searchHistory = model.searchHistory,
                         onSearchItemClick = {
-                            updateSearchTextAction(it)
+                            component.onSearchChange(it)
                             isSearchHistoryItemClick = true
                         }
                     )
                 }
             }
 
-            is SearchAnimeScreenState.EmptyList -> {}
+            is SearchAnimeStore.State.SearchAnimeScreenState.EmptyList -> {}
         }
     }
 }

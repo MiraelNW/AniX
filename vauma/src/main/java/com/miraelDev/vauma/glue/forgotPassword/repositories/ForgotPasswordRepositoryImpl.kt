@@ -15,8 +15,8 @@ class ForgotPasswordRepositoryImpl @Inject constructor(
         return forgotPasswordRepository.getSignUpError()
     }
 
-    override suspend fun saveNewPassword(email: String, newPassword: String) {
-        forgotPasswordRepository.saveNewPassword(email, newPassword)
+    override suspend fun saveNewPassword(email: String, newPassword: String): Boolean {
+        return forgotPasswordRepository.saveNewPassword(email, newPassword)
     }
 
     override suspend fun sendNewOtp() {

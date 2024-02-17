@@ -32,6 +32,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.detailinfo.R
+import com.miraeldev.detailinfo.presentation.detailComponent.DetailComponent
+import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore
+import com.miraeldev.detailinfo.presentation.ui.AnimeNameAndShareButton
+import com.miraeldev.detailinfo.presentation.ui.AnimeSeriesDialog
+import com.miraeldev.detailinfo.presentation.ui.BackIcon
+import com.miraeldev.detailinfo.presentation.ui.BottomSheet
+import com.miraeldev.detailinfo.presentation.ui.ExpandableDescription
+import com.miraeldev.detailinfo.presentation.ui.GenreRow
+import com.miraeldev.detailinfo.presentation.ui.OtherAnime
+import com.miraeldev.detailinfo.presentation.ui.PlayButton
+import com.miraeldev.detailinfo.presentation.ui.RatingAndCategoriesRow
+import com.miraeldev.detailinfo.presentation.ui.TopAnimeImage
+import com.miraeldev.detailinfo.presentation.ui.ZoomableImage
 import com.miraeldev.presentation.FavouriteIcon
 import com.miraeldev.presentation.shimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.delay
@@ -44,67 +57,45 @@ private const val DOWNLOAD_SCREEN = 2
 
 @Composable
 fun AnimeDetailScreen(
-    animeId: Int,
-    onBackPressed: () -> Unit,
-    onAnimeItemClick: (Int) -> Unit,
-    onSeriesClick: () -> Unit
+    component: DetailComponent,
+    animeId: Int
 ) {
-    val viewModel = hiltViewModel<AnimeDetailViewModel>()
 
-    val screenState by viewModel.animeDetail.collectAsStateWithLifecycle(AnimeDetailScreenState.Initial)
+    val model by component.model.collectAsStateWithLifecycle()
 
-    val onBackPressedAction = remember { { onBackPressed() } }
+    var shouldShowLoading by remember { mutableStateOf(false) }
 
-    val loadAnimeDetailAction: (Int) -> Unit = remember { { viewModel.loadAnimeDetail(it) } }
-    val loadAnimeVideoAction: (AnimeDetailInfo, Int) -> Unit = remember {
-        { animeItem, videoId ->
-            viewModel.loadVideoId(animeItem, videoId)
-        }
-    }
-    val downloadEpisodeAction: (String, String) -> Unit =
-        remember { { url, videoName -> viewModel.downloadEpisode(url, videoName) } }
-
-
-    var shouldShowLoading by remember {
-        mutableStateOf(false)
-    }
-
-    BackHandler(onBack = onBackPressedAction)
+    BackHandler(onBack = component::onBackClicked)
 
     Box(modifier = Modifier.fillMaxSize()) {
-        when (val results = screenState) {
+        when (val results = model.animeDetailScreenState) {
 
-            is AnimeDetailScreenState.SearchResult -> {
-
-                val selectAnimeItemAction: (Boolean) -> Unit =
-                    remember {
-                        { isSelected ->
-                            viewModel.selectAnimeItem(
-                                isSelected,
-                                results.result.first()
-                            )
-                        }
-                    }
+            is DetailStore.State.AnimeDetailScreenState.SearchResult -> {
 
                 DetailScreen(
                     animeDetail = results.result.first(),
-                    onBackPressed = onBackPressedAction,
-                    onAnimeItemClick = onAnimeItemClick,
+                    onBackPressed = component::onBackClicked,
+                    onAnimeItemClick = component::onAnimeItemClick,
                     onSeriesClick = { videoId ->
-                        loadAnimeVideoAction(results.result.first(), videoId)
-                        onSeriesClick()
+                        component.loadAnimeVideo(results.result.first(), videoId)
+                        component.onSeriesClick()
                     },
-                    downloadAnimeEpisode = downloadEpisodeAction,
-                    onFavouriteIconCLick = selectAnimeItemAction
+                    downloadAnimeEpisode = component::downloadEpisode,
+                    onFavouriteIconCLick = {
+                        component.selectAnimeItem(
+                            isSelected = it,
+                            animeInfo = results.result.first()
+                        )
+                    }
 
                 )
             }
 
-            is AnimeDetailScreenState.SearchFailure -> {
+            is DetailStore.State.AnimeDetailScreenState.SearchFailure -> {
             }
 
-            is AnimeDetailScreenState.Loading -> {
-                loadAnimeDetailAction(animeId)
+            is DetailStore.State.AnimeDetailScreenState.Loading -> {
+                component.loadAnimeDetail(animeId)
 
                 LaunchedEffect(key1 = Unit) {
                     delay(200)
@@ -115,7 +106,7 @@ fun AnimeDetailScreen(
                 }
             }
 
-            is AnimeDetailScreenState.Initial -> {}
+            is DetailStore.State.AnimeDetailScreenState.Initial -> {}
         }
     }
 

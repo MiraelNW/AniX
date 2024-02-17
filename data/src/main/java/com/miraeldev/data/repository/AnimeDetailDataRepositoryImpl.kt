@@ -66,7 +66,7 @@ internal class AnimeDetailDataRepositoryImpl @Inject constructor(
 
         val bearerToken = localTokenService.getBearerToken()
 
-        val userInfo = userDataRepository.getUserInfo().first()
+        val userInfo = userDataRepository.getUserInfo()
 
         client.post {
             url(ApiRoutes.SET_ANIME_FAV_STATUS)

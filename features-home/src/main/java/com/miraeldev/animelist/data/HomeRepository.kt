@@ -17,15 +17,7 @@ interface HomeRepository {
     fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>>
 
 
-    suspend fun loadData()
-
-    fun getNewAnimeList(): Flow<List<AnimeInfo>>
-
-    fun getPopularAnimeList(): Flow<List<AnimeInfo>>
-
-    fun getNameAnimeList(): Flow<List<AnimeInfo>>
-
-    fun getFilmsAnimeList(): Flow<List<AnimeInfo>>
+    suspend fun loadData(): Map<Int, List<AnimeInfo>>
 
     suspend fun addAnimeToList(isSelected: Boolean, animeInfo: LastWatchedAnime)
 

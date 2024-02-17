@@ -35,6 +35,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
+import java.net.SocketTimeoutException
 
 fun <T> Flow<T>.mergeWith(another: Flow<T>): Flow<T> {
     return merge(this, another)
@@ -53,7 +54,7 @@ fun Modifier.noRippleEffectClick(
     )
 }
 
-fun Modifier.shimmerEffect(targetValue:Float,initialValue:Float = 0.98f): Modifier = composed {
+fun Modifier.shimmerEffect(targetValue: Float, initialValue: Float = 0.98f): Modifier = composed {
 
     val infiniteTransition = rememberInfiniteTransition()
 
@@ -116,4 +117,12 @@ fun ComponentContext.componentScope(): CoroutineScope = CoroutineScope(
     Dispatchers.Main.immediate + SupervisorJob()
 ).apply {
     doOnDestroy { cancel() }
+}
+
+suspend fun sendRequest(trySend: suspend () -> Boolean): Boolean {
+    return try {
+        trySend()
+    } catch (e: Exception) {
+        false
+    }
 }

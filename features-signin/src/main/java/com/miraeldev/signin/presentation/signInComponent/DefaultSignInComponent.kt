@@ -1,4 +1,4 @@
-package com.miraeldev.navigation.decompose.authComponent.signInComponent
+package com.miraeldev.signin.presentation.signInComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
@@ -6,17 +6,23 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.signin.presentation.store.SignInStore
-import com.miraeldev.signin.presentation.store.SignInStoreFactory
+import com.miraeldev.signin.presentation.signInComponent.store.SignInStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DefaultSignInComponent(
-    componentContext: ComponentContext,
-    private val onSignUpClicked: () -> Unit,
+class DefaultSignInComponent @AssistedInject constructor (
+    private val storeFactory: SignInStoreFactory,
+    @Assisted("componentContext") componentContext: ComponentContext,
+    @Assisted("onSignUpClicked") private val onSignUpClicked: () -> Unit,
+    @Assisted("onForgetPasswordClick") private val onForgetPasswordClick: () -> Unit,
+    @Assisted("logIn") private val logIn: () -> Unit
 ) : SignInComponent, ComponentContext by componentContext {
 
-    private val store: SignInStore = instanceKeeper.getStore { SignInStoreFactory().create() }
+    private val store: SignInStore = instanceKeeper.getStore { storeFactory.create() }
 
     init {
         componentScope().launch {
@@ -24,6 +30,13 @@ class DefaultSignInComponent(
                 when (it) {
                     is SignInStore.Label.SignUpClicked -> {
                         onSignUpClicked()
+                    }
+
+                    is SignInStore.Label.ForgetPasswordClick -> {
+                        onForgetPasswordClick()
+                    }
+                    is SignInStore.Label.LogIn -> {
+                        logIn()
                     }
                 }
             }
@@ -50,11 +63,33 @@ class DefaultSignInComponent(
         store.accept(SignInStore.Intent.ChangePassword(password))
     }
 
+    override fun authViaGoogle(idToken: String) {
+        store.accept(SignInStore.Intent.AuthViaGoogle(idToken))
+    }
+
+    override fun authViaVk(accessToken: String, userId: String, email: String?) {
+        store.accept(SignInStore.Intent.AuthViaVk(accessToken, userId, email))
+    }
+
     override fun refreshPasswordError() {
-        TODO("Not yet implemented")
+        store.accept(SignInStore.Intent.RefreshPasswordError)
     }
 
     override fun refreshEmailError() {
-        TODO("Not yet implemented")
+        store.accept(SignInStore.Intent.RefreshEmailError)
+    }
+
+    override fun forgetPasswordClick() {
+        store.accept(SignInStore.Intent.ForgetPasswordClick)
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+            @Assisted("onSignUpClicked") onSignUpClicked: () -> Unit,
+            @Assisted("onForgetPasswordClick") onForgetPasswordClick: () -> Unit,
+            @Assisted("logIn") logIn: () -> Unit
+        ): DefaultSignInComponent
     }
 }

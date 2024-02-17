@@ -1,5 +1,6 @@
 package com.miraeldev.presentation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.animateColorAsState
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -59,9 +61,9 @@ fun OutlinedOtpTextField(
     value: String,
     onValueChange: (String) -> Unit,
     length: Int = 4,
-    onFilled: () -> Unit = {},
+    onFilled: (String) -> Unit = {},
     errorMessage: String? = null,
-    textStyle: TextStyle = MaterialTheme.typography.body1,
+    textStyle: TextStyle = TextStyle.Default.copy(fontSize = 48.sp),
     enabled: Boolean = true,
     readOnly: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -113,7 +115,7 @@ fun OutlinedOtpTextField(
                                 focusRequester.freeFocus()
                                 focusManager.clearFocus()
                             }
-                            updatedOnFilled()
+                            updatedOnFilled(it.text)
                         }
                     },
                     visualTransformation = visualTransformation,
@@ -196,8 +198,8 @@ private fun OtpEntry(
 
     Box(
         modifier = modifier
-            .width(56.dp)
-            .height(52.dp)
+            .width(74.dp)
+            .height(66.dp)
             .border(width = 2.dp, color = borderColor, shape = RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
@@ -231,7 +233,7 @@ private fun OtpEntry(
                     color = textColor,
                     style = textStyle,
                     textAlign = TextAlign.Center,
-                    fontSize = 16.sp
+                    fontSize = 24.sp
                 )
             }
         }

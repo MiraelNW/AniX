@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SignInRepository {
 
-    suspend fun signIn(username: String, password: String)
+    suspend fun signIn(email: String, password: String): Boolean
 
     fun getSignInError(): Flow<Boolean>
 

@@ -5,32 +5,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesComponent
 
 @Composable
 fun AnimeCategoriesScreen(
-    categoryId: Int,
-    onAnimeItemClick: (Int) -> Unit,
-    viewModel: AnimeListViewModel = hiltViewModel()
+    component: CategoriesComponent,
+    categoryId: Int
 ) {
-
+    val model by component.model.collectAsStateWithLifecycle()
 
     Box {
         val newCategoryList =
-            viewModel.newAnimeList.collectAsLazyPagingItems()
+            model.newListState.collectAsLazyPagingItems()
 
         val filmsAnimeList =
-            viewModel.filmsAnimeList.collectAsLazyPagingItems()
+            model.filmsListState.collectAsLazyPagingItems()
 
         val popularAnimeList =
-            viewModel.popularAnimeList.collectAsLazyPagingItems()
+            model.popularListState.collectAsLazyPagingItems()
 
         val nameAnimeList =
-            viewModel.nameAnimeList.collectAsLazyPagingItems()
+            model.nameListState.collectAsLazyPagingItems()
 
         AnimeList(
             newCategoryList = newCategoryList,
@@ -38,7 +40,7 @@ fun AnimeCategoriesScreen(
             popularAnimeList = popularAnimeList,
             nameAnimeList = nameAnimeList,
             categoryId = categoryId,
-            onAnimeItemClick = onAnimeItemClick,
+            onAnimeItemClick = component::onAnimeItemClick,
         )
     }
 }
