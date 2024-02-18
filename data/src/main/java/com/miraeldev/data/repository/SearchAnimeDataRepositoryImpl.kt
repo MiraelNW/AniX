@@ -1,5 +1,6 @@
 package com.miraeldev.data.repository
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -39,7 +41,7 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
 
     private val _searchTextFlow = MutableStateFlow("")
 
-    private val _searchResult = MutableSharedFlow<Flow<PagingData<AnimeInfo>>>()
+    private val searchInitialList = MutableSharedFlow<Flow<PagingData<AnimeInfo>>>()
 
     private val _searchName = MutableStateFlow<String>("")
 
@@ -98,8 +100,10 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>> =
-        _searchResult.asSharedFlow()
+    override fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>> = emptyFlow()
+
+    override fun getSearchInitialList(): Flow<Flow<PagingData<AnimeInfo>>> = searchInitialList.asSharedFlow()
+
 
     override fun getSearchName(): Flow<String> = _searchTextFlow.asStateFlow()
 
@@ -127,7 +131,7 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
     }
 
     override fun saveSearchText(searchText: String) {
-        _searchTextFlow.value = (searchText)
+        _searchTextFlow.value = searchText
     }
 
     override fun getSearchHistoryListFlow(): Flow<List<String>> =
@@ -141,7 +145,7 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
 
 
     override suspend fun loadInitialList() {
-        _searchResult.emit(
+        searchInitialList.emit(
             Pager(
                 config = PagingConfig(
                     pageSize = 12,
@@ -157,7 +161,5 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
             )
                 .flow
         )
-
     }
-
 }

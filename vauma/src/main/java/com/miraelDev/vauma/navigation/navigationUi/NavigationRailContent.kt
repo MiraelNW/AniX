@@ -30,17 +30,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.common.collect.ImmutableList
-import com.miraelDev.vauma.navigation.AppRootComponent
-import com.miraelDev.vauma.navigation.DefaultAppRootComponent
 import com.miraelDev.vauma.navigation.mainComponent.MainRootComponent
 import com.miraeldev.extensions.noRippleEffectClick
 
 @Composable
-fun NavigationRailContent(component: MainRootComponent) {
-
-    var selected by rememberSaveable {
-        mutableStateOf(NavId.HOME)
-    }
+fun NavigationRailContent(component: MainRootComponent, screen: MainRootComponent.Child) {
 
     val items =
         ImmutableList.of(
@@ -63,15 +57,10 @@ fun NavigationRailContent(component: MainRootComponent) {
 
             AddItem(
                 item = item,
-                onTabClick = {
-                    component.onTabNavigate(it)
-                    selected = it
-                },
-                selected = selected == item.id
+                onTabClick = component::onTabNavigate,
+                selected = screen.navId == item.id
             )
         }
-
-
     }
 }
 

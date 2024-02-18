@@ -10,8 +10,8 @@ import javax.inject.Inject
 class VideoPlayerRepositoryImpl @Inject constructor(
     private val videoPlayerDataRepository: VideoPlayerDataRepository
 ) : VideoPlayerRepository {
-    override fun getVideoPlayer(): StateFlow<PlayerWrapper> {
-        return videoPlayerDataRepository.getVideoPlayer()
+    override fun getVideoInfo(): StateFlow<PlayerWrapper> {
+        return videoPlayerDataRepository.getVideoInfo()
     }
 
     override fun loadVideoPlayer(animeInfo: AnimeDetailInfo) {

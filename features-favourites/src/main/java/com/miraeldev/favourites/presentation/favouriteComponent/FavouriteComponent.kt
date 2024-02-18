@@ -8,7 +8,7 @@ interface FavouriteComponent {
     val model: StateFlow<FavouriteStore.State>
 
     fun onAnimeItemClick(id: Int)
-    fun navigateToSearchScreen()
+    fun navigateToSearchScreen(search: String)
     fun updateSearchTextState(search: String)
     fun selectAnimeItem(animeInfo: AnimeInfo)
     fun searchAnimeItemInDatabase(name: String)

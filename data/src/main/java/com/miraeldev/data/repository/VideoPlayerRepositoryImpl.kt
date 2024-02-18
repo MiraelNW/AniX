@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 @UnstableApi
 internal class VideoPlayerRepositoryImpl @Inject constructor(
-    private val player: ExoPlayer,
     private val userDataRepository: UserDataRepository
 ) : VideoPlayerDataRepository {
 
@@ -27,14 +26,10 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
     private var lastWatchedAnime = LastWatchedAnime(-1)
 
     private val playerWrapper = MutableStateFlow(
-        PlayerWrapper(player, isFirstEpisode = false, isLastEpisode = false, title = "no name")
+        PlayerWrapper("", isFirstEpisode = false, isLastEpisode = false, title = "no name")
     )
 
-    override fun getVideoPlayer(): StateFlow<PlayerWrapper> {
-        player.prepare()
-        player.addAnalyticsListener(EventLogger())
-        return playerWrapper.asStateFlow()
-    }
+    override fun getVideoInfo(): StateFlow<PlayerWrapper> = playerWrapper.asStateFlow()
 
     override fun loadVideoId(animeItem: AnimeDetailInfo, videoId: Int) {
         this.videoId.value = videoId
@@ -121,9 +116,7 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
     }
 
     override suspend fun releasePlayer() {
-        player.stop()
         userDataRepository.saveLastWatchedAnime(lastWatchedAnime)
-
     }
 
     override fun loadSpecificEpisode(specificEpisode: Int) {
@@ -155,14 +148,6 @@ internal class VideoPlayerRepositoryImpl @Inject constructor(
     }
 
     private fun setMediaItem(name: String, url: String) {
-        player.apply {
-            setMediaItem(
-                MediaItem.Builder()
-                    .setUri(url)
-                    .build()
-            )
-            playWhenReady = true
-        }
-        playerWrapper.value = playerWrapper.value.copy(title = name)
+        playerWrapper.value = playerWrapper.value.copy(link = url, title = name)
     }
 }

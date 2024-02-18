@@ -17,7 +17,7 @@ class DefaultFavouriteComponent @AssistedInject internal constructor(
     private val storeFactory: FavouriteStoreFactory,
     @Assisted("componentContext") componentContext: ComponentContext,
     @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-    @Assisted("navigateToSearchScreen") navigateToSearchScreen: () -> Unit
+    @Assisted("navigateToSearchScreen") navigateToSearchScreen: (String) -> Unit
 ) : FavouriteComponent, ComponentContext by componentContext {
 
     private val store: FavouriteStore = instanceKeeper.getStore { storeFactory.create() }
@@ -34,7 +34,7 @@ class DefaultFavouriteComponent @AssistedInject internal constructor(
                     }
 
                     is FavouriteStore.Label.NavigateToSearchScreen -> {
-                        navigateToSearchScreen()
+                        navigateToSearchScreen(it.search)
                     }
                 }
             }
@@ -45,8 +45,8 @@ class DefaultFavouriteComponent @AssistedInject internal constructor(
         store.accept(FavouriteStore.Intent.OnAnimeItemClick(id))
     }
 
-    override fun navigateToSearchScreen() {
-        store.accept(FavouriteStore.Intent.NavigateToSearchScreen)
+    override fun navigateToSearchScreen(search: String) {
+        store.accept(FavouriteStore.Intent.NavigateToSearchScreen(search))
     }
 
     override fun updateSearchTextState(search: String) {
@@ -74,7 +74,7 @@ class DefaultFavouriteComponent @AssistedInject internal constructor(
         fun create(
             @Assisted("componentContext") componentContext: ComponentContext,
             @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-            @Assisted("navigateToSearchScreen") navigateToSearchScreen: () -> Unit
+            @Assisted("navigateToSearchScreen") navigateToSearchScreen: (String) -> Unit
         ): DefaultFavouriteComponent
     }
 }

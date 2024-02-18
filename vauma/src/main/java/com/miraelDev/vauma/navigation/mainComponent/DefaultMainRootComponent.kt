@@ -8,30 +8,37 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraelDev.vauma.navigation.navigationUi.NavId
-import com.miraeldev.account.presentation.accountComponent.DefaultAccountComponent
-import com.miraeldev.account.presentation.settings.editProfileScreen.EditProfileComponent.DefaultEditProfileComponent
+import com.miraelDev.vauma.presentation.appRootComponent.MainStore
+import com.miraelDev.vauma.presentation.appRootComponent.MainStoreFactory
+import com.miraeldev.account.presentation.DefaultAccountRootComponent
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponent
 import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponent
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponent
+import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponent
 import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponent
+import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 
 class DefaultMainRootComponent @AssistedInject constructor(
     @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onDarkThemeClick") private val onDarkThemeClick: () -> Unit,
     @Assisted("onLogOutComplete") private val onLogOutComplete: () -> Unit,
     private val homeComponentFactory: DefaultHomeComponent.Factory,
-    private val searchComponentFactory: DefaultSearchAnimeComponent.Factory,
     private val categoriesComponentFactory: DefaultCategoriesComponent.Factory,
+    private val searchComponentFactory: DefaultSearchAnimeComponent.Factory,
+    private val filterComponent: DefaultFilterComponent.Factory,
     private val favouriteComponentFactory: DefaultFavouriteComponent.Factory,
-    private val accountComponentFactory: DefaultAccountComponent.Factory,
-    private val detailComponentFactory: DefaultDetailComponent.Factory,
-    private val editProfileComponentFactory: DefaultEditProfileComponent.Factory,
+    private val accountRootComponentFactory: DefaultAccountRootComponent.Factory,
+    private val videoComponent: DefaultVideoComponent.Factory,
+    private val detailComponentFactory: DefaultDetailComponent.Factory
 ) : MainRootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
@@ -52,7 +59,7 @@ class DefaultMainRootComponent @AssistedInject constructor(
             }
 
             NavId.SEARCH -> {
-                navigation.bringToFront(Config.Search)
+                navigation.bringToFront(Config.Search())
             }
 
             NavId.FAVOURITE -> {
@@ -83,21 +90,10 @@ class DefaultMainRootComponent @AssistedInject constructor(
                         navigation.push(Config.Categories(it))
                     },
                     onPlayClick = {
-
+                        navigation.push(Config.VideoScreen)
                     }
                 )
                 MainRootComponent.Child.Home(component)
-            }
-
-            is Config.Search -> {
-                val component = searchComponentFactory.create(
-                    componentContext = componentContext,
-                    onAnimeItemClick = {
-                        navigation.push(Config.DetailInfo(it))
-                    },
-                    onFilterClicked = {},
-                )
-                MainRootComponent.Child.Search(component)
             }
 
             is Config.Categories -> {
@@ -110,6 +106,27 @@ class DefaultMainRootComponent @AssistedInject constructor(
                 MainRootComponent.Child.Categories(component, config.id)
             }
 
+            is Config.Search -> {
+                val component = searchComponentFactory.create(
+                    componentContext = componentContext,
+                    onAnimeItemClick = {
+                        navigation.push(Config.DetailInfo(it))
+                    },
+                    onFilterClicked = {
+                        navigation.push(Config.Filter)
+                    },
+                )
+                MainRootComponent.Child.Search(component, config.search)
+            }
+
+            is Config.Filter -> {
+                val component = filterComponent.create(
+                    componentContext = componentContext,
+                    onBackPressed = navigation::pop
+                )
+                MainRootComponent.Child.Filter(component)
+            }
+
             is Config.Favourite -> {
                 val component = favouriteComponentFactory.create(
                     componentContext = componentContext,
@@ -117,19 +134,15 @@ class DefaultMainRootComponent @AssistedInject constructor(
                         navigation.push(Config.DetailInfo(it))
                     },
                     navigateToSearchScreen = {
-
+                        navigation.bringToFront(Config.Search(it))
                     }
                 )
                 MainRootComponent.Child.Favourite(component)
             }
 
             is Config.Account -> {
-                val component = accountComponentFactory.create(
+                val component = accountRootComponentFactory.create(
                     componentContext = componentContext,
-                    onDarkThemeClick = onDarkThemeClick,
-                    onSettingItemClick = {
-                        navigation.push(Config.EditProfile)
-                    },
                     onLogOutComplete = onLogOutComplete
                 )
                 MainRootComponent.Child.Account(component)
@@ -140,7 +153,7 @@ class DefaultMainRootComponent @AssistedInject constructor(
                     componentContext = componentContext,
                     onBackClicked = navigation::pop,
                     onSeriesClick = {
-
+                        navigation.push(Config.VideoScreen)
                     },
                     onAnimeItemClick = {
                         navigation.push(Config.DetailInfo(it))
@@ -149,12 +162,12 @@ class DefaultMainRootComponent @AssistedInject constructor(
                 MainRootComponent.Child.DetailInfo(component, config.id)
             }
 
-            is Config.EditProfile -> {
-                val component = editProfileComponentFactory.create(
+            is Config.VideoScreen -> {
+                val component = videoComponent.create(
                     componentContext = componentContext,
                     onBackClicked = navigation::pop
                 )
-                MainRootComponent.Child.EditProfile(component)
+                MainRootComponent.Child.VideoScreen(component)
             }
         }
     }
@@ -165,7 +178,10 @@ class DefaultMainRootComponent @AssistedInject constructor(
         data object Home : Config
 
         @Serializable
-        data object Search : Config
+        data class Search(val search: String = "") : Config
+
+        @Serializable
+        data object Filter : Config
 
         @Serializable
         data class Categories(val id: Int) : Config
@@ -178,9 +194,8 @@ class DefaultMainRootComponent @AssistedInject constructor(
 
         @Serializable
         data class DetailInfo(val id: Int) : Config
-
         @Serializable
-        data object EditProfile : Config
+        data object VideoScreen : Config
 
     }
 
@@ -188,7 +203,6 @@ class DefaultMainRootComponent @AssistedInject constructor(
     interface Factory {
         fun create(
             @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onDarkThemeClick") onDarkThemeClick: () -> Unit,
             @Assisted("onLogOutComplete") onLogOutComplete: () -> Unit,
         ): DefaultMainRootComponent
     }

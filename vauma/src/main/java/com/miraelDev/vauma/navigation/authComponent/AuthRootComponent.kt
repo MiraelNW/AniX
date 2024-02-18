@@ -15,15 +15,15 @@ interface AuthRootComponent {
 
     sealed interface Child {
 
-        class SignIn(val component: SignInComponent) : Child
-        class SignUp(val component: SignUpComponent) : Child
-        class CodeVerify(
+        data class SignIn(val component: SignInComponent) : Child
+        data class SignUp(val component: SignUpComponent) : Child
+        data class CodeVerify(
             val component: CodeVerifyComponent,
             val email: String,
             val password: String
         ) : Child
-        class EmailChoose(val component: EmailChooseComponent) : Child
-        class CodeVerifyResetPassword(val component: CodeVerifyRPComponent, val email: String) : Child
-        class ResetPassword(val component: ResetPasswordComponent, val email: String) : Child
+        data class EmailChoose(val component: EmailChooseComponent) : Child
+        data class CodeVerifyResetPassword(val component: CodeVerifyRPComponent, val email: String) : Child
+        data class ResetPassword(val component: ResetPasswordComponent, val email: String) : Child
     }
 }

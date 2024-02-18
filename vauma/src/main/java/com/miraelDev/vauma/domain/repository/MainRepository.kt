@@ -8,12 +8,10 @@ interface MainRepository {
 
     suspend fun checkAuthState()
 
-    suspend fun getDarkTheme(): Boolean
+    fun getDarkTheme(): Flow<Boolean>
 
     fun getUserStatus(): Flow<AuthState>
 
     suspend fun getLocalUser(): UserEmail
-
-    suspend fun setDarkTheme(isDarkTheme: Boolean)
 
 }

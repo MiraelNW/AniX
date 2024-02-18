@@ -24,10 +24,9 @@ class MainRepositoryImpl @Inject constructor(
         userAuthDataRepository.checkAuthState()
     }
 
-    override suspend fun getDarkTheme(): Boolean {
+    override fun getDarkTheme(): Flow<Boolean> {
         return preferenceDataStoreAPI
             .getPreference(booleanPreferencesKey(DARK_THEME_KEY), false)
-            .first()
     }
 
     override fun getUserStatus(): Flow<AuthState> {
@@ -36,9 +35,5 @@ class MainRepositoryImpl @Inject constructor(
 
     override suspend fun getLocalUser(): UserEmail {
         return userDataRepository.getUserEmail()
-    }
-
-    override suspend fun setDarkTheme(isDarkTheme: Boolean) {
-        preferenceDataStoreAPI.putPreference(booleanPreferencesKey(DARK_THEME_KEY), isDarkTheme)
     }
 }

@@ -6,8 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.miraelDev.vauma.navigation.authComponent.AuthRootComponent
-import com.miraelDev.vauma.navigation.mainComponent.MainContent
 import com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.CodeVerifyRPScreen
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.EmailChooseScreen
 import com.miraeldev.forgotpassword.presentation.resetPassword.ResetPasswordScreen
@@ -15,7 +13,12 @@ import com.miraeldev.signin.presentation.SignInScreen
 import com.miraeldev.signup.presentation.codeVerifyScreen.CodeVerifyScreen
 import com.miraeldev.signup.presentation.signUpScreen.SignUpScreen
 @Composable
-fun AuthContent(component: AuthRootComponent) {
+fun AuthContent(component: AuthRootComponent, onReadyToDrawStartScreen: () -> Unit) {
+
+    LaunchedEffect(Unit) {
+        onReadyToDrawStartScreen()
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

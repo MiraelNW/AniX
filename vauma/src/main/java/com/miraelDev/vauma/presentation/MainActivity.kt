@@ -19,15 +19,12 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.arkivanov.decompose.defaultComponentContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.miraelDev.vauma.navigation.DefaultAppRootComponent
-import com.miraelDev.vauma.navigation.AppRootContent
-import com.miraeldev.models.auth.AuthState
+import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
 import com.miraeldev.theme.LocalOrientation
 import com.miraeldev.theme.VaumaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +44,6 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val viewModel: MainViewModel by viewModels()
-
         var readyToDrawStartScreen = false
 
         splashScreen.setKeepOnScreenCondition { !readyToDrawStartScreen }
@@ -57,49 +52,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            val systemUiController = rememberSystemUiController()
-
-            val isSystemDark = isSystemInDarkTheme()
-
-            val darkModeUserChoice by viewModel.isDarkThemeFlow.collectAsState()
-
-            var darkTheme = rememberSaveable { mutableStateOf(false) }
-
-            darkTheme.value = isSystemDark || darkModeUserChoice
-
             var shouldShowSystemBars by rememberSaveable { mutableStateOf(true) }
-
-            val isUserAuthorized = false
 
             DisposableEffect(Unit) {
                 enableEdgeToEdge()
                 onDispose {}
             }
 
-            VaumaTheme(darkTheme = darkTheme) {
-
-                var useDarkIcons by rememberSaveable { mutableStateOf(false) }
-                useDarkIcons = darkTheme.value
-                DisposableEffect(systemUiController, useDarkIcons) {
-                    systemUiController.setSystemBarsColor(
-                        color = Color.Transparent,
-                        darkIcons = !useDarkIcons
-                    )
-                    onDispose {}
-                }
-
-                AppRootContent(
-                    component = appRootComponentFactory.create(
-                        componentContext = componentContext,
-                        isUserAuthorized = isUserAuthorized,
-                        onDarkThemeClick = {
-                            darkTheme.value = !darkTheme.value
-                            viewModel.setThemeMode(darkTheme.value)
-                            useDarkIcons = !useDarkIcons
-                        }
-                    ),
-                    onReadyToDrawStartScreen = { readyToDrawStartScreen = true }
-                )
+            AppRootContent(
+                component = appRootComponentFactory.create(componentContext = componentContext),
+                onReadyToDrawStartScreen = { readyToDrawStartScreen = true }
+            )
 
 //                        MainScreen(
 //                            onVideoViewClick = { isVideoViewOpen ->
@@ -113,8 +76,6 @@ class MainActivity : ComponentActivity() {
 //                            }
 //                        )
 //                    }
-            }
-
 
 
             observeState(

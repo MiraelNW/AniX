@@ -17,7 +17,9 @@ interface AccountRepository {
         repeatedPassword:String
     ):Boolean
 
+    suspend fun setDarkTheme(isDarkTheme: Boolean)
+
     suspend fun setPreference(key:String,value:Boolean)
 
-    suspend fun  getPreference(key:String) : Boolean
+    fun getPreference(key:String) : Flow<Boolean>
 }

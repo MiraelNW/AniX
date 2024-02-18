@@ -128,18 +128,6 @@ internal abstract class DataModule {
 
         @Provides
         @Singleton
-        fun provideVideoPlayer(application: Application): ExoPlayer {
-            return ExoPlayer.Builder(application)
-                .apply {
-                    setSeekBackIncrementMs(PLAYER_SEEK_BACK_INCREMENT)
-                    setSeekForwardIncrementMs(PLAYER_SEEK_FORWARD_INCREMENT)
-                }
-                .build()
-
-        }
-
-        @Provides
-        @Singleton
         fun providePreferenceManager(@ApplicationContext context: Context): PreferenceDataStoreAPI {
             return PreferenceManager(context)
         }

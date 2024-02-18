@@ -115,6 +115,13 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.logging.jvm)
 
+    //mvi kotlin
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.logging)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.coroutine.extensions)
+
+
     //paging 3
     implementation(libs.paging.runtime.ktx)
     implementation(libs.paging.compose)

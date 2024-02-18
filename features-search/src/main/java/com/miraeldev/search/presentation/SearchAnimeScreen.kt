@@ -70,7 +70,7 @@ private const val SMALL_ANIMATION = 1.015f
 
 
 @Composable
-fun SearchAnimeScreen(component: SearchAnimeComponent) {
+fun SearchAnimeScreen(component: SearchAnimeComponent, search: String = "") {
     val model by component.model.collectAsStateWithLifecycle()
 
     Column(
@@ -82,6 +82,15 @@ fun SearchAnimeScreen(component: SearchAnimeComponent) {
         var open by rememberSaveable { mutableStateOf(false) }
 
         var isSearchHistoryItemClick by rememberSaveable { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            if (search.isEmpty()) {
+                component.showInitialList()
+            } else {
+                component.onSearchChange(search)
+                component.searchAnimeByName(search)
+            }
+        }
 
         AnimeSearchView(
             text = { model.search },

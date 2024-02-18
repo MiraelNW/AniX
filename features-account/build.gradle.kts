@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
+    id("kotlinx-serialization")
 }
 
 android {

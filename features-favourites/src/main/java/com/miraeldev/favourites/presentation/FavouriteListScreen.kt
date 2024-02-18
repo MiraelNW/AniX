@@ -96,12 +96,10 @@ fun FavouriteListScreen(component: FavouriteComponent) {
         snapshotFlow { isSearchButtonClicked }
             .collect { clicked ->
                 if (clicked) {
-                    component.searchAnimeByName(model.search)
-                    delay(800)
-                    component.navigateToSearchScreen()
                     component.loadAnimeList()
                     component.updateSearchTextState("")
                     searchButtonIsNotClickedAction()
+                    component.navigateToSearchScreen(model.search)
                 }
             }
     }

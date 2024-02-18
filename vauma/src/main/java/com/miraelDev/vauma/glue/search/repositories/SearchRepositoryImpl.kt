@@ -38,6 +38,10 @@ class SearchRepositoryImpl @Inject constructor(
         return searchAnimeDataRepository.getSearchResults()
     }
 
+    override fun getSearchInitialList(): Flow<Flow<PagingData<AnimeInfo>>> {
+        return searchAnimeDataRepository.getSearchInitialList()
+    }
+
     override fun getSearchName(): Flow<String> {
         return searchAnimeDataRepository.getSearchName()
     }

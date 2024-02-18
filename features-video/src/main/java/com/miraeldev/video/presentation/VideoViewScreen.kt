@@ -33,11 +33,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_BUFFERING
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.SimpleExoPlayer
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
 import coil.compose.AsyncImage
@@ -50,39 +52,42 @@ import com.miraeldev.video.presentation.playerControls.PlayerControls
 import com.miraeldev.video.presentation.utilis.setAutoOrientation
 import com.miraeldev.video.presentation.utilis.setLandscape
 import com.miraeldev.video.presentation.utilis.setPortrait
+import com.miraeldev.video.presentation.videoComponent.VideoComponent
 import kotlinx.coroutines.delay
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@UnstableApi
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter","UnstableApi")
 @Composable
-fun VideoViewScreen(
-    navigateBack: () -> Unit,
-    viewModel: VideoViewModel = hiltViewModel()
-) {
+fun VideoViewScreen(component: VideoComponent) {
 
-    val playerWrapper by viewModel.screenState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
+    val model by component.model.collectAsStateWithLifecycle()
+
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            this.prepare()
+            setMediaItem(MediaItem.fromUri(model.playerWrapper.link))
+            playWhenReady = true
+        }
+    }
 
 //    when (val res = screenState.value) {
 //
 //        is VideoViewScreenState.Result -> {
 //            val playerWrapper = res.result
     VideoView(
-        exoPlayer = playerWrapper.exoPlayer,
-        isFirstEpisode = playerWrapper.isFirstEpisode,
-        isLastEpisode = playerWrapper.isLastEpisode,
-        title = playerWrapper.title,
-        navigateBack = {
-            viewModel.releasePlayer()
-            navigateBack()
-        },
-        onNextVideoClick = viewModel::loadNextVideo,
-        onPreviousVideoClick = viewModel::loadPreviousVideo,
-        onEpisodeItemClick = viewModel::loadSpecificEpisode,
-        loadVideoSelectedQuality = viewModel::loadVideoSelectedQuality
+        exoPlayer = exoPlayer,
+        isFirstEpisode = model.playerWrapper.isFirstEpisode,
+        isLastEpisode = model.playerWrapper.isLastEpisode,
+        title = model.playerWrapper.title,
+        navigateBack = component::onBackPressed,
+        onNextVideoClick = component::loadNextVideo,
+        onPreviousVideoClick = component::loadPreviousVideo,
+        onEpisodeItemClick = component::loadSpecificEpisode,
+        loadVideoSelectedQuality = component::loadVideoSelectedQuality
     )
 
 
@@ -181,6 +186,7 @@ private fun VideoView(
 
         onDispose {
             exoPlayer.removeListener(listener)
+            exoPlayer.release()
         }
     }
 
@@ -213,11 +219,11 @@ private fun VideoView(
                 add(VideoFrameDecoder.Factory())
             }
             .build()
-        
+
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = "http://10.0.2.2:8080/api/v1/video/11061/season-1/episode-2/1080",
-            contentDescription ="" ,
+            contentDescription = "",
             imageLoader = imageLoader
         )
 

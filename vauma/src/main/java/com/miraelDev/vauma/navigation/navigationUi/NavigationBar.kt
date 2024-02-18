@@ -1,6 +1,5 @@
 package com.miraelDev.vauma.navigation.navigationUi
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,17 +30,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.google.common.collect.ImmutableList
-import com.miraelDev.vauma.navigation.AppRootComponent
-import com.miraelDev.vauma.navigation.DefaultAppRootComponent
 import com.miraelDev.vauma.navigation.mainComponent.MainRootComponent
 import com.miraeldev.extensions.noRippleEffectClick
 
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
-    component: MainRootComponent
+    component: MainRootComponent,
+    screen: MainRootComponent.Child
 ) {
-    var selected by rememberSaveable { mutableStateOf(NavId.HOME) }
 
     val items =
         ImmutableList.of(
@@ -75,11 +72,8 @@ fun BottomBar(
                 items.forEach { item ->
                     AddItem(
                         item = item,
-                        onTabClick = {
-                            component.onTabNavigate(it)
-                            selected = it
-                        },
-                        selected = selected == item.id
+                        onTabClick = component::onTabNavigate,
+                        selected = screen.navId == item.id
                     )
                 }
             }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface VideoPlayerRepository {
 
-    fun getVideoPlayer(): StateFlow<PlayerWrapper>
+    fun getVideoInfo(): StateFlow<PlayerWrapper>
 
     fun loadVideoPlayer(animeInfo: AnimeDetailInfo)
 

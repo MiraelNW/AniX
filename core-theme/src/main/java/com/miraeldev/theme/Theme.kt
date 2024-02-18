@@ -49,7 +49,7 @@ val LocalTheme = compositionLocalOf { false }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VaumaTheme(
-    darkTheme: State<Boolean>,
+    darkTheme: Boolean,
     content: @Composable () -> Unit,
 ) {
 
@@ -63,14 +63,14 @@ fun VaumaTheme(
 
 
     MaterialTheme(
-        colors = if (darkTheme.value) DarkMainColorPalette else LightMainColorPalette,
+        colors = if (darkTheme) DarkMainColorPalette else LightMainColorPalette,
         shapes = Shapes,
         typography = Typography
     ) {
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null,
             LocalOrientation provides orientation,
-            LocalTheme provides darkTheme.value,
+            LocalTheme provides darkTheme,
             content = content
         )
     }

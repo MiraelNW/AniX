@@ -1,17 +1,18 @@
 package com.miraeldev.search.presentation.searchComponent
 
-import androidx.lifecycle.viewModelScope
+import android.util.Log
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.search.domain.usecases.filterUseCase.ClearAllFiltersUseCase
 import com.miraeldev.search.domain.usecases.filterUseCase.GetFilterListUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchHistoryListUseCase
+import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchInitialListUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchNameUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchResultsUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.LoadInitialListUseCase
@@ -24,8 +25,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -86,6 +87,7 @@ class SearchAnimeStoreFactory @Inject constructor(
     private val getFilterListUseCase: GetFilterListUseCase,
     private val getSearchHistoryList: GetSearchHistoryListUseCase,
     private val getSearchResults: GetSearchResultsUseCase,
+    private val getSearchInitialList: GetSearchInitialListUseCase,
 ) {
 
     fun create(): SearchAnimeStore =
@@ -113,6 +115,7 @@ class SearchAnimeStoreFactory @Inject constructor(
     }
 
     private sealed interface Msg {
+        data class OnSearchChange(val search: String) : Msg
         data object ShowSearchHistory : Msg
         data class SearchNameLoaded(val name: String, val result: Flow<PagingData<AnimeInfo>>) : Msg
         data class SearchHistoryLoaded(val history: List<String>) : Msg
@@ -124,15 +127,14 @@ class SearchAnimeStoreFactory @Inject constructor(
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
         override fun invoke() {
             scope.launch {
-                searchAnimeByName("")
                 getSearchResults().collect {
-                    dispatch(Action.InitialListLoaded(it))
+                    dispatch(Action.SearchResultsLoaded(it))
                 }
             }
             scope.launch {
                 getSearchName()
-                    .filterNot { it.isEmpty() }
-                    .collectLatest {
+                    .filter { it.isNotEmpty() }
+                    .collect {
                         val result = searchAnimeByName(it)
                         dispatch(Action.SearchNameLoaded(it, result))
                         saveNameInAnimeSearchHistory(it)
@@ -149,8 +151,8 @@ class SearchAnimeStoreFactory @Inject constructor(
                 }
             }
             scope.launch {
-                getSearchResults().onStart { loadInitialList() }.collect {
-                    dispatch(Action.SearchResultsLoaded(it))
+                getSearchInitialList().collect {
+                    dispatch(Action.InitialListLoaded(it))
                 }
             }
         }
@@ -159,13 +161,12 @@ class SearchAnimeStoreFactory @Inject constructor(
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
         override fun executeIntent(intent: Intent, getState: () -> State) {
             when (intent) {
-                is Intent.OnSearchChange -> {
-
-                }
+                is Intent.OnSearchChange -> dispatch(Msg.OnSearchChange(intent.search))
 
                 is Intent.SearchAnimeByName -> {
                     scope.launch {
-                        searchAnimeByName(intent.name)
+                        val result = searchAnimeByName(intent.name)
+                        dispatch(Msg.SearchResultsLoaded(result))
                         saveNameInAnimeSearchHistory(intent.name)
                     }
                 }
@@ -174,7 +175,7 @@ class SearchAnimeStoreFactory @Inject constructor(
 
                 is Intent.ShowInitialList -> {
                     scope.launch {
-                        clearAllFilters()
+//                        clearAllFilters()
                         loadInitialList()
                     }
                 }
@@ -207,6 +208,10 @@ class SearchAnimeStoreFactory @Inject constructor(
     private object ReducerImpl : Reducer<State, Msg> {
         override fun State.reduce(msg: Msg): State =
             when (msg) {
+                is Msg.OnSearchChange -> {
+                    copy(search = msg.search)
+                }
+
                 is Msg.ShowSearchHistory -> {
                     copy(screenState = State.SearchAnimeScreenState.SearchHistory)
                 }

@@ -4,5 +4,5 @@ import com.miraelDev.vauma.domain.repository.MainRepository
 import javax.inject.Inject
 
 class GetUserAuthStateUseCase @Inject constructor(private val repository: MainRepository) {
-    operator fun invoke() = repository.getUserStatus()
+   operator fun invoke() = repository.getUserStatus()
 }

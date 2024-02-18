@@ -13,42 +13,40 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class FilterViewModel @Inject constructor(
-
-    private val getGenreListUseCase: GetGenreListUseCase,
-    private val getSortByCategoryUseCase: GetSortByCategoryUseCase,
-    private val getYearCategoryUseCase: GetYearCategoryUseCase,
-
-    private val addToFilterListUseCase: AddToFilterListUseCase,
-    private val removeFromFilterListUseCase: RemoveFromFilterListUseCase,
-
-    private val selectCategoryUseCase: SelectCategoryUseCase,
-
-    private val clearAllFiltersInFilterRepository: ClearAllFiltersUseCase
-
-) : ViewModel() {
-
-    val genreListFlow = getGenreListUseCase()
-
-    val sortByCategoryFlow = getSortByCategoryUseCase()
-
-    val yearCategoryFlow = getYearCategoryUseCase()
-
-    fun selectCategory(categoryId: Int, category: String, isSelected: Boolean) {
-        viewModelScope.launch {
-            selectCategoryUseCase(categoryId, category)
-            if (isSelected) {
-                removeFromFilterListUseCase(categoryId, category)
-            } else {
-                addToFilterListUseCase(categoryId, category)
-            }
-        }
-    }
-
-    fun clearAllFilters() {
-        viewModelScope.launch {
-            clearAllFiltersInFilterRepository()
-        }
-    }
-}
+//@HiltViewModel
+//class FilterViewModel @Inject constructor(
+//
+//    private val getGenreListUseCase: GetGenreListUseCase,
+//    private val getSortByCategoryUseCase: GetSortByCategoryUseCase,
+//    private val getYearCategoryUseCase: GetYearCategoryUseCase,
+//
+//    private val addToFilterListUseCase: AddToFilterListUseCase,
+//    private val removeFromFilterListUseCase: RemoveFromFilterListUseCase,
+//
+//    private val selectCategoryUseCase: SelectCategoryUseCase,
+//
+//) : ViewModel() {
+//
+//    val genreListFlow = getGenreListUseCase()
+//
+//    val sortByCategoryFlow = getSortByCategoryUseCase()
+//
+//    val yearCategoryFlow = getYearCategoryUseCase()
+//
+//    fun selectCategory(categoryId: Int, category: String, isSelected: Boolean) {
+//        viewModelScope.launch {
+//            selectCategoryUseCase(categoryId, category)
+//            if (isSelected) {
+//                removeFromFilterListUseCase(categoryId, category)
+//            } else {
+//                addToFilterListUseCase(categoryId, category)
+//            }
+//        }
+//    }
+//
+//    fun clearAllFilters() {
+//        viewModelScope.launch {
+//            clearAllFiltersInFilterRepository()
+//        }
+//    }
+//}

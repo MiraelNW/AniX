@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.search.R
+import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterComponent
 import com.miraeldev.theme.LightGreen700
 import com.miraeldev.theme.LocalTheme
 import kotlinx.collections.immutable.persistentListOf
@@ -31,16 +32,9 @@ import kotlinx.collections.immutable.persistentListOf
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FilterScreen(
-    onBackPressed: () -> Unit,
-    viewModel: FilterViewModel = hiltViewModel()
-) {
+fun FilterScreen(component: FilterComponent) {
 
-    val filterGenreList = viewModel.genreListFlow.collectAsStateWithLifecycle(listOf())
-
-    val filterYearCategory by viewModel.yearCategoryFlow.collectAsStateWithLifecycle(INITIAL)
-
-    val filterSortByCategory by viewModel.sortByCategoryFlow.collectAsStateWithLifecycle(INITIAL)
+    val model by component.model.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier
@@ -48,12 +42,11 @@ fun FilterScreen(
             .systemBarsPadding(),
         topBar = {
             Toolbar(
-                onBackPressed = onBackPressed,
+                onBackPressed = component::onBackPressed,
                 text = R.string.filter
             )
         }
     ) {
-        BackHandler(onBack = onBackPressed)
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -91,11 +84,11 @@ fun FilterScreen(
                     )
 
                     filterCategoriesYearList.forEach { category ->
-                        CategoryField(category, category == filterYearCategory) {
-                            viewModel.selectCategory(
+                        CategoryField(category, category == model.yearCategory) {
+                            component.selectCategory(
                                 YEAR_CATEGORIES_ID,
                                 category,
-                                category == filterYearCategory
+                                category == model.yearCategory
                             )
                         }
                     }
@@ -114,9 +107,9 @@ fun FilterScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
 
-                    filterGenreList.value.forEachIndexed { index, category ->
+                    model.genreList.forEachIndexed { index, category ->
                         CategoryField(category.name, category.isSelected) {
-                            viewModel.selectCategory(
+                            component.selectCategory(
                                 index + 4,
                                 category.name,
                                 category.isSelected
@@ -146,11 +139,11 @@ fun FilterScreen(
                     )
 
                     filterCategoriesSortList.forEach { category ->
-                        CategoryField(category, category == filterSortByCategory) {
-                            viewModel.selectCategory(
+                        CategoryField(category, category == model.sortByCategory) {
+                            component.selectCategory(
                                 SORT_CATEGORIES_ID,
                                 category,
-                                category == filterSortByCategory
+                                category == model.sortByCategory
                             )
                         }
                     }
@@ -162,7 +155,7 @@ fun FilterScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 12.dp),
                 backgroundColor = MaterialTheme.colors.background,
-                onClick = viewModel::clearAllFilters
+                onClick = component::clearAllFilter
             ) {
                 Row(
                     modifier = Modifier.padding(8.dp),

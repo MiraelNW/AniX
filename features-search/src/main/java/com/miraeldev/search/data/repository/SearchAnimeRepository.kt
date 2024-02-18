@@ -19,6 +19,7 @@ interface SearchAnimeRepository {
     fun saveSearchText(searchText:String)
 
     fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>>
+    fun getSearchInitialList(): Flow<Flow<PagingData<AnimeInfo>>>
 
     fun getSearchName():Flow<String>
 

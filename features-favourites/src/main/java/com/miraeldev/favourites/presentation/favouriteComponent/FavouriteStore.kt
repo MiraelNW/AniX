@@ -9,7 +9,6 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.favourites.domain.useCases.GetFavouriteAnimeListUseCase
 import com.miraeldev.favourites.domain.useCases.LoadAnimeListUseCase
 import com.miraeldev.favourites.domain.useCases.SaveSearchTextUseCase
-import com.miraeldev.favourites.domain.useCases.SearchAnimeByNameUseCase
 import com.miraeldev.favourites.domain.useCases.SearchAnimeItemInDatabaseUseCase
 import com.miraeldev.favourites.domain.useCases.SelectAnimeItemUseCase
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.Intent
@@ -26,7 +25,7 @@ interface FavouriteStore : Store<Intent, State, Label> {
 
     sealed interface Intent {
         data class OnAnimeItemClick(val id: Int) : Intent
-        data object NavigateToSearchScreen : Intent
+        data class NavigateToSearchScreen(val search: String) : Intent
         data class UpdateSearchTextState(val search: String) : Intent
         data class SelectAnimeItem(val animeInfo: AnimeInfo) : Intent
         data class SearchAnimeItemInDatabase(val name: String) : Intent
@@ -45,7 +44,7 @@ interface FavouriteStore : Store<Intent, State, Label> {
 
     sealed interface Label {
         data class OnAnimeItemClicked(val id: Int) : Label
-        data object NavigateToSearchScreen : Label
+        data class NavigateToSearchScreen(val search: String) : Label
     }
 }
 
@@ -55,7 +54,6 @@ internal class FavouriteStoreFactory @Inject constructor(
     private val selectAnimeItemUseCase: SelectAnimeItemUseCase,
     private val searchAnimeItemInDatabaseUseCase: SearchAnimeItemInDatabaseUseCase,
     private val loadAnimeListUseCase: LoadAnimeListUseCase,
-    private val searchAnimeByNameUseCase: SearchAnimeByNameUseCase,
     private val saveSearchTextUseCase: SaveSearchTextUseCase,
 ) {
 
@@ -93,17 +91,11 @@ internal class FavouriteStoreFactory @Inject constructor(
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
         override fun executeIntent(intent: Intent, getState: () -> State) {
             when (intent) {
-                is Intent.OnAnimeItemClick -> {
-                    publish(Label.OnAnimeItemClicked(intent.id))
-                }
+                is Intent.OnAnimeItemClick -> publish(Label.OnAnimeItemClicked(intent.id))
 
-                is Intent.NavigateToSearchScreen -> {
-                    publish(Label.NavigateToSearchScreen)
-                }
+                is Intent.NavigateToSearchScreen -> publish(Label.NavigateToSearchScreen(intent.search))
 
-                is Intent.UpdateSearchTextState -> {
-                    dispatch(Msg.UpdateSearchTextState(intent.search))
-                }
+                is Intent.UpdateSearchTextState -> dispatch(Msg.UpdateSearchTextState(intent.search))
 
                 is Intent.SelectAnimeItem -> {
                     scope.launch {
@@ -111,24 +103,16 @@ internal class FavouriteStoreFactory @Inject constructor(
                     }
                 }
 
-                is Intent.SearchAnimeItemInDatabase -> {
-                    scope.launch {
-                        searchAnimeItemInDatabaseUseCase(intent.name)
-                    }
+                is Intent.SearchAnimeItemInDatabase -> scope.launch {
+                    searchAnimeItemInDatabaseUseCase(
+                        intent.name
+                    )
                 }
 
-                is Intent.SearchAnimeByName -> {
-                    scope.launch {
-                        searchAnimeByNameUseCase(intent.name)
-                        saveSearchTextUseCase(intent.name)
-                    }
-                }
 
-                is Intent.LoadAnimeList -> {
-                    scope.launch {
-                        loadAnimeListUseCase()
-                    }
-                }
+                is Intent.SearchAnimeByName -> scope.launch { saveSearchTextUseCase(intent.name) }
+
+                is Intent.LoadAnimeList -> scope.launch { loadAnimeListUseCase() }
             }
         }
 
@@ -148,13 +132,9 @@ internal class FavouriteStoreFactory @Inject constructor(
     private object ReducerImpl : Reducer<State, Msg> {
         override fun State.reduce(msg: Msg): State =
             when (msg) {
-                is Msg.UpdateSearchTextState -> {
-                    copy(search = msg.search)
-                }
+                is Msg.UpdateSearchTextState -> copy(search = msg.search)
 
-                is Msg.FavouriteListLoading -> {
-                    copy(screenState = State.FavouriteListScreenState.Loading)
-                }
+                is Msg.FavouriteListLoading -> copy(screenState = State.FavouriteListScreenState.Loading)
 
                 is Msg.FavouriteList -> {
                     val state = when (msg.result) {
