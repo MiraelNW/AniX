@@ -94,7 +94,7 @@ internal class InitialSearchRemoteMediator(
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     appDatabase.initialSearchRemoteKeysDao().clearRemoteKeys()
-                    appDatabase.initialSearchDao().clearAllAnime()
+                    appDatabase.initialSearchPagingDao().clearAllAnime()
                 }
                 val prevKey = if (page > 0) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -108,7 +108,7 @@ internal class InitialSearchRemoteMediator(
                 }
 
                 appDatabase.initialSearchRemoteKeysDao().insertAll(remoteKeys)
-                appDatabase.initialSearchDao()
+                appDatabase.initialSearchPagingDao()
                     .insertAll(anime.onEachIndexed { _, anime -> anime.page = page })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

@@ -1,4 +1,4 @@
-package com.miraeldev.domain.models.auth
+package com.miraeldev.models.models.auth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

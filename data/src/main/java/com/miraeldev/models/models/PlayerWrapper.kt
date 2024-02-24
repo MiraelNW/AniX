@@ -1,6 +1,4 @@
-package com.miraeldev.domain.models
-
-import androidx.media3.exoplayer.ExoPlayer
+package com.miraeldev.models.models
 
 
 //data class PlayerWrapper(

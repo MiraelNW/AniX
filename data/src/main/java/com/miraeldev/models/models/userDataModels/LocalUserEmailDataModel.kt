@@ -1,4 +1,4 @@
-package com.miraeldev.domain.models.userDataModels
+package com.miraeldev.models.models.userDataModels
 
 import com.miraeldev.user.UserEmail
 import kotlinx.serialization.Serializable

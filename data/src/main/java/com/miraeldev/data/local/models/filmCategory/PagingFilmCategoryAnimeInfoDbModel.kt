@@ -3,8 +3,8 @@ package com.miraeldev.data.local.models.filmCategory
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.miraeldev.data.local.models.user.ImageDbModel
-import com.miraeldev.domain.models.animeDataModels.GenreDataModel
-import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
+import com.miraeldev.models.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
 import kotlinx.serialization.Serializable
 
 
