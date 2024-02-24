@@ -13,16 +13,17 @@ import com.miraeldev.data.remoteMediator.categoriesLists.FilmCategoryRemoteMedia
 import com.miraeldev.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.NewCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.PopularCategoryRemoteMediator
-import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.di.AppHttpClient
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-internal class AnimeListDataRepositoryImpl @Inject constructor(
+@Inject
+class AnimeListDataRepositoryImpl internal constructor(
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
-    @CommonHttpClient private val httpClient: HttpClient,
+    private val httpClient: AppHttpClient,
     private val localTokenService: LocalTokenService
 ) : AnimeListDataRepository {
 

@@ -14,7 +14,7 @@ import com.miraelDev.vauma.presentation.appRootComponent.MainStore.Label
 import com.miraelDev.vauma.presentation.appRootComponent.MainStore.State
 import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface MainStore : Store<Intent, State, Label> {
 
@@ -29,7 +29,9 @@ interface MainStore : Store<Intent, State, Label> {
     }
 }
 
-class MainStoreFactory @Inject constructor(
+
+@Inject
+class MainStoreFactory(
     private val storeFactory: StoreFactory,
     private val checkUserAuthState: CheckUserAuthStateUseCase,
     private val getUserAuthState: GetUserAuthStateUseCase,

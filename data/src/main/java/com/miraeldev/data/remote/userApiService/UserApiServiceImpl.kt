@@ -3,9 +3,10 @@ package com.miraeldev.data.remote.userApiService
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.remote.NetworkHandler
 import io.ktor.client.HttpClient
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class UserApiServiceImpl @Inject constructor(
+@Inject
+class UserApiServiceImpl internal constructor(
     private val client: HttpClient,
     private val networkHandler: NetworkHandler,
     private val localTokenService: LocalTokenService

@@ -2,7 +2,7 @@ package com.miraeldev.data.dataStore.localUser
 
 import androidx.datastore.core.Serializer
 import com.miraeldev.data.dataStore.crypto.CryptoManager
-import com.miraeldev.domain.models.userDataModels.LocalUserEmailDataModel
+import com.miraeldev.models.models.userDataModels.LocalUserEmailDataModel
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.InputStream

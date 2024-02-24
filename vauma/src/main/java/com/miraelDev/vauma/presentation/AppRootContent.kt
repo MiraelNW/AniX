@@ -15,9 +15,9 @@ import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
 import com.miraeldev.theme.VaumaTheme
 
 @Composable
-@UnstableApi
+@Suppress("UnstableApi")
 fun AppRootContent(
-    component: DefaultAppRootComponent,
+    component: AppRootComponent,
     onReadyToDrawStartScreen: () -> Unit
 ) {
 

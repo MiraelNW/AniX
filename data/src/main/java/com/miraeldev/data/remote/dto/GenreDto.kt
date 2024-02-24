@@ -1,12 +1,12 @@
 package com.miraeldev.data.remote.dto
 
-import com.miraeldev.domain.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.models.animeDataModels.GenreDataModel
 import com.miraeldev.models.anime.Genre
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class GenreDto(
+data class GenreDto(
     @SerialName("name") val nameEn: String,
     @SerialName("russian") val nameRu: String,
 )

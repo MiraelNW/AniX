@@ -45,6 +45,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
 
+    //koin
+    implementation(libs.koin)
+
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

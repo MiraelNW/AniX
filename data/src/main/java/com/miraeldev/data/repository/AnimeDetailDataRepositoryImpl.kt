@@ -12,7 +12,7 @@ import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.FavouriteAnimeSendRequest
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.searchApi.SearchApiService
-import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.di.AppHttpClient
 import com.miraeldev.result.ResultAnimeDetail
 import io.ktor.client.HttpClient
 import io.ktor.client.request.headers
@@ -23,12 +23,12 @@ import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class AnimeDetailDataRepositoryImpl @Inject constructor(
+@Inject
+class AnimeDetailDataRepositoryImpl internal constructor(
     private val searchApiService: SearchApiService,
-    @CommonHttpClient private val client: HttpClient,
+    private val client: AppHttpClient,
     private val userDataRepository: UserDataRepository,
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val favouriteAnimeDao: FavouriteAnimeDao,

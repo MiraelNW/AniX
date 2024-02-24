@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.data.local.models.VideoDbModel
-import com.miraeldev.domain.models.animeDataModels.GenreDataModel
-import com.miraeldev.domain.models.animeDataModels.toGenre
+import com.miraeldev.models.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.models.animeDataModels.toGenre
 import com.miraeldev.models.anime.Genre
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable

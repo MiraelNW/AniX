@@ -2,12 +2,12 @@ package com.miraeldev.data.dataStore.tokenService
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.miraeldev.PreferenceDataStoreAPI
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class LocalTokenService @Inject constructor(
+@Inject
+class LocalTokenService internal constructor(
     private val preferenceManager: PreferenceDataStoreAPI
 ) {
 

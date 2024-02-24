@@ -5,12 +5,13 @@ import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.data.local.models.favourite.AnimeInfoDbModel
 import com.miraeldev.data.local.models.user.ImageDbModel
-import com.miraeldev.domain.models.animeDataModels.GenreDataModel
-import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
 import com.miraeldev.models.anime.Genre
-import javax.inject.Inject
+import com.miraeldev.models.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
+import me.tatarka.inject.annotations.Inject
 
-internal class AnimeModelsMapper @Inject constructor() {
+@Inject
+internal class AnimeModelsMapper{
 
 
     fun mapAnimeInfoToAnimeDbModel(animeInfo: AnimeInfo): AnimeInfoDbModel {

@@ -2,8 +2,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("kotlinx-serialization")
 }
 
@@ -53,12 +53,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.runtime.compose)
 
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
-
     //google oauth
     implementation(libs.play.services.auth)
 
@@ -74,6 +68,15 @@ dependencies {
     implementation(libs.mvi.kotlin)
     implementation(libs.mvi.kotlin.main)
     implementation(libs.mvi.kotlin.coroutine.extensions)
+
+    //dagger hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    //koin
+    implementation(libs.koin)
 
     //test
     testImplementation(libs.junit)

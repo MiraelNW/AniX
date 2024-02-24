@@ -5,7 +5,9 @@ import android.net.ConnectivityManager
 import android.net.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 internal class NetworkHandler(private val context: Context) {
 
     private val connectivityManager: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

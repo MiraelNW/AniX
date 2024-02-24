@@ -5,15 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,34 +17,28 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.media3.common.util.UnstableApi
 import com.arkivanov.decompose.defaultComponentContext
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
+import com.miraelDev.vauma.di.AppRootComponent
+import com.miraelDev.vauma.di.applicationComponent
+import com.miraelDev.vauma.di.create
 import com.miraeldev.theme.LocalOrientation
-import com.miraeldev.theme.VaumaTheme
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@UnstableApi
-@AndroidEntryPoint
+
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var appRootComponentFactory: DefaultAppRootComponent.Factory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val rootComponent = AppRootComponent::class.create(applicationComponent)
+        val appDiComponent = rootComponent.create()
+
+        val componentContext = defaultComponentContext()
 
         var readyToDrawStartScreen = false
 
         splashScreen.setKeepOnScreenCondition { !readyToDrawStartScreen }
-
-        val componentContext = defaultComponentContext()
 
         setContent {
 
@@ -60,7 +50,7 @@ class MainActivity : ComponentActivity() {
             }
 
             AppRootContent(
-                component = appRootComponentFactory.create(componentContext = componentContext),
+                component = appDiComponent(componentContext),
                 onReadyToDrawStartScreen = { readyToDrawStartScreen = true }
             )
 

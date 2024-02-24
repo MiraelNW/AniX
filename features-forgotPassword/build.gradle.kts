@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.mvi.kotlin.main)
     implementation(libs.mvi.kotlin.coroutine.extensions)
 
+    //koin
+    implementation(libs.koin)
+
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

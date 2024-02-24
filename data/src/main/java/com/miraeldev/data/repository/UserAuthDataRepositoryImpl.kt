@@ -10,11 +10,10 @@ import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.di.qualifiers.AuthClient
-import com.miraeldev.domain.models.auth.Token
+import com.miraeldev.di.AuthHttpClient
 import com.miraeldev.extensions.sendRequest
+import com.miraeldev.models.models.auth.Token
 import com.miraeldev.user.User
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
@@ -30,15 +29,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import me.tatarka.inject.annotations.Inject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.net.SocketTimeoutException
-import javax.inject.Inject
 
 
-internal class UserAuthDataRepositoryImpl @Inject constructor(
-    @AuthClient private val client: HttpClient,
+@Inject
+internal class UserAuthDataRepositoryImpl(
+    private val client: AuthHttpClient,
     private val localService: LocalTokenService,
     private val localUserDataRepository: LocalUserDataRepository,
     private val userDataRepository: UserDataRepository,

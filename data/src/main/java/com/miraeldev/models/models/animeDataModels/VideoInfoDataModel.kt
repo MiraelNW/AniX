@@ -1,4 +1,4 @@
-package com.miraeldev.domain.models.animeDataModels
+package com.miraeldev.models.models.animeDataModels
 
 import kotlinx.serialization.Serializable
 

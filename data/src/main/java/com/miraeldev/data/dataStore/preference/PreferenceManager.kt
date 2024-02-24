@@ -9,13 +9,14 @@ import com.miraeldev.PreferenceDataStoreAPI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 import java.io.IOException
-import javax.inject.Inject
 
 
 private val Context.dataStore by preferencesDataStore(name = "preference")
 
-internal class PreferenceManager @Inject constructor (context: Context) : PreferenceDataStoreAPI {
+@Inject
+class PreferenceManager internal constructor(context: Context) : PreferenceDataStoreAPI {
 
     private val dataStore = context.dataStore
 

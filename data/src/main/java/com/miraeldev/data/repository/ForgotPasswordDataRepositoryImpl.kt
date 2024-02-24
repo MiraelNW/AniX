@@ -2,13 +2,11 @@ package com.miraeldev.data.repository
 
 import com.miraeldev.ForgotPasswordDataRepository
 import com.miraeldev.LocalUserDataRepository
-import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
-import com.miraeldev.di.qualifiers.AuthClient
-import com.miraeldev.domain.models.auth.Token
+import com.miraeldev.di.AuthHttpClient
 import com.miraeldev.extensions.sendRequest
-import io.ktor.client.HttpClient
+import com.miraeldev.models.models.auth.Token
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -17,11 +15,12 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 
-internal class ForgotPasswordDataRepositoryImpl @Inject constructor(
-    @AuthClient private val client: HttpClient,
+@Inject
+class ForgotPasswordDataRepositoryImpl internal constructor(
+    private val client: AuthHttpClient,
     private val localService: LocalTokenService,
     private val userDataRepository: LocalUserDataRepository,
 ) : ForgotPasswordDataRepository {

@@ -11,6 +11,9 @@ lifecycle-runtime-compose = "2.6.0-beta01"
 decompose = "2.2.2"
 mvi = "3.2.1"
 
+koin = "3.5.3"
+kotlin-inject = "0.6.3"
+
 kaspresso = "1.5.3"
 
 media3-exoplayer = "1.0.0-beta02"
@@ -190,6 +193,12 @@ mvi-kotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logg
 mvi-kotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvi" }
 mvi-kotlin-coroutine-extensions = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvi" }
 
+koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
+
+#ksp("me.tatarka.inject:kotlin-inject-compiler-ksp:0.6.3")
+#implementation("me.tatarka.inject:kotlin-inject-runtime:0.6.3")
+kotlin-inject-ksp = { group = "me.tatarka.inject", name = "kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
+kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-runtime", version.ref = "kotlin-inject" }
 [plugins]
 
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }

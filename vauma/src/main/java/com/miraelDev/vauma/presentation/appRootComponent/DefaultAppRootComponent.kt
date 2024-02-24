@@ -13,18 +13,18 @@ import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponent
 import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponent
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.auth.AuthState
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultAppRootComponent @AssistedInject constructor(
-    @Assisted("componentContext") componentContext: ComponentContext,
+@Inject
+class DefaultAppRootComponent(
+    @Assisted componentContext: ComponentContext,
     private val storeFactory: MainStoreFactory,
-    private val mainRootComponent: DefaultMainRootComponent.Factory,
+    private val mainRootComponent: DefaultMainRootComponent,
     private val authRootComponent: DefaultAuthRootComponent.Factory
 ) : AppRootComponent, ComponentContext by componentContext {
 
@@ -75,11 +75,11 @@ class DefaultAppRootComponent @AssistedInject constructor(
             }
 
             is Config.Main -> {
-                val component = mainRootComponent.create(
+                val component = authRootComponent.create(
                     componentContext = componentContext,
-                    onLogOutComplete = { navigation.replaceAll(Config.Auth) }
+                    logIn = { navigation.replaceAll(Config.Main) }
                 )
-                AppRootComponent.Child.Main(component)
+                AppRootComponent.Child.Auth(component)
             }
 
             is Config.Initial -> AppRootComponent.Child.Initial
@@ -96,13 +96,6 @@ class DefaultAppRootComponent @AssistedInject constructor(
 
         @Serializable
         data object Initial : Config
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext
-        ): DefaultAppRootComponent
     }
 }
 

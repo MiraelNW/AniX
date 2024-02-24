@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
     id("com.google.gms.google-services")
@@ -113,6 +114,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    //kotlin-inject
+    ksp(libs.kotlin.inject.ksp)
+    implementation(libs.kotlin.inject.runtime)
+
     //splash screen api
     implementation(libs.core.splashscreen)
 
@@ -136,6 +141,8 @@ dependencies {
     implementation(libs.mvi.kotlin)
     implementation(libs.mvi.kotlin.main)
     implementation(libs.mvi.kotlin.coroutine.extensions)
+    implementation(libs.mvi.kotlin.logging)
+
 
     implementation(project(":features-signin"))
     implementation(project(":features-signup"))
@@ -156,10 +163,6 @@ dependencies {
     implementation(project(":core-extensions"))
     implementation(project(":core-presentation"))
 
-    implementation(project(":core-models"))
-    implementation(project(":core-models"))
-    implementation(project(":core-models"))
-    implementation(project(":core-models"))
     implementation(project(":core-models"))
 }
 

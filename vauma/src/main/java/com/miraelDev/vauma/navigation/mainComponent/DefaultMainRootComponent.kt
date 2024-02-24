@@ -8,11 +8,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraelDev.vauma.navigation.navigationUi.NavId
-import com.miraelDev.vauma.presentation.appRootComponent.MainStore
-import com.miraelDev.vauma.presentation.appRootComponent.MainStoreFactory
 import com.miraeldev.account.presentation.DefaultAccountRootComponent
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponent
 import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponent
@@ -21,16 +17,14 @@ import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavourite
 import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponent
 import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponent
 import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultMainRootComponent @AssistedInject constructor(
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onLogOutComplete") private val onLogOutComplete: () -> Unit,
+@Inject
+class DefaultMainRootComponent(
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val onLogOutComplete: () -> Unit,
     private val homeComponentFactory: DefaultHomeComponent.Factory,
     private val categoriesComponentFactory: DefaultCategoriesComponent.Factory,
     private val searchComponentFactory: DefaultSearchAnimeComponent.Factory,
@@ -199,12 +193,6 @@ class DefaultMainRootComponent @AssistedInject constructor(
 
     }
 
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onLogOutComplete") onLogOutComplete: () -> Unit,
-        ): DefaultMainRootComponent
-    }
+
 }
 

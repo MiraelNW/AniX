@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class SimilarDto(
+data class SimilarDto(
     @SerialName("id")
     val id: Int,
     @SerialName("kind")

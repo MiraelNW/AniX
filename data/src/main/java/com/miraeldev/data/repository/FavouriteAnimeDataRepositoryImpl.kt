@@ -13,9 +13,10 @@ import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class FavouriteAnimeDataRepositoryImpl @Inject constructor(
+@Inject
+class FavouriteAnimeDataRepositoryImpl internal constructor(
     private val favouriteAnimeDao: FavouriteAnimeDao,
     private val animeModelsMapper: AnimeModelsMapper
 ) : FavouriteAnimeDataRepository {

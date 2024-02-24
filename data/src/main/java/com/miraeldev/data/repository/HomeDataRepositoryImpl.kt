@@ -16,7 +16,7 @@ import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.dto.toAnimeInfo
 import com.miraeldev.data.remote.dto.toLastWatched
 import com.miraeldev.data.remote.searchApi.SearchApiService
-import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.di.AppHttpClient
 import com.miraeldev.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -27,11 +27,12 @@ import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class HomeDataRepositoryImpl @Inject constructor(
+@Inject
+class HomeDataRepositoryImpl internal constructor(
     private val appDatabase: AppDatabase,
-    @CommonHttpClient private val client: HttpClient,
+    private val client: AppHttpClient,
     private val searchApiService: SearchApiService,
     private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository

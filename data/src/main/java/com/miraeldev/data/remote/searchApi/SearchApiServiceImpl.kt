@@ -6,7 +6,7 @@ import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.AnimeInfoDto
-import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.di.AppHttpClient
 import com.miraeldev.result.FailureCauses
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,10 +18,11 @@ import io.ktor.client.request.headers
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class SearchApiServiceImpl @Inject constructor(
-    @CommonHttpClient private val client: HttpClient,
+@Inject
+class SearchApiServiceImpl internal constructor(
+    private val client: AppHttpClient,
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
     private val localTokenService: LocalTokenService

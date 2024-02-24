@@ -1,22 +1,19 @@
 package com.miraeldev.data.repository
 
-import androidx.media3.common.MediaItem
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.util.EventLogger
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.VideoInfo
 import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.anime.VideoInfo
 import com.miraeldev.video.PlayerWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-@UnstableApi
-internal class VideoPlayerRepositoryImpl @Inject constructor(
+@Suppress("UnstableApi")
+@Inject
+class VideoPlayerRepositoryImpl internal constructor(
     private val userDataRepository: UserDataRepository
 ) : VideoPlayerDataRepository {
 

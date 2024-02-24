@@ -1,10 +1,11 @@
 package com.miraeldev.data.mapper
 
-import com.miraeldev.domain.models.userDataModels.LocalUserEmailDataModel
+import com.miraeldev.models.models.userDataModels.LocalUserEmailDataModel
 import com.miraeldev.user.UserEmail
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class UserModelsMapper @Inject constructor() {
+@Inject
+class UserModelsMapper{
 
     fun mapLocalUserToDataModel(user: UserEmail): LocalUserEmailDataModel {
         return LocalUserEmailDataModel(user.email)

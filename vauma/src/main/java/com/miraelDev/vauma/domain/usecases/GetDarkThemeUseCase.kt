@@ -1,8 +1,9 @@
 package com.miraelDev.vauma.domain.usecases
 
 import com.miraelDev.vauma.domain.repository.MainRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetDarkThemeUseCase @Inject constructor(private val repository: MainRepository) {
+@Inject
+class GetDarkThemeUseCase(private val repository: MainRepository) {
     operator fun invoke() = repository.getDarkTheme()
 }

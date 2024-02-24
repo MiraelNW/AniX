@@ -90,7 +90,7 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun nameCategoryPagingDao(): NameCategoryPagingDao
     abstract fun nameCategoryRemoteKeys(): NameCategoryRemoteKeysDao
 
-    abstract fun initialSearchDao(): InitialSearchPagingDao
+    abstract fun initialSearchPagingDao(): InitialSearchPagingDao
     abstract fun initialSearchRemoteKeysDao(): InitialSearchRemoteKeysDao
 
 }

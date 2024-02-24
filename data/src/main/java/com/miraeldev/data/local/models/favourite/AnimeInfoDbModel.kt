@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.user.ImageDbModel
 import com.miraeldev.data.local.models.user.toModel
-import com.miraeldev.domain.models.animeDataModels.GenreDataModel
-import com.miraeldev.domain.models.animeDataModels.VideoInfoDataModel
-import com.miraeldev.domain.models.animeDataModels.toGenre
+import com.miraeldev.models.models.animeDataModels.GenreDataModel
+import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
+import com.miraeldev.models.models.animeDataModels.toGenre
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 

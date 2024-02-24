@@ -1,6 +1,5 @@
 package com.miraeldev.data.repository
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -14,7 +13,7 @@ import com.miraeldev.data.local.models.SearchHistoryDbModel
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.searchApi.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
-import com.miraeldev.di.qualifiers.CommonHttpClient
+import com.miraeldev.di.AppHttpClient
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,12 +22,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-internal class SearchAnimeDataRepositoryImpl @Inject constructor(
+@Inject
+class SearchAnimeDataRepositoryImpl internal constructor(
     private val appDatabase: AppDatabase,
-    @CommonHttpClient private val client: HttpClient,
+    private val client: AppHttpClient,
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
     private val localTokenService: LocalTokenService
@@ -151,7 +151,7 @@ internal class SearchAnimeDataRepositoryImpl @Inject constructor(
                     pageSize = 12,
                     enablePlaceholders = true
                 ),
-                pagingSourceFactory = { appDatabase.initialSearchDao().getAnime() },
+                pagingSourceFactory = { appDatabase.initialSearchPagingDao().getAnime() },
                 remoteMediator = InitialSearchRemoteMediator(
                     client = client,
                     appDatabase = appDatabase,

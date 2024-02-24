@@ -5,9 +5,10 @@ import com.miraeldev.anime.CategoryModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class FilterDataRepositoryImpl @Inject constructor() : FilterAnimeDataRepository {
+@Inject
+class FilterDataRepositoryImpl internal constructor(): FilterAnimeDataRepository {
 
 
     private val _filterCategoriesGenreList = mutableListOf(

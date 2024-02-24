@@ -8,8 +8,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.miraeldev.Downloader
 import com.miraeldev.PreferenceDataStoreAPI
 import kotlinx.coroutines.flow.first
+import me.tatarka.inject.annotations.Inject
 
-internal class AndroidDownloader(
+@Inject
+class AndroidDownloader internal constructor(
     private val context: Context,
     private val preferenceManager: PreferenceDataStoreAPI
 ) : Downloader {
