@@ -5,18 +5,23 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnLogOut
+import com.miraeldev.models.OnSettingClick
+import com.miraeldev.models.anime.Settings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultAccountComponent @AssistedInject constructor(
+typealias DefaultAccountComponentFactory = (ComponentContext, OnSettingClick, OnLogOut) -> DefaultAccountComponent
+
+@Inject
+class DefaultAccountComponent(
     private val accountStoreFactory: AccountStoreFactory,
-    @Assisted("onSettingItemClick") onSettingItemClick: (Settings) -> Unit,
-    @Assisted("onLogOutComplete") onLogOutComplete: () -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onSettingItemClick: (Settings) -> Unit,
+    @Assisted onLogOutComplete: () -> Unit
 ) : AccountComponent, ComponentContext by componentContext {
 
     private val store: AccountStore = instanceKeeper.getStore { accountStoreFactory.create() }
@@ -47,14 +52,5 @@ class DefaultAccountComponent @AssistedInject constructor(
 
     override fun onDarkThemeClick(isDarkTheme: Boolean) {
         store.accept(AccountStore.Intent.OnDarkThemeClick(isDarkTheme))
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("onSettingItemClick") onSettingItemClick: (Settings) -> Unit,
-            @Assisted("onLogOutComplete") onLogOutComplete: () -> Unit,
-            @Assisted("componentContext") componentContext: ComponentContext
-        ): DefaultAccountComponent
     }
 }

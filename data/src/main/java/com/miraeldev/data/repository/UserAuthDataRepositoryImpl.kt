@@ -10,6 +10,7 @@ import com.miraeldev.UserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
+import com.miraeldev.data.network.AuthNetworkClient
 import com.miraeldev.di.AuthHttpClient
 import com.miraeldev.extensions.sendRequest
 import com.miraeldev.models.models.auth.Token
@@ -36,8 +37,7 @@ import java.io.InputStream
 
 
 @Inject
-internal class UserAuthDataRepositoryImpl(
-    private val client: AuthHttpClient,
+class UserAuthDataRepositoryImpl constructor(
     private val localService: LocalTokenService,
     private val localUserDataRepository: LocalUserDataRepository,
     private val userDataRepository: UserDataRepository,
@@ -47,6 +47,7 @@ internal class UserAuthDataRepositoryImpl(
 
     private val isSignInError = MutableSharedFlow<Boolean>()
     private val isSignUpError = MutableSharedFlow<Boolean>()
+    private val client: AuthHttpClient = AuthNetworkClient.createClient()
 
     override fun getSignInError(): Flow<Boolean> = isSignInError.asSharedFlow()
 

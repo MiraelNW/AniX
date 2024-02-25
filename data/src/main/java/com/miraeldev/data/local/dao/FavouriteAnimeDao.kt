@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-internal interface FavouriteAnimeDao {
+interface FavouriteAnimeDao {
 
     @Query("SELECT * FROM favList LIMIT 10 OFFSET :offset")
     fun getFavouriteAnimeList(offset: Int = 0): Flow<List<AnimeInfoDbModel>>

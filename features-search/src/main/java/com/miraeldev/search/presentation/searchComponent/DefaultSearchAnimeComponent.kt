@@ -5,18 +5,22 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnAnimeItemClick
+import com.miraeldev.models.OnFilterClick
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultSearchAnimeComponent @AssistedInject constructor(
+typealias DefaultSearchAnimeComponentFactory = (ComponentContext, OnAnimeItemClick, OnFilterClick) -> DefaultSearchAnimeComponent
+
+@Inject
+class DefaultSearchAnimeComponent(
     private val storeFactory: SearchAnimeStoreFactory,
-    @Assisted("onFilterClicked") onFilterClicked: () -> Unit,
-    @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onAnimeItemClick: (Int) -> Unit,
+    @Assisted onFilterClick: () -> Unit
 ) : SearchAnimeComponent, ComponentContext by componentContext {
 
     private val store: SearchAnimeStore = instanceKeeper.getStore { storeFactory.create() }
@@ -28,7 +32,7 @@ class DefaultSearchAnimeComponent @AssistedInject constructor(
         componentScope().launch {
             store.labels.collect {
                 when (it) {
-                    is SearchAnimeStore.Label.OnFilterClicked -> onFilterClicked()
+                    is SearchAnimeStore.Label.OnFilterClicked -> onFilterClick()
                     is SearchAnimeStore.Label.OnAnimeItemClick -> onAnimeItemClick(it.id)
                 }
             }
@@ -61,14 +65,5 @@ class DefaultSearchAnimeComponent @AssistedInject constructor(
 
     override fun onAnimeItemClick(id: Int) {
         store.accept(SearchAnimeStore.Intent.OnAnimeItemClick(id))
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("onFilterClicked") onFilterClicked: () -> Unit,
-            @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-            @Assisted("componentContext") componentContext: ComponentContext
-        ): DefaultSearchAnimeComponent
     }
 }

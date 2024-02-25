@@ -16,7 +16,7 @@ import java.io.IOException
 private val Context.dataStore by preferencesDataStore(name = "preference")
 
 @Inject
-class PreferenceManager internal constructor(context: Context) : PreferenceDataStoreAPI {
+class PreferenceManager(context: Context) : PreferenceDataStoreAPI {
 
     private val dataStore = context.dataStore
 

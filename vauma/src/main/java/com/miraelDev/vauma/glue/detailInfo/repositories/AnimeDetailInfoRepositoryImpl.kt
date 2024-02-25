@@ -8,9 +8,10 @@ import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.detailinfo.data.repositories.AnimeDetailRepository
 import com.miraeldev.result.ResultAnimeDetail
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class AnimeDetailInfoRepositoryImpl @Inject constructor(
+@Inject
+class AnimeDetailInfoRepositoryImpl(
     private val animeDetailDataRepository: AnimeDetailDataRepository,
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val downloader: Downloader,

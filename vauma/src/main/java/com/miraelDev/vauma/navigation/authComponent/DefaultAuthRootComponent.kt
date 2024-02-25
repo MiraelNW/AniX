@@ -7,26 +7,30 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.DefaultEmailChooseComponent
+import com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.codeVerifyResetPasswordComponent.DefaultCodeVerifyRPComponentFactory
+import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.DefaultEmailChooseComponentFactory
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.DefaultResetPasswordComponent
-import com.miraeldev.signin.presentation.signInComponent.DefaultSignInComponent
-import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.DefaultCodeVerifyComponent
-import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.DefaultCodeVerifyRPComponent
-import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.DefaultSignUpComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.DefaultResetPasswordComponentFactory
+import com.miraeldev.models.LogIn
+import com.miraeldev.signin.presentation.signInComponent.DefaultSignInComponentFactory
+import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.DefaultCodeVerifyComponentFactory
+import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.DefaultSignUpComponentFactory
 import kotlinx.serialization.Serializable
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultAuthRootComponent @AssistedInject constructor(
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("logIn") private val logIn: () -> Unit,
-    private val signInComponentFactory: DefaultSignInComponent.Factory,
-    private val signUpComponentFactory: DefaultSignUpComponent.Factory,
-    private val codeVerifyComponentFactory: DefaultCodeVerifyComponent.Factory,
-    private val codeVerifyRPComponentFactory: DefaultCodeVerifyRPComponent.Factory,
-    private val emailChooseComponentFactory: DefaultEmailChooseComponent.Factory,
-    private val resetPasswordComponent: DefaultResetPasswordComponent.Factory
+typealias DefaultAuthRootComponentFactory = (ComponentContext, LogIn) -> DefaultAuthRootComponent
+
+@Inject
+class DefaultAuthRootComponent(
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val logIn: () -> Unit,
+    private val signInComponentFactory: DefaultSignInComponentFactory,
+    private val signUpComponentFactory: DefaultSignUpComponentFactory,
+    private val codeVerifyComponentFactory: DefaultCodeVerifyComponentFactory,
+    private val codeVerifyRPComponentFactory: DefaultCodeVerifyRPComponentFactory,
+    private val emailChooseComponentFactory: DefaultEmailChooseComponentFactory,
+    private val resetPasswordComponent: DefaultResetPasswordComponentFactory
 ) : AuthRootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
@@ -46,74 +50,57 @@ class DefaultAuthRootComponent @AssistedInject constructor(
     ): AuthRootComponent.Child {
         return when (config) {
             is Config.SignIn -> {
-                val component = signInComponentFactory.create(
-                    componentContext = componentContext,
-                    onSignUpClicked = {
-                        navigation.push(Config.SignUp)
-                    },
-                    onForgetPasswordClick = {
-                        navigation.push(Config.EmailChoose)
-                    },
-                    logIn = logIn
+                val component = signInComponentFactory(
+                    componentContext,
+                    { navigation.push(Config.SignUp) },
+                    { navigation.push(Config.EmailChoose) },
+                    logIn
                 )
                 AuthRootComponent.Child.SignIn(component)
             }
 
             is Config.SignUp -> {
-                val component = signUpComponentFactory.create(
-                    componentContext = componentContext,
-                    onSignUpClicked = { email, password ->
-                        navigation.push(Config.CodeVerify(email, password))
-                    },
-                    onBackClicked = {
-                        navigation.pop()
-                    }
-                )
+                val component = signUpComponentFactory(
+                    componentContext,
+                    navigation::pop
+                ) { email, password ->
+                    navigation.push(Config.CodeVerify(email, password))
+                }
                 AuthRootComponent.Child.SignUp(component)
             }
 
             is Config.CodeVerify -> {
-                val component = codeVerifyComponentFactory.create(
-                    componentContext = componentContext,
-                    onBackClicked = {
-                        navigation.pop()
-                    }
+                val component = codeVerifyComponentFactory(
+                    componentContext,
+                    navigation::pop
                 )
                 AuthRootComponent.Child.CodeVerify(component, config.email, config.password)
             }
 
             is Config.CodeVerifyForgotPassword -> {
-                val component = codeVerifyRPComponentFactory.create(
-                    componentContext = componentContext,
-                    onBackClicked = {
-                        navigation.pop()
-                    },
-                    onOtpVerified = {
-                        navigation.push(Config.ResetPassword(config.email))
-                    }
-                )
+                val component = codeVerifyRPComponentFactory(
+                    componentContext,
+                    navigation::pop
+                ) {
+                    navigation.push(Config.ResetPassword(config.email))
+                }
                 AuthRootComponent.Child.CodeVerifyResetPassword(component, config.email)
             }
 
             is Config.EmailChoose -> {
-                val component = emailChooseComponentFactory.create(
-                    componentContext = componentContext,
-                    onEmailExist = { email ->
-                        navigation.push(Config.CodeVerifyForgotPassword(email))
-                    },
-                    onBackClicked = {
-                        navigation.pop()
-                    }
-                )
+                val component = emailChooseComponentFactory(
+                    componentContext,
+                    navigation::pop,
+                ) { email ->
+                    navigation.push(Config.CodeVerifyForgotPassword(email))
+                }
                 AuthRootComponent.Child.EmailChoose(component)
             }
 
             is Config.ResetPassword -> {
-                val component = resetPasswordComponent.create(
-                    componentContext = componentContext,
-                    onBackClicked = {
-                        navigation.pop()
-                    }
+                val component = resetPasswordComponent(
+                    componentContext,
+                    navigation::pop
                 )
                 AuthRootComponent.Child.ResetPassword(component, config.email)
             }
@@ -140,13 +127,4 @@ class DefaultAuthRootComponent @AssistedInject constructor(
         @Serializable
         data class ResetPassword(val email: String) : Config
     }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("logIn") logIn: () -> Unit,
-        ): DefaultAuthRootComponent
-    }
-
 }

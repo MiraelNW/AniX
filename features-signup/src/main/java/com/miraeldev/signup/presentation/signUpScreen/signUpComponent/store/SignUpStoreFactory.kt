@@ -10,9 +10,10 @@ import com.miraeldev.signup.domain.useCases.SignUpUseCase
 import com.miraeldev.user.User
 import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class SignUpStoreFactory @Inject constructor(
+@Inject
+class SignUpStoreFactory(
     private val storeFactory: StoreFactory,
     private val signUpUseCase: SignUpUseCase,
     private val validatePassword: ValidatePassword

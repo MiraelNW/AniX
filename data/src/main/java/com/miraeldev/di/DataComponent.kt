@@ -1,9 +1,7 @@
 package com.miraeldev.di
 
-import android.content.Context
-import me.tatarka.inject.annotations.Provides
-
 interface DataComponent :
+    DatabaseComponent,
     PreferenceDataStoreSubComponent,
-    RepoSubComponent,
-    NetworkSubComponent
+    NetworkSubComponent,
+    RepoSubComponent

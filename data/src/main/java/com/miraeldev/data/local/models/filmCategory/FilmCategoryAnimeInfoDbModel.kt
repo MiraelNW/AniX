@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 
 @Entity(tableName = "film_category_anime")
 @Serializable
-internal data class FilmCategoryAnimeInfoDbModel(
+data class FilmCategoryAnimeInfoDbModel(
 
     @PrimaryKey val id: Int,
     val nameEn: String,

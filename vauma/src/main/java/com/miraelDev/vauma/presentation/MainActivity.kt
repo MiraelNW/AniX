@@ -31,8 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val rootComponent = AppRootComponent::class.create(applicationComponent)
-        val appDiComponent = rootComponent.create()
+        val rootComponent = AppRootComponent::class.create(applicationComponent).appRootFactory()
 
         val componentContext = defaultComponentContext()
 
@@ -50,7 +49,7 @@ class MainActivity : ComponentActivity() {
             }
 
             AppRootContent(
-                component = appDiComponent(componentContext),
+                component = rootComponent(componentContext),
                 onReadyToDrawStartScreen = { readyToDrawStartScreen = true }
             )
 

@@ -34,6 +34,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
 
+@Inject
 internal object AppNetworkClient
 //    (
 //    private val localTokenService: LocalTokenService,

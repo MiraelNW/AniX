@@ -12,8 +12,8 @@ import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloa
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadStore.Label
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadStore.State
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Inject
 import java.io.File
-import javax.inject.Inject
 
 interface DownloadStore : Store<Intent, State, Label> {
 
@@ -30,7 +30,8 @@ interface DownloadStore : Store<Intent, State, Label> {
     }
 }
 
-class DownloadStoreFactory @Inject constructor(
+@Inject
+class DownloadStoreFactory(
     private val storeFactory: StoreFactory,
     private val setPreferenceUseCase: SetPreferenceUseCase,
     private val getPreferenceUseCase: GetPreferenceUseCase,

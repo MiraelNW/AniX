@@ -2,11 +2,13 @@ package com.miraeldev.data.remote.searchApi
 
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.AnimeInfoDto
 import com.miraeldev.di.AppHttpClient
+import com.miraeldev.di.AuthHttpClient
 import com.miraeldev.result.FailureCauses
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -21,12 +23,13 @@ import kotlinx.coroutines.flow.first
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class SearchApiServiceImpl internal constructor(
-    private val client: AppHttpClient,
+class SearchApiServiceImpl constructor(
+//    private val client: HttpClient,
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
     private val localTokenService: LocalTokenService
 ) : SearchApiService {
+    private val client: AppHttpClient = AppNetworkClient.createClient()
 
     override suspend fun getAnimeById(id: Int): ApiResult {
 

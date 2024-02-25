@@ -6,20 +6,26 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.extensions.componentScope
+import com.miraeldev.models.OnAnimeItemClick
+import com.miraeldev.models.OnPlayClick
+import com.miraeldev.models.OnSeeAllClick
 import com.miraeldev.user.User
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultHomeComponent @AssistedInject internal constructor(
+
+typealias DefaultHomeComponentFactory = (ComponentContext, OnAnimeItemClick, OnSeeAllClick, OnPlayClick) -> DefaultHomeComponent
+
+@Inject
+class DefaultHomeComponent(
     private val homeStoreFactory: HomeStoreFactory,
-    @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-    @Assisted("onSeeAllClick") onSeeAllClick: (Int) -> Unit,
-    @Assisted("onPlayClick") onPlayClick: (Int) -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onAnimeItemClick: (Int) -> Unit,
+    @Assisted onSeeAllClick: (Int) -> Unit,
+    @Assisted onPlayClick: (Int) -> Unit
 ) : HomeComponent, ComponentContext by componentContext {
 
     private val store: HomeStore = instanceKeeper.getStore { homeStoreFactory.create() }
@@ -58,15 +64,5 @@ class DefaultHomeComponent @AssistedInject internal constructor(
 
     override fun onPlayClick(id: Int) {
         store.accept(HomeStore.Intent.OnPlayClick(id))
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-            @Assisted("onSeeAllClick") onSeeAllClick: (Int) -> Unit,
-            @Assisted("onPlayClick") onPlayClick: (Int) -> Unit,
-        ): DefaultHomeComponent
     }
 }

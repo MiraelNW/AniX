@@ -9,8 +9,8 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponent
-import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponent
+import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponentFactory
+import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponentFactory
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,8 +24,8 @@ import me.tatarka.inject.annotations.Inject
 class DefaultAppRootComponent(
     @Assisted componentContext: ComponentContext,
     private val storeFactory: MainStoreFactory,
-    private val mainRootComponent: DefaultMainRootComponent,
-    private val authRootComponent: DefaultAuthRootComponent.Factory
+    private val mainRootComponent: DefaultMainRootComponentFactory,
+    private val authRootComponent: DefaultAuthRootComponentFactory
 ) : AppRootComponent, ComponentContext by componentContext {
 
     private val store: MainStore = instanceKeeper.getStore { storeFactory.create() }
@@ -67,19 +67,16 @@ class DefaultAppRootComponent(
     ): AppRootComponent.Child {
         return when (config) {
             is Config.Auth -> {
-                val component = authRootComponent.create(
-                    componentContext = componentContext,
-                    logIn = { navigation.replaceAll(Config.Main) }
-                )
+                val component = authRootComponent(
+                    componentContext
+                ) { navigation.replaceAll(Config.Main) }
                 AppRootComponent.Child.Auth(component)
             }
 
             is Config.Main -> {
-                val component = authRootComponent.create(
-                    componentContext = componentContext,
-                    logIn = { navigation.replaceAll(Config.Main) }
-                )
-                AppRootComponent.Child.Auth(component)
+                val component = mainRootComponent(componentContext)
+                { navigation.replaceAll(Config.Auth) }
+                AppRootComponent.Child.Main(component)
             }
 
             is Config.Initial -> AppRootComponent.Child.Initial

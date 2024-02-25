@@ -1,12 +1,17 @@
 package com.miraeldev.di
 
 import com.miraeldev.PreferenceDataStoreAPI
+import com.miraeldev.data.dataStore.localUser.LocalUserManager
 import com.miraeldev.data.dataStore.localUser.LocalUserStoreApi
+import com.miraeldev.data.dataStore.preference.PreferenceManager
+import me.tatarka.inject.annotations.Provides
 
 interface PreferenceDataStoreSubComponent {
 
-    val providePreferenceDataStoreAPI: PreferenceDataStoreAPI
+    @Provides
+    fun PreferenceManager.bind(): PreferenceDataStoreAPI = this
 
-    val provideLocalUserStoreApi: LocalUserStoreApi
+    @Provides
+    fun LocalUserManager.bind(): LocalUserStoreApi = this
 
 }

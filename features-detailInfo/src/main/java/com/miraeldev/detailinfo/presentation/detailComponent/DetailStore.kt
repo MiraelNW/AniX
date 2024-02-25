@@ -20,7 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface DetailStore : Store<Intent, State, Label> {
 
@@ -54,7 +54,8 @@ interface DetailStore : Store<Intent, State, Label> {
     }
 }
 
-class DetailStoreFactory @Inject internal constructor(
+@Inject
+class DetailStoreFactory(
     private val storeFactory: StoreFactory,
     private val getAnimeDetailUseCase: GetAnimeDetailUseCase,
     private val selectAnimeItemUseCase: SelectAnimeItemUseCase,

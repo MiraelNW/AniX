@@ -9,30 +9,33 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.miraelDev.vauma.navigation.navigationUi.NavId
-import com.miraeldev.account.presentation.DefaultAccountRootComponent
-import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponent
-import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponent
+import com.miraeldev.account.presentation.DefaultAccountRootComponentFactory
+import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponentFactory
+import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponentFactory
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponent
-import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponent
-import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponent
-import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponent
-import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponent
+import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponentFactory
+import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponentFactory
+import com.miraeldev.models.OnLogOut
+import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponentFactory
+import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponentFactory
+import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponentFactory
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
+typealias DefaultMainRootComponentFactory = (ComponentContext, OnLogOut) -> DefaultMainRootComponent
 @Inject
 class DefaultMainRootComponent(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onLogOutComplete: () -> Unit,
-    private val homeComponentFactory: DefaultHomeComponent.Factory,
-    private val categoriesComponentFactory: DefaultCategoriesComponent.Factory,
-    private val searchComponentFactory: DefaultSearchAnimeComponent.Factory,
-    private val filterComponent: DefaultFilterComponent.Factory,
-    private val favouriteComponentFactory: DefaultFavouriteComponent.Factory,
-    private val accountRootComponentFactory: DefaultAccountRootComponent.Factory,
-    private val videoComponent: DefaultVideoComponent.Factory,
-    private val detailComponentFactory: DefaultDetailComponent.Factory
+    private val homeComponentFactory: DefaultHomeComponentFactory,
+    private val categoriesComponentFactory: DefaultCategoriesComponentFactory,
+    private val searchComponentFactory: DefaultSearchAnimeComponentFactory,
+    private val filterComponent: DefaultFilterComponentFactory,
+    private val favouriteComponentFactory: DefaultFavouriteComponentFactory,
+    private val accountRootComponentFactory: DefaultAccountRootComponentFactory,
+    private val videoComponent: DefaultVideoComponentFactory,
+    private val detailComponentFactory: DefaultDetailComponentFactory
 ) : MainRootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
@@ -75,15 +78,15 @@ class DefaultMainRootComponent(
         return when (config) {
 
             is Config.Home -> {
-                val component = homeComponentFactory.create(
-                    componentContext = componentContext,
-                    onAnimeItemClick = {
+                val component = homeComponentFactory(
+                    componentContext,
+                    {
                         navigation.push(Config.DetailInfo(it))
                     },
-                    onSeeAllClick = {
+                    {
                         navigation.push(Config.Categories(it))
                     },
-                    onPlayClick = {
+                    {
                         navigation.push(Config.VideoScreen)
                     }
                 )
@@ -91,22 +94,21 @@ class DefaultMainRootComponent(
             }
 
             is Config.Categories -> {
-                val component = categoriesComponentFactory.create(
-                    componentContext = componentContext,
-                    onAnimeItemClick = {
-                        navigation.push(Config.DetailInfo(it))
-                    }
-                )
+                val component = categoriesComponentFactory(
+                    componentContext
+                ) {
+                    navigation.push(Config.DetailInfo(it))
+                }
                 MainRootComponent.Child.Categories(component, config.id)
             }
 
             is Config.Search -> {
-                val component = searchComponentFactory.create(
-                    componentContext = componentContext,
-                    onAnimeItemClick = {
+                val component = searchComponentFactory(
+                    componentContext,
+                    {
                         navigation.push(Config.DetailInfo(it))
                     },
-                    onFilterClicked = {
+                    {
                         navigation.push(Config.Filter)
                     },
                 )
@@ -114,20 +116,20 @@ class DefaultMainRootComponent(
             }
 
             is Config.Filter -> {
-                val component = filterComponent.create(
-                    componentContext = componentContext,
-                    onBackPressed = navigation::pop
+                val component = filterComponent(
+                    componentContext,
+                    navigation::pop
                 )
                 MainRootComponent.Child.Filter(component)
             }
 
             is Config.Favourite -> {
-                val component = favouriteComponentFactory.create(
-                    componentContext = componentContext,
-                    onAnimeItemClick = {
+                val component = favouriteComponentFactory(
+                    componentContext,
+                    {
                         navigation.push(Config.DetailInfo(it))
                     },
-                    navigateToSearchScreen = {
+                    {
                         navigation.bringToFront(Config.Search(it))
                     }
                 )
@@ -135,21 +137,21 @@ class DefaultMainRootComponent(
             }
 
             is Config.Account -> {
-                val component = accountRootComponentFactory.create(
-                    componentContext = componentContext,
-                    onLogOutComplete = onLogOutComplete
+                val component = accountRootComponentFactory(
+                    componentContext,
+                    onLogOutComplete
                 )
                 MainRootComponent.Child.Account(component)
             }
 
             is Config.DetailInfo -> {
-                val component = detailComponentFactory.create(
-                    componentContext = componentContext,
-                    onBackClicked = navigation::pop,
-                    onSeriesClick = {
+                val component = detailComponentFactory(
+                    componentContext,
+                    navigation::pop,
+                    {
                         navigation.push(Config.VideoScreen)
                     },
-                    onAnimeItemClick = {
+                    {
                         navigation.push(Config.DetailInfo(it))
                     }
                 )
@@ -157,9 +159,9 @@ class DefaultMainRootComponent(
             }
 
             is Config.VideoScreen -> {
-                val component = videoComponent.create(
-                    componentContext = componentContext,
-                    onBackClicked = navigation::pop
+                val component = videoComponent(
+                    componentContext,
+                    navigation::pop
                 )
                 MainRootComponent.Child.VideoScreen(component)
             }
@@ -188,6 +190,7 @@ class DefaultMainRootComponent(
 
         @Serializable
         data class DetailInfo(val id: Int) : Config
+
         @Serializable
         data object VideoScreen : Config
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class AndroidDownloader internal constructor(
+class AndroidDownloader constructor(
     private val context: Context,
     private val preferenceManager: PreferenceDataStoreAPI
 ) : Downloader {

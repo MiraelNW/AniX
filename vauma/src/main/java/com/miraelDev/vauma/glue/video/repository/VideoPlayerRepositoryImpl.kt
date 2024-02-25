@@ -5,9 +5,10 @@ import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.video.PlayerWrapper
 import com.miraeldev.video.data.repository.VideoPlayerRepository
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class VideoPlayerRepositoryImpl @Inject constructor(
+@Inject
+class VideoPlayerRepositoryImpl(
     private val videoPlayerDataRepository: VideoPlayerDataRepository
 ) : VideoPlayerRepository {
     override fun getVideoInfo(): StateFlow<PlayerWrapper> {

@@ -11,7 +11,7 @@ import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-internal class AnimeModelsMapper{
+class AnimeModelsMapper{
 
 
     fun mapAnimeInfoToAnimeDbModel(animeInfo: AnimeInfo): AnimeInfoDbModel {

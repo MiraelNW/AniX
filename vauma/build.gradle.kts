@@ -174,6 +174,10 @@ kapt {
     correctErrorTypes = true
 }
 
+ksp {
+    arg("me.tatarka.inject.dumpGraph", "true")
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }

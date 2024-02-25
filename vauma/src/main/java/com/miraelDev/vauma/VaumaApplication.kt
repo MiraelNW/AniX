@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.Stable
 import com.miraelDev.vauma.di.ApplicationComponent
 import com.miraelDev.vauma.di.ApplicationComponentProvider
+import com.miraelDev.vauma.di.GlueFeatureComponent
 import com.miraelDev.vauma.di.create
 
 @Stable

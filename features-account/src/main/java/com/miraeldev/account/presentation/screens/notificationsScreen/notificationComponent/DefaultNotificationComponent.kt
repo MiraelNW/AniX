@@ -5,17 +5,20 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultNotificationComponent @AssistedInject constructor(
+typealias DefaultNotificationComponentFactory = (ComponentContext, OnBackPressed) -> DefaultNotificationComponent
+
+@Inject
+class DefaultNotificationComponent(
     private val storeFactory: NotificationStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackClicked") private val onBackClicked: () -> Unit,
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val onBackClicked: () -> Unit,
 ) : NotificationComponent, ComponentContext by componentContext {
 
     private val store: NotificationStore = instanceKeeper.getStore { storeFactory.create() }
@@ -35,13 +38,5 @@ class DefaultNotificationComponent @AssistedInject constructor(
 
     override fun onBackPressed() {
         store.accept(NotificationStore.Intent.OnBackClicked)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit,
-        ): DefaultNotificationComponent
     }
 }

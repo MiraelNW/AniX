@@ -8,9 +8,10 @@ import com.miraeldev.signup.domain.useCases.UpdateUserUseCase
 import com.miraeldev.signup.domain.useCases.VerifyOtpCodeUseCase
 import com.miraeldev.user.User
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class CodeVerifyStoreFactory @Inject constructor(
+@Inject
+class CodeVerifyStoreFactory(
     private val storeFactory: StoreFactory,
     private val updateUserUseCase: UpdateUserUseCase,
     private val verifyOtpCodeUseCase: VerifyOtpCodeUseCase

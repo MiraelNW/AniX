@@ -1,8 +1,9 @@
 package com.miraeldev.signin.domain.usecases
 
 import com.miraeldev.signin.data.repositories.SignInRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetUserEmailUseCase @Inject constructor(private val repository: SignInRepository) {
+@Inject
+class GetUserEmailUseCase(private val repository: SignInRepository) {
     suspend operator fun invoke() = repository.getUserEmail()
 }

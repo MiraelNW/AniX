@@ -1,8 +1,9 @@
 package com.miraeldev.search.domain.usecases.filterUseCase
 
 import com.miraeldev.search.data.repository.FilterAnimeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetSortByCategoryUseCase @Inject constructor(val repository: FilterAnimeRepository) {
+@Inject
+class GetSortByCategoryUseCase(val repository: FilterAnimeRepository) {
     operator fun invoke() = repository.getSortByCategory()
 }

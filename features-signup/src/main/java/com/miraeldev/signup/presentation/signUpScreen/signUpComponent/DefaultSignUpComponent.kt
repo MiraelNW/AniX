@@ -5,21 +5,26 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
+import com.miraeldev.models.OnBackPressed
+import com.miraeldev.models.OnSignUp
 import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store.SignUpStore
 import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store.SignUpStoreFactory
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultSignUpComponent @AssistedInject constructor(
+typealias DefaultSignUpComponentFactory =
+            (ComponentContext, OnBackPressed, OnSignUp) -> DefaultSignUpComponent
+
+@Inject
+class DefaultSignUpComponent(
     private val storeFactory: SignUpStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackClicked") private val onBackClicked: () -> Unit,
-    @Assisted("onSignUpClicked") private val onSignUpClicked: (email: String, password: String) -> Unit,
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val onBackClicked: () -> Unit,
+    @Assisted private val onSignUpClicked: (email: String, password: String) -> Unit,
 ) : SignUpComponent, ComponentContext by componentContext {
 
     private val store: SignUpStore = instanceKeeper.getStore { storeFactory.create() }
@@ -96,14 +101,5 @@ class DefaultSignUpComponent @AssistedInject constructor(
 
     override fun refreshEmailError() {
         store.accept(SignUpStore.Intent.RefreshEmailError)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit,
-            @Assisted("onSignUpClicked") onSignUpClicked: (email: String, password: String) -> Unit,
-        ): DefaultSignUpComponent
     }
 }

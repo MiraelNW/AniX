@@ -4,9 +4,10 @@ import com.miraeldev.FilterAnimeDataRepository
 import com.miraeldev.anime.CategoryModel
 import com.miraeldev.search.data.repository.FilterAnimeRepository
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class FilterRepositoryImpl @Inject constructor(
+@Inject
+class FilterRepositoryImpl(
     private val filterAnimeDataRepository: FilterAnimeDataRepository
 ) : FilterAnimeRepository {
     override fun getGenreList(): StateFlow<List<CategoryModel>> {

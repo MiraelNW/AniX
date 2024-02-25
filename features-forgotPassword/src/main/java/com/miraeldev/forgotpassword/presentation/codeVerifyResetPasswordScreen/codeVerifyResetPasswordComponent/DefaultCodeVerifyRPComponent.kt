@@ -1,4 +1,4 @@
-package com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent
+package com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.codeVerifyResetPasswordComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
@@ -7,18 +7,24 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.codeVerifyResetPasswordComponent.store.CodeVerifyRPStore
 import com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.codeVerifyResetPasswordComponent.store.CodeVerifyStoreRPFactory
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
+import com.miraeldev.models.OnOtpVerified
+import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyRPComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultCodeVerifyRPComponent @AssistedInject constructor(
+typealias DefaultCodeVerifyRPComponentFactory =
+            (ComponentContext, OnBackPressed, OnOtpVerified) -> DefaultCodeVerifyRPComponent
+
+@Inject
+class DefaultCodeVerifyRPComponent(
     private val storeFactory: CodeVerifyStoreRPFactory,
-    @Assisted("onBackClicked") onBackClicked: () -> Unit,
-    @Assisted("onOtpVerified") onOtpVerified: () -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit,
+    @Assisted onOtpVerified: () -> Unit
 ) : CodeVerifyRPComponent, ComponentContext by componentContext {
 
     private val store: CodeVerifyRPStore = instanceKeeper.getStore { storeFactory.create() }
@@ -60,14 +66,5 @@ class DefaultCodeVerifyRPComponent @AssistedInject constructor(
 
     override fun onBackClicked() {
         store.accept(CodeVerifyRPStore.Intent.OnBackClicked)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("onBackClicked") onBackClicked: () -> Unit,
-            @Assisted("onOtpVerified") onOtpVerified: () -> Unit,
-            @Assisted("componentContext") componentContext: ComponentContext
-        ): DefaultCodeVerifyRPComponent
     }
 }

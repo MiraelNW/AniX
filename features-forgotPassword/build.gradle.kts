@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
@@ -65,6 +66,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    //kotlin-inject
+    ksp(libs.kotlin.inject.ksp)
+    implementation(libs.kotlin.inject.runtime)
+
     //decompose
     implementation (libs.decompose)
     implementation(libs.decompose.jetpack.compose)
@@ -94,5 +99,6 @@ dependencies {
 
     implementation(project(":core-presentation"))
     implementation(project(":core-extensions"))
+    implementation(project(":core-models"))
     implementation(project(":core-utils"))
 }

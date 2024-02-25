@@ -7,11 +7,13 @@ import com.miraeldev.UserDataRepository
 import com.miraeldev.account.data.AccountRepository
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 
 private const val DARK_THEME_KEY = "dark theme key"
-class AccountRepositoryImpl @Inject constructor(
+
+@Inject
+class AccountRepositoryImpl(
     private val userAuthDataRepository: UserAuthDataRepository,
     private val userDataRepository: UserDataRepository,
     private val preferenceDataStoreAPI: PreferenceDataStoreAPI

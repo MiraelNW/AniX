@@ -4,25 +4,15 @@ import com.miraeldev.logger.LogTracker
 import com.miraeldev.logger.LoggerApi
 import com.miraeldev.logger.impl.CrashlyticsLogTracker
 import com.miraeldev.logger.impl.LoggerImpl
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import me.tatarka.inject.annotations.Provides
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class LoggerDi {
+interface LoggerFeature {
 
-    @Binds
-    @Singleton
-    abstract fun bindLogger(impl: LoggerImpl): LoggerApi
+//    @Singleton
+    @Provides
+    fun LoggerImpl.bind(): LoggerApi = this
 
-    companion object {
-        @Provides
-        fun provideLogTracker():LogTracker {
-            return CrashlyticsLogTracker()
-        }
-    }
+    @Provides
+//    @Singleton
+    fun provideLogTracker(): LogTracker = CrashlyticsLogTracker()
 }

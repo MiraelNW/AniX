@@ -14,9 +14,10 @@ import com.miraeldev.account.domain.toUserModel
 import com.miraeldev.account.presentation.screens.account.accountComponent.AccountStore.Intent
 import com.miraeldev.account.presentation.screens.account.accountComponent.AccountStore.Label
 import com.miraeldev.account.presentation.screens.account.accountComponent.AccountStore.State
+import com.miraeldev.models.anime.Settings
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface AccountStore : Store<Intent, State, Label> {
 
@@ -34,7 +35,8 @@ interface AccountStore : Store<Intent, State, Label> {
     }
 }
 
-class AccountStoreFactory @Inject constructor(
+@Inject
+class AccountStoreFactory(
     private val storeFactory: StoreFactory,
     private val logOutUseCase: LogOutUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,

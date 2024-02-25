@@ -7,17 +7,20 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore.ResetPasswordStore
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore.ResetPasswordStoreFactory
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultResetPasswordComponent @AssistedInject constructor(
+typealias DefaultResetPasswordComponentFactory = (ComponentContext, OnBackPressed) -> DefaultResetPasswordComponent
+
+@Inject
+class DefaultResetPasswordComponent(
     private val storeFactory: ResetPasswordStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackClicked") onBackClicked: () -> Unit
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit
 ) : ResetPasswordComponent, ComponentContext by componentContext {
 
     private val store: ResetPasswordStore = instanceKeeper.getStore { storeFactory.create() }
@@ -61,14 +64,4 @@ class DefaultResetPasswordComponent @AssistedInject constructor(
     override fun refreshRepeatedPasswordError() {
         store.accept(ResetPasswordStore.Intent.RefreshRepeatedPasswordError)
     }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit
-        ): DefaultResetPasswordComponent
-    }
-
-
 }

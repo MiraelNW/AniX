@@ -5,17 +5,20 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultVideoComponent @AssistedInject constructor(
+typealias DefaultVideoComponentFactory = (ComponentContext, OnBackPressed) -> DefaultVideoComponent
+
+@Inject
+class DefaultVideoComponent(
     private val storeFactory: VideoStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackClicked") onBackClicked: () -> Unit,
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit,
 ) : VideoComponent, ComponentContext by componentContext {
 
 
@@ -51,14 +54,5 @@ class DefaultVideoComponent @AssistedInject constructor(
 
     override fun onBackPressed() {
         store.accept(VideoStore.Intent.OnBackPressed)
-    }
-
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit
-        ): DefaultVideoComponent
     }
 }

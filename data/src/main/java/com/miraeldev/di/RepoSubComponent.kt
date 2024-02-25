@@ -12,48 +12,77 @@ import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
+import com.miraeldev.data.downloadMananger.AndroidDownloader
+import com.miraeldev.data.network.AuthNetworkClient
 import com.miraeldev.data.remote.userApiService.UserApiService
+import com.miraeldev.data.remote.userApiService.UserApiServiceImpl
+import com.miraeldev.data.repository.AnimeDetailDataRepositoryImpl
+import com.miraeldev.data.repository.AnimeListDataRepositoryImpl
+import com.miraeldev.data.repository.FavouriteAnimeDataRepositoryImpl
+import com.miraeldev.data.repository.FilterDataRepositoryImpl
+import com.miraeldev.data.repository.ForgotPasswordDataRepositoryImpl
+import com.miraeldev.data.repository.HomeDataRepositoryImpl
+import com.miraeldev.data.repository.LocalUserDataRepositoryImpl
+import com.miraeldev.data.repository.SearchAnimeDataRepositoryImpl
+import com.miraeldev.data.repository.UserAuthDataRepositoryImpl
+import com.miraeldev.data.repository.UserDataRepositoryImpl
+import com.miraeldev.data.repository.VideoPlayerRepositoryImpl
 import com.miraeldev.di.scope.Singleton
+import io.ktor.client.HttpClient
+import me.tatarka.inject.annotations.Provides
 
 
 interface RepoSubComponent {
 
     @Singleton
-    val animeListDataRepository: AnimeListDataRepository
+    @Provides
+    fun AnimeListDataRepositoryImpl.bind(): AnimeListDataRepository = this
 
     @Singleton
-    val searchAnimeDataRepository: SearchAnimeDataRepository
+    @Provides
+    fun SearchAnimeDataRepositoryImpl.bind(): SearchAnimeDataRepository = this
 
     @Singleton
-    val filterAnimeDataRepository: FilterAnimeDataRepository
+    @Provides
+    fun FilterDataRepositoryImpl.bind(): FilterAnimeDataRepository = this
 
     @Singleton
-    val animeDetailDataRepository: AnimeDetailDataRepository
+    @Provides
+    fun AnimeDetailDataRepositoryImpl.bind(): AnimeDetailDataRepository = this
 
     @Singleton
-    val videoPlayerDataRepository: VideoPlayerDataRepository
+    @Provides
+    fun VideoPlayerRepositoryImpl.bind(): VideoPlayerDataRepository = this
 
     @Singleton
-    val forgotPasswordDataRepository: ForgotPasswordDataRepository
+    @Provides
+    fun ForgotPasswordDataRepositoryImpl.bind(): ForgotPasswordDataRepository = this
 
     @Singleton
-    val favouriteAnimeDataRepository: FavouriteAnimeDataRepository
+    @Provides
+    fun FavouriteAnimeDataRepositoryImpl.bind(): FavouriteAnimeDataRepository = this
 
     @Singleton
-    val userDataRepository: UserDataRepository
+    @Provides
+    fun UserDataRepositoryImpl.bind(): UserDataRepository = this
 
     @Singleton
-    val userAuthDataRepository: UserAuthDataRepository
+    @Provides
+    fun UserAuthDataRepositoryImpl.bind(): UserAuthDataRepository = this
 
     @Singleton
-    val homeDataRepository: HomeDataRepository
+    @Provides
+    fun HomeDataRepositoryImpl.bind(): HomeDataRepository = this
 
     @Singleton
-    val localUserDataRepository: LocalUserDataRepository
+    @Provides
+    fun LocalUserDataRepositoryImpl.bind(): LocalUserDataRepository = this
 
     @Singleton
-    val userApiService: UserApiService
+    @Provides
+    fun UserApiServiceImpl.bind(): UserApiService = this
 
     @Singleton
-    val downloader: Downloader
+    @Provides
+    fun AndroidDownloader.bind(): Downloader = this
 }

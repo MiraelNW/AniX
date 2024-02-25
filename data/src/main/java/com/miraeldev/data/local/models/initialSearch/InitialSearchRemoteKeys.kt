@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "initial_search_remote_key")
-internal data class InitialSearchRemoteKeys(
+data class InitialSearchRemoteKeys(
     @PrimaryKey(autoGenerate = false)
     val animeId: Int,
     val prevKey: Int?,

@@ -13,7 +13,7 @@ private val Context.userDataStore by dataStore(
 )
 
 @Inject
-class LocalUserManager internal constructor(context: Context) : LocalUserStoreApi {
+class LocalUserManager constructor(context: Context) : LocalUserStoreApi {
 
     private val dataStore = context.userDataStore
     override suspend fun updateUser(localUser: LocalUserEmailDataModel) {

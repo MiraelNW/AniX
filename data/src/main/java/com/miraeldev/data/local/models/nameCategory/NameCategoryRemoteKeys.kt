@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "name_category_remote_key")
-internal data class NameCategoryRemoteKeys(
+data class NameCategoryRemoteKeys(
     @PrimaryKey(autoGenerate = false)
     val animeId: Int,
     val prevKey: Int?,

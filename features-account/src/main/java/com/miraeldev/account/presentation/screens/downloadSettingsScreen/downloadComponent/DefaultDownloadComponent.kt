@@ -5,17 +5,20 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultDownloadComponent @AssistedInject constructor(
+typealias DefaultDownloadComponentFactory = (ComponentContext, OnBackPressed) -> DefaultDownloadComponent
+
+@Inject
+class DefaultDownloadComponent(
     private val storeFactory: DownloadStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackClicked") onBackClicked: () -> Unit
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit
 ) : DownloadComponent, ComponentContext by componentContext {
 
     private val store: DownloadStore = instanceKeeper.getStore { storeFactory.create() }
@@ -43,13 +46,5 @@ class DefaultDownloadComponent @AssistedInject constructor(
 
     override fun changeStatus(isSelected: Boolean) {
         store.accept(DownloadStore.Intent.ChangeStatus(isSelected))
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit
-        ): DefaultDownloadComponent
     }
 }

@@ -1,8 +1,9 @@
 package com.miraeldev.video.domain.useCases
 
 import com.miraeldev.video.data.repository.VideoPlayerRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class LoadPreviousEpisodeUseCase @Inject constructor(val repository: VideoPlayerRepository) {
+@Inject
+class LoadPreviousEpisodeUseCase(val repository: VideoPlayerRepository) {
     operator fun invoke() = repository.loadPrevEpisode()
 }

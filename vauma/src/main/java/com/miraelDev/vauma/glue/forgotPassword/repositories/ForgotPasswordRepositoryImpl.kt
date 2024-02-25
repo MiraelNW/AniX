@@ -2,12 +2,11 @@ package com.miraelDev.vauma.glue.forgotPassword.repositories
 
 import com.miraeldev.ForgotPasswordDataRepository
 import com.miraeldev.forgotpassword.data.ForgotPasswordRepository
-import com.miraeldev.signin.data.repositories.SignInRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class ForgotPasswordRepositoryImpl @Inject constructor(
+@Inject
+class ForgotPasswordRepositoryImpl(
     private val forgotPasswordRepository: ForgotPasswordDataRepository
 ) : ForgotPasswordRepository {
 

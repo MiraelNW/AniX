@@ -6,14 +6,15 @@ import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.HomeDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeDetailInfo
+import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class HomeRepositoryImpl @Inject constructor(
+@Inject
+class HomeRepositoryImpl(
     private val animeListDataRepository: AnimeListDataRepository,
     private val favouriteAnimeDataRepository: FavouriteAnimeDataRepository,
     private val homeDataRepository: HomeDataRepository,

@@ -3,9 +3,10 @@ package com.miraeldev.logger.impl
 import com.miraeldev.logger.LogError
 import com.miraeldev.logger.LogTracker
 import com.miraeldev.logger.LoggerApi
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class LoggerImpl @Inject constructor(
+@Inject
+class LoggerImpl(
     private val logTrackers: LogTracker
 ) : LoggerApi {
 

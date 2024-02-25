@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-internal interface UserDao {
+interface UserDao {
 
     @Query("SELECT * FROM user")
     fun getUserFlow(): Flow<UserDbModel>

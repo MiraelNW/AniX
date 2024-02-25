@@ -5,9 +5,10 @@ import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.search.data.repository.SearchAnimeRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class SearchRepositoryImpl @Inject constructor(
+@Inject
+class SearchRepositoryImpl(
     private val searchAnimeDataRepository: SearchAnimeDataRepository
 ) : SearchAnimeRepository {
     override fun getFilterList(): Flow<List<String>> {

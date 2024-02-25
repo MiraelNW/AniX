@@ -1,9 +1,10 @@
 package com.miraeldev.animelist.domain.useCases
 
 import com.miraeldev.animelist.data.HomeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetUserInfoUseCase @Inject constructor(private val homeRepository: HomeRepository) {
+@Inject
+class GetUserInfoUseCase(private val homeRepository: HomeRepository) {
 
     operator fun invoke() = homeRepository.getUserInfo()
 

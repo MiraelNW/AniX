@@ -7,6 +7,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.mapper.AnimeModelsMapper
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.FavouriteAnimeSendRequest
@@ -26,15 +27,15 @@ import kotlinx.coroutines.flow.asSharedFlow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class AnimeDetailDataRepositoryImpl internal constructor(
+class AnimeDetailDataRepositoryImpl constructor(
     private val searchApiService: SearchApiService,
-    private val client: AppHttpClient,
     private val userDataRepository: UserDataRepository,
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val favouriteAnimeDao: FavouriteAnimeDao,
     private val animeModelsMapper: AnimeModelsMapper,
     private val localTokenService: LocalTokenService
 ) : AnimeDetailDataRepository {
+    private val client: HttpClient = AppNetworkClient.createClient()
 
     private val _animeDetail = MutableSharedFlow<ResultAnimeDetail>()
 

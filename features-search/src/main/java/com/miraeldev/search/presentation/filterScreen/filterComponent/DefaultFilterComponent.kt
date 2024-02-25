@@ -5,18 +5,21 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultFilterComponent @AssistedInject constructor(
+typealias DefaultFilterComponentFactory = (ComponentContext, OnBackPressed) -> DefaultFilterComponent
+
+@Inject
+class DefaultFilterComponent(
     private val storeFactory: FilterStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onBackPressed") onBackPressed: () -> Unit,
-    ) : FilterComponent, ComponentContext by componentContext {
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackPressed: () -> Unit,
+) : FilterComponent, ComponentContext by componentContext {
 
     private val store: FilterStore = instanceKeeper.getStore { storeFactory.create() }
 
@@ -43,13 +46,5 @@ class DefaultFilterComponent @AssistedInject constructor(
 
     override fun onBackPressed() {
         store.accept(FilterStore.Intent.OnBackPressed)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackPressed") onBackPressed: () -> Unit,
-        ): DefaultFilterComponent
     }
 }

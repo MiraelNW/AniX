@@ -1,9 +1,10 @@
 package com.miraeldev.signin.domain.usecases
 
 import com.miraeldev.signin.data.repositories.SignInRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class LogInWithGoogleUseCase @Inject constructor(
+@Inject
+class LogInWithGoogleUseCase(
     private val repository: SignInRepository
 ) {
     suspend operator fun invoke(idToken:String) = repository.logInWithGoogle(idToken)

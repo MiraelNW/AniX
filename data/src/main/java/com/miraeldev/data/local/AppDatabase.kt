@@ -67,7 +67,7 @@ import com.miraeldev.data.local.models.user.UserDbModel
     exportSchema = false
 )
 @TypeConverters(Converters::class)
-internal abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun favouriteAnimeDao(): FavouriteAnimeDao

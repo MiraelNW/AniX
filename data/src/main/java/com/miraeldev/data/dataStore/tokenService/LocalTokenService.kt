@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class LocalTokenService internal constructor(
+class LocalTokenService constructor(
     private val preferenceManager: PreferenceDataStoreAPI
 ) {
 

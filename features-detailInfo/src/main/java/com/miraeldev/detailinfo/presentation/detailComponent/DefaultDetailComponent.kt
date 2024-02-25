@@ -6,20 +6,26 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnAnimeItemClick
+import com.miraeldev.models.OnBackPressed
+import com.miraeldev.models.OnSeriesClick
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultDetailComponent @AssistedInject constructor(
+typealias DefaultDetailComponentFactory =
+            (ComponentContext, OnBackPressed, OnSeriesClick, OnAnimeItemClick) -> DefaultDetailComponent
+
+@Inject
+class DefaultDetailComponent(
     private val storeFactory: DetailStoreFactory,
-    @Assisted("onBackClicked") onBackClicked:()->Unit,
-    @Assisted("onSeriesClick") onSeriesClick:()->Unit,
-    @Assisted("onAnimeItemClick") onAnimeItemClick:(Int)->Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit,
+    @Assisted onSeriesClick: () -> Unit,
+    @Assisted onAnimeItemClick: (Int) -> Unit
 ) : DetailComponent, ComponentContext by componentContext {
 
     private val store: DetailStore = instanceKeeper.getStore { storeFactory.create() }
@@ -65,15 +71,5 @@ class DefaultDetailComponent @AssistedInject constructor(
 
     override fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeDetailInfo) {
         store.accept(DetailStore.Intent.SelectAnimeItem(isSelected, animeInfo))
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("onBackClicked") onBackClicked:()->Unit,
-            @Assisted("onSeriesClick") onSeriesClick:()->Unit,
-            @Assisted("onAnimeItemClick") onAnimeItemClick:(Int)->Unit,
-            @Assisted("componentContext") componentContext: ComponentContext
-        ):DefaultDetailComponent
     }
 }

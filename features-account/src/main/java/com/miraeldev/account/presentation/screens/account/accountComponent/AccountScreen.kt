@@ -47,19 +47,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.account.R
 import com.miraeldev.account.domain.UserModel
 import com.miraeldev.account.presentation.screens.notificationsScreen.Switcher
+import com.miraeldev.models.anime.Settings
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.theme.LocalTheme
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import okhttp3.internal.immutableListOf
-
-
-enum class Settings {
-    EDIT_PROFILE,
-    NOTIFICATIONS,
-    DOWNLOADS,
-    PRIVACY_POLICY
-}
 
 @Composable
 fun AccountScreen(component: AccountComponent) {

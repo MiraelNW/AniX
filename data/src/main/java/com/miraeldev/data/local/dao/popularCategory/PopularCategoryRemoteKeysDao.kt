@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.miraeldev.data.local.models.popularCategory.PopularCategoryRemoteKeys
 
 @Dao
-internal interface PopularCategoryRemoteKeysDao {
+interface PopularCategoryRemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<PopularCategoryRemoteKeys>)

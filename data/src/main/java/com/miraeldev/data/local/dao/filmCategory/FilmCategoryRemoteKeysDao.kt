@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.miraeldev.data.local.models.filmCategory.FilmCategoryRemoteKeys
 
 @Dao
-internal interface FilmCategoryRemoteKeysDao {
+interface FilmCategoryRemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<FilmCategoryRemoteKeys>)

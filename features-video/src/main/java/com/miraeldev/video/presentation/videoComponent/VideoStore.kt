@@ -14,7 +14,7 @@ import com.miraeldev.video.presentation.videoComponent.VideoStore.Intent
 import com.miraeldev.video.presentation.videoComponent.VideoStore.Label
 import com.miraeldev.video.presentation.videoComponent.VideoStore.State
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface VideoStore : Store<Intent, State, Label> {
 
@@ -33,7 +33,8 @@ interface VideoStore : Store<Intent, State, Label> {
     }
 }
 
-class VideoStoreFactory @Inject constructor(
+@Inject
+class VideoStoreFactory(
     private val storeFactory: StoreFactory,
     private val loadPreviousEpisode: LoadPreviousEpisodeUseCase,
     private val loadNextEpisode: LoadNextEpisodeUseCase,

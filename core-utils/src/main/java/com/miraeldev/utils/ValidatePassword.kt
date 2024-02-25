@@ -1,8 +1,10 @@
 package com.miraeldev.utils
 
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class ValidatePassword @Inject constructor() {
+
+@Inject
+class ValidatePassword {
 
     fun execute(password: String): PasswordValidationState {
         val validateCapitalizedLetter = validateCapitalizedLetter(password)

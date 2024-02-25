@@ -16,7 +16,7 @@ import com.miraeldev.animelist.presentation.categories.categoriesComponent.Categ
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesStore.State
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface CategoriesStore : Store<Intent, State, Label> {
 
@@ -36,7 +36,8 @@ interface CategoriesStore : Store<Intent, State, Label> {
     }
 }
 
-class CategoriesStoreFactory @Inject internal constructor(
+@Inject
+class CategoriesStoreFactory(
     private val storeFactory: StoreFactory,
     private val getNewPagingAnimeListUseCase: GetNewPagingAnimeListUseCase,
     private val getFilmsPagingAnimeListUseCase: GetFilmsPagingAnimeListUseCase,

@@ -8,6 +8,7 @@ import com.miraeldev.AnimeListDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remoteMediator.categoriesLists.FilmCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
@@ -20,12 +21,12 @@ import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 @Inject
-class AnimeListDataRepositoryImpl internal constructor(
+class AnimeListDataRepositoryImpl constructor(
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
-    private val httpClient: AppHttpClient,
     private val localTokenService: LocalTokenService
 ) : AnimeListDataRepository {
+    private val httpClient: AppHttpClient = AppNetworkClient.createClient()
 
 
     override fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>> {

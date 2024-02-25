@@ -6,18 +6,23 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.componentScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.NavigateToSearchScreen
+import com.miraeldev.models.OnAnimeItemClick
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultFavouriteComponent @AssistedInject internal constructor(
+typealias DefaultFavouriteComponentFactory =
+            (ComponentContext, OnAnimeItemClick, NavigateToSearchScreen) -> DefaultFavouriteComponent
+
+@Inject
+class DefaultFavouriteComponent(
     private val storeFactory: FavouriteStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-    @Assisted("navigateToSearchScreen") navigateToSearchScreen: (String) -> Unit
+    @Assisted componentContext: ComponentContext,
+    @Assisted onAnimeItemClick: (Int) -> Unit,
+    @Assisted navigateToSearchScreen: (String) -> Unit
 ) : FavouriteComponent, ComponentContext by componentContext {
 
     private val store: FavouriteStore = instanceKeeper.getStore { storeFactory.create() }
@@ -67,14 +72,5 @@ class DefaultFavouriteComponent @AssistedInject internal constructor(
 
     override fun loadAnimeList() {
         store.accept(FavouriteStore.Intent.LoadAnimeList)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onAnimeItemClick") onAnimeItemClick: (Int) -> Unit,
-            @Assisted("navigateToSearchScreen") navigateToSearchScreen: (String) -> Unit
-        ): DefaultFavouriteComponent
     }
 }

@@ -6,9 +6,10 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.favourites.data.FavouriteAnimeRepository
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class FavouriteAnimeRepositoryImpl @Inject constructor(
+@Inject
+class FavouriteAnimeRepositoryImpl(
     private val favouriteAnimeDataRepository: FavouriteAnimeDataRepository,
     private val searchAnimeDataRepository: SearchAnimeDataRepository
 ) : FavouriteAnimeRepository {

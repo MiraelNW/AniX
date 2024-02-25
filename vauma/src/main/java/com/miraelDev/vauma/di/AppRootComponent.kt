@@ -7,10 +7,5 @@ import me.tatarka.inject.annotations.Component
 
 @Component
 abstract class AppRootComponent(@Component val parent: ApplicationComponent) {
-    abstract fun create(): (ComponentContext) -> DefaultAppRootComponent
-}
-
-@Component
-abstract class MainRootComponent(@Component val parent: AppRootComponent) {
-    abstract fun create(): (ComponentContext) -> DefaultMainRootComponent
+    abstract fun appRootFactory(): (ComponentContext) -> DefaultAppRootComponent
 }

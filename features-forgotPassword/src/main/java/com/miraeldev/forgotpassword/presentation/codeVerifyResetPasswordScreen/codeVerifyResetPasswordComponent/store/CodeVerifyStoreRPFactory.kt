@@ -6,9 +6,10 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.miraeldev.forgotpassword.domain.usecases.VerifyOtpUseCase
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class CodeVerifyStoreRPFactory @Inject constructor(
+@Inject
+class CodeVerifyStoreRPFactory(
     private val storeFactory: StoreFactory,
     private val verifyOtpCodeUseCase: VerifyOtpUseCase
 ) {

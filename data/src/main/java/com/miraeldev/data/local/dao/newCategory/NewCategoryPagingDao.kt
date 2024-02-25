@@ -10,7 +10,7 @@ import com.miraeldev.data.local.models.newCategory.PagingNewCategoryAnimeInfoDbM
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-internal interface NewCategoryPagingDao {
+interface NewCategoryPagingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<PagingNewCategoryAnimeInfoDbModel>)

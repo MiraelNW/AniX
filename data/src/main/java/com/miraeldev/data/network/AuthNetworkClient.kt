@@ -18,9 +18,9 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import me.tatarka.inject.annotations.Inject
 
-internal object AuthNetworkClient {
-
+object AuthNetworkClient {
     fun createClient() = HttpClient(Android).config {
 
         defaultRequest {
@@ -66,5 +66,4 @@ internal object AuthNetworkClient {
             socketTimeoutMillis = 5000L
         }
     }
-
 }

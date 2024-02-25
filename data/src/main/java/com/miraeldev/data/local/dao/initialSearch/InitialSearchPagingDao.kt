@@ -10,7 +10,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
 
 @Dao
-internal interface InitialSearchPagingDao {
+interface InitialSearchPagingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<PagingInitialSearchAnimeInfoDbModel>)

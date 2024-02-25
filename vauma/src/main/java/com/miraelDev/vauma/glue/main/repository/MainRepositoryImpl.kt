@@ -6,6 +6,7 @@ import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
+import com.miraeldev.di.scope.Singleton
 import com.miraeldev.models.auth.AuthState
 import com.miraeldev.user.UserEmail
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ import me.tatarka.inject.annotations.Inject
 
 private const val DARK_THEME_KEY = "dark theme key"
 
-@Inject
+@Inject @Singleton
 class MainRepositoryImpl(
     private val userDataRepository: UserDataRepository,
     private val userAuthDataRepository: UserAuthDataRepository,

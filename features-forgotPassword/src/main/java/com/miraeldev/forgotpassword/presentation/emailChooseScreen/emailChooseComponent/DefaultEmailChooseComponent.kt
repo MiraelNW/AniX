@@ -7,18 +7,22 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.emailChooseStore.EmailChooseStore
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.emailChooseStore.EmailChooseStoreFactory
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.models.OnBackPressed
+import com.miraeldev.models.OnEmailExist
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultEmailChooseComponent @AssistedInject constructor(
+typealias DefaultEmailChooseComponentFactory = (ComponentContext, OnBackPressed, OnEmailExist) -> DefaultEmailChooseComponent
+
+@Inject
+class DefaultEmailChooseComponent(
     private val storeFactory: EmailChooseStoreFactory,
-    @Assisted("onBackClicked") onBackClicked: () -> Unit,
-    @Assisted("onEmailExist") onEmailExist: (String) -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+    @Assisted componentContext: ComponentContext,
+    @Assisted onBackClicked: () -> Unit,
+    @Assisted onEmailExist: (String) -> Unit
 ) : EmailChooseComponent, ComponentContext by componentContext {
 
     private val store: EmailChooseStore = instanceKeeper.getStore { storeFactory.create() }
@@ -57,14 +61,5 @@ class DefaultEmailChooseComponent @AssistedInject constructor(
 
     override fun onBackClicked() {
         store.accept(EmailChooseStore.Intent.OnBackClicked)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onBackClicked") onBackClicked: () -> Unit,
-            @Assisted("onEmailExist") onEmailExist: (String) -> Unit,
-        ): DefaultEmailChooseComponent
     }
 }

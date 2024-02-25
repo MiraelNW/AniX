@@ -17,7 +17,7 @@ import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileC
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface EditProfileStore : Store<Intent, State, Label> {
 
@@ -60,7 +60,8 @@ interface EditProfileStore : Store<Intent, State, Label> {
     }
 }
 
-class EditProfileStoreFactory @Inject constructor(
+@Inject
+class EditProfileStoreFactory(
     private val storeFactory: StoreFactory,
     private val validatePassword: ValidatePassword,
     private val getUserEmailUseCase: GetUserEmailUseCase,

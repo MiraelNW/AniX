@@ -7,23 +7,28 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.miraeldev.account.presentation.screens.account.accountComponent.DefaultAccountComponent
-import com.miraeldev.account.presentation.screens.account.accountComponent.Settings
+import com.miraeldev.account.presentation.screens.account.accountComponent.DefaultAccountComponentFactory
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DefaultDownloadComponent
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.DefaultEditProfileComponent
+import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DefaultDownloadComponentFactory
+import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.DefaultEditProfileComponentFactory
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponentFactory
+import com.miraeldev.models.OnLogOut
+import com.miraeldev.models.anime.Settings
 import kotlinx.serialization.Serializable
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultAccountRootComponent @AssistedInject constructor(
-    private val accountComponentFactory: DefaultAccountComponent.Factory,
-    private val editProfileComponentFactory: DefaultEditProfileComponent.Factory,
-    private val notificationComponent: DefaultNotificationComponent.Factory,
-    private val downloadComponent: DefaultDownloadComponent.Factory,
-    @Assisted("onLogOutComplete") private val onLogOutComplete: () -> Unit,
-    @Assisted("componentContext") componentContext: ComponentContext
+typealias DefaultAccountRootComponentFactory = (ComponentContext, OnLogOut) -> DefaultAccountRootComponent
+
+@Inject
+class DefaultAccountRootComponent(
+    private val accountComponentFactory: DefaultAccountComponentFactory,
+    private val editProfileComponentFactory: DefaultEditProfileComponentFactory,
+    private val notificationComponent: DefaultNotificationComponentFactory,
+    private val downloadComponent: DefaultDownloadComponentFactory,
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val onLogOutComplete: () -> Unit
 ) : AccountRootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
@@ -44,9 +49,9 @@ class DefaultAccountRootComponent @AssistedInject constructor(
         return when (config) {
 
             is Config.Account -> {
-                val component = accountComponentFactory.create(
-                    componentContext = componentContext,
-                    onSettingItemClick = {
+                val component = accountComponentFactory(
+                    componentContext,
+                    {
                         when (it) {
                             Settings.EDIT_PROFILE -> navigation.push(Config.EditProfile)
                             Settings.NOTIFICATIONS -> navigation.push(Config.Notifications)
@@ -54,31 +59,31 @@ class DefaultAccountRootComponent @AssistedInject constructor(
                             Settings.PRIVACY_POLICY -> navigation.push(Config.EditProfile)
                         }
                     },
-                    onLogOutComplete = onLogOutComplete,
+                    onLogOutComplete,
                 )
                 AccountRootComponent.Child.Account(component)
             }
 
             is Config.EditProfile -> {
-                val component = editProfileComponentFactory.create(
-                    componentContext = componentContext,
-                    onBackClicked = navigation::pop
+                val component = editProfileComponentFactory(
+                    componentContext,
+                    navigation::pop
                 )
                 AccountRootComponent.Child.EditProfile(component)
             }
 
             is Config.Notifications -> {
-                val component = notificationComponent.create(
-                    componentContext = componentContext,
-                    onBackClicked = navigation::pop
+                val component = notificationComponent(
+                    componentContext,
+                    navigation::pop
                 )
                 AccountRootComponent.Child.Notification(component)
             }
 
             is Config.DownloadSettings -> {
-                val component = downloadComponent.create(
-                    componentContext = componentContext,
-                    onBackClicked = navigation::pop
+                val component = downloadComponent(
+                    componentContext,
+                    navigation::pop
                 )
                 AccountRootComponent.Child.DownloadSettings(component)
             }
@@ -114,13 +119,5 @@ class DefaultAccountRootComponent @AssistedInject constructor(
         data object DownloadSettings : Config
 //        @Serializable
 //        data object PrivacyPolicy : Config
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("onLogOutComplete") onLogOutComplete: () -> Unit,
-            @Assisted("componentContext") componentContext: ComponentContext
-        ): DefaultAccountRootComponent
     }
 }

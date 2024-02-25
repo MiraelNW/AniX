@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.NotificationStore.Intent
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.NotificationStore.Label
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.NotificationStore.State
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface NotificationStore : Store<Intent, State, Label> {
 
@@ -23,7 +23,8 @@ interface NotificationStore : Store<Intent, State, Label> {
     }
 }
 
-class NotificationStoreFactory @Inject constructor(
+@Inject
+class NotificationStoreFactory(
     private val storeFactory: StoreFactory
 ) {
 

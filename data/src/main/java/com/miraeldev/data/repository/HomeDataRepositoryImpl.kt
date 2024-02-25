@@ -5,6 +5,7 @@ import com.miraeldev.UserDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiResult
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.Response
@@ -30,13 +31,13 @@ import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class HomeDataRepositoryImpl internal constructor(
+class HomeDataRepositoryImpl constructor(
     private val appDatabase: AppDatabase,
-    private val client: AppHttpClient,
     private val searchApiService: SearchApiService,
     private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository
 ) : HomeDataRepository {
+    private val client: AppHttpClient = AppNetworkClient.createClient()
     override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
 
         val bearerToken = localTokenService.getBearerToken()

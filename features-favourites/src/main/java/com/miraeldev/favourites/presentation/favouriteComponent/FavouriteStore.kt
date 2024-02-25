@@ -19,7 +19,7 @@ import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface FavouriteStore : Store<Intent, State, Label> {
 
@@ -48,7 +48,8 @@ interface FavouriteStore : Store<Intent, State, Label> {
     }
 }
 
-internal class FavouriteStoreFactory @Inject constructor(
+@Inject
+class FavouriteStoreFactory(
     private val storeFactory: StoreFactory,
     private val getFavouriteAnimeListUseCase: GetFavouriteAnimeListUseCase,
     private val selectAnimeItemUseCase: SelectAnimeItemUseCase,

@@ -5,21 +5,27 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import com.miraeldev.signin.presentation.store.SignInStore
+import com.miraeldev.models.LogIn
+import com.miraeldev.models.OnForgetPasswordClick
+import com.miraeldev.models.OnSignUpClicked
 import com.miraeldev.signin.presentation.signInComponent.store.SignInStoreFactory
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.miraeldev.signin.presentation.store.SignInStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
-class DefaultSignInComponent @AssistedInject constructor (
+typealias DefaultSignInComponentFactory =
+            (ComponentContext, OnSignUpClicked, OnForgetPasswordClick, LogIn) -> DefaultSignInComponent
+
+@Inject
+class DefaultSignInComponent(
     private val storeFactory: SignInStoreFactory,
-    @Assisted("componentContext") componentContext: ComponentContext,
-    @Assisted("onSignUpClicked") private val onSignUpClicked: () -> Unit,
-    @Assisted("onForgetPasswordClick") private val onForgetPasswordClick: () -> Unit,
-    @Assisted("logIn") private val logIn: () -> Unit
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val onSignUpClicked: () -> Unit,
+    @Assisted private val onForgetPasswordClick: () -> Unit,
+    @Assisted private val logIn: () -> Unit
 ) : SignInComponent, ComponentContext by componentContext {
 
     private val store: SignInStore = instanceKeeper.getStore { storeFactory.create() }
@@ -35,6 +41,7 @@ class DefaultSignInComponent @AssistedInject constructor (
                     is SignInStore.Label.ForgetPasswordClick -> {
                         onForgetPasswordClick()
                     }
+
                     is SignInStore.Label.LogIn -> {
                         logIn()
                     }
@@ -81,15 +88,5 @@ class DefaultSignInComponent @AssistedInject constructor (
 
     override fun forgetPasswordClick() {
         store.accept(SignInStore.Intent.ForgetPasswordClick)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onSignUpClicked") onSignUpClicked: () -> Unit,
-            @Assisted("onForgetPasswordClick") onForgetPasswordClick: () -> Unit,
-            @Assisted("logIn") logIn: () -> Unit
-        ): DefaultSignInComponent
     }
 }

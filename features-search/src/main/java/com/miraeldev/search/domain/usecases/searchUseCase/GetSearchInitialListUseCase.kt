@@ -1,9 +1,10 @@
 package com.miraeldev.search.domain.usecases.searchUseCase
 
 import com.miraeldev.search.data.repository.SearchAnimeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetSearchInitialListUseCase @Inject constructor(val repository: SearchAnimeRepository) {
+@Inject
+class GetSearchInitialListUseCase(val repository: SearchAnimeRepository) {
 
     operator fun invoke() = repository.getSearchInitialList()
 

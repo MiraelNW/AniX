@@ -10,6 +10,7 @@ import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.dao.SearchHistoryAnimeDao
 import com.miraeldev.data.local.models.SearchHistoryDbModel
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.searchApi.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
@@ -26,13 +27,13 @@ import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 @Inject
-class SearchAnimeDataRepositoryImpl internal constructor(
+class SearchAnimeDataRepositoryImpl constructor(
     private val appDatabase: AppDatabase,
-    private val client: AppHttpClient,
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
     private val localTokenService: LocalTokenService
 ) : SearchAnimeDataRepository {
+    private val client: AppHttpClient = AppNetworkClient.createClient()
 
     private var _filterMap = mutableMapOf<Int, String>()
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()

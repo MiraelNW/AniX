@@ -1,16 +1,17 @@
 package com.miraelDev.vauma.glue.account.repositories
 
+import com.miraeldev.account.data.Logger
 import com.miraeldev.logger.LogError
 import com.miraeldev.logger.LoggerApi
-import com.miraeldev.account.data.Logger
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class LoggerAccountImpl @Inject constructor(
+@Inject
+class LoggerAccountImpl(
     private val logger: LoggerApi
 ) : Logger {
 
     override fun logError(msg: String, error: Throwable) {
-        logger.logError(LogError(msg,error))
+        logger.logError(LogError(msg, error))
     }
 
 }

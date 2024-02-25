@@ -1,8 +1,9 @@
 package com.miraeldev.animelist.domain.useCases.homeScreenUseCases
 
 import com.miraeldev.animelist.data.HomeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class LoadDataUseCase @Inject constructor(private val repository: HomeRepository) {
+@Inject
+class LoadDataUseCase(private val repository: HomeRepository) {
     suspend operator fun invoke() = repository.loadData()
 }

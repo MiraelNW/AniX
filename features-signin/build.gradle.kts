@@ -78,6 +78,10 @@ dependencies {
     //koin
     implementation(libs.koin)
 
+    //kotlin-inject
+    ksp(libs.kotlin.inject.ksp)
+    implementation(libs.kotlin.inject.runtime)
+
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -99,5 +103,6 @@ dependencies {
 
     implementation(project(":core-presentation"))
     implementation(project(":core-extensions"))
+    implementation(project(":core-models"))
     implementation(project(":core-utils"))
 }

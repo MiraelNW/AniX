@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-internal interface SearchHistoryAnimeDao {
+interface SearchHistoryAnimeDao {
 
     @Query("SELECT * FROM search_history")
     fun getSearchHistoryListFlow(): Flow<List<SearchHistoryDbModel>>

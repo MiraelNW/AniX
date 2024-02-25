@@ -9,7 +9,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
 
 @Dao
-internal interface PopularCategoryPagingDao {
+interface PopularCategoryPagingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(anime: List<PagingPopularCategoryAnimeInfoDbModel>)

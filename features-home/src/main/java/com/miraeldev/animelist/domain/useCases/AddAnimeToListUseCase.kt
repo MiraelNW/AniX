@@ -1,10 +1,11 @@
 package com.miraeldev.animelist.domain.useCases
 
-import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.anime.LastWatchedAnime
-import javax.inject.Inject
+import com.miraeldev.animelist.data.HomeRepository
+import me.tatarka.inject.annotations.Inject
 
-class AddAnimeToListUseCase @Inject constructor(private val homeRepository: HomeRepository) {
+@Inject
+class AddAnimeToListUseCase(private val homeRepository: HomeRepository) {
 
     suspend operator fun invoke(isSelected: Boolean, animeInfo: LastWatchedAnime) =
         homeRepository.addAnimeToList(isSelected, animeInfo)

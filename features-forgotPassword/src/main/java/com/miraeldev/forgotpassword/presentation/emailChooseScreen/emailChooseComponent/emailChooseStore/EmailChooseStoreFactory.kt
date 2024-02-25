@@ -8,9 +8,10 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.miraeldev.forgotpassword.domain.models.EmailChooseErrorModel
 import com.miraeldev.forgotpassword.domain.usecases.CheckEmailExistUseCase
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class EmailChooseStoreFactory @Inject constructor(
+@Inject
+class EmailChooseStoreFactory(
     private val storeFactory: StoreFactory,
     private val checkEmailExistUseCase: CheckEmailExistUseCase
 ) {

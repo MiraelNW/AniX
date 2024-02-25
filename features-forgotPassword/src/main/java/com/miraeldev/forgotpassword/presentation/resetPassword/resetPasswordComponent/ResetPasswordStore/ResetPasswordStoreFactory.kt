@@ -8,9 +8,10 @@ import com.miraeldev.forgotpassword.domain.usecases.SaveNewPasswordUseCase
 import com.miraeldev.signin.domain.model.ResetPasswordErrorModel
 import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class ResetPasswordStoreFactory @Inject constructor(
+@Inject
+class ResetPasswordStoreFactory(
     private val storeFactory: StoreFactory,
     private val validatePassword: ValidatePassword,
     private val saveNewPasswordUseCase: SaveNewPasswordUseCase

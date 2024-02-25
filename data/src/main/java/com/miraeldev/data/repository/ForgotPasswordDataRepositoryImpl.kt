@@ -4,6 +4,7 @@ import com.miraeldev.ForgotPasswordDataRepository
 import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.data.BuildConfig
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
+import com.miraeldev.data.network.AuthNetworkClient
 import com.miraeldev.di.AuthHttpClient
 import com.miraeldev.extensions.sendRequest
 import com.miraeldev.models.models.auth.Token
@@ -19,12 +20,12 @@ import me.tatarka.inject.annotations.Inject
 
 
 @Inject
-class ForgotPasswordDataRepositoryImpl internal constructor(
-    private val client: AuthHttpClient,
+class ForgotPasswordDataRepositoryImpl constructor(
     private val localService: LocalTokenService,
     private val userDataRepository: LocalUserDataRepository,
 ) : ForgotPasswordDataRepository {
 
+    private val client: AuthHttpClient = AuthNetworkClient.createClient()
     override fun getSignUpError(): Flow<Boolean> {
         return emptyFlow()
     }

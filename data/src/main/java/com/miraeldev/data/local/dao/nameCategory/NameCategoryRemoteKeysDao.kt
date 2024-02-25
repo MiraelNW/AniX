@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.miraeldev.data.local.models.nameCategory.NameCategoryRemoteKeys
 
 @Dao
-internal interface NameCategoryRemoteKeysDao {
+interface NameCategoryRemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<NameCategoryRemoteKeys>)

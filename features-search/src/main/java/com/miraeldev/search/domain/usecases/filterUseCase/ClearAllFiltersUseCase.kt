@@ -2,9 +2,10 @@ package com.miraeldev.search.domain.usecases.filterUseCase
 
 import com.miraeldev.search.data.repository.FilterAnimeRepository
 import com.miraeldev.search.data.repository.SearchAnimeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class ClearAllFiltersUseCase @Inject constructor(
+@Inject
+class ClearAllFiltersUseCase(
     private val filterRepository: FilterAnimeRepository,
     private val searchRepository: SearchAnimeRepository
 ) {

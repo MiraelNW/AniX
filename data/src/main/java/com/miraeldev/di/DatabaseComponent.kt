@@ -15,19 +15,15 @@ import com.miraeldev.data.local.dao.newCategory.NewCategoryPagingDao
 import com.miraeldev.data.local.dao.newCategory.NewCategoryRemoteKeysDao
 import com.miraeldev.data.local.dao.popularCategory.PopularCategoryPagingDao
 import com.miraeldev.data.local.dao.popularCategory.PopularCategoryRemoteKeysDao
+import com.miraeldev.data.network.AuthNetworkClient
 import com.miraeldev.di.scope.Singleton
-import me.tatarka.inject.annotations.Component
+import io.ktor.client.HttpClient
 import me.tatarka.inject.annotations.Provides
 
-@Component
-@Singleton
-abstract class DatabaseComponent(@get:Provides val context: Context) {
-
+interface DatabaseComponent {
 
     @Provides
-    @Singleton
-    internal fun provideAppDatabase(): AppDatabase {
-
+    fun provideDatabase(context: Context): AppDatabase {
         var db: AppDatabase? = null
         val LOCK = Any()
         synchronized(LOCK) {
@@ -39,83 +35,79 @@ abstract class DatabaseComponent(@get:Provides val context: Context) {
             db = instance
             return instance
         }
-
     }
-
 
     @Provides
     @Singleton
-    internal fun provideSearchHistoryDao(database: AppDatabase): SearchHistoryAnimeDao =
+    fun provideSearchHistoryDao(database: AppDatabase): SearchHistoryAnimeDao =
         database.searchAnimeDao()
 
     @Provides
     @Singleton
-    internal fun provideFavouriteAnimeDao(database: AppDatabase): FavouriteAnimeDao =
+    fun provideFavouriteAnimeDao(database: AppDatabase): FavouriteAnimeDao =
         database.favouriteAnimeDao()
 
 
     @Provides
     @Singleton
-    internal fun provideNewCategoryDao(database: AppDatabase): NewCategoryPagingDao =
+    fun provideNewCategoryDao(database: AppDatabase): NewCategoryPagingDao =
         database.newCategoryPagingDao()
 
 
     @Provides
     @Singleton
-    internal fun provideNewCategoryRemoteKeysDao(database: AppDatabase): NewCategoryRemoteKeysDao =
+    fun provideNewCategoryRemoteKeysDao(database: AppDatabase): NewCategoryRemoteKeysDao =
         database.newCategoryRemoteKeys()
 
 
     @Provides
     @Singleton
-    internal fun providePopularCategoryDao(database: AppDatabase): PopularCategoryPagingDao =
+    fun providePopularCategoryDao(database: AppDatabase): PopularCategoryPagingDao =
         database.popularCategoryPagingDao()
 
 
     @Provides
     @Singleton
-    internal fun providePopularCategoryRemoteKeysDao(database: AppDatabase): PopularCategoryRemoteKeysDao =
+    fun providePopularCategoryRemoteKeysDao(database: AppDatabase): PopularCategoryRemoteKeysDao =
         database.popularCategoryRemoteKeysDao()
 
 
     @Provides
     @Singleton
-    internal fun provideFilmCategoryDao(database: AppDatabase): FilmCategoryPagingDao =
+    fun provideFilmCategoryDao(database: AppDatabase): FilmCategoryPagingDao =
         database.filmCategoryPagingDao()
 
 
     @Provides
     @Singleton
-    internal fun provideFilmCategoryRemoteKeysDao(database: AppDatabase): FilmCategoryRemoteKeysDao =
+    fun provideFilmCategoryRemoteKeysDao(database: AppDatabase): FilmCategoryRemoteKeysDao =
         database.filmCategoryRemoteKeysDao()
 
 
     @Provides
     @Singleton
-    internal fun provideNameCategoryDao(database: AppDatabase): NameCategoryPagingDao =
+    fun provideNameCategoryDao(database: AppDatabase): NameCategoryPagingDao =
         database.nameCategoryPagingDao()
 
 
     @Provides
     @Singleton
-    internal fun provideNameCategoryRemoteKeysDao(database: AppDatabase): NameCategoryRemoteKeysDao =
+    fun provideNameCategoryRemoteKeysDao(database: AppDatabase): NameCategoryRemoteKeysDao =
         database.nameCategoryRemoteKeys()
 
 
     @Provides
     @Singleton
-    internal fun provideInitialSearchDao(database: AppDatabase): InitialSearchPagingDao =
+    fun provideInitialSearchDao(database: AppDatabase): InitialSearchPagingDao =
         database.initialSearchPagingDao()
 
 
     @Provides
     @Singleton
-    internal fun provideInitialSearchRemoteKeysDao(database: AppDatabase): InitialSearchRemoteKeysDao =
+    fun provideInitialSearchRemoteKeysDao(database: AppDatabase): InitialSearchRemoteKeysDao =
         database.initialSearchRemoteKeysDao()
-
 
     companion object {
         private const val DB_NAME = "main.db"
     }
-
 }

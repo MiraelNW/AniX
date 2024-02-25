@@ -16,9 +16,8 @@ import com.miraeldev.search.domain.usecases.filterUseCase.SelectCategoryUseCase
 import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterStore.Intent
 import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterStore.Label
 import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterStore.State
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface FilterStore : Store<Intent, State, Label> {
 
@@ -44,7 +43,8 @@ interface FilterStore : Store<Intent, State, Label> {
     }
 }
 
-class FilterStoreFactory @Inject constructor(
+@Inject
+class FilterStoreFactory(
     private val storeFactory: StoreFactory,
     private val clearAllFilters: ClearAllFiltersUseCase,
     private val addToFilterList: AddToFilterListUseCase,

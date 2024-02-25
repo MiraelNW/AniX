@@ -1,8 +1,9 @@
 package com.miraeldev.animelist.domain.useCases.paging
 
 import com.miraeldev.animelist.data.HomeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetFilmsPagingAnimeListUseCase @Inject constructor(private val repository: HomeRepository) {
+@Inject
+class GetFilmsPagingAnimeListUseCase(private val repository: HomeRepository) {
     operator fun invoke() = repository.getPagingFilmsAnimeList()
 }

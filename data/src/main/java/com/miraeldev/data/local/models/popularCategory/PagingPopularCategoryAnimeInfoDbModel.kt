@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 
 @Entity(tableName = "paging_popular_category_anime")
 @Serializable
-internal data class PagingPopularCategoryAnimeInfoDbModel(
+data class PagingPopularCategoryAnimeInfoDbModel(
 
     @PrimaryKey val id: Int,
     val nameEn: String,

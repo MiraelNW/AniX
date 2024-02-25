@@ -6,13 +6,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.tatarka.inject.annotations.Provides
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface FavouriteAnimeRepositoryModule {
+interface FavouriteFeatureComponent {
 
-    @Binds
-    fun bindFavouriteAnimeRepository(impl: FavouriteAnimeRepositoryImpl): FavouriteAnimeRepository
+    @Provides
+    fun FavouriteAnimeRepositoryImpl.bind(): FavouriteAnimeRepository = this
 
 }

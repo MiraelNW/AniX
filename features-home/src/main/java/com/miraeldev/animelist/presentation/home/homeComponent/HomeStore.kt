@@ -17,7 +17,7 @@ import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.State
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface HomeStore : Store<Intent, State, Label> {
 
@@ -58,7 +58,8 @@ interface HomeStore : Store<Intent, State, Label> {
     }
 }
 
-class HomeStoreFactory @Inject constructor(
+@Inject
+class HomeStoreFactory(
     private val storeFactory: StoreFactory,
     private val loadDataUseCase: LoadDataUseCase,
     private val addAnimeToListUseCase: AddAnimeToListUseCase,

@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.first
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class UserDataRepositoryImpl internal constructor(
+class UserDataRepositoryImpl constructor(
 //    private val client: HttpClient,
     private val localTokenService: LocalTokenService,
     private val localUserManager: LocalUserStoreApi,

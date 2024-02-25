@@ -1,8 +1,9 @@
 package com.miraeldev.search.domain.usecases.filterUseCase
 
 import com.miraeldev.search.data.repository.SearchAnimeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetFilterListUseCase @Inject constructor(val repository: SearchAnimeRepository) {
+@Inject
+class GetFilterListUseCase(val repository: SearchAnimeRepository) {
     operator fun invoke() = repository.getFilterList()
 }

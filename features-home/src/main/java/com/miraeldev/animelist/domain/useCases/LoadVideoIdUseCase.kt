@@ -1,10 +1,11 @@
 package com.miraeldev.animelist.domain.useCases
 
-import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.anime.LastWatchedAnime
-import javax.inject.Inject
+import com.miraeldev.animelist.data.HomeRepository
+import me.tatarka.inject.annotations.Inject
 
-class LoadVideoIdUseCase @Inject constructor(private val homeRepository: HomeRepository) {
+@Inject
+class LoadVideoIdUseCase(private val homeRepository: HomeRepository) {
 
     operator fun invoke(animeInfo: LastWatchedAnime) = homeRepository.loadVideoId(animeInfo)
 

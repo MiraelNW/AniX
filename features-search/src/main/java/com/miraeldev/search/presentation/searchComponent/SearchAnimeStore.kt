@@ -1,13 +1,11 @@
 package com.miraeldev.search.presentation.searchComponent
 
-import android.util.Log
 import androidx.paging.PagingData
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.search.domain.usecases.filterUseCase.ClearAllFiltersUseCase
 import com.miraeldev.search.domain.usecases.filterUseCase.GetFilterListUseCase
@@ -25,13 +23,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 interface SearchAnimeStore : Store<Intent, State, Label> {
 
@@ -77,7 +71,8 @@ interface SearchAnimeStore : Store<Intent, State, Label> {
     }
 }
 
-class SearchAnimeStoreFactory @Inject constructor(
+@Inject
+class SearchAnimeStoreFactory(
     private val storeFactory: StoreFactory,
     private val clearAllFilters: ClearAllFiltersUseCase,
     private val loadInitialList: LoadInitialListUseCase,

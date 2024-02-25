@@ -4,9 +4,10 @@ import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.signin.data.repositories.SignInRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class SignInRepositoryImpl @Inject constructor(
+@Inject
+class SignInRepositoryImpl(
     private val userAuthDataRepository: UserAuthDataRepository,
     private val userDataRepository: UserDataRepository
 ) : SignInRepository {

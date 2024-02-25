@@ -1,9 +1,10 @@
 package com.miraeldev.favourites.domain.useCases
 
 import com.miraeldev.favourites.data.FavouriteAnimeRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class GetFavouriteAnimeListUseCase @Inject constructor(private val repository: FavouriteAnimeRepository) {
+@Inject
+class GetFavouriteAnimeListUseCase(private val repository: FavouriteAnimeRepository) {
 
     operator fun invoke() = repository.getFavouriteAnimeList()
 
