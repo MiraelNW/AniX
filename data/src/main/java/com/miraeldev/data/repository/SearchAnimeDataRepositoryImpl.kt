@@ -6,12 +6,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.local.dao.SearchHistoryAnimeDao
-import com.miraeldev.data.local.models.SearchHistoryDbModel
 import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.data.remoteMediator.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
+import com.miraeldev.data.remoteMediator.SearchPagingPagingSource
+import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.dao.SearchHistoryAnimeDao
+import com.miraeldev.local.models.SearchHistoryDbModel
 import com.miraeldev.network.AppNetworkClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

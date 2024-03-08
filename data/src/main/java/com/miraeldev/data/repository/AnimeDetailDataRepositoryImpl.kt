@@ -3,14 +3,14 @@ package com.miraeldev.data.repository
 import com.miraeldev.AnimeDetailDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.local.dao.FavouriteAnimeDao
 import com.miraeldev.data.mapper.AnimeModelsMapper
 import com.miraeldev.data.remote.dto.AnimeInfoDto
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
+import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.dao.FavouriteAnimeDao
+import com.miraeldev.models.result.ResultAnimeDetail
 import com.miraeldev.network.AppNetworkClient
 import com.miraeldev.result.FailureCauses
-import com.miraeldev.models.result.ResultAnimeDetail
 import io.ktor.client.call.body
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableSharedFlow

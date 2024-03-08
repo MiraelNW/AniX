@@ -1,6 +1,6 @@
 package com.miraeldev.data.remote.dto
 
-import com.miraeldev.data.local.models.user.UserDbModel
+import com.miraeldev.local.models.user.UserDbModel
 import kotlinx.serialization.Serializable
 
 @Serializable

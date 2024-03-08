@@ -3,7 +3,6 @@ package com.miraeldev.data.repository
 import com.miraeldev.HomeDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.remote.dto.AnimeInfoDto
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
@@ -13,6 +12,7 @@ import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.dto.toAnimeInfo
 import com.miraeldev.data.remote.dto.toLastWatched
+import com.miraeldev.local.AppDatabase
 import com.miraeldev.network.AppNetworkClient
 import com.miraeldev.user.User
 import io.ktor.client.call.body

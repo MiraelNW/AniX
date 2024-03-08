@@ -2,10 +2,10 @@ package com.miraeldev.data.repository
 
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
-import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.dataStore.PreferenceClient
 import com.miraeldev.dataStore.userAuth.UserAuthRepository
 import com.miraeldev.extensions.sendRequest
+import com.miraeldev.local.AppDatabase
 import com.miraeldev.models.models.auth.Token
 import com.miraeldev.network.AuthNetworkClient
 import com.miraeldev.user.User

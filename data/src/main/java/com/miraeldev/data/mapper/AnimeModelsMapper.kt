@@ -3,10 +3,10 @@ package com.miraeldev.data.mapper
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
-import com.miraeldev.data.local.models.favourite.AnimeInfoDbModel
-import com.miraeldev.data.local.models.user.ImageDbModel
+import com.miraeldev.local.animeDataModels.GenreDataModel
+import com.miraeldev.local.models.favourite.AnimeInfoDbModel
+import com.miraeldev.local.models.user.ImageDbModel
 import com.miraeldev.models.anime.Genre
-import com.miraeldev.models.models.animeDataModels.GenreDataModel
 import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
 import me.tatarka.inject.annotations.Inject
 

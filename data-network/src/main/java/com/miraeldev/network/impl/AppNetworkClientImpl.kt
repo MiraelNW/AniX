@@ -4,12 +4,15 @@ import android.util.Log
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.dataStore.PreferenceClient
 import com.miraeldev.dataStore.userAuth.UserAuthRepository
+import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.models.user.toUserModel
 import com.miraeldev.network.AppNetworkClient
 import com.miraeldev.network.models.AccessTokenDataModel
 import com.miraeldev.network.models.FavouriteAnimeSendRequest
 import com.miraeldev.network.models.RefreshToken
 import com.miraeldev.network.models.routes.AppNetworkRoutes
 import com.miraeldev.network.models.routes.AuthNetworkRoutes
+import com.miraeldev.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -43,7 +46,7 @@ import me.tatarka.inject.annotations.Inject
 class AppNetworkClientImpl(
     private val preferenceClient: PreferenceClient,
     private val userAuthRepository: UserAuthRepository,
-//    private val appDatabase: AppDatabase
+    private val appDatabase: AppDatabase
 ) : AppNetworkClient {
 
     private val client: HttpClient = HttpClient(Android).config {
@@ -123,7 +126,7 @@ class AppNetworkClientImpl(
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo): HttpResponse {
 
         val bearerToken = preferenceClient.getBearerToken()
-//        val userInfo = appDatabase.userDao().getUser()?.toUserModel() ?: User()
+        val user = appDatabase.userDao().getUser()?.toUserModel() ?: User()
         return client.post {
             url(AppNetworkRoutes.SET_ANIME_FAV_STATUS)
             headers {
@@ -132,7 +135,7 @@ class AppNetworkClientImpl(
             setBody(
                 FavouriteAnimeSendRequest(
                     animeId = animeInfo.id.toLong(),
-                    userId = 1,
+                    userId = user.id,
                     isFavourite = isSelected
                 )
             )

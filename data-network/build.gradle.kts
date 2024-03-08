@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
 }
 
@@ -95,6 +96,7 @@ dependencies {
     implementation(project(":core-extensions"))
     implementation(project(":core-models"))
     implementation(project(":data-store-client"))
+    implementation(project(":data-database"))
 
     //kotlin
     implementation(libs.core.ktx)
@@ -102,6 +104,11 @@ dependencies {
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
+
+    //room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
 
     //ktor
     implementation(libs.ktor.client.android)

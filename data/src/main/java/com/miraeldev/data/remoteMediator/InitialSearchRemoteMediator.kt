@@ -6,11 +6,11 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.local.models.initialSearch.InitialSearchRemoteKeys
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToInitialSearchModel
+import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.models.initialSearch.InitialSearchRemoteKeys
 import com.miraeldev.network.AppNetworkClient
 import io.ktor.client.call.body
 import io.ktor.utils.io.errors.IOException

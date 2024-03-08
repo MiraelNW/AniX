@@ -145,6 +145,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":data-network"))
     implementation(project(":data-store-client"))
+    implementation(project(":data-database"))
 
     implementation(project(":logger"))
 

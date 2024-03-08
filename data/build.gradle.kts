@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core-models"))
     implementation(project(":data-network"))
     implementation(project(":data-store-client"))
+    implementation(project(":data-database"))
 
     //kotlin
     implementation(libs.core.ktx)
