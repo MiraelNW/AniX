@@ -8,6 +8,7 @@ import com.miraeldev.network.AuthNetworkClient
 import com.miraeldev.network.models.routes.AppNetworkRoutes
 import com.miraeldev.network.models.routes.AuthNetworkRoutes
 import com.miraeldev.user.User
+import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpRequestRetry
@@ -60,6 +61,8 @@ class AuthNetworkClientImpl(private val context: Context) : AuthNetworkClient {
         }
 
         install(HttpCache)
+
+        install(PlutoKtorInterceptor)
 
         install(HttpRequestRetry) {
             maxRetries = 1

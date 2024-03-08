@@ -70,7 +70,7 @@ class UserAuthDataRepositoryImpl(
     }
 
     override suspend fun checkAuthState() {
-        if (preferenceClient.getBearerToken().isNullOrEmpty() ||
+        if (preferenceClient.getBearerToken().isEmpty() ||
             preferenceClient.getRefreshToken().isEmpty()
         ) {
             userAuthRepository.setUserUnAuthorizedStatus()

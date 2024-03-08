@@ -50,9 +50,6 @@ dependencies {
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 
-    //koin
-    implementation(libs.koin)
-
     //test
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

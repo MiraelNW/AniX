@@ -54,6 +54,9 @@ dependencies {
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 
+    //pluto
+    implementation(libs.pluto.datastore)
+
     //test
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

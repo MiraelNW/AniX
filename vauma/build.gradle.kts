@@ -131,6 +131,11 @@ dependencies {
     implementation(libs.mvi.kotlin.coroutine.extensions)
     implementation(libs.mvi.kotlin.logging)
 
+    //pluto
+    implementation(libs.pluto)
+    implementation(libs.pluto.network)
+    implementation(libs.pluto.datastore)
+
 
     implementation(project(":features-signin"))
     implementation(project(":features-signup"))

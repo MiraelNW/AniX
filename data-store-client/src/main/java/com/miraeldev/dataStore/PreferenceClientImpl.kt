@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.pluto.plugins.datastore.pref.PlutoDatastoreWatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -13,12 +14,17 @@ import me.tatarka.inject.annotations.Inject
 import java.io.IOException
 
 
-private val Context.dataStore by preferencesDataStore(name = "preference")
+private val Context.dataStore by preferencesDataStore(name = PreferenceClientImpl.PREF_NAME)
+
 
 @Inject
 class PreferenceClientImpl(context: Context) : PreferenceClient {
-
     private val dataStore = context.dataStore
+
+    init {
+        PlutoDatastoreWatcher.watch(PREF_NAME, dataStore)
+    }
+
     private fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T):
             Flow<T> = dataStore.data.catch { exception ->
         if (exception is IOException) {
@@ -68,6 +74,10 @@ class PreferenceClientImpl(context: Context) : PreferenceClient {
 
     override suspend fun setDarkTheme(isDarkTheme: Boolean) {
         putPreference(PreferencesConstants.darkTheme, isDarkTheme)
+    }
+
+    companion object{
+        const val PREF_NAME = "preference"
     }
 
 }

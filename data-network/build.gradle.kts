@@ -118,4 +118,7 @@ dependencies {
     implementation(libs.ktor.client.auth)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.logging.jvm)
+
+    //pluto
+    implementation(libs.pluto.ktor.intercepter)
 }

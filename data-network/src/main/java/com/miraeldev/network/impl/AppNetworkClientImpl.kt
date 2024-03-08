@@ -13,6 +13,7 @@ import com.miraeldev.network.models.RefreshToken
 import com.miraeldev.network.models.routes.AppNetworkRoutes
 import com.miraeldev.network.models.routes.AuthNetworkRoutes
 import com.miraeldev.user.User
+import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -105,6 +106,8 @@ class AppNetworkClientImpl(
                 retry * 1000L
             }
         }
+
+        install(PlutoKtorInterceptor)
 
         install(Logging) {
             level = LogLevel.ALL

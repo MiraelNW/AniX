@@ -61,7 +61,6 @@ class MainStoreFactory(
         override fun invoke() {
             scope.launch {
                 getUserAuthState().collect {
-                    Log.d("tag","collect $it")
                     dispatch(Action.UserAuthStateChecked(it))
                 }
             }
