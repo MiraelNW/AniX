@@ -9,6 +9,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.models.popularCategory.PopularCategoryRemoteKeys
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
@@ -26,9 +27,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPagingApi::class)
 internal class PopularCategoryRemoteMediator(
     private val appDatabase: AppDatabase,
-    private val client: HttpClient,
-    private val networkHandler: NetworkHandler,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient,
+    private val networkHandler: NetworkHandler
 ) : RemoteMediator<Int, AnimeInfo>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -71,20 +71,12 @@ internal class PopularCategoryRemoteMediator(
         }
 
         try {
-            val bearerToken = localTokenService.getBearerToken()
-
             if (!networkHandler.isConnected.value) {
                 delay(1000)
                 return MediatorResult.Error(IOException())
             }
 
-            val apiResponse = client.get {
-                url("${ApiRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=$page&page_size=${PAGE_SIZE}")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
-            }
-                .body<Response>()
+            val apiResponse = appNetworkClient.getPopularCategoryList(page).body<Response>()
 
             val anime = apiResponse.results.map { it.mapToPagingPopularCategoryModel() }
             val endOfPaginationReached =
@@ -141,9 +133,5 @@ internal class PopularCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { anime ->
             appDatabase.popularCategoryRemoteKeysDao().getRemoteKeyByAnimeId(anime.id)
         }
-    }
-
-    companion object {
-        private const val PAGE_SIZE = 20
     }
 }

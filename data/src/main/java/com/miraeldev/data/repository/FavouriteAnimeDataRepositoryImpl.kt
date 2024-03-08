@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class FavouriteAnimeDataRepositoryImpl constructor(
+class FavouriteAnimeDataRepositoryImpl(
     private val favouriteAnimeDao: FavouriteAnimeDao,
     private val animeModelsMapper: AnimeModelsMapper
 ) : FavouriteAnimeDataRepository {

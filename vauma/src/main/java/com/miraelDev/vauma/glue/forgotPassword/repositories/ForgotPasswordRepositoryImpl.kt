@@ -2,17 +2,12 @@ package com.miraelDev.vauma.glue.forgotPassword.repositories
 
 import com.miraeldev.ForgotPasswordDataRepository
 import com.miraeldev.forgotpassword.data.ForgotPasswordRepository
-import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class ForgotPasswordRepositoryImpl(
     private val forgotPasswordRepository: ForgotPasswordDataRepository
 ) : ForgotPasswordRepository {
-
-    override fun getSignUpError(): Flow<Boolean> {
-        return forgotPasswordRepository.getSignUpError()
-    }
 
     override suspend fun saveNewPassword(email: String, newPassword: String): Boolean {
         return forgotPasswordRepository.saveNewPassword(email, newPassword)

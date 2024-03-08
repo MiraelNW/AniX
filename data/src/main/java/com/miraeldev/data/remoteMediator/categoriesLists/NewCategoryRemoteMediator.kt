@@ -9,6 +9,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.models.newCategory.NewCategoryRemoteKeys
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
@@ -25,9 +26,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPagingApi::class)
 internal class NewCategoryRemoteMediator(
     private val appDatabase: AppDatabase,
-    private val client: HttpClient,
+    private val appNetworkClient: AppNetworkClient,
     private val networkHandler: NetworkHandler,
-    private val localTokenService: LocalTokenService
 ) : RemoteMediator<Int, AnimeInfo>() {
 
 
@@ -72,17 +72,7 @@ internal class NewCategoryRemoteMediator(
         }
 
         try {
-
-            val bearerToken = localTokenService.getBearerToken()
-
-            val apiResponse = client.get {
-
-                url("${ApiRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
-            }
-                .body<Response>()
+            val apiResponse = appNetworkClient.getNewCategoryList(page).body<Response>()
 
             val anime = apiResponse.results.map { it.mapToPagingNewCategoryModel() }
             val endOfPaginationReached =
@@ -140,9 +130,5 @@ internal class NewCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { anime ->
             appDatabase.newCategoryRemoteKeys().getRemoteKeyByAnimeId(anime.id)
         }
-    }
-
-    companion object {
-        private const val PAGE_SIZE = 20
     }
 }

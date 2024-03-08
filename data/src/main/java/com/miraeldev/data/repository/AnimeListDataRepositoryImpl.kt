@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.miraeldev.AnimeListDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
@@ -14,23 +13,19 @@ import com.miraeldev.data.remoteMediator.categoriesLists.FilmCategoryRemoteMedia
 import com.miraeldev.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.NewCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.PopularCategoryRemoteMediator
-import com.miraeldev.di.AppHttpClient
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 @Inject
-class AnimeListDataRepositoryImpl constructor(
+class AnimeListDataRepositoryImpl(
     private val networkHandler: NetworkHandler,
     private val appDatabase: AppDatabase,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient
 ) : AnimeListDataRepository {
-    private val httpClient: AppHttpClient = AppNetworkClient.createClient()
 
 
     override fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>> {
-
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
@@ -38,10 +33,9 @@ class AnimeListDataRepositoryImpl constructor(
             ),
             pagingSourceFactory = { appDatabase.newCategoryPagingDao().getAnime() },
             remoteMediator = NewCategoryRemoteMediator(
-                client = httpClient,
+                appNetworkClient = appNetworkClient,
                 appDatabase = appDatabase,
-                networkHandler = networkHandler,
-                localTokenService = localTokenService
+                networkHandler = networkHandler
             )
         )
             .flow
@@ -50,17 +44,15 @@ class AnimeListDataRepositoryImpl constructor(
 
 
     override fun getPagingPopularAnimeList(): Flow<PagingData<AnimeInfo>> {
-
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
             ),
             pagingSourceFactory = { appDatabase.popularCategoryPagingDao().getAnime() },
             remoteMediator = PopularCategoryRemoteMediator(
-                client = httpClient,
+                appNetworkClient = appNetworkClient,
                 appDatabase = appDatabase,
-                networkHandler = networkHandler,
-                localTokenService = localTokenService
+                networkHandler = networkHandler
             )
         ).flow
 
@@ -69,7 +61,6 @@ class AnimeListDataRepositoryImpl constructor(
     }
 
     override fun getPagingNameAnimeList(): Flow<PagingData<AnimeInfo>> {
-
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
@@ -77,17 +68,15 @@ class AnimeListDataRepositoryImpl constructor(
             ),
             pagingSourceFactory = { appDatabase.nameCategoryPagingDao().getAnime() },
             remoteMediator = NameCategoryRemoteMediator(
-                client = httpClient,
+                appNetworkClient = appNetworkClient,
                 appDatabase = appDatabase,
-                networkHandler = networkHandler,
-                localTokenService = localTokenService
+                networkHandler = networkHandler
             )
         ).flow
 
     }
 
     override fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>> {
-
         return Pager(
             config = PagingConfig(
                 pageSize = 12,
@@ -95,10 +84,9 @@ class AnimeListDataRepositoryImpl constructor(
             ),
             pagingSourceFactory = { appDatabase.filmCategoryPagingDao().getAnime() },
             remoteMediator = FilmCategoryRemoteMediator(
-                client = httpClient,
+                appNetworkClient = appNetworkClient,
                 appDatabase = appDatabase,
-                networkHandler = networkHandler,
-                localTokenService = localTokenService
+                networkHandler = networkHandler
             )
         ).flow
 

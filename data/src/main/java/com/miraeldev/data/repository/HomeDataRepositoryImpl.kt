@@ -7,7 +7,6 @@ import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiResult
-import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
 import com.miraeldev.data.remote.dto.mapToNameCategoryModel
@@ -17,31 +16,27 @@ import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.dto.toAnimeInfo
 import com.miraeldev.data.remote.dto.toLastWatched
 import com.miraeldev.data.remote.searchApi.SearchApiService
-import com.miraeldev.di.AppHttpClient
 import com.miraeldev.user.User
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.request.url
-import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.map
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 @Inject
-class HomeDataRepositoryImpl constructor(
+class HomeDataRepositoryImpl(
+    private val appNetworkClient: AppNetworkClient,
     private val appDatabase: AppDatabase,
     private val searchApiService: SearchApiService,
     private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository
 ) : HomeDataRepository {
-    private val client: AppHttpClient = AppNetworkClient.createClient()
     override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
-
-        val bearerToken = localTokenService.getBearerToken()
-
         val isNewEmpty = appDatabase.newCategoryDao().isEmpty()
 
         val firstDbModel = appDatabase.newCategoryDao().getCreateTime()
@@ -49,10 +44,10 @@ class HomeDataRepositoryImpl constructor(
         return when {
             isNewEmpty || System.currentTimeMillis() - firstDbModel.createTime > FIVE_HOURS_IN_MILLIS -> {
                 val map = mutableMapOf<Int, List<AnimeInfo>>()
-                map[0] = loadNewAnimeList(bearerToken)
-                map[1] = loadPopularAnimeList(bearerToken)
-                map[2] = loadNameAnimeList(bearerToken)
-                map[3] = loadFilmAnimeList(bearerToken)
+                map[0] = loadNewAnimeList()
+                map[1] = loadPopularAnimeList()
+                map[2] = loadNameAnimeList()
+                map[3] = loadFilmAnimeList()
                 map
             }
 
@@ -62,14 +57,8 @@ class HomeDataRepositoryImpl constructor(
         }
     }
 
-    private suspend fun loadNewAnimeList(bearerToken: String?): List<AnimeInfo> {
-        val apiResponse = client.get {
-            url("${ApiRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=0&page_size=15")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
-            .body<Response>()
+    private suspend fun loadNewAnimeList(): List<AnimeInfo> {
+        val apiResponse = appNetworkClient.getNewCategoryList(0).body<Response>()
 
         val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
 
@@ -78,14 +67,8 @@ class HomeDataRepositoryImpl constructor(
         return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-    private suspend fun loadPopularAnimeList(bearerToken: String?): List<AnimeInfo> {
-        val apiResponse = client.get {
-            url("${ApiRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=0&page_size=15")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
-            .body<Response>()
+    private suspend fun loadPopularAnimeList(): List<AnimeInfo> {
+        val apiResponse = appNetworkClient.getPopularCategoryList(0).body<Response>()
 
         val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
 
@@ -94,14 +77,8 @@ class HomeDataRepositoryImpl constructor(
         return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-    private suspend fun loadNameAnimeList(bearerToken: String?): List<AnimeInfo> {
-        val apiResponse = client.get {
-            url("${ApiRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=0&page_size=15")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
-            .body<Response>()
+    private suspend fun loadNameAnimeList(): List<AnimeInfo> {
+        val apiResponse = appNetworkClient.getNameCategoryList(0).body<Response>()
 
         val anime = apiResponse.results.map { it.mapToNameCategoryModel() }
 
@@ -110,14 +87,8 @@ class HomeDataRepositoryImpl constructor(
         return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-    private suspend fun loadFilmAnimeList(bearerToken: String?): List<AnimeInfo> {
-        val apiResponse = client.get {
-            url("${ApiRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=0&page_size=15")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
-            .body<Response>()
+    private suspend fun loadFilmAnimeList(): List<AnimeInfo> {
+        val apiResponse = appNetworkClient.getFilmCategoryList(0).body<Response>()
 
         val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
 

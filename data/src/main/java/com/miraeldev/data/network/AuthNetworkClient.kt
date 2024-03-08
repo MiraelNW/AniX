@@ -1,69 +1,18 @@
 package com.miraeldev.data.network
 
-import android.util.Log
-import com.miraeldev.data.BuildConfig
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
-import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.accept
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
-import me.tatarka.inject.annotations.Inject
+import com.miraeldev.user.User
+import io.ktor.client.statement.HttpResponse
 
-object AuthNetworkClient {
-    fun createClient() = HttpClient(Android).config {
 
-        defaultRequest {
-            url(BuildConfig.BASE_URL)
-            contentType(ContentType.Application.Json)
-            accept(ContentType.Application.Json)
-        }
+interface AuthNetworkClient {
+    suspend fun saveNewPassword(email: String, newPassword: String): HttpResponse
+    suspend fun verifyOtpForgotPassword(otp: String): HttpResponse
+    suspend fun checkEmailExist(email: String): HttpResponse
+    suspend fun signUp(user: User): HttpResponse
+    suspend fun verifyOtpCode(user: User, otpToken: String): HttpResponse
+    suspend fun signIn(email: String, password: String): HttpResponse
+    suspend fun logInWithGoogle(idToken: String): HttpResponse
+    suspend fun loginWithVk(accessToken: String, userId: String, email: String?): HttpResponse
+    suspend fun logOutUser(refreshToken: String): HttpResponse
 
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                    prettyPrint = true
-                }
-            )
-        }
-
-        install(HttpCache)
-
-        install(HttpRequestRetry) {
-            maxRetries = 1
-            retryIf { request, response ->
-                !response.status.isSuccess() && response.status.value != 401
-            }
-            delayMillis {
-                500L
-            }
-        }
-
-        install(Logging) {
-            level = LogLevel.ALL
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.i("HttpClient", message)
-                }
-            }
-        }
-
-        install(HttpTimeout) {
-            requestTimeoutMillis = 2000L
-            connectTimeoutMillis = 10000L
-            socketTimeoutMillis = 5000L
-        }
-    }
 }

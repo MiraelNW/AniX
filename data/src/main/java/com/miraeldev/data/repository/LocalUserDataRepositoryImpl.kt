@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class LocalUserDataRepositoryImpl constructor(
+class LocalUserDataRepositoryImpl(
     private val localService: LocalTokenService,
 ) : LocalUserDataRepository {
 

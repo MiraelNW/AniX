@@ -13,7 +13,7 @@ import me.tatarka.inject.annotations.Inject
 
 @Suppress("UnstableApi")
 @Inject
-class VideoPlayerRepositoryImpl constructor(
+class VideoPlayerRepositoryImpl(
     private val userDataRepository: UserDataRepository
 ) : VideoPlayerDataRepository {
 

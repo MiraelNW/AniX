@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.dao.SearchHistoryAnimeDao
 import com.miraeldev.data.local.models.SearchHistoryDbModel
@@ -14,8 +13,6 @@ import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.searchApi.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
-import com.miraeldev.di.AppHttpClient
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,13 +24,12 @@ import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 @Inject
-class SearchAnimeDataRepositoryImpl constructor(
+class SearchAnimeDataRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient
 ) : SearchAnimeDataRepository {
-    private val client: AppHttpClient = AppNetworkClient.createClient()
 
     private var _filterMap = mutableMapOf<Int, String>()
     private val filterMap: Map<Int, String> get() = _filterMap.toMap()
@@ -93,9 +89,8 @@ class SearchAnimeDataRepositoryImpl constructor(
                     yearFilter = yearFilter,
                     sortFilter = sortFilter,
                     genreListFilter = genreListFilter,
-                    client = client,
-                    networkHandler = networkHandler,
-                    localTokenService = localTokenService
+                    appNetworkClient = appNetworkClient,
+                    networkHandler = networkHandler
                 )
             }
         ).flow
@@ -154,10 +149,9 @@ class SearchAnimeDataRepositoryImpl constructor(
                 ),
                 pagingSourceFactory = { appDatabase.initialSearchPagingDao().getAnime() },
                 remoteMediator = InitialSearchRemoteMediator(
-                    client = client,
+                    appNetworkClient = appNetworkClient,
                     appDatabase = appDatabase,
-                    networkHandler = networkHandler,
-                    localTokenService = localTokenService
+                    networkHandler = networkHandler
                 )
             )
                 .flow

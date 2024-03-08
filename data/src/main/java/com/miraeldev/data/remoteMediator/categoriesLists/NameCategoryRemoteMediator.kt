@@ -9,6 +9,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.models.nameCategory.NameCategoryRemoteKeys
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
@@ -26,9 +27,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPagingApi::class)
 internal class NameCategoryRemoteMediator(
     private val appDatabase: AppDatabase,
-    private val client: HttpClient,
-    private val networkHandler: NetworkHandler,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient,
+    private val networkHandler: NetworkHandler
 
 ) : RemoteMediator<Int, AnimeInfo>() {
 
@@ -72,21 +72,12 @@ internal class NameCategoryRemoteMediator(
         }
 
         try {
-
-            val bearerToken = localTokenService.getBearerToken()
-
             if (!networkHandler.isConnected.value) {
                 delay(1000)
                 return MediatorResult.Error(IOException())
             }
 
-            val apiResponse = client.get {
-                url("${ApiRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=$page&page_size=${PAGE_SIZE}")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
-            }
-                .body<Response>()
+            val apiResponse = appNetworkClient.getNameCategoryList(page).body<Response>()
 
             val anime = apiResponse.results.map { it.mapToPagingNameCategoryModel() }
 
@@ -144,9 +135,5 @@ internal class NameCategoryRemoteMediator(
         }?.data?.lastOrNull()?.let { movie ->
             appDatabase.nameCategoryRemoteKeys().getRemoteKeyByAnimeId(movie.id)
         }
-    }
-
-    companion object {
-        private const val PAGE_SIZE = 20
     }
 }

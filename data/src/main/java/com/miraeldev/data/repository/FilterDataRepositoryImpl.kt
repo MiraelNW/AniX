@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class FilterDataRepositoryImpl constructor(): FilterAnimeDataRepository {
+class FilterDataRepositoryImpl: FilterAnimeDataRepository {
 
 
     private val _filterCategoriesGenreList = mutableListOf(

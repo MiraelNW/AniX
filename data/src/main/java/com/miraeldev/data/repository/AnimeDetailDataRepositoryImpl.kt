@@ -13,7 +13,6 @@ import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.dto.FavouriteAnimeSendRequest
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.searchApi.SearchApiService
-import com.miraeldev.di.AppHttpClient
 import com.miraeldev.result.ResultAnimeDetail
 import io.ktor.client.HttpClient
 import io.ktor.client.request.headers
@@ -21,6 +20,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -29,21 +29,17 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AnimeDetailDataRepositoryImpl constructor(
     private val searchApiService: SearchApiService,
-    private val userDataRepository: UserDataRepository,
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val favouriteAnimeDao: FavouriteAnimeDao,
     private val animeModelsMapper: AnimeModelsMapper,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient
 ) : AnimeDetailDataRepository {
-    private val client: HttpClient = AppNetworkClient.createClient()
 
     private val _animeDetail = MutableSharedFlow<ResultAnimeDetail>()
 
     override fun getAnimeDetail(): SharedFlow<ResultAnimeDetail> = _animeDetail.asSharedFlow()
 
     override suspend fun loadAnimeDetail(animeId: Int) {
-
-        val token = localTokenService.getBearerToken()
 
         when (val apiResult = searchApiService.getAnimeById(animeId)) {
             is ApiResult.Success -> {
@@ -65,23 +61,9 @@ class AnimeDetailDataRepositoryImpl constructor(
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo) {
 
-        val bearerToken = localTokenService.getBearerToken()
+        val response = appNetworkClient.selectAnimeItem(isSelected, animeInfo)
 
-        val userInfo = userDataRepository.getUserInfo()
-
-        client.post {
-            url(ApiRoutes.SET_ANIME_FAV_STATUS)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-            setBody(
-                FavouriteAnimeSendRequest(
-                    animeId = animeInfo.id.toLong(),
-                    userId = userInfo.id,
-                    isFavourite = isSelected
-                )
-            )
-        }
+        if (!response.status.isSuccess()) return
 
         if (isSelected) {
             favouriteAnimeDao.insertFavouriteAnimeItem(
@@ -91,6 +73,4 @@ class AnimeDetailDataRepositoryImpl constructor(
             favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
         }
     }
-
-
 }

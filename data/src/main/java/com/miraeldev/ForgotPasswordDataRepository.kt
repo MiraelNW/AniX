@@ -4,9 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ForgotPasswordDataRepository {
 
-
-    fun getSignUpError(): Flow<Boolean>
-
     suspend fun saveNewPassword(email: String, newPassword: String): Boolean
 
     suspend fun sendNewOtp()

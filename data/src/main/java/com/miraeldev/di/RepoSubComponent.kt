@@ -13,7 +13,6 @@ import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.data.downloadMananger.AndroidDownloader
-import com.miraeldev.data.network.AuthNetworkClient
 import com.miraeldev.data.remote.userApiService.UserApiService
 import com.miraeldev.data.remote.userApiService.UserApiServiceImpl
 import com.miraeldev.data.repository.AnimeDetailDataRepositoryImpl

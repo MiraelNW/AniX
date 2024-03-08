@@ -4,11 +4,11 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.dataStore.tokenService.LocalTokenService
+import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.toAnimeInfo
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -21,9 +21,8 @@ internal class SearchPagingPagingSource(
     private val yearFilter: String?,
     private val sortFilter: String?,
     private val genreListFilter: List<String>,
-    private val client: HttpClient,
-    private val networkHandler: NetworkHandler,
-    private val localTokenService: LocalTokenService
+    private val appNetworkClient: AppNetworkClient,
+    private val networkHandler: NetworkHandler
 ) : PagingSource<Int, AnimeInfo>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeInfo> {
         return try {
@@ -41,75 +40,14 @@ internal class SearchPagingPagingSource(
             val page = params.key ?: 0
             val pageSize = params.loadSize.coerceAtMost(20)
 
-            val bearerToken = localTokenService.getBearerToken()
-
-            val response =
-                if (yearFilter != null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body()
-                } else if (yearCode != null && sortFilter != null && genreListFilter.isEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else if (yearCode != null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else if (yearCode == null && sortFilter != null && genreListFilter.isNotEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else if (yearCode != null && sortFilter == null && genreListFilter.isEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else if (yearCode == null && sortFilter != null && genreListFilter.isEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else if (yearCode == null && sortFilter == null && genreListFilter.isNotEmpty()) {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&genres=$genreCode&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                } else {
-                    client.get {
-                        url("${ApiRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&page=$page&page_size=$pageSize")
-                        headers {
-                            append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                        }
-                    }
-                        .body<Response>()
-                }
-
+            val response = appNetworkClient.getPagingFilteredList(
+                name,
+                yearCode,
+                sortCode,
+                genreCode,
+                page,
+                pageSize
+            ).body<Response>()
 
 
             LoadResult.Page(
@@ -134,93 +72,49 @@ internal class SearchPagingPagingSource(
         genreList.forEach { genre ->
             val litterCode = when (genre) {
 
-                "Сенен" -> {
-                    'a'
-                }
+                "Сенен" -> 'a'
 
-                "Седзе" -> {
-                    'b'
-                }
+                "Седзе" -> 'b'
 
-                "Комедия" -> {
-                    'c'
-                }
+                "Комедия" -> 'c'
 
-                "Романтика" -> {
-                    'd'
-                }
+                "Романтика" -> 'd'
 
-                "Школа" -> {
-                    'e'
-                }
+                "Школа" -> 'e'
 
-                "Боевые искусства" -> {
-                    'f'
-                }
+                "Боевые искусства" -> 'f'
 
-                "Гарем" -> {
-                    'g'
-                }
+                "Гарем" -> 'g'
 
-                "Детектив" -> {
-                    'h'
-                }
+                "Детектив" -> 'h'
 
-                "Драма" -> {
-                    'i'
-                }
+                "Драма" -> 'i'
 
-                "Повседневность" -> {
-                    'j'
-                }
+                "Повседневность" -> 'j'
 
-                "Приключение" -> {
-                    'k'
-                }
+                "Приключение" -> 'k'
 
-                "Психологическое" -> {
-                    'l'
-                }
+                "Психологическое" -> 'l'
 
-                "Сверхъестественное" -> {
-                    'm'
-                }
+                "Сверхъестественное" -> 'm'
 
-                "Спорт" -> {
-                    'n'
-                }
+                "Спорт" -> 'n'
 
-                "Ужасы" -> {
-                    'o'
-                }
+                "Ужасы" -> 'o'
 
-                "Фантастика" -> {
-                    'p'
-                }
+                "Фантастика" -> 'p'
 
-                "Фэнтези" -> {
-                    'q'
-                }
+                "Фэнтези" -> 'q'
 
-                "Экшен" -> {
-                    'r'
-                }
+                "Экшен" -> 'r'
 
-                "Триллер" -> {
-                    's'
-                }
+                "Триллер" -> 's'
 
-                "Супер сила" -> {
-                    't'
-                }
+                "Супер сила" -> 't'
 
-                "Гурман" -> {
-                    'u'
-                }
+                "Гурман" -> 'u'
 
-                else -> {
-                    'k'
-                }
+                else -> ""
             }
 
             codeResult += litterCode
@@ -231,68 +125,25 @@ internal class SearchPagingPagingSource(
     private fun getYearCode(year: String?): String? {
         if (year == null) return null
         return when (year) {
-
-            "Онгоинг" -> {
-                "h"
-            }
-
-            "2023" -> {
-                "g"
-            }
-
-            "2022" -> {
-                "f"
-            }
-
-            "2021" -> {
-                "e"
-            }
-
-            "2015-2020" -> {
-                "d"
-            }
-
-            "2008-2014" -> {
-                "c"
-            }
-
-            "2000-2007" -> {
-                "b"
-            }
-
-            "до 2000" -> {
-                "a"
-            }
-
-            else -> {
-                "a"
-            }
+            "Онгоинг" -> "h"
+            "2023" -> "g"
+            "2022" -> "f"
+            "2021" -> "e"
+            "2015-2020" -> "d"
+            "2008-2014" -> "c"
+            "2000-2007" -> "b"
+            "до 2000" -> "a"
+            else -> null
         }
     }
 
     private fun getSortCode(sort: String?): String? {
-        if (sort == null) return null
         return when (sort) {
-
-            "Алфавиту" -> {
-                "name"
-            }
-
-            "Рейтингу" -> {
-                "popular"
-            }
-
-            "Количеству серий" -> {
-                "c"
-            }
-
-            "Году выхода" -> {
-                "new"
-            }
-
-            else -> {
-                "new"
-            }
+            "Алфавиту" -> "name"
+            "Рейтингу" -> "popular"
+            "Количеству серий" -> "c"
+            "Году выхода" -> "new"
+            else -> null
         }
     }
 
