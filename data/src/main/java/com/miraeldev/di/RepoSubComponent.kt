@@ -7,29 +7,23 @@ import com.miraeldev.FavouriteAnimeDataRepository
 import com.miraeldev.FilterAnimeDataRepository
 import com.miraeldev.ForgotPasswordDataRepository
 import com.miraeldev.HomeDataRepository
-import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.data.downloadMananger.AndroidDownloader
-import com.miraeldev.data.remote.userApiService.UserApiService
-import com.miraeldev.data.remote.userApiService.UserApiServiceImpl
 import com.miraeldev.data.repository.AnimeDetailDataRepositoryImpl
 import com.miraeldev.data.repository.AnimeListDataRepositoryImpl
 import com.miraeldev.data.repository.FavouriteAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.FilterDataRepositoryImpl
 import com.miraeldev.data.repository.ForgotPasswordDataRepositoryImpl
 import com.miraeldev.data.repository.HomeDataRepositoryImpl
-import com.miraeldev.data.repository.LocalUserDataRepositoryImpl
 import com.miraeldev.data.repository.SearchAnimeDataRepositoryImpl
 import com.miraeldev.data.repository.UserAuthDataRepositoryImpl
 import com.miraeldev.data.repository.UserDataRepositoryImpl
 import com.miraeldev.data.repository.VideoPlayerRepositoryImpl
-import com.miraeldev.di.scope.Singleton
-import io.ktor.client.HttpClient
+import com.miraeldev.models.di.scope.Singleton
 import me.tatarka.inject.annotations.Provides
-
 
 interface RepoSubComponent {
 
@@ -72,14 +66,6 @@ interface RepoSubComponent {
     @Singleton
     @Provides
     fun HomeDataRepositoryImpl.bind(): HomeDataRepository = this
-
-    @Singleton
-    @Provides
-    fun LocalUserDataRepositoryImpl.bind(): LocalUserDataRepository = this
-
-    @Singleton
-    @Provides
-    fun UserApiServiceImpl.bind(): UserApiService = this
 
     @Singleton
     @Provides

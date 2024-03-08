@@ -19,7 +19,7 @@ interface AccountRepository {
 
     suspend fun setDarkTheme(isDarkTheme: Boolean)
 
-    suspend fun setPreference(key:String,value:Boolean)
+    suspend fun setIsWifiOnly(isWifi:Boolean)
 
-    fun getPreference(key:String) : Flow<Boolean>
+    suspend fun getIsWifiOnly() : Flow<Boolean>
 }

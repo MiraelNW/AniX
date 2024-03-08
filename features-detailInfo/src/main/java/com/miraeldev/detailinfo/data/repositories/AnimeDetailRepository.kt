@@ -1,7 +1,7 @@
 package com.miraeldev.detailinfo.data.repositories
 
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.result.ResultAnimeDetail
+import com.miraeldev.models.result.ResultAnimeDetail
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeDetailRepository {

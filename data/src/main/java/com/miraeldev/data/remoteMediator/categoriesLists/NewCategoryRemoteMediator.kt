@@ -6,20 +6,13 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.models.newCategory.NewCategoryRemoteKeys
-import com.miraeldev.data.network.AppNetworkClient
-import com.miraeldev.data.remote.ApiRoutes
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToPagingNewCategoryModel
-import io.ktor.client.HttpClient
+import com.miraeldev.network.AppNetworkClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.request.url
-import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 

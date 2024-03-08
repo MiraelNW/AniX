@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class NetworkHandler constructor(private val context: Context) {
+class NetworkHandler(private val context: Context) {
 
     private val connectivityManager: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

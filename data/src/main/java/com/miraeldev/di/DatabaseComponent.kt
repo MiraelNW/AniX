@@ -15,13 +15,13 @@ import com.miraeldev.data.local.dao.newCategory.NewCategoryPagingDao
 import com.miraeldev.data.local.dao.newCategory.NewCategoryRemoteKeysDao
 import com.miraeldev.data.local.dao.popularCategory.PopularCategoryPagingDao
 import com.miraeldev.data.local.dao.popularCategory.PopularCategoryRemoteKeysDao
-import com.miraeldev.di.scope.Singleton
-import io.ktor.client.HttpClient
+import com.miraeldev.models.di.scope.Singleton
 import me.tatarka.inject.annotations.Provides
 
 interface DatabaseComponent {
 
     @Provides
+    @Singleton
     fun provideDatabase(context: Context): AppDatabase {
         var db: AppDatabase? = null
         val LOCK = Any()

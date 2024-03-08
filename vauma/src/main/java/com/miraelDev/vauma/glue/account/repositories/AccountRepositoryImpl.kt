@@ -1,22 +1,18 @@
 package com.miraelDev.vauma.glue.account.repositories
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.account.data.AccountRepository
+import com.miraeldev.dataStore.PreferenceClient
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
-
-
-private const val DARK_THEME_KEY = "dark theme key"
 
 @Inject
 class AccountRepositoryImpl(
     private val userAuthDataRepository: UserAuthDataRepository,
     private val userDataRepository: UserDataRepository,
-    private val preferenceDataStoreAPI: PreferenceDataStoreAPI
+    private val preferenceClient: PreferenceClient
 ) : AccountRepository {
 
     override suspend fun logOutUser(): Boolean {
@@ -40,16 +36,14 @@ class AccountRepositoryImpl(
     }
 
     override suspend fun setDarkTheme(isDarkTheme: Boolean) {
-        preferenceDataStoreAPI.putPreference(booleanPreferencesKey(DARK_THEME_KEY), isDarkTheme)
+        preferenceClient.setDarkTheme(isDarkTheme)
     }
 
-    override suspend fun setPreference(key: String, value: Boolean) {
-        preferenceDataStoreAPI.putPreference(booleanPreferencesKey(key), value)
+    override suspend fun setIsWifiOnly(isWifi: Boolean) {
+        preferenceClient.setIsWifiOnly(isWifi)
     }
 
-    override fun getPreference(key: String): Flow<Boolean> {
-        return preferenceDataStoreAPI.getPreference(booleanPreferencesKey(key), true)
+    override suspend fun getIsWifiOnly(): Flow<Boolean> {
+        return preferenceClient.getIsWifiOnly()
     }
-
-
 }

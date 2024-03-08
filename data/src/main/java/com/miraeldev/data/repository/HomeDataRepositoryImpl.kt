@@ -3,10 +3,8 @@ package com.miraeldev.data.repository
 import com.miraeldev.HomeDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.network.AppNetworkClient
-import com.miraeldev.data.remote.ApiResult
+import com.miraeldev.data.remote.dto.AnimeInfoDto
 import com.miraeldev.data.remote.dto.Response
 import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
 import com.miraeldev.data.remote.dto.mapToNameCategoryModel
@@ -15,25 +13,20 @@ import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
 import com.miraeldev.data.remote.dto.toAnimeDetailInfo
 import com.miraeldev.data.remote.dto.toAnimeInfo
 import com.miraeldev.data.remote.dto.toLastWatched
-import com.miraeldev.data.remote.searchApi.SearchApiService
+import com.miraeldev.network.AppNetworkClient
 import com.miraeldev.user.User
 import io.ktor.client.call.body
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.map
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 
 @Inject
 class HomeDataRepositoryImpl(
     private val appNetworkClient: AppNetworkClient,
     private val appDatabase: AppDatabase,
-    private val searchApiService: SearchApiService,
-    private val localTokenService: LocalTokenService,
     private val userDataRepository: UserDataRepository
 ) : HomeDataRepository {
     override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
@@ -120,17 +113,14 @@ class HomeDataRepositoryImpl(
             .map { user ->
                 if (user.lastWatchedAnime == null) {
                     val animeId = appDatabase.popularCategoryDao().getAnimeList()[0].id
-                    when (val apiResult = searchApiService.getAnimeById(animeId)) {
-                        is ApiResult.Success -> {
-                            val animeList = apiResult.animeList.map { it.toAnimeDetailInfo() }
-                            user.copy(lastWatchedAnime = animeList[0].toLastWatched())
-                        }
-
-                        is ApiResult.Failure -> {
-                            user
-                        }
+                    val response = appNetworkClient
+                            .searchAnimeById(animeId, user.id.toInt())
+                    if (response.status.isSuccess()) {
+                        val animeList = response.body<AnimeInfoDto>().toAnimeDetailInfo()
+                        user.copy(lastWatchedAnime = animeList.toLastWatched())
+                    } else {
+                        user
                     }
-
                 } else {
                     user
                 }

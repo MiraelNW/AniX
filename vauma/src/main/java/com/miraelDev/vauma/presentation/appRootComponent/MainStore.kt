@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation.appRootComponent
 
 
+import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -60,6 +61,7 @@ class MainStoreFactory(
         override fun invoke() {
             scope.launch {
                 getUserAuthState().collect {
+                    Log.d("tag","collect $it")
                     dispatch(Action.UserAuthStateChecked(it))
                 }
             }

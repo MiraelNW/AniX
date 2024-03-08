@@ -56,7 +56,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -67,7 +66,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.favourites.R
-import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore
 import com.miraeldev.presentation.FavouriteIcon

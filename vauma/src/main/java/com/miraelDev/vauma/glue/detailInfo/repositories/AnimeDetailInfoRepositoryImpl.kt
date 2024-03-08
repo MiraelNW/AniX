@@ -6,7 +6,7 @@ import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.detailinfo.data.repositories.AnimeDetailRepository
-import com.miraeldev.result.ResultAnimeDetail
+import com.miraeldev.models.result.ResultAnimeDetail
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 

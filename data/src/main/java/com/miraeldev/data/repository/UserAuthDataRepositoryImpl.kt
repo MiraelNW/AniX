@@ -1,38 +1,28 @@
 package com.miraeldev.data.repository
 
-import com.miraeldev.LocalUserDataRepository
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
 import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.network.AuthNetworkClient
+import com.miraeldev.dataStore.PreferenceClient
+import com.miraeldev.dataStore.userAuth.UserAuthRepository
 import com.miraeldev.extensions.sendRequest
 import com.miraeldev.models.models.auth.Token
+import com.miraeldev.network.AuthNetworkClient
 import com.miraeldev.user.User
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import me.tatarka.inject.annotations.Inject
 
 
 @Inject
 class UserAuthDataRepositoryImpl(
-    private val localService: LocalTokenService,
-    private val localUserDataRepository: LocalUserDataRepository,
+    private val preferenceClient: PreferenceClient,
+    private val userAuthRepository: UserAuthRepository,
     private val userDataRepository: UserDataRepository,
     private val appDatabase: AppDatabase,
     private val authNetworkClient: AuthNetworkClient
 ) : UserAuthDataRepository {
-
-    private val isSignInError = MutableSharedFlow<Boolean>()
-    private val isSignUpError = MutableSharedFlow<Boolean>()
-
-    override fun getSignInError(): Flow<Boolean> = isSignInError.asSharedFlow()
-
-    override fun getSignUpError(): Flow<Boolean> = isSignUpError.asSharedFlow()
 
     override suspend fun signUp(user: User): Boolean {
         return sendRequest {
@@ -80,12 +70,12 @@ class UserAuthDataRepositoryImpl(
     }
 
     override suspend fun checkAuthState() {
-        if (localService.getBearerToken().isNullOrEmpty() ||
-            localService.getRefreshToken().isEmpty()
+        if (preferenceClient.getBearerToken().isNullOrEmpty() ||
+            preferenceClient.getRefreshToken().isEmpty()
         ) {
-            localUserDataRepository.setUserUnAuthorizedStatus()
+            userAuthRepository.setUserUnAuthorizedStatus()
         } else {
-            localUserDataRepository.setUserAuthorizedStatus()
+            userAuthRepository.setUserAuthorizedStatus()
         }
     }
 
@@ -99,11 +89,11 @@ class UserAuthDataRepositoryImpl(
 
     override suspend fun logOutUser(): Boolean {
         return sendRequest {
-            val refreshToken = localService.getRefreshToken()
+            val refreshToken = preferenceClient.getRefreshToken()
             val response = authNetworkClient.logOutUser(refreshToken)
 
             if (response.status.isSuccess()) {
-                localUserDataRepository.setUserUnAuthorizedStatus()
+                userAuthRepository.setUserUnAuthorizedStatus()
                 appDatabase.userDao().deleteOldUser()
             }
             response.status.isSuccess()
@@ -114,14 +104,14 @@ class UserAuthDataRepositoryImpl(
 
         val token = response.body<Token>()
 
-        localService.saveBearerToken(token.bearerToken)
-        localService.saveRefreshToken(token.refreshToken)
+        preferenceClient.saveBearerToken(token.bearerToken)
+        preferenceClient.saveRefreshToken(token.refreshToken)
 
 
         val isSuccess = userDataRepository.saveRemoteUser()
 
         if (isSuccess) {
-            localUserDataRepository.setUserAuthorizedStatus()
+            userAuthRepository.setUserAuthorizedStatus()
         }
     }
 }

@@ -11,6 +11,4 @@ interface SignUpRepository {
 
     suspend fun verifyOtpCode(otpToken: String, user: User): Boolean
 
-    fun getSignUpError(): Flow<Boolean>
-
 }

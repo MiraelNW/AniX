@@ -1,33 +1,29 @@
 package com.miraelDev.vauma.glue.main.repository
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.miraelDev.vauma.domain.repository.MainRepository
-import com.miraeldev.LocalUserDataRepository
-import com.miraeldev.PreferenceDataStoreAPI
 import com.miraeldev.UserAuthDataRepository
 import com.miraeldev.UserDataRepository
-import com.miraeldev.di.scope.Singleton
+import com.miraeldev.dataStore.PreferenceClient
+import com.miraeldev.dataStore.userAuth.UserAuthRepository
 import com.miraeldev.models.auth.AuthState
+import com.miraeldev.models.di.scope.Singleton
 import com.miraeldev.user.UserEmail
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
-
-private const val DARK_THEME_KEY = "dark theme key"
 
 @Inject @Singleton
 class MainRepositoryImpl(
     private val userDataRepository: UserDataRepository,
     private val userAuthDataRepository: UserAuthDataRepository,
-    private val localUserAuthDataRepository: LocalUserDataRepository,
-    private val preferenceDataStoreAPI: PreferenceDataStoreAPI
+    private val localUserAuthDataRepository: UserAuthRepository,
+    private val preferenceClient: PreferenceClient
 ) : MainRepository {
     override suspend fun checkAuthState() {
         userAuthDataRepository.checkAuthState()
     }
 
-    override fun getDarkTheme(): Flow<Boolean> {
-        return preferenceDataStoreAPI
-            .getPreference(booleanPreferencesKey(DARK_THEME_KEY), false)
+    override suspend fun getDarkTheme(): Flow<Boolean> {
+        return preferenceClient.getDarkTheme()
     }
 
     override fun getUserStatus(): Flow<AuthState> {

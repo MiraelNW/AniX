@@ -5,5 +5,5 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class GetDarkThemeUseCase(private val repository: MainRepository) {
-    operator fun invoke() = repository.getDarkTheme()
+    suspend operator fun invoke() = repository.getDarkTheme()
 }

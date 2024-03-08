@@ -6,8 +6,6 @@ interface SignInRepository {
 
     suspend fun signIn(email: String, password: String): Boolean
 
-    fun getSignInError(): Flow<Boolean>
-
     suspend fun loginWithVk(accessToken:String, userId:String,email:String?)
 
     suspend fun getUserEmail(): String

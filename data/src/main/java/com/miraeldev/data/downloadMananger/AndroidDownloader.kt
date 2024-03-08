@@ -4,27 +4,22 @@ import android.app.DownloadManager
 import android.content.Context
 import android.os.Environment
 import androidx.core.net.toUri
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.miraeldev.Downloader
-import com.miraeldev.PreferenceDataStoreAPI
+import com.miraeldev.dataStore.PreferenceClient
 import kotlinx.coroutines.flow.first
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class AndroidDownloader constructor(
+class AndroidDownloader(
     private val context: Context,
-    private val preferenceManager: PreferenceDataStoreAPI
+    private val preferenceClient: PreferenceClient
 ) : Downloader {
 
     private val downloadManager = context.getSystemService(DownloadManager::class.java)
 
-    private val isWifiOnlyKey = booleanPreferencesKey(IS_WIFI_ONLY_KEY)
-
-    private val onlyWifiFlow = preferenceManager.getPreference(isWifiOnlyKey, true)
-
     override suspend fun downloadVideo(url: String, videoName: String): Long {
 
-        val onlyWifi = onlyWifiFlow.first()
+        val onlyWifi = preferenceClient.getIsWifiOnly().first()
 
         val request = DownloadManager.Request(url.toUri())
             .setMimeType("video/mp4")
@@ -38,9 +33,5 @@ class AndroidDownloader constructor(
             )
 
         return downloadManager.enqueue(request)
-    }
-
-    companion object {
-        private const val IS_WIFI_ONLY_KEY = "is_wifi_only_key"
     }
 }

@@ -7,12 +7,12 @@ import androidx.paging.PagingData
 import com.miraeldev.AnimeListDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.AppDatabase
-import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.data.remoteMediator.categoriesLists.FilmCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.NewCategoryRemoteMediator
 import com.miraeldev.data.remoteMediator.categoriesLists.PopularCategoryRemoteMediator
+import com.miraeldev.network.AppNetworkClient
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 

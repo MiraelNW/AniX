@@ -6,8 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.account.domain.GetPreferenceUseCase
-import com.miraeldev.account.domain.SetPreferenceUseCase
+import com.miraeldev.account.domain.GetIsWifiUseCase
+import com.miraeldev.account.domain.SetIsWifiOnlyUseCase
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadStore.Intent
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadStore.Label
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadStore.State
@@ -33,8 +33,8 @@ interface DownloadStore : Store<Intent, State, Label> {
 @Inject
 class DownloadStoreFactory(
     private val storeFactory: StoreFactory,
-    private val setPreferenceUseCase: SetPreferenceUseCase,
-    private val getPreferenceUseCase: GetPreferenceUseCase,
+    private val setIsWifiOnlyUseCase: SetIsWifiOnlyUseCase,
+    private val getIsWifiUseCase: GetIsWifiUseCase,
 ) {
 
     fun create(): DownloadStore =
@@ -57,7 +57,7 @@ class DownloadStoreFactory(
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
         override fun invoke() {
             scope.launch {
-                getPreferenceUseCase(IS_WIFI_ONLY_KEY).collect { isSelected ->
+                getIsWifiUseCase().collect { isSelected ->
                     dispatch(Action.PreferenceLoaded(isSelected))
                 }
             }
@@ -77,7 +77,7 @@ class DownloadStoreFactory(
 
                 is Intent.ChangeStatus -> {
                     scope.launch {
-                        setPreferenceUseCase(IS_WIFI_ONLY_KEY, !intent.status)
+                        setIsWifiOnlyUseCase(!intent.status)
                     }
                 }
             }

@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
-    id("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
 }
 
@@ -60,12 +58,6 @@ dependencies {
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
 
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
-
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
@@ -78,9 +70,6 @@ dependencies {
     implementation(libs.mvi.kotlin)
     implementation(libs.mvi.kotlin.main)
     implementation(libs.mvi.kotlin.coroutine.extensions)
-
-    //koin
-    implementation(libs.koin)
 
     //test
     testImplementation(libs.junit)

@@ -8,7 +8,7 @@ interface MainRepository {
 
     suspend fun checkAuthState()
 
-    fun getDarkTheme(): Flow<Boolean>
+    suspend fun getDarkTheme(): Flow<Boolean>
 
     fun getUserStatus(): Flow<AuthState>
 

@@ -15,10 +15,6 @@ class SignInRepositoryImpl(
         return userAuthDataRepository.signIn(email, password)
     }
 
-    override fun getSignInError(): Flow<Boolean> {
-        return userAuthDataRepository.getSignInError()
-    }
-
     override suspend fun loginWithVk(accessToken:String, userId:String,email:String?) {
         userAuthDataRepository.loginWithVk(accessToken,userId,email)
     }

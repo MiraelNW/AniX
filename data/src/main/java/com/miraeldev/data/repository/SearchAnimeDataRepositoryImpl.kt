@@ -9,10 +9,10 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.local.AppDatabase
 import com.miraeldev.data.local.dao.SearchHistoryAnimeDao
 import com.miraeldev.data.local.models.SearchHistoryDbModel
-import com.miraeldev.data.network.AppNetworkClient
 import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.data.remote.searchApi.SearchPagingPagingSource
+import com.miraeldev.data.remoteMediator.SearchPagingPagingSource
 import com.miraeldev.data.remoteMediator.InitialSearchRemoteMediator
+import com.miraeldev.network.AppNetworkClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

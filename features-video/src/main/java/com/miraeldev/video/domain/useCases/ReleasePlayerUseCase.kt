@@ -1,8 +1,9 @@
 package com.miraeldev.video.domain.useCases
 
 import com.miraeldev.video.data.repository.VideoPlayerRepository
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-class ReleasePlayerUseCase @Inject constructor(private val repository: VideoPlayerRepository) {
+@Inject
+class ReleasePlayerUseCase constructor(private val repository: VideoPlayerRepository) {
     suspend operator fun invoke() = repository.releasePlayer()
 }

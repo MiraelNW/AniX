@@ -4,9 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
-    id("org.jetbrains.kotlin.kapt")
     id("kotlinx-serialization")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -104,16 +102,6 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
-    //navigation
-    implementation(libs.navigation.compose)
-    implementation(libs.gson)
-
-    //dagger hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
-
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
@@ -155,6 +143,8 @@ dependencies {
     implementation(project(":features-video"))
 
     implementation(project(":data"))
+    implementation(project(":data-network"))
+    implementation(project(":data-store-client"))
 
     implementation(project(":logger"))
 
@@ -164,14 +154,6 @@ dependencies {
     implementation(project(":core-presentation"))
 
     implementation(project(":core-models"))
-}
-
-hilt {
-    enableAggregatingTask = true
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 ksp {

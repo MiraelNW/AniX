@@ -1,6 +1,7 @@
 package com.miraelDev.vauma.presentation
 
 import MainContent
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +33,7 @@ fun AppRootContent(
         )
         onDispose {}
     }
+
 
     VaumaTheme(darkTheme = model.isDarkTheme) {
         Children(stack = component.stack) {

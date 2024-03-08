@@ -1,9 +1,9 @@
 package com.miraeldev.data.repository
 
 import com.miraeldev.ForgotPasswordDataRepository
-import com.miraeldev.LocalUserDataRepository
-import com.miraeldev.data.dataStore.tokenService.LocalTokenService
-import com.miraeldev.data.network.AuthNetworkClient
+import com.miraeldev.dataStore.PreferenceClient
+import com.miraeldev.network.AuthNetworkClient
+import com.miraeldev.dataStore.userAuth.UserAuthRepository
 import com.miraeldev.extensions.sendRequest
 import com.miraeldev.models.models.auth.Token
 import io.ktor.client.call.body
@@ -15,8 +15,8 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class ForgotPasswordDataRepositoryImpl(
     private val authNetworkClient: AuthNetworkClient,
-    private val localService: LocalTokenService,
-    private val userDataRepository: LocalUserDataRepository,
+    private val preferenceClient: PreferenceClient,
+    private val userDataRepository: UserAuthRepository,
 ) : ForgotPasswordDataRepository {
 
     override suspend fun saveNewPassword(email: String, newPassword: String): Boolean {
@@ -52,8 +52,8 @@ class ForgotPasswordDataRepositoryImpl(
 
         val token = response.body<Token>()
 
-        localService.saveBearerToken(token.bearerToken)
-        localService.saveRefreshToken(token.refreshToken)
+        preferenceClient.saveBearerToken(token.bearerToken)
+        preferenceClient.saveRefreshToken(token.refreshToken)
 
         userDataRepository.setUserAuthorizedStatus()
     }

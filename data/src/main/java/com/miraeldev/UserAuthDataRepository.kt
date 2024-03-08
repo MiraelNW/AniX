@@ -13,10 +13,6 @@ interface UserAuthDataRepository {
 
     suspend fun logInWithGoogle(idToken: String)
 
-    fun getSignInError(): Flow<Boolean>
-
-    fun getSignUpError(): Flow<Boolean>
-
     suspend fun checkAuthState()
 
     suspend fun loginWithVk(accessToken: String, userId: String, email: String?)

@@ -25,8 +25,4 @@ class SignUpRepositoryImpl(
         return userAuthDataRepository.verifyOtpCode(user = user, otpToken = otpToken)
     }
 
-    override fun getSignUpError(): Flow<Boolean> {
-        return userAuthDataRepository.getSignUpError()
-    }
-
 }

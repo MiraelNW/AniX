@@ -4,8 +4,6 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("com.google.firebase.crashlytics")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
-    id("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -53,10 +51,4 @@ dependencies {
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
-
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
 }
