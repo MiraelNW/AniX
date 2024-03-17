@@ -1,18 +1,19 @@
 package com.miraeldev.data.repository
 
+import android.util.Log
 import com.miraeldev.HomeDataRepository
 import com.miraeldev.UserDataRepository
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.data.remote.dto.AnimeInfoDto
-import com.miraeldev.data.remote.dto.Response
-import com.miraeldev.data.remote.dto.mapToFilmCategoryModel
-import com.miraeldev.data.remote.dto.mapToNameCategoryModel
-import com.miraeldev.data.remote.dto.mapToNewCategoryModel
-import com.miraeldev.data.remote.dto.mapToPopularCategoryModel
-import com.miraeldev.data.remote.dto.toAnimeDetailInfo
-import com.miraeldev.data.remote.dto.toAnimeInfo
+import com.miraeldev.models.dto.Response
 import com.miraeldev.data.remote.dto.toLastWatched
 import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.dao.filmCategory.api.FilmCategoryDao
+import com.miraeldev.local.dao.nameCategory.api.NameCategoryDao
+import com.miraeldev.local.dao.newCategory.api.NewCategoryDao
+import com.miraeldev.local.dao.popularCategory.api.PopularCategoryDao
+import com.miraeldev.models.dto.AnimeInfoDto
+import com.miraeldev.models.dto.toAnimeDetailInfo
+import com.miraeldev.models.dto.toAnimeInfo
 import com.miraeldev.network.AppNetworkClient
 import com.miraeldev.user.User
 import io.ktor.client.call.body
@@ -26,16 +27,23 @@ import kotlin.collections.set
 @Inject
 class HomeDataRepositoryImpl(
     private val appNetworkClient: AppNetworkClient,
-    private val appDatabase: AppDatabase,
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
+    private val newCategoryDao: NewCategoryDao,
+    private val popularCategoryDao: PopularCategoryDao,
+    private val nameCategoryDao: NameCategoryDao,
+    private val filmCategoryDao: FilmCategoryDao,
 ) : HomeDataRepository {
     override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
-        val isNewEmpty = appDatabase.newCategoryDao().isEmpty()
+        val isNewEmpty = newCategoryDao.isEmpty()
+        val isPopularEmpty = popularCategoryDao.isEmpty()
+        val isNameEmpty = nameCategoryDao.isEmpty()
+        val isFilmEmpty = filmCategoryDao.isEmpty()
 
-        val firstDbModel = appDatabase.newCategoryDao().getCreateTime()
+        val createTime = newCategoryDao.getCreateTime()
+        val anyIsEmpty = isNewEmpty || isPopularEmpty || isNameEmpty || isFilmEmpty
 
         return when {
-            isNewEmpty || System.currentTimeMillis() - firstDbModel.createTime > FIVE_HOURS_IN_MILLIS -> {
+            anyIsEmpty || System.currentTimeMillis() - createTime > FIVE_HOURS_IN_MILLIS -> {
                 val map = mutableMapOf<Int, List<AnimeInfo>>()
                 map[0] = loadNewAnimeList()
                 map[1] = loadPopularAnimeList()
@@ -53,9 +61,9 @@ class HomeDataRepositoryImpl(
     private suspend fun loadNewAnimeList(): List<AnimeInfo> {
         val apiResponse = appNetworkClient.getNewCategoryList(0).body<Response>()
 
-        val anime = apiResponse.results.map { it.mapToNewCategoryModel() }
+        val anime = apiResponse.results
 
-        appDatabase.newCategoryDao().insertAll(anime)
+        newCategoryDao.insertAll(anime)
 
         return apiResponse.results.map { it.toAnimeInfo() }
     }
@@ -63,9 +71,9 @@ class HomeDataRepositoryImpl(
     private suspend fun loadPopularAnimeList(): List<AnimeInfo> {
         val apiResponse = appNetworkClient.getPopularCategoryList(0).body<Response>()
 
-        val anime = apiResponse.results.map { it.mapToPopularCategoryModel() }
+        val anime = apiResponse.results
 
-        appDatabase.popularCategoryDao().insertAll(anime)
+        popularCategoryDao.insertAll(anime)
 
         return apiResponse.results.map { it.toAnimeInfo() }
     }
@@ -73,9 +81,9 @@ class HomeDataRepositoryImpl(
     private suspend fun loadNameAnimeList(): List<AnimeInfo> {
         val apiResponse = appNetworkClient.getNameCategoryList(0).body<Response>()
 
-        val anime = apiResponse.results.map { it.mapToNameCategoryModel() }
+        val anime = apiResponse.results
 
-        appDatabase.nameCategoryDao().insertAll(anime)
+        nameCategoryDao.insertAll(anime)
 
         return apiResponse.results.map { it.toAnimeInfo() }
     }
@@ -83,9 +91,9 @@ class HomeDataRepositoryImpl(
     private suspend fun loadFilmAnimeList(): List<AnimeInfo> {
         val apiResponse = appNetworkClient.getFilmCategoryList(0).body<Response>()
 
-        val anime = apiResponse.results.map { it.mapToFilmCategoryModel() }
+        val anime = apiResponse.results
 
-        appDatabase.filmCategoryDao().insertAll(anime)
+        filmCategoryDao.insertAll(anime)
 
         return apiResponse.results.map { it.toAnimeInfo() }
     }
@@ -93,10 +101,10 @@ class HomeDataRepositoryImpl(
 
     private suspend fun getAnimeListForCategory(): Map<Int, List<AnimeInfo>> {
 
-        val newAnimeList = appDatabase.newCategoryDao().getAnimeList()
-        val popularAnimeList = appDatabase.popularCategoryDao().getAnimeList()
-        val nameAnimeList = appDatabase.nameCategoryDao().getAnimeList()
-        val filmsAnimeList = appDatabase.filmCategoryDao().getAnimeList()
+        val newAnimeList = newCategoryDao.getAnimeList()
+        val popularAnimeList = popularCategoryDao.getAnimeList()
+        val nameAnimeList = nameCategoryDao.getAnimeList()
+        val filmsAnimeList = filmCategoryDao.getAnimeList()
 
         val map = mutableMapOf<Int, List<AnimeInfo>>()
 
@@ -112,9 +120,7 @@ class HomeDataRepositoryImpl(
         return flow { emit(userDataRepository.getUserInfo()) }
             .map { user ->
                 if (user.lastWatchedAnime == null) {
-                    val animeId = appDatabase.popularCategoryDao().getAnimeList()[0].id
-                    val response = appNetworkClient
-                            .searchAnimeById(animeId, user.id.toInt())
+                    val response = appNetworkClient.searchAnimeById(-1, user.id.toInt())
                     if (response.status.isSuccess()) {
                         val animeList = response.body<AnimeInfoDto>().toAnimeDetailInfo()
                         user.copy(lastWatchedAnime = animeList.toLastWatched())

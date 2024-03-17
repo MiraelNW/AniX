@@ -1,0 +1,12 @@
+CREATE TABLE SearchHistory(
+    searchHistory TEXT PRIMARY KEY NOT NULL
+);
+
+getSearchHistoryListFlow:
+SELECT * FROM SearchHistory;
+
+getSearchHistoryList:
+SELECT * FROM SearchHistory;
+
+insertSearchItem:
+INSERT OR REPLACE INTO SearchHistory VALUES (:searchHistory);

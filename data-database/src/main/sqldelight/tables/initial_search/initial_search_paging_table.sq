@@ -1,0 +1,27 @@
+CREATE TABLE InitialSearchPagingInfo (
+    id INTEGER  PRIMARY KEY NOT NULL,
+    nameEn TEXT NOT NULL,
+    nameRu TEXT NOT NULL,
+    image TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    score REAL NOT NULL,
+    status TEXT NOT NULL,
+    rating TEXT NOT NULL,
+    releasedOn TEXT NOT NULL,
+    episodes INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    videoUrls TEXT NOT NULL,
+    genres TEXT NOT NULL,
+    isFavourite INTEGER NOT NULL,
+    page INTEGER NOT NULL
+);
+
+insertAll:
+INSERT OR REPLACE INTO InitialSearchPagingInfo VALUES (:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrls, :genres,:isFavourite,:page);
+
+getPagingAnime:
+SELECT * FROM InitialSearchPagingInfo ORDER BY page, score DESC;
+
+clearAllAnime:
+DELETE FROM InitialSearchPagingInfo;

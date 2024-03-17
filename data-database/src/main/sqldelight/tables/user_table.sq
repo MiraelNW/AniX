@@ -1,0 +1,20 @@
+CREATE TABLE User (
+    id INTEGER PRIMARY KEY NOT NULL,
+    username TEXT NOT NULL,
+    name TEXT,
+    image TEXT,
+    email TEXT,
+    lastWatchedAnimeDbModel TEXT
+);
+
+getUserFlow:
+SELECT * FROM User;
+
+getUser:
+SELECT * FROM User;
+
+insertUser:
+INSERT OR REPLACE INTO User VALUES (:id, :username, :name, :image, :email, :lastWatchedAnimeDbModel);
+
+deleteOldUser:
+DELETE FROM User;

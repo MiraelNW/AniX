@@ -1,0 +1,30 @@
+CREATE TABLE FavouriteAnimeInfo (
+    id INTEGER PRIMARY KEY NOT NULL,
+    nameEn TEXT NOT NULL,
+    nameRu TEXT NOT NULL,
+    image TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    score REAL NOT NULL,
+    status TEXT NOT NULL,
+    rating TEXT NOT NULL,
+    releasedOn TEXT NOT NULL,
+    episodes INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    videoUrls TEXT NOT NULL,
+    genres TEXT NOT NULL,
+    isFavourite INTEGER NOT NULL,
+    page INTEGER NOT NULL
+);
+
+getFavouriteAnimeList:
+SELECT * FROM FavouriteAnimeInfo LIMIT 10 OFFSET :offset;
+
+insertFavouriteAnimeItem:
+INSERT OR REPLACE INTO FavouriteAnimeInfo VALUES(:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrl,:genres,:isFavourite,:page);
+
+deleteFavouriteAnimeItem:
+DELETE FROM FavouriteAnimeInfo WHERE id= :animeItemId;
+
+searchAnimeItem:
+SELECT * FROM FavouriteAnimeInfo WHERE nameEn LIKE ('%' || :name || '%') OR nameRu LIKE ('%' || :name || '%');

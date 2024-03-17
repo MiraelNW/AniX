@@ -1,0 +1,33 @@
+CREATE TABLE NameCategoryPagingInfo (
+    id INTEGER  PRIMARY KEY NOT NULL,
+    nameEn TEXT NOT NULL,
+    nameRu TEXT NOT NULL,
+    image TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    score REAL NOT NULL,
+    status TEXT NOT NULL,
+    rating TEXT NOT NULL,
+    releasedOn TEXT NOT NULL,
+    episodes INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    videoUrls TEXT NOT NULL,
+    genres TEXT NOT NULL,
+    isFavourite INTEGER NOT NULL,
+    page INTEGER NOT NULL
+);
+
+insertAll:
+INSERT OR REPLACE INTO NameCategoryPagingInfo VALUES (:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrls, :genres,:isFavourite,:page);
+
+getPagingAnime:
+SELECT * FROM NameCategoryPagingInfo ORDER BY page, nameRu DESC;
+
+getAnimeList:
+SELECT * FROM NameCategoryPagingInfo LIMIT 15;
+
+isEmpty:
+SELECT (SELECT COUNT(*) FROM NameCategoryPagingInfo) == 0;
+
+clearAllAnime:
+DELETE FROM NameCategoryPagingInfo;
