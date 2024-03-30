@@ -14,5 +14,4 @@ interface DetailComponent {
     fun onAnimeItemClick(id: Int)
     fun onSeriesClick()
     fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeDetailInfo)
-
 }

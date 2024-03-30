@@ -46,6 +46,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.AnimeCard
 import com.miraeldev.presentation.ErrorAppendItem
 import com.miraeldev.presentation.shimmerList.ShimmerAnimeCard
@@ -66,7 +67,7 @@ private const val SMALL_ANIMATION = 1.015f
 
 
 @Composable
-fun SearchAnimeScreen(component: SearchAnimeComponent, search: String = "") {
+fun SearchAnimeScreen(component: SearchAnimeComponent, search: String = "", imageLoader: VaumaImageLoader) {
     val model by component.model.collectAsStateWithLifecycle()
 
     Column(
@@ -113,6 +114,7 @@ fun SearchAnimeScreen(component: SearchAnimeComponent, search: String = "") {
                     Filters(filterList = model.filterList)
                     SearchResult(
                         searchResults = resultList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = component::onAnimeItemClick,
                         onRetry = resultList::retry
                     )
@@ -127,6 +129,7 @@ fun SearchAnimeScreen(component: SearchAnimeComponent, search: String = "") {
                 InitialAnimeList(
                     initialList = resultList,
                     onAnimeItemClick = component::onAnimeItemClick,
+                    imageLoader = imageLoader,
                     onClickRetry = resultList::retry
                 )
 
@@ -217,6 +220,7 @@ private fun SearchHistory(
 @Composable
 private fun InitialAnimeList(
     initialList: LazyPagingItems<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     onClickRetry: () -> Unit
 ) {
@@ -296,6 +300,7 @@ private fun InitialAnimeList(
                                 initialList[index]?.let {
                                     AnimeCard(
                                         animeItem = it,
+                                        imageLoader = imageLoader,
                                         onAnimeItemClick = onAnimeItemClick
                                     )
                                 }
@@ -329,6 +334,7 @@ private fun InitialAnimeList(
 @Composable
 private fun SearchResult(
     searchResults: LazyPagingItems<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     onRetry: () -> Unit,
 ) {
@@ -392,6 +398,7 @@ private fun SearchResult(
                             searchResults[index]?.let {
                                 SearchAnimeCard(
                                     item = it,
+                                    imageLoader = imageLoader,
                                     onAnimeItemClick = onAnimeItemClick
                                 )
                             }

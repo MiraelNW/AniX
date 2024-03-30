@@ -4,7 +4,7 @@ import com.miraelDev.vauma.domain.repository.MainRepository
 import com.miraelDev.vauma.glue.main.repository.MainRepositoryImpl
 import me.tatarka.inject.annotations.Provides
 
-interface MainFeature {
+interface MainFeatureComponent {
     @Provides
     fun MainRepositoryImpl.bind(): MainRepository = this
 }

@@ -1,7 +1,6 @@
 package com.miraelDev.vauma.di
 
 import com.arkivanov.decompose.ComponentContext
-import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponent
 import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
 import me.tatarka.inject.annotations.Component
 

@@ -16,11 +16,11 @@ fun AccountRootContent(
     Children(stack = accountRootComponent.stack) {
         when (val instance = it.instance) {
             is AccountRootComponent.Child.Account -> {
-                AccountScreen(component = instance.component)
+                AccountScreen(component = instance.component, imageLoader = instance.imageLoader)
                 showBottomBar()
             }
             is AccountRootComponent.Child.EditProfile -> {
-                EditProfileScreen(component = instance.component)
+                EditProfileScreen(component = instance.component, imageLoader = instance.imageLoader)
                 hideBottomBar()
             }
             is AccountRootComponent.Child.Notification -> {

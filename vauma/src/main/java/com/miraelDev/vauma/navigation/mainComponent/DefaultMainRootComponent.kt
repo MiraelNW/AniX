@@ -15,6 +15,7 @@ import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeCompon
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponent
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponentFactory
 import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponentFactory
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
 import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponentFactory
 import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponentFactory
@@ -23,10 +24,11 @@ import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultMainRootComponentFactory = (ComponentContext, OnLogOut) -> DefaultMainRootComponent
+typealias DefaultMainRootComponentFactory = (ComponentContext, VaumaImageLoader, OnLogOut) -> DefaultMainRootComponent
 @Inject
 class DefaultMainRootComponent(
     @Assisted componentContext: ComponentContext,
+    @Assisted private val imageLoader: VaumaImageLoader,
     @Assisted private val onLogOutComplete: () -> Unit,
     private val homeComponentFactory: DefaultHomeComponentFactory,
     private val categoriesComponentFactory: DefaultCategoriesComponentFactory,
@@ -90,7 +92,7 @@ class DefaultMainRootComponent(
                         navigation.push(Config.VideoScreen)
                     }
                 )
-                MainRootComponent.Child.Home(component)
+                MainRootComponent.Child.Home(component, imageLoader)
             }
 
             is Config.Categories -> {
@@ -99,7 +101,7 @@ class DefaultMainRootComponent(
                 ) {
                     navigation.push(Config.DetailInfo(it))
                 }
-                MainRootComponent.Child.Categories(component, config.id)
+                MainRootComponent.Child.Categories(component, config.id, imageLoader)
             }
 
             is Config.Search -> {
@@ -112,7 +114,7 @@ class DefaultMainRootComponent(
                         navigation.push(Config.Filter)
                     },
                 )
-                MainRootComponent.Child.Search(component, config.search)
+                MainRootComponent.Child.Search(component, config.search, imageLoader)
             }
 
             is Config.Filter -> {
@@ -133,12 +135,13 @@ class DefaultMainRootComponent(
                         navigation.bringToFront(Config.Search(it))
                     }
                 )
-                MainRootComponent.Child.Favourite(component)
+                MainRootComponent.Child.Favourite(component, imageLoader)
             }
 
             is Config.Account -> {
                 val component = accountRootComponentFactory(
                     componentContext,
+                    imageLoader,
                     onLogOutComplete
                 )
                 MainRootComponent.Child.Account(component)
@@ -155,7 +158,7 @@ class DefaultMainRootComponent(
                         navigation.push(Config.DetailInfo(it))
                     }
                 )
-                MainRootComponent.Child.DetailInfo(component, config.id)
+                MainRootComponent.Child.DetailInfo(component, config.id, imageLoader)
             }
 
             is Config.VideoScreen -> {

@@ -52,20 +52,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.account.R
 import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileComponent
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
 import com.miraeldev.presentation.Toolbar
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun EditProfileScreen(component: EditProfileComponent) {
+fun EditProfileScreen(component: EditProfileComponent, imageLoader: VaumaImageLoader) {
     val model by component.model.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
@@ -119,19 +117,15 @@ fun EditProfileScreen(component: EditProfileComponent) {
                         }
                     ) {
 
-                        GlideImage(
+                        AsyncImage(
                             modifier = Modifier
                                 .size(160.dp)
                                 .clip(CircleShape),
-                            imageModel = { model.userModel.image.ifEmpty { R.drawable.ic_placeholder } },
-                            requestOptions = {
-                                RequestOptions()
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            model = imageLoader.load {
+                                data(model.userModel.image.ifEmpty { R.drawable.ic_placeholder })
                             },
-                            imageOptions = ImageOptions(
-                                contentDescription = "profile image",
-                                contentScale = ContentScale.Crop,
-                            ),
+                            contentDescription = "profile image",
+                            contentScale = ContentScale.Crop
                         )
                         Icon(
                             modifier = Modifier

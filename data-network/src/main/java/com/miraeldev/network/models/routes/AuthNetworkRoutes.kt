@@ -3,7 +3,7 @@ package com.miraeldev.network.models.routes
 import com.miraeldev.data_network.BuildConfig
 
 
-internal object AuthNetworkRoutes {
+object AuthNetworkRoutes {
     const val AUTH_REFRESH_URL = BuildConfig.AUTH_REFRESH_URL
     const val AUTH_LOGOUT_URL = BuildConfig.AUTH_LOGOUT_URL
     const val VK_LOGIN = BuildConfig.VK_LOGIN

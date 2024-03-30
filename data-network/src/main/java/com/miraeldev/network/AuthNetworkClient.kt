@@ -1,10 +1,12 @@
 package com.miraeldev.network
 
 import com.miraeldev.user.User
+import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 
 
 interface AuthNetworkClient {
+    val client: HttpClient
     suspend fun saveNewPassword(email: String, newPassword: String): HttpResponse
     suspend fun verifyOtpForgotPassword(otp: String): HttpResponse
     suspend fun checkEmailExist(email: String): HttpResponse

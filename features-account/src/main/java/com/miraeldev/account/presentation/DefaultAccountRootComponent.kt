@@ -13,13 +13,14 @@ import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloa
 import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.DefaultEditProfileComponentFactory
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponent
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponentFactory
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
 import com.miraeldev.models.anime.Settings
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultAccountRootComponentFactory = (ComponentContext, OnLogOut) -> DefaultAccountRootComponent
+typealias DefaultAccountRootComponentFactory = (ComponentContext, VaumaImageLoader, OnLogOut) -> DefaultAccountRootComponent
 
 @Inject
 class DefaultAccountRootComponent(
@@ -28,6 +29,7 @@ class DefaultAccountRootComponent(
     private val notificationComponent: DefaultNotificationComponentFactory,
     private val downloadComponent: DefaultDownloadComponentFactory,
     @Assisted componentContext: ComponentContext,
+    @Assisted private val imageLoader: VaumaImageLoader,
     @Assisted private val onLogOutComplete: () -> Unit
 ) : AccountRootComponent, ComponentContext by componentContext {
 
@@ -61,7 +63,7 @@ class DefaultAccountRootComponent(
                     },
                     onLogOutComplete,
                 )
-                AccountRootComponent.Child.Account(component)
+                AccountRootComponent.Child.Account(component, imageLoader)
             }
 
             is Config.EditProfile -> {
@@ -69,7 +71,7 @@ class DefaultAccountRootComponent(
                     componentContext,
                     navigation::pop
                 )
-                AccountRootComponent.Child.EditProfile(component)
+                AccountRootComponent.Child.EditProfile(component, imageLoader)
             }
 
             is Config.Notifications -> {

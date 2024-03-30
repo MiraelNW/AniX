@@ -24,17 +24,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.pressClickEffect
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.miraeldev.imageloader.VaumaImageLoader
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
+fun AnimeCard(animeItem: AnimeInfo, imageLoader: VaumaImageLoader, onAnimeItemClick: (Int) -> Unit) {
 
     Card(
         onClick = { onAnimeItemClick(animeItem.id) },
@@ -48,20 +46,13 @@ fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
         Column {
             Box {
 
-                GlideImage(
+                AsyncImage(
                     modifier = Modifier
                         .height(300.dp)
                         .width(200.dp),
-                    imageModel = { animeItem.image.original },
-                    imageOptions = ImageOptions(
-                        contentDescription = animeItem.nameRu,
-                        contentScale = ContentScale.FillBounds
-
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    },
+                    model = imageLoader.load { data(animeItem.image.original) },
+                    contentDescription = animeItem.nameRu,
+                    contentScale = ContentScale.FillBounds
                 )
                 Rating(animeItem = animeItem)
             }

@@ -10,8 +10,9 @@ import com.miraelDev.vauma.glue.signIn.di.SignInFeatureComponent
 import com.miraelDev.vauma.glue.signUp.di.SignUpFeatureComponent
 import com.miraelDev.vauma.glue.video.di.VideoPlayerFeatureComponent
 import com.miraeldev.di.DataComponent
+import com.miraeldev.imageloader.di.ImageLoaderComponent
 
-interface GlueFeatureComponent :
+interface GlueFeatureComponentComponent :
     StoreFactoryComponent,
     DataComponent,
     HomeFeatureComponent,
@@ -23,5 +24,6 @@ interface GlueFeatureComponent :
     ForgotPasswordFeatureComponent,
     SignInFeatureComponent,
     SignUpFeatureComponent,
-    MainFeature,
+    MainFeatureComponent,
+    ImageLoaderComponent,
     LoggerComponent

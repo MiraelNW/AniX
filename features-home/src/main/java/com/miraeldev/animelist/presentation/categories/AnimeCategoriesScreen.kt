@@ -12,11 +12,13 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesComponent
+import com.miraeldev.imageloader.VaumaImageLoader
 
 @Composable
 fun AnimeCategoriesScreen(
     component: CategoriesComponent,
-    categoryId: Int
+    categoryId: Int,
+    imageLoader: VaumaImageLoader
 ) {
     val model by component.model.collectAsStateWithLifecycle()
 
@@ -38,6 +40,7 @@ fun AnimeCategoriesScreen(
             filmsAnimeList = filmsAnimeList,
             popularAnimeList = popularAnimeList,
             nameAnimeList = nameAnimeList,
+            imageLoader = imageLoader,
             categoryId = categoryId,
             onAnimeItemClick = component::onAnimeItemClick,
         )
@@ -50,6 +53,7 @@ fun AnimeList(
     filmsAnimeList: LazyPagingItems<AnimeInfo>,
     popularAnimeList: LazyPagingItems<AnimeInfo>,
     nameAnimeList: LazyPagingItems<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     categoryId: Int,
     onAnimeItemClick: (Int) -> Unit,
 ) {
@@ -64,6 +68,7 @@ fun AnimeList(
             filmsAnimeList = filmsAnimeList,
             popularAnimeList = popularAnimeList,
             nameAnimeList = nameAnimeList,
+            imageLoader = imageLoader,
             onAnimeItemClick = onAnimeItemClick,
             categoryId = categoryId
         )

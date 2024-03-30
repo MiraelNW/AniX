@@ -14,40 +14,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.ImageLoader
+import coil3.compose.AsyncImage
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.pressClickEffect
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.miraeldev.imageloader.VaumaImageLoader
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchAnimeCard(
     item: AnimeInfo,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit
 ) {
-
-//    val animatedProgress = remember { Animatable(initialValue = 0f) }
-//    LaunchedEffect(Unit) {
-//        animatedProgress.animateTo(
-//            targetValue = 1f,
-//            animationSpec = tween(500)
-//        )
-//    }
-
-//    val originalGlideUrl = remember {
-//        GlideUrl(
-//            item.image.original
-//        ) {
-//            mapOf(
-//                Pair(
-//                    "Authorization",
-//                    item.image.token
-//                )
-//            )
-//        }
-//    }
 
     Card(
         onClick = { onAnimeItemClick(item.id) },
@@ -67,17 +46,11 @@ fun SearchAnimeCard(
                     .width(150.dp)
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                GlideImage(
+                AsyncImage(
                     modifier = Modifier.fillMaxWidth(),
-                    imageModel = { item.image.original },
-                    imageOptions = ImageOptions(
-                        contentDescription = item.nameRu,
-                        contentScale = ContentScale.FillBounds
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    },
+                    model = imageLoader.load { data(item.image.original) },
+                    contentDescription = item.nameRu,
+                    contentScale = ContentScale.FillBounds
                 )
                 Rating(animeItem = item)
             }

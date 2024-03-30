@@ -23,11 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.extensions.noRippleEffectClick
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.miraeldev.imageloader.VaumaImageLoader
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -37,6 +35,7 @@ import kotlin.math.sin
 @Composable
 fun ZoomableImage(
     image: String,
+    imageLoader: VaumaImageLoader,
     onDismiss: () -> Unit,
 ) {
 
@@ -67,7 +66,7 @@ fun ZoomableImage(
                 }
             )
     ) {
-        GlideImage(
+        AsyncImage(
             modifier = Modifier
                 .noRippleEffectClick {  }
                 .align(Alignment.Center)
@@ -101,16 +100,9 @@ fun ZoomableImage(
                         }
                     )
                 },
-            imageModel = { image },
-            imageOptions = ImageOptions(
-                contentDescription = "anime image preview",
-                contentScale = ContentScale.Fit
-            ),
-            requestOptions = {
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-            }
+            model = imageLoader.load { data(image) },
+            contentDescription = "anime image preview",
+            contentScale = ContentScale.Fit
         )
-
     }
 }

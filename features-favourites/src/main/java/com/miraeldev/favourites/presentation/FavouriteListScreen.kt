@@ -57,28 +57,26 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.favourites.R
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.FavouriteIcon
 import com.miraeldev.presentation.shimmerList.ShimmerListFavouriteAnime
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.theme.LocalOrientation
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
-fun FavouriteListScreen(component: FavouriteComponent) {
+fun FavouriteListScreen(component: FavouriteComponent, imageLoader: VaumaImageLoader) {
     val model by component.model.collectAsStateWithLifecycle()
 
     var resultAfterSearch by rememberSaveable { mutableStateOf(false) }
@@ -125,6 +123,7 @@ fun FavouriteListScreen(component: FavouriteComponent) {
 
                 FavouriteList(
                     favouriteAnimeList = res.result,
+                    imageLoader = imageLoader,
                     onAnimeItemClick = component::onAnimeItemClick,
                     onFavouriteIconClick = component::selectAnimeItem
                 )
@@ -301,6 +300,7 @@ private fun Toolbar(
 @Composable
 private fun FavouriteList(
     favouriteAnimeList: ImmutableList<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
@@ -323,6 +323,7 @@ private fun FavouriteList(
         items(items = favouriteAnimeList, key = { it.id }) {
             AnimeCard(
                 item = it,
+                imageLoader = imageLoader,
                 onAnimeItemClick = onAnimeItemClick,
                 onFavouriteIconClick = onFavouriteIconClick
             )
@@ -334,6 +335,7 @@ private fun FavouriteList(
 @Composable
 private fun AnimeCard(
     item: AnimeInfo,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     onFavouriteIconClick: (AnimeInfo) -> Unit
 ) {
@@ -370,19 +372,13 @@ private fun AnimeCard(
             elevation = 4.dp
         ) {
             Box(modifier = Modifier) {
-                GlideImage(
+                AsyncImage(
                     modifier = Modifier
                         .height(300.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp)),
-                    imageModel = { item.image.original },
-                    imageOptions = ImageOptions(
-                        contentDescription = item.nameRu,
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    },
+                    model = imageLoader.load { data(item.image.original) },
+                    contentDescription = item.nameRu
                 )
                 FavouriteIcon(
                     modifier = Modifier

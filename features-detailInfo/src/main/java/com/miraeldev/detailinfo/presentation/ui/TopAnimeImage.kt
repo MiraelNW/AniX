@@ -14,70 +14,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
+import coil3.request.transformations
 import com.miraeldev.anime.AnimeDetailInfo
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.components.rememberImageComponent
-import com.skydoves.landscapist.glide.GlideImage
-import com.skydoves.landscapist.transformation.blur.BlurTransformationPlugin
+import com.miraeldev.imageloader.transformation.BlurTransformation
+import com.miraeldev.imageloader.VaumaImageLoader
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TopAnimeImage(
+    imageLoader: VaumaImageLoader,
     animeItem: AnimeDetailInfo,
     onImageClick: () -> Unit
 ) {
-
-//    val previewGlideUrl = remember {
-//        GlideUrl(
-//            animeItem.image.preview
-//        ) {
-//            mapOf(
-//                Pair(
-//                    "Authorization",
-//                    animeItem.image.token
-//                )
-//            )
-//        }
-//    }
-//
-//    val originalGlideUrl = remember {
-//        GlideUrl(
-//            animeItem.image.original
-//        ) {
-//            mapOf(
-//                Pair(
-//                    "Authorization",
-//                    animeItem.image.token
-//                )
-//            )
-//        }
-//    }
-
-
     Card(
         elevation = 4.dp,
         shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp),
         onClick = onImageClick
     ) {
-        Box() {
-            GlideImage(
+        Box {
+            AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp),
-                imageModel = { animeItem.image.preview },
-                requestOptions = {
-                    RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                model = imageLoader.load {
+                    data(animeItem.image.preview)
+                    transformations(BlurTransformation(radius = 5, scale = 1f))
                 },
-                imageOptions = ImageOptions(
-                    contentDescription = "anime image preview",
-                    contentScale = ContentScale.FillBounds,
-                ),
-                component = rememberImageComponent {
-                    +BlurTransformationPlugin(radius = 30)
-                }
+                contentDescription = "anime image preview",
+                contentScale = ContentScale.FillBounds,
             )
             Card(
                 modifier = Modifier
@@ -87,16 +52,10 @@ fun TopAnimeImage(
                 shape = RoundedCornerShape(16.dp),
                 elevation = 4.dp
             ) {
-                GlideImage(
+                AsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    imageModel = { animeItem.image.original },
-                    imageOptions = ImageOptions(
-                        contentDescription = "anime image preview",
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    }
+                    model = imageLoader.load { data(animeItem.image.original) },
+                    contentDescription = "anime image preview"
                 )
             }
 

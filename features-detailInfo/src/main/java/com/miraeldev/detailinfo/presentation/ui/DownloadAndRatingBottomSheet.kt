@@ -36,14 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.detailinfo.R
 import com.miraeldev.extensions.noRippleEffectClick
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.theme.LightGreen
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
 
 private const val RATING_SCREEN = 1
 private const val DOWNLOAD_SCREEN = 2
@@ -53,6 +51,7 @@ private const val DOWNLOAD_SCREEN = 2
 fun BottomSheet(
     bottomSheetScreen: Int,
     animeDetailInfo: AnimeDetailInfo,
+    imageLoader: VaumaImageLoader,
     onBackPressed: () -> Unit,
     modalSheetState: ModalBottomSheetState,
     onDownloadClick: (List<Int>) -> Unit,
@@ -85,6 +84,7 @@ fun BottomSheet(
                 DOWNLOAD_SCREEN -> {
                     DownloadScreen(
                         animeDetailInfo = animeDetailInfo,
+                        imageLoader = imageLoader,
                         onDownloadClick = onDownloadClick,
                         onCloseDownloadSheet = onCloseDownloadSheet
                     )
@@ -240,6 +240,7 @@ private fun RatingScreen(
 @Composable
 private fun DownloadScreen(
     animeDetailInfo: AnimeDetailInfo,
+    imageLoader: VaumaImageLoader,
     onDownloadClick: (List<Int>) -> Unit,
     onCloseDownloadSheet: () -> Unit,
 ) {
@@ -288,6 +289,7 @@ private fun DownloadScreen(
             items(count = animeDetailInfo.videos.size, key = { it }) {
                 EpisodeItem(
                     url = animeDetailInfo.videos[it].videoUrl480,
+                    imageLoader = imageLoader,
                     videoName = animeDetailInfo.videos[it].videoName,
                     selected = selectedList.contains(it),
                     onEpisodeItemClick = {
@@ -334,6 +336,7 @@ private fun DownloadScreen(
 @Composable
 private fun EpisodeItem(
     url: String,
+    imageLoader: VaumaImageLoader,
     videoName: String,
     selected: Boolean,
     onEpisodeItemClick: () -> Unit
@@ -349,20 +352,14 @@ private fun EpisodeItem(
                 shape = RoundedCornerShape(16.dp)
             ),
     ) {
-        GlideImage(
+        AsyncImage(
             modifier = Modifier
                 .width(200.dp)
                 .height(150.dp)
                 .clip(RoundedCornerShape(16.dp)),
-            imageModel = { url },
-            requestOptions = {
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-            },
-            imageOptions = ImageOptions(
-                contentDescription = stringResource(R.string.anime_episode_preview),
-                contentScale = ContentScale.FillBounds,
-            )
+            model = imageLoader.load { data(url) },
+            contentDescription = stringResource(R.string.anime_episode_preview),
+            contentScale = ContentScale.FillBounds
         )
         Text(
             modifier = Modifier

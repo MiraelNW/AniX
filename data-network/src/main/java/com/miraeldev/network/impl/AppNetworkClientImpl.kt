@@ -16,7 +16,7 @@ import com.miraeldev.user.User
 import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
@@ -50,7 +50,7 @@ class AppNetworkClientImpl(
     private val appDatabase: AppDatabase
 ) : AppNetworkClient {
 
-    private val client: HttpClient = HttpClient(Android).config {
+    override val client: HttpClient = HttpClient(CIO).config {
 
         defaultRequest {
             url(AppNetworkRoutes.BASE_URL)
@@ -85,13 +85,34 @@ class AppNetworkClientImpl(
                             setBody(RefreshToken(refreshToken))
                         }.body<AccessTokenDataModel>()
                     } catch (e: Exception) {
-                        userAuthRepository.setUserUnAuthorizedStatus()
-                        AccessTokenDataModel(bearerToken = "", refreshToken = "")
+                        client.post {
+                            url(AuthNetworkRoutes.AUTH_LOGOUT_URL)
+                            headers {
+                                append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                            }
+                        }
+                        if (response.status.isSuccess()) {
+                            userAuthRepository.setUserUnAuthorizedStatus()
+                            AccessTokenDataModel(bearerToken = "", refreshToken = "")
+                        } else {
+                            AccessTokenDataModel(
+                                bearerToken = bearerToken,
+                                refreshToken = refreshToken
+                            )
+                        }
                     }
 
                     BearerTokens(
                         accessToken = accessTokenDataModel.bearerToken,
                         refreshToken = accessTokenDataModel.refreshToken
+                    )
+                }
+                loadTokens {
+                    val refreshToken = preferenceClient.getRefreshToken()
+                    val bearerToken = preferenceClient.getBearerToken()
+                    BearerTokens(
+                        accessToken = bearerToken,
+                        refreshToken = refreshToken
                     )
                 }
             }
@@ -123,18 +144,12 @@ class AppNetworkClientImpl(
             connectTimeoutMillis = 10000L
             socketTimeoutMillis = 10000L
         }
-
     }
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo): HttpResponse {
-
-        val bearerToken = preferenceClient.getBearerToken()
         val user = appDatabase.userDao().getUser()?.toUserModel() ?: User()
         return client.post {
             url(AppNetworkRoutes.SET_ANIME_FAV_STATUS)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
             setBody(
                 FavouriteAnimeSendRequest(
                     animeId = animeInfo.id.toLong(),
@@ -145,54 +160,24 @@ class AppNetworkClientImpl(
         }
     }
 
-    override suspend fun getNewCategoryList(page: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun getNewCategoryList(page: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getPopularCategoryList(page: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun getPopularCategoryList(page: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getNameCategoryList(page: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun getNameCategoryList(page: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getFilmCategoryList(page: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun getFilmCategoryList(page: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getInitialListCategoryList(page: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page=$page&page_size=$PAGE_SIZE")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun getInitialListCategoryList(page: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page=$page&page_size=$PAGE_SIZE")
     }
 
     override suspend fun getPagingFilteredList(
@@ -202,106 +187,62 @@ class AppNetworkClientImpl(
         genreCode: String,
         page: Int,
         pageSize: Int
-    ): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return if (yearCode != null && sortCode != null && genreCode.isNotEmpty()) {
+    ): HttpResponse = when {
+        yearCode != null && sortCode != null && genreCode.isNotEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode != null && sortCode != null && genreCode.isEmpty()) {
+        yearCode != null && sortCode != null && genreCode.isEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode != null && sortCode == null && genreCode.isNotEmpty()) {
+        yearCode != null && sortCode == null && genreCode.isNotEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode == null && sortCode != null && genreCode.isNotEmpty()) {
+        yearCode == null && sortCode != null && genreCode.isNotEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&genres=$genreCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode != null && sortCode == null && genreCode.isEmpty()) {
+        yearCode != null && sortCode == null && genreCode.isEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode == null && sortCode != null && genreCode.isEmpty()) {
+        yearCode == null && sortCode != null && genreCode.isEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else if (yearCode == null && sortCode == null && genreCode.isNotEmpty()) {
+        yearCode == null && sortCode == null && genreCode.isNotEmpty() ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&genres=$genreCode&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        } else {
+        else ->
             client.get {
                 url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&page=$page&page_size=$pageSize")
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $bearerToken")
-                }
             }
-        }
     }
 
-    override suspend fun saveRemoteUser(): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url(AppNetworkRoutes.GET_USER_INFO)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun saveRemoteUser(): HttpResponse = client.get {
+        url(AppNetworkRoutes.GET_USER_INFO)
     }
 
     override suspend fun changePassword(
         currentPassword: String,
         newPassword: String,
         repeatedPassword: String
-    ): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.post {
-            url(AppNetworkRoutes.CHANGE_PASSWORD)
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-            setBody(
-                mapOf(
-                    Pair("current_password", currentPassword),
-                    Pair("new_password", newPassword),
-                    Pair("repeated_password", repeatedPassword)
-                )
+    ): HttpResponse = client.post {
+        url(AppNetworkRoutes.CHANGE_PASSWORD)
+        setBody(
+            mapOf(
+                Pair("current_password", currentPassword),
+                Pair("new_password", newPassword),
+                Pair("repeated_password", repeatedPassword)
             )
-        }
+        )
     }
 
-    override suspend fun searchAnimeById(id: Int, userId: Int): HttpResponse {
-        val bearerToken = preferenceClient.getBearerToken()
-        return client.get {
-            url("${AppNetworkRoutes.SEARCH_URL_ANIME_ID_ROUTE}?anime_id=$id&user_id=${userId}")
-            headers {
-                append(HttpHeaders.Authorization, "Bearer $bearerToken")
-            }
-        }
+    override suspend fun searchAnimeById(id: Int, userId: Int): HttpResponse = client.get {
+        url("${AppNetworkRoutes.SEARCH_URL_ANIME_ID_ROUTE}?anime_id=$id&user_id=${userId}")
     }
 
     companion object {

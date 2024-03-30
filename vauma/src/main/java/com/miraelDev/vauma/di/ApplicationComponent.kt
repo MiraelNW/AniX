@@ -9,7 +9,7 @@ import me.tatarka.inject.annotations.Provides
 @Singleton
 abstract class ApplicationComponent(
     @get:Provides val context: Context,
-) : GlueFeatureComponent
+) : GlueFeatureComponentComponent
 
 interface ApplicationComponentProvider {
     val component: ApplicationComponent

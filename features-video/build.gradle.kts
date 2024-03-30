@@ -90,6 +90,6 @@ dependencies {
 
     implementation(project(":core-theme"))
     implementation(project(":core-extensions"))
-    implementation(project(":core-presentation"))
+    implementation(project(":core-designSystem"))
     implementation(project(":core-models"))
 }

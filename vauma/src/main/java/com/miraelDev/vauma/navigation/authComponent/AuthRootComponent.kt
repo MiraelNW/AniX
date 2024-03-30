@@ -4,6 +4,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.EmailChooseComponent
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordComponent
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.signin.presentation.signInComponent.SignInComponent
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyComponent
@@ -16,7 +17,7 @@ interface AuthRootComponent {
     sealed interface Child {
 
         data class SignIn(val component: SignInComponent) : Child
-        data class SignUp(val component: SignUpComponent) : Child
+        data class SignUp(val component: SignUpComponent, val imageLoader: VaumaImageLoader) : Child
         data class CodeVerify(
             val component: CodeVerifyComponent,
             val email: String,

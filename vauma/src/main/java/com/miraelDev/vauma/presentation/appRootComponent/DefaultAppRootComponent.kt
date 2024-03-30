@@ -12,6 +12,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponentFactory
 import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponentFactory
 import com.miraeldev.extensions.componentScope
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +24,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class DefaultAppRootComponent(
     @Assisted componentContext: ComponentContext,
+    private val imageLoader: VaumaImageLoader,
     private val storeFactory: MainStoreFactory,
     private val mainRootComponent: DefaultMainRootComponentFactory,
     private val authRootComponent: DefaultAuthRootComponentFactory
@@ -68,13 +70,14 @@ class DefaultAppRootComponent(
         return when (config) {
             is Config.Auth -> {
                 val component = authRootComponent(
-                    componentContext
+                    componentContext,
+                    imageLoader
                 ) { navigation.replaceAll(Config.Main) }
                 AppRootComponent.Child.Auth(component)
             }
 
             is Config.Main -> {
-                val component = mainRootComponent(componentContext)
+                val component = mainRootComponent(componentContext, imageLoader)
                 { navigation.replaceAll(Config.Auth) }
                 AppRootComponent.Child.Main(component)
             }

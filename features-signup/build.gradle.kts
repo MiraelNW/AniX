@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.kotlin.inject.runtime)
 
     //coil image
-    implementation(libs.coil)
     implementation(libs.coil.compose)
 
     //decompose
@@ -84,9 +83,10 @@ dependencies {
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
+    implementation(project(":core-designSystem"))
 
-    implementation(project(":core-presentation"))
     implementation(project(":core-extensions"))
     implementation(project(":core-models"))
     implementation(project(":core-utils"))
+    implementation(project(":core-imageLoader"))
 }

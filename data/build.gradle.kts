@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //ktor
-    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.cio)
 
     //mvi kotlin
     implementation(libs.mvi.kotlin)

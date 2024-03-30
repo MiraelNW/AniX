@@ -59,9 +59,9 @@ dependencies {
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 
-    //glide
-    implementation(libs.landscapist.glide)
-    implementation(libs.landscapist.transformation)
+    //coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     //paging 3
     implementation(libs.paging.runtime.ktx)
@@ -93,9 +93,10 @@ dependencies {
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
+    implementation(project(":core-designSystem"))
 
-    implementation(project(":core-presentation"))
     implementation(project(":core-theme"))
     implementation(project(":core-extensions"))
     implementation(project(":core-models"))
+    implementation(project(":core-imageLoader"))
 }

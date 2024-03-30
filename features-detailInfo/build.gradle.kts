@@ -59,9 +59,9 @@ dependencies {
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 
-    //image
-    implementation(libs.landscapist.glide)
-    implementation(libs.landscapist.transformation)
+    //coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
@@ -90,8 +90,16 @@ dependencies {
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
 
+    //coil
+    implementation(libs.coil)
+    implementation(libs.coil.network)
+
     implementation(project(":core-theme"))
     implementation(project(":core-extensions"))
-    implementation(project(":core-presentation"))
+    implementation(project(":core-designSystem"))
     implementation(project(":core-models"))
+    implementation(project(":core-imageLoader"))
+
+    implementation(project(":data-store-client"))
+    implementation(project(":data-network"))
 }

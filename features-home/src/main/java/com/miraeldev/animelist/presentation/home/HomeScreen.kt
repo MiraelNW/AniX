@@ -51,8 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.animelist.R
@@ -61,12 +60,11 @@ import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.shimmerList.ShimmerHome
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun HomeScreen(component: HomeComponent) {
+fun HomeScreen(component: HomeComponent, imageLoader: VaumaImageLoader) {
 
     val model by component.model.collectAsStateWithLifecycle()
 
@@ -81,6 +79,7 @@ fun HomeScreen(component: HomeComponent) {
             ) {
                 LastWatchedVideoImage(
                     animeItem = state.user.lastWatchedAnime ?: LastWatchedAnime(-1),
+                    imageLoader = imageLoader,
                     onPlayClick = {
                         state.user.lastWatchedAnime?.let {
                             component.loadAnimeVideo(it)
@@ -99,6 +98,7 @@ fun HomeScreen(component: HomeComponent) {
 
                 AnimeList(
                     animeList = state.newAnimeList,
+                    imageLoader = imageLoader,
                     onAnimeItemClick = component::onAnimeItemClick,
                     listName = "New anime",
                     onSeeAllClick = { component.onSeeAllClick(0) }
@@ -106,6 +106,7 @@ fun HomeScreen(component: HomeComponent) {
 
                 AnimeList(
                     animeList = state.popularAnimeList,
+                    imageLoader = imageLoader,
                     onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Popular anime",
                     onSeeAllClick = { component.onSeeAllClick(1) }
@@ -113,6 +114,7 @@ fun HomeScreen(component: HomeComponent) {
 
                 AnimeList(
                     animeList = state.nameAnimeList,
+                    imageLoader = imageLoader,
                     onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Name anime",
                     onSeeAllClick = { component.onSeeAllClick(2) }
@@ -120,6 +122,7 @@ fun HomeScreen(component: HomeComponent) {
 
                 AnimeList(
                     animeList = state.filmsAnimeList,
+                    imageLoader = imageLoader,
                     onAnimeItemClick = component::onAnimeItemClick,
                     listName = "Films",
                     onSeeAllClick = { component.onSeeAllClick(3) }
@@ -139,6 +142,7 @@ fun HomeScreen(component: HomeComponent) {
 @Composable
 private fun LastWatchedVideoImage(
     animeItem: LastWatchedAnime,
+    imageLoader: VaumaImageLoader,
     onPlayClick: () -> Unit,
     onAnimeClick: (Int) -> Unit,
     addToList: (Boolean) -> Unit
@@ -147,20 +151,13 @@ private fun LastWatchedVideoImage(
     Box(
         modifier = Modifier.noRippleEffectClick { onAnimeClick(animeItem.id) }
     ) {
-        GlideImage(
+        AsyncImage(
             modifier = Modifier
                 .fillMaxSize()
                 .height(400.dp),
-            imageModel = { animeItem.imageUrl },
-            imageOptions = ImageOptions(
-                contentDescription = "image video",
-                contentScale = ContentScale.FillBounds
-
-            ),
-            requestOptions = {
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-            },
+            model = imageLoader.load { data(animeItem.imageUrl) },
+            contentDescription = "image video",
+            contentScale = ContentScale.FillBounds
         )
 
         Column(
@@ -198,6 +195,7 @@ private fun LastWatchedVideoImage(
 @Composable
 private fun AnimeList(
     animeList: List<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     listName: String,
     onSeeAllClick: () -> Unit
@@ -232,7 +230,7 @@ private fun AnimeList(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             animeList.forEach {
-                AnimeCard(animeItem = it, onAnimeItemClick = onAnimeItemClick)
+                AnimeCard(animeItem = it, imageLoader = imageLoader, onAnimeItemClick = onAnimeItemClick)
             }
         }
 
@@ -241,7 +239,7 @@ private fun AnimeList(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
+private fun AnimeCard(animeItem: AnimeInfo, imageLoader: VaumaImageLoader, onAnimeItemClick: (Int) -> Unit) {
     Card(
         onClick = { onAnimeItemClick(animeItem.id) },
         shape = RoundedCornerShape(16.dp),
@@ -253,21 +251,13 @@ private fun AnimeCard(animeItem: AnimeInfo, onAnimeItemClick: (Int) -> Unit) {
 
         Column {
             Box {
-
-                GlideImage(
+                AsyncImage(
                     modifier = Modifier
                         .height(250.dp)
                         .width(175.dp),
-                    imageModel = { animeItem.image.original },
-                    imageOptions = ImageOptions(
-                        contentDescription = animeItem.nameRu,
-                        contentScale = ContentScale.FillBounds
-
-                    ),
-                    requestOptions = {
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    },
+                    model = imageLoader.load { data(animeItem.image.original) },
+                    contentDescription = animeItem.nameRu,
+                    contentScale = ContentScale.FillBounds
                 )
                 Rating(animeItem = animeItem)
             }

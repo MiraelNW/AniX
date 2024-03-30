@@ -57,7 +57,10 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
                 when (val instance = it.instance) {
 
                     is MainRootComponent.Child.Home -> {
-                        HomeScreen(component = instance.component)
+                        HomeScreen(
+                            component = instance.component,
+                            imageLoader = instance.imageLoader
+                        )
                         shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
                         shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
                     }
@@ -67,12 +70,17 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
                         shouldShowNavRail = false
                         AnimeCategoriesScreen(
                             component = instance.component,
-                            categoryId = instance.id
+                            categoryId = instance.id,
+                            imageLoader = instance.imageLoader
                         )
                     }
 
                     is MainRootComponent.Child.Search -> {
-                        SearchAnimeScreen(component = instance.component, search = instance.search)
+                        SearchAnimeScreen(
+                            component = instance.component,
+                            search = instance.search,
+                            imageLoader = instance.imageLoader
+                        )
                         shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
                         shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
                     }
@@ -84,7 +92,7 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
                     }
 
                     is MainRootComponent.Child.Favourite -> {
-                        FavouriteListScreen(component = instance.component)
+                        FavouriteListScreen(component = instance.component, imageLoader = instance.imageLoader)
                         shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
                         shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
                     }
@@ -110,7 +118,11 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
                     is MainRootComponent.Child.DetailInfo -> {
                         shouldShowBottomBar = false
                         shouldShowNavRail = false
-                        AnimeDetailScreen(component = instance.component, instance.id)
+                        AnimeDetailScreen(
+                            component = instance.component,
+                            animeId = instance.id,
+                            imageLoader = instance.imageLoader
+                        )
                     }
 
                     is MainRootComponent.Child.VideoScreen -> {

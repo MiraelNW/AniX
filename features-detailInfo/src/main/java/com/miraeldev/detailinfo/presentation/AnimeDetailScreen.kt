@@ -44,6 +44,7 @@ import com.miraeldev.detailinfo.presentation.ui.PlayButton
 import com.miraeldev.detailinfo.presentation.ui.RatingAndCategoriesRow
 import com.miraeldev.detailinfo.presentation.ui.TopAnimeImage
 import com.miraeldev.detailinfo.presentation.ui.ZoomableImage
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.FavouriteIcon
 import com.miraeldev.presentation.shimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.delay
@@ -57,6 +58,7 @@ private const val DOWNLOAD_SCREEN = 2
 @Composable
 fun AnimeDetailScreen(
     component: DetailComponent,
+    imageLoader: VaumaImageLoader,
     animeId: Int
 ) {
 
@@ -72,6 +74,7 @@ fun AnimeDetailScreen(
             is DetailStore.State.AnimeDetailScreenState.SearchResult -> {
 
                 DetailScreen(
+                    imageLoader = imageLoader,
                     animeDetail = results.result.first(),
                     onBackPressed = component::onBackClicked,
                     onAnimeItemClick = component::onAnimeItemClick,
@@ -115,6 +118,7 @@ fun AnimeDetailScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun DetailScreen(
+    imageLoader: VaumaImageLoader,
     animeDetail: AnimeDetailInfo,
     onBackPressed: () -> Unit,
     onSeriesClick: (Int) -> Unit,
@@ -141,6 +145,7 @@ private fun DetailScreen(
     BottomSheet(
         bottomSheetScreen = currentBottomSheetScreen,
         animeDetailInfo = animeDetail,
+        imageLoader = imageLoader,
         onBackPressed = {
             coroutineScope.launch { modalSheetState.hide() }
         },
@@ -174,6 +179,7 @@ private fun DetailScreen(
 
                 item {
                     TopAnimeImage(
+                        imageLoader = imageLoader,
                         animeItem = animeDetail,
                         onImageClick = { showZoomableImage = true })
                 }
@@ -245,6 +251,7 @@ private fun DetailScreen(
                 item {
                     OtherAnime(
                         animeList = animeDetail.similar,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick
                     )
                 }
@@ -272,6 +279,7 @@ private fun DetailScreen(
             if (showZoomableImage) {
                 ZoomableImage(
                     image = animeDetail.image.original,
+                    imageLoader = imageLoader,
                     onDismiss = {
                         showZoomableImage = false
                     },

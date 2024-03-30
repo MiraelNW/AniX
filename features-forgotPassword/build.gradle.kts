@@ -85,8 +85,8 @@ dependencies {
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
+    implementation(project(":core-designSystem"))
 
-    implementation(project(":core-presentation"))
     implementation(project(":core-extensions"))
     implementation(project(":core-models"))
     implementation(project(":core-utils"))

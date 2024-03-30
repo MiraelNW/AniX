@@ -29,17 +29,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.anime.Similar
 import com.miraeldev.extensions.pressClickEffect
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.miraeldev.imageloader.VaumaImageLoader
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun OtherAnime(
     animeList: ImmutableList<Similar>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit
 ) {
     LazyRow(
@@ -49,27 +48,22 @@ fun OtherAnime(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items = animeList, key = { it.id }) {
-            AnimeCard(animeItem = it, onAnimeItemClick = onAnimeItemClick)
+            AnimeCard(
+                animeItem = it,
+                imageLoader = imageLoader,
+                onAnimeItemClick = onAnimeItemClick
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
-
-//    val originalGlideUrl = remember {
-//        GlideUrl(
-//            animeItem.image.original
-//        ) {
-//            mapOf(
-//                Pair(
-//                    "Authorization",
-//                    animeItem.image.token
-//                )
-//            )
-//        }
-//    }
+private fun AnimeCard(
+    animeItem: Similar,
+    imageLoader: VaumaImageLoader,
+    onAnimeItemClick: (Int) -> Unit
+) {
 
     val animatedProgress = remember { Animatable(initialValue = 0f) }
     LaunchedEffect(Unit) {
@@ -94,21 +88,14 @@ private fun AnimeCard(animeItem: Similar, onAnimeItemClick: (Int) -> Unit) {
                 .pressClickEffect(),
             elevation = 4.dp
         ) {
-
-            GlideImage(
+            AsyncImage(
                 modifier = Modifier
                     .height(300.dp)
                     .width(230.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                imageModel = { animeItem.image.original },
-                imageOptions = ImageOptions(
-                    contentDescription = "anime image preview",
-                    contentScale = ContentScale.FillBounds,
-                ),
-                requestOptions = {
-                    RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                },
+                model = imageLoader.load { data(animeItem.image.original) },
+                contentDescription = "anime image preview",
+                contentScale = ContentScale.FillBounds
             )
 
         }

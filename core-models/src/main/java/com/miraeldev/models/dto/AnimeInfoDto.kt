@@ -3,7 +3,6 @@ package com.miraeldev.models.dto
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.models.baseModel.DtoModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -27,7 +26,7 @@ data class AnimeInfoDto(
     @SerialName("similar") val similar: List<SimilarDto>,
     @SerialName("videos") val videos: List<VideoDto>,
     @SerialName("favoured") val isFavourite: Boolean,
-) : DtoModel
+)
 
 fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
     return AnimeInfo(

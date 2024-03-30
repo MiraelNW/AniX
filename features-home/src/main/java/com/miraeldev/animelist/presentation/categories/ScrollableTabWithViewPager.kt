@@ -40,6 +40,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.R
 import com.miraeldev.extensions.NoRippleInteractionSource
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.presentation.AnimeCard
 import com.miraeldev.presentation.ErrorAppendMessage
 import com.miraeldev.presentation.ErrorRetryButton
@@ -61,6 +62,7 @@ fun ScrollableTabWithViewPager(
     popularAnimeList: LazyPagingItems<AnimeInfo>,
     nameAnimeList: LazyPagingItems<AnimeInfo>,
     filmsAnimeList: LazyPagingItems<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     categoryId: Int,
     onAnimeItemClick: (Int) -> Unit
 ) {
@@ -136,7 +138,7 @@ fun ScrollableTabWithViewPager(
         reverseLayout = false,
         contentPadding = PaddingValues(0.dp),
         pageNestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
-            Orientation.Vertical
+            pagerState, Orientation.Vertical
         ),
         pageContent = { page ->
             when (page) {
@@ -144,6 +146,7 @@ fun ScrollableTabWithViewPager(
                 0 -> {
                     AnimeList(
                         categoryList = newCategoryList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
                         onClickRetry = { shouldRetry = true }
@@ -152,6 +155,7 @@ fun ScrollableTabWithViewPager(
                 1 -> {
                     AnimeList(
                         categoryList = popularAnimeList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
                         onClickRetry = { shouldRetry = true }
@@ -161,6 +165,7 @@ fun ScrollableTabWithViewPager(
                 2 -> {
                     AnimeList(
                         categoryList = nameAnimeList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
                         onClickRetry = { shouldRetry = true }
@@ -170,6 +175,7 @@ fun ScrollableTabWithViewPager(
                 3 -> {
                     AnimeList(
                         categoryList = filmsAnimeList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
                         onClickRetry = { shouldRetry = true }
@@ -179,6 +185,7 @@ fun ScrollableTabWithViewPager(
                 else -> {
                     AnimeList(
                         categoryList = newCategoryList,
+                        imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
                         onClickRetry = { shouldRetry = true }
@@ -192,6 +199,7 @@ fun ScrollableTabWithViewPager(
 @Composable
 private fun AnimeList(
     categoryList: LazyPagingItems<AnimeInfo>,
+    imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     changeScrollPossibility: (Boolean) -> Unit,
     onClickRetry: () -> Unit
@@ -271,6 +279,7 @@ private fun AnimeList(
                                     categoryList[index]?.let {
                                         AnimeCard(
                                             animeItem = it,
+                                            imageLoader = imageLoader,
                                             onAnimeItemClick = onAnimeItemClick,
                                         )
                                     }

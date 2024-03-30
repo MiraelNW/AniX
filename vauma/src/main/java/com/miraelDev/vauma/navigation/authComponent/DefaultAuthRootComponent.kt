@@ -11,6 +11,7 @@ import com.miraeldev.forgotpassword.presentation.codeVerifyResetPasswordScreen.c
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.DefaultEmailChooseComponentFactory
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.DefaultResetPasswordComponent
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.DefaultResetPasswordComponentFactory
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.models.LogIn
 import com.miraeldev.signin.presentation.signInComponent.DefaultSignInComponentFactory
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.DefaultCodeVerifyComponentFactory
@@ -19,11 +20,12 @@ import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultAuthRootComponentFactory = (ComponentContext, LogIn) -> DefaultAuthRootComponent
+typealias DefaultAuthRootComponentFactory = (ComponentContext, VaumaImageLoader, LogIn) -> DefaultAuthRootComponent
 
 @Inject
 class DefaultAuthRootComponent(
     @Assisted componentContext: ComponentContext,
+    @Assisted private val imageLoader: VaumaImageLoader,
     @Assisted private val logIn: () -> Unit,
     private val signInComponentFactory: DefaultSignInComponentFactory,
     private val signUpComponentFactory: DefaultSignUpComponentFactory,
@@ -66,7 +68,7 @@ class DefaultAuthRootComponent(
                 ) { email, password ->
                     navigation.push(Config.CodeVerify(email, password))
                 }
-                AuthRootComponent.Child.SignUp(component)
+                AuthRootComponent.Child.SignUp(component, imageLoader)
             }
 
             is Config.CodeVerify -> {

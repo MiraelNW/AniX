@@ -10,7 +10,7 @@ import com.miraeldev.network.models.routes.AuthNetworkRoutes
 import com.miraeldev.user.User
 import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cache.HttpCache
@@ -42,7 +42,7 @@ import java.io.InputStream
 @Inject
 class AuthNetworkClientImpl(private val context: Context) : AuthNetworkClient {
 
-    private val client = HttpClient(Android).config {
+    override val client = HttpClient(CIO).config {
 
         defaultRequest {
             url(AppNetworkRoutes.BASE_URL)

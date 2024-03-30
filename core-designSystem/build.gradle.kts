@@ -53,13 +53,8 @@ dependencies {
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
 
-    //glide
-    implementation(libs.landscapist.glide)
-    implementation(libs.landscapist.transformation)
-
-    implementation(project(":core-extensions"))
-    implementation(project(":core-theme"))
-    implementation(project(":core-models"))
+    //coil
+    implementation(libs.coil.compose)
 
     //lottie animations
     implementation(libs.lottie.compose)
@@ -78,4 +73,9 @@ dependencies {
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
+
+    implementation(project(":core-extensions"))
+    implementation(project(":core-theme"))
+    implementation(project(":core-models"))
+    implementation(project(":core-imageLoader"))
 }

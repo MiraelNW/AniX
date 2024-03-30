@@ -53,8 +53,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.miraeldev.extensions.noRippleEffectClick
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.presentation.EmailField
 import com.miraeldev.presentation.ErrorValidField
@@ -63,7 +64,7 @@ import com.miraeldev.presentation.Toolbar
 import com.miraeldev.signup.R
 
 @Composable
-fun SignUpScreen(component: SignUpComponent) {
+fun SignUpScreen(component: SignUpComponent, imageLoader: VaumaImageLoader) {
     val model by component.model.collectAsStateWithLifecycle()
 
     val loginFocusRequester = remember { FocusRequester() }
@@ -124,7 +125,9 @@ fun SignUpScreen(component: SignUpComponent) {
                         modifier = Modifier
                             .size(160.dp)
                             .clip(CircleShape),
-                        model = model.image.ifEmpty { R.drawable.ic_placeholder },
+                        model = imageLoader.load {
+                            data(model.image.ifEmpty { R.drawable.ic_placeholder })
+                        },
                         placeholder = painterResource(id = R.drawable.ic_placeholder),
                         contentScale = ContentScale.FillBounds,
                         contentDescription = stringResource(R.string.profile_image)

@@ -9,6 +9,7 @@ import com.miraeldev.animelist.presentation.categories.categoriesComponent.Categ
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeComponent
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteComponent
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterComponent
 import com.miraeldev.search.presentation.searchComponent.SearchAnimeComponent
 import com.miraeldev.video.presentation.videoComponent.VideoComponent
@@ -21,15 +22,28 @@ interface MainRootComponent {
     fun onTabNavigate(navId: NavId)
 
     sealed class Child(val navId: NavId) {
-        data class Home(val component: HomeComponent) : Child(NavId.HOME)
-        data class Categories(val component: CategoriesComponent, val id: Int) :
+        data class Home(val component: HomeComponent, val imageLoader: VaumaImageLoader) :
+            Child(NavId.HOME)
+
+        data class Categories(val component: CategoriesComponent, val id: Int, val imageLoader: VaumaImageLoader) :
             Child(NavId.UNDEFINED)
-        data class Search(val component: SearchAnimeComponent, val search: String = "") :
+
+        data class Search(
+            val component: SearchAnimeComponent,
+            val search: String = "",
+            val imageLoader: VaumaImageLoader
+        ) :
             Child(NavId.SEARCH)
+
         data class Filter(val component: FilterComponent) : Child(NavId.UNDEFINED)
-        data class Favourite(val component: FavouriteComponent) : Child(NavId.FAVOURITE)
+        data class Favourite(val component: FavouriteComponent, val imageLoader: VaumaImageLoader) : Child(NavId.FAVOURITE)
         data class Account(val component: AccountRootComponent) : Child(NavId.ACCOUNT)
-        data class DetailInfo(val component: DetailComponent, val id: Int) : Child(NavId.UNDEFINED)
+        data class DetailInfo(
+            val component: DetailComponent,
+            val id: Int,
+            val imageLoader: VaumaImageLoader
+        ) : Child(NavId.UNDEFINED)
+
         data class VideoScreen(val component: VideoComponent) : Child(NavId.UNDEFINED)
 
     }

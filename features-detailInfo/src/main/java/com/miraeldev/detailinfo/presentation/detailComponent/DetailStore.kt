@@ -14,6 +14,7 @@ import com.miraeldev.detailinfo.domain.useCases.SelectAnimeItemUseCase
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.Intent
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.Label
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.State
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.models.result.ResultAnimeDetail
 import kotlinx.collections.immutable.ImmutableList
@@ -89,7 +90,6 @@ class DetailStoreFactory(
                 dispatch(Action.AnimeDetailLoading)
                 getAnimeDetailUseCase().map {
                     when (val res = it) {
-
                         is ResultAnimeDetail.Success -> {
                             State.AnimeDetailScreenState.SearchResult(result = res.animeList.toImmutableList()) as State.AnimeDetailScreenState
                         }

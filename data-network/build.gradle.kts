@@ -111,7 +111,7 @@ dependencies {
     kapt(libs.room.compiler)
 
     //ktor
-    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)

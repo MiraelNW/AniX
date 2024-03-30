@@ -1,14 +1,11 @@
 package com.miraeldev.account.presentation.screens.account.accountComponent
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,20 +39,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil3.compose.AsyncImage
 import com.miraeldev.account.R
 import com.miraeldev.account.domain.UserModel
 import com.miraeldev.account.presentation.screens.notificationsScreen.Switcher
+import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.models.anime.Settings
 import com.miraeldev.presentation.Toolbar
 import com.miraeldev.theme.LocalTheme
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
-import okhttp3.internal.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun AccountScreen(component: AccountComponent) {
+fun AccountScreen(component: AccountComponent, imageLoader: VaumaImageLoader) {
 
     val model by component.model.collectAsStateWithLifecycle()
 
@@ -77,7 +72,7 @@ fun AccountScreen(component: AccountComponent) {
                 .padding(horizontal = 6.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ProfileNameAndImage(model.userModel)
+            ProfileNameAndImage(model.userModel, imageLoader)
             AllSettings(
                 onSettingItemClick = component::onSettingItemClick,
                 onDarkThemeClick = component::onDarkThemeClick,
@@ -88,7 +83,7 @@ fun AccountScreen(component: AccountComponent) {
 }
 
 @Composable
-private fun ProfileNameAndImage(userInfo: UserModel) {
+private fun ProfileNameAndImage(userInfo: UserModel, imageLoader: VaumaImageLoader) {
 
     Row(
         modifier = Modifier
@@ -97,25 +92,19 @@ private fun ProfileNameAndImage(userInfo: UserModel) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        GlideImage(
+        AsyncImage(
             modifier = Modifier
                 .size(140.dp)
                 .clip(CircleShape),
-            imageModel = { userInfo.image },
-            requestOptions = {
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-            },
-            imageOptions = ImageOptions(
-                contentDescription = "profile image",
-                contentScale = ContentScale.Crop,
-            ),
-            failure = {
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_placeholder),
-                    contentDescription = "place holder"
-                )
-            }
+            model = imageLoader.load { data(userInfo.image) },
+            contentDescription = "profile image",
+            contentScale = ContentScale.Crop,
+//            failure = {
+//                Image(
+//                    imageVector = ImageVector.vectorResource(R.drawable.ic_placeholder),
+//                    contentDescription = "place holder"
+//                )
+//            }
         )
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(
@@ -142,13 +131,13 @@ private fun AllSettings(
     onDarkThemeClick: (Boolean) -> Unit,
     onLogOutClick: () -> Unit,
 ) {
-    val settings = immutableListOf(
+    val settings = persistentListOf(
         Settings.EDIT_PROFILE,
         Settings.NOTIFICATIONS,
         Settings.DOWNLOADS
     )
 
-    val settingsItems = immutableListOf(
+    val settingsItems = persistentListOf(
         stringResource(R.string.edit_profile) to R.drawable.ic_edit_profile,
         stringResource(R.string.notification) to R.drawable.ic_notification,
         stringResource(R.string.download_video) to R.drawable.ic_download_videos,

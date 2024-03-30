@@ -31,7 +31,7 @@ fun AuthContent(component: AuthRootComponent, onReadyToDrawStartScreen: () -> Un
                 }
 
                 is AuthRootComponent.Child.SignUp -> {
-                    SignUpScreen(component = instance.component)
+                    SignUpScreen(component = instance.component, imageLoader = instance.imageLoader)
                 }
 
                 is AuthRootComponent.Child.CodeVerify -> {
