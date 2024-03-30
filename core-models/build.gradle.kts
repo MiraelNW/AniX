@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation(libs.core.ktx)
+
     //exoplayer
     implementation(libs.media3.exoplayer)
     //immutable list
