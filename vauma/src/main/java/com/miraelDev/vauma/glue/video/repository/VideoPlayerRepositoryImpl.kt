@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.glue.video.repository
 
-import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.api.VideoPlayerDataRepository
 import com.miraeldev.video.PlayerWrapper
 import com.miraeldev.video.data.repository.VideoPlayerRepository
 import kotlinx.coroutines.flow.StateFlow

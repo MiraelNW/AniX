@@ -37,8 +37,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.pressClickEffect
-import com.miraeldev.presentation.Toolbar
 import com.miraeldev.search.R
 import com.miraeldev.search.presentation.filterScreen.filterComponent.FilterComponent
 import com.miraeldev.theme.LightGreen700

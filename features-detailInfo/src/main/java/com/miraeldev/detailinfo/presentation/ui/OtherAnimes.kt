@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.miraeldev.anime.Similar
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.extensions.pressClickEffect
-import com.miraeldev.imageloader.VaumaImageLoader
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable

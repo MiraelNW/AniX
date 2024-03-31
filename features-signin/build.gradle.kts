@@ -27,11 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -90,9 +90,9 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.test.manifest)
-    implementation(project(":core-designSystem"))
 
-    implementation(project(":core-extensions"))
-    implementation(project(":core-models"))
-    implementation(project(":core-utils"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:extensions"))
+    implementation(project(":core:models"))
+    implementation(project(":core:utils"))
 }

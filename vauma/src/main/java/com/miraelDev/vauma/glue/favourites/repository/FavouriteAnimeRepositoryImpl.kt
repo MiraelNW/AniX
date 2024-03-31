@@ -1,8 +1,8 @@
 package com.miraelDev.vauma.glue.favourites.repository
 
-import com.miraeldev.FavouriteAnimeDataRepository
-import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.api.FavouriteAnimeDataRepository
+import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.favourites.data.FavouriteAnimeRepository
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow

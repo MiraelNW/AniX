@@ -30,18 +30,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-
-    implementation(project(":core-models"))
-    implementation(project(":core-extensions"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -61,8 +58,8 @@ dependencies {
     implementation(libs.kotlin.inject.runtime)
 
     //sqlDelight
-    implementation("app.cash.sqldelight:android-driver:2.0.0")
-    implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
+    implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.coroutine.exstension)
     implementation("app.cash.sqldelight:androidx-paging3-extensions:2.0.0")
 
     //room
@@ -70,6 +67,9 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.room.paging)
+
+    implementation(project(":core:models"))
+    implementation(project(":core:extensions"))
 }
 
 sqldelight {

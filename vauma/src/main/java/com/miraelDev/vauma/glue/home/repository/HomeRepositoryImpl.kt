@@ -1,14 +1,14 @@
 package com.miraelDev.vauma.glue.home.repository
 
 import androidx.paging.PagingData
-import com.miraeldev.AnimeListDataRepository
-import com.miraeldev.FavouriteAnimeDataRepository
-import com.miraeldev.HomeDataRepository
-import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeDetailInfo
 import com.miraeldev.animelist.data.HomeRepository
+import com.miraeldev.api.AnimeListDataRepository
+import com.miraeldev.api.FavouriteAnimeDataRepository
+import com.miraeldev.api.HomeDataRepository
+import com.miraeldev.api.VideoPlayerDataRepository
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject

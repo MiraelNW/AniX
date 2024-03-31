@@ -36,7 +36,7 @@ android {
 
 dependencies {
 
-    implementation(project(":core-models"))
+    implementation(project(":core:models"))
 
     //kotlin
     implementation(libs.core.ktx)

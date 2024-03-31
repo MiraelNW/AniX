@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.detailinfo.R
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.theme.LightGreen
 
 private const val RATING_SCREEN = 1

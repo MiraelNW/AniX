@@ -57,11 +57,11 @@ import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.animelist.R
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeComponent
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.shimmerlist.ShimmerHome
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.shimmerList.ShimmerHome
 
 @Composable
 fun HomeScreen(component: HomeComponent, imageLoader: VaumaImageLoader) {

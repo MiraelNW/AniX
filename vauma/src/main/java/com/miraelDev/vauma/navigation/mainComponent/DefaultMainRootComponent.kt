@@ -12,10 +12,9 @@ import com.miraelDev.vauma.navigation.navigationUi.NavId
 import com.miraeldev.account.presentation.DefaultAccountRootComponentFactory
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponentFactory
 import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponentFactory
-import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponent
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponentFactory
 import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponentFactory
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
 import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponentFactory
 import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponentFactory

@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,11 +30,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.miraeldev.designsystem.ErrorValidField
+import com.miraeldev.designsystem.PasswordField
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.forgotpassword.R
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordComponent
-import com.miraeldev.presentation.ErrorValidField
-import com.miraeldev.presentation.PasswordField
-import com.miraeldev.presentation.Toolbar
 
 @Composable
 fun ResetPasswordScreen(

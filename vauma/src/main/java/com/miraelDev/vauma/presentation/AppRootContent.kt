@@ -1,18 +1,15 @@
 package com.miraelDev.vauma.presentation
 
 import MainContent
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.media3.common.util.UnstableApi
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.miraelDev.vauma.navigation.authComponent.AuthContent
 import com.miraelDev.vauma.presentation.appRootComponent.AppRootComponent
-import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
 import com.miraeldev.theme.VaumaTheme
 
 @Composable

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.miraeldev.account.R
-import com.miraeldev.presentation.Toolbar
+import com.miraeldev.designsystem.Toolbar
 
 @Composable
 fun PrivacyPolicyScreen(onBackPressed: () -> Unit) {

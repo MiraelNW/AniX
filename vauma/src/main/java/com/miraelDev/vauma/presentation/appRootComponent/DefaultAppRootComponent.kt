@@ -12,7 +12,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponentFactory
 import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponentFactory
 import com.miraeldev.extensions.componentScope
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow

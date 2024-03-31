@@ -54,13 +54,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.EmailField
+import com.miraeldev.designsystem.ErrorValidField
+import com.miraeldev.designsystem.PasswordField
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.imageloader.VaumaImageLoader
 import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
-import com.miraeldev.presentation.EmailField
-import com.miraeldev.presentation.ErrorValidField
-import com.miraeldev.presentation.PasswordField
-import com.miraeldev.presentation.Toolbar
 import com.miraeldev.signup.R
 
 @Composable

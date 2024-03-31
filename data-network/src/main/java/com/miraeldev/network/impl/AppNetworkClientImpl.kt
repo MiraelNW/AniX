@@ -2,11 +2,11 @@ package com.miraeldev.network.impl
 
 import android.util.Log
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.dataStore.PreferenceClient
-import com.miraeldev.dataStore.userAuth.UserAuthRepository
+import com.miraeldev.api.PreferenceClient
+import com.miraeldev.api.UserAuthRepository
 import com.miraeldev.local.AppDatabase
 import com.miraeldev.local.models.user.toUserModel
-import com.miraeldev.network.AppNetworkClient
+import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.network.models.AccessTokenDataModel
 import com.miraeldev.network.models.FavouriteAnimeSendRequest
 import com.miraeldev.network.models.RefreshToken
@@ -48,7 +48,7 @@ class AppNetworkClientImpl(
     private val preferenceClient: PreferenceClient,
     private val userAuthRepository: UserAuthRepository,
     private val appDatabase: AppDatabase
-) : AppNetworkClient {
+) : com.miraeldev.api.AppNetworkClient {
 
     override val client: HttpClient = HttpClient(CIO).config {
 

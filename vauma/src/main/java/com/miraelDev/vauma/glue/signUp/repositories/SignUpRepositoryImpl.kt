@@ -1,10 +1,9 @@
 package com.miraelDev.vauma.glue.signUp.repositories
 
-import com.miraeldev.UserAuthDataRepository
-import com.miraeldev.UserDataRepository
+import com.miraeldev.api.UserAuthDataRepository
+import com.miraeldev.api.UserDataRepository
 import com.miraeldev.signup.data.SignUpRepository
 import com.miraeldev.user.User
-import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 
 @Inject

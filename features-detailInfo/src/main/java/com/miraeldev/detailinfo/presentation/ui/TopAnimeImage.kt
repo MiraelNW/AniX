@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.transformations
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.imageloader.transformation.BlurTransformation
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.api.transformation.BlurTransformation
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

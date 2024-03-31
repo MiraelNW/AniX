@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -147,20 +145,23 @@ dependencies {
     implementation(project(":features-search"))
     implementation(project(":features-video"))
 
-    implementation(project(":data"))
-    implementation(project(":data-network"))
-    implementation(project(":data-store-client"))
+    implementation(project(":data:repositories:api"))
+    implementation(project(":data:repositories:impl"))
+    implementation(project(":data:network:api"))
+    implementation(project(":data:network:impl"))
+    implementation(project(":data:storeclient:api"))
+    implementation(project(":data:storeclient:impl"))
     implementation(project(":data-database"))
 
     implementation(project(":logger"))
 
-    implementation(project(":core-theme"))
-    implementation(project(":core-utils"))
-    implementation(project(":core-extensions"))
-    implementation(project(":core-designSystem"))
-    implementation(project(":core-imageLoader"))
+    implementation(project(":core:theme"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:extensions"))
+    implementation(project(":core:models"))
 
-    implementation(project(":core-models"))
+    implementation(project(":imageloader:api"))
+    implementation(project(":imageloader:impl"))
 }
 
 ksp {

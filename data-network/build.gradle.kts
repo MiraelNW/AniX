@@ -93,11 +93,6 @@ android {
 
 dependencies {
 
-    implementation(project(":core-extensions"))
-    implementation(project(":core-models"))
-    implementation(project(":data-store-client"))
-    implementation(project(":data-database"))
-
     //kotlin
     implementation(libs.core.ktx)
 
@@ -121,4 +116,9 @@ dependencies {
 
     //pluto
     implementation(libs.pluto.ktor.intercepter)
+
+    implementation(project(":core:extensions"))
+    implementation(project(":core:models"))
+    implementation(project(":data:storeclient:api"))
+    implementation(project(":data-database"))
 }

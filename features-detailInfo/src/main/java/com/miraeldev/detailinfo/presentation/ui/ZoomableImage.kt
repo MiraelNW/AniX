@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.imageloader.VaumaImageLoader
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt

@@ -5,6 +5,6 @@ import com.miraelDev.vauma.presentation.appRootComponent.DefaultAppRootComponent
 import me.tatarka.inject.annotations.Component
 
 @Component
-abstract class AppRootComponent(@Component val parent: ApplicationComponent) {
+abstract class AppRootComponent(@Component val parent: ApplicationComponentt) {
     abstract fun appRootFactory(): (ComponentContext) -> DefaultAppRootComponent
 }

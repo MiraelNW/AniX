@@ -55,12 +55,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.miraeldev.account.R
 import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileComponent
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.EmailField
+import com.miraeldev.designsystem.ErrorValidField
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.EmailField
-import com.miraeldev.presentation.ErrorValidField
-import com.miraeldev.presentation.Toolbar
 
 @Composable
 fun EditProfileScreen(component: EditProfileComponent, imageLoader: VaumaImageLoader) {

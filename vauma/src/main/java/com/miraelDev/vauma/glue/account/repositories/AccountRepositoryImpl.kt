@@ -1,9 +1,9 @@
 package com.miraelDev.vauma.glue.account.repositories
 
-import com.miraeldev.UserAuthDataRepository
-import com.miraeldev.UserDataRepository
 import com.miraeldev.account.data.AccountRepository
-import com.miraeldev.dataStore.PreferenceClient
+import com.miraeldev.api.PreferenceClient
+import com.miraeldev.api.UserAuthDataRepository
+import com.miraeldev.api.UserDataRepository
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject

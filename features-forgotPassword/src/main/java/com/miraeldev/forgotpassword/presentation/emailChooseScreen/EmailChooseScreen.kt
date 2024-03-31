@@ -31,11 +31,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.miraeldev.designsystem.EmailField
+import com.miraeldev.designsystem.ErrorValidField
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.forgotpassword.R
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.EmailChooseComponent
-import com.miraeldev.presentation.EmailField
-import com.miraeldev.presentation.ErrorValidField
-import com.miraeldev.presentation.Toolbar
 
 
 @Composable

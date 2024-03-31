@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.FavouriteIcon
+import com.miraeldev.designsystem.shimmerlist.ShimmerListAnimeDetail
 import com.miraeldev.detailinfo.R
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailComponent
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore
@@ -44,9 +47,6 @@ import com.miraeldev.detailinfo.presentation.ui.PlayButton
 import com.miraeldev.detailinfo.presentation.ui.RatingAndCategoriesRow
 import com.miraeldev.detailinfo.presentation.ui.TopAnimeImage
 import com.miraeldev.detailinfo.presentation.ui.ZoomableImage
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.FavouriteIcon
-import com.miraeldev.presentation.shimmerList.ShimmerListAnimeDetail
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

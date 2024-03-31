@@ -26,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.miraeldev.designsystem.OutlinedOtpTextField
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.forgotpassword.R
-import com.miraeldev.presentation.OutlinedOtpTextField
-import com.miraeldev.presentation.Toolbar
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyRPComponent
 import kotlinx.coroutines.delay
 

@@ -6,7 +6,7 @@ import com.miraeldev.account.presentation.screens.account.accountComponent.Accou
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadComponent
 import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileComponent
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.NotificationComponent
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
 
 interface AccountRootComponent {
 

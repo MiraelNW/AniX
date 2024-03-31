@@ -28,9 +28,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.account.R
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadComponent
 import com.miraeldev.account.presentation.screens.notificationsScreen.Switcher
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
-import com.miraeldev.presentation.Toolbar
 
 
 private const val DELETE_VIDEO = 1

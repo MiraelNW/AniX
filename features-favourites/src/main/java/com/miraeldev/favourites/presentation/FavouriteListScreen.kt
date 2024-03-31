@@ -63,13 +63,13 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.FavouriteIcon
+import com.miraeldev.designsystem.shimmerlist.ShimmerListFavouriteAnime
 import com.miraeldev.extensions.pressClickEffect
 import com.miraeldev.favourites.R
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteComponent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.FavouriteIcon
-import com.miraeldev.presentation.shimmerList.ShimmerListFavouriteAnime
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.ImmutableList

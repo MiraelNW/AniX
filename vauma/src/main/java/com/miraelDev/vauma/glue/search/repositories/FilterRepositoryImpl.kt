@@ -1,7 +1,7 @@
 package com.miraelDev.vauma.glue.search.repositories
 
-import com.miraeldev.FilterAnimeDataRepository
 import com.miraeldev.anime.CategoryModel
+import com.miraeldev.api.FilterAnimeDataRepository
 import com.miraeldev.search.data.repository.FilterAnimeRepository
 import kotlinx.coroutines.flow.StateFlow
 import me.tatarka.inject.annotations.Inject

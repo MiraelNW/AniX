@@ -1,8 +1,8 @@
 package com.miraelDev.vauma.glue.search.repositories
 
 import androidx.paging.PagingData
-import com.miraeldev.SearchAnimeDataRepository
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.search.data.repository.SearchAnimeRepository
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject

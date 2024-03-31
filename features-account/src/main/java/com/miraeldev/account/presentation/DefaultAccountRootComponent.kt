@@ -8,12 +8,10 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.miraeldev.account.presentation.screens.account.accountComponent.DefaultAccountComponentFactory
-import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DefaultDownloadComponent
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DefaultDownloadComponentFactory
 import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.DefaultEditProfileComponentFactory
-import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponent
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponentFactory
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
 import com.miraeldev.models.anime.Settings
 import kotlinx.serialization.Serializable

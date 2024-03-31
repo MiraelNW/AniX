@@ -34,9 +34,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miraeldev.account.R
+import com.miraeldev.designsystem.ErrorValidField
+import com.miraeldev.designsystem.PasswordField
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.presentation.ErrorValidField
-import com.miraeldev.presentation.PasswordField
 import com.miraeldev.theme.LocalOrientation
 import com.miraeldev.utils.PasswordValidationState
 

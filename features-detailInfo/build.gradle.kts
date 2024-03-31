@@ -26,11 +26,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -94,12 +94,12 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.network)
 
-    implementation(project(":core-theme"))
-    implementation(project(":core-extensions"))
-    implementation(project(":core-designSystem"))
-    implementation(project(":core-models"))
-    implementation(project(":core-imageLoader"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:theme"))
+    implementation(project(":core:extensions"))
+    implementation(project(":core:models"))
+    implementation(project(":imageloader:api"))
 
-    implementation(project(":data-store-client"))
-    implementation(project(":data-network"))
+    implementation(project(":data:storeclient:api"))
+    implementation(project(":data:network:api"))
 }

@@ -1,10 +1,10 @@
 package com.miraelDev.vauma.glue.detailInfo.repositories
 
-import com.miraeldev.AnimeDetailDataRepository
-import com.miraeldev.Downloader
-import com.miraeldev.VideoPlayerDataRepository
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.toAnimeInfo
+import com.miraeldev.api.AnimeDetailDataRepository
+import com.miraeldev.api.Downloader
+import com.miraeldev.api.VideoPlayerDataRepository
 import com.miraeldev.detailinfo.data.repositories.AnimeDetailRepository
 import com.miraeldev.models.result.ResultAnimeDetail
 import kotlinx.coroutines.flow.Flow

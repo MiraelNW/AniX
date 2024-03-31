@@ -1,6 +1,7 @@
 package com.miraeldev.search.presentation
 
 
+import AnimeCard
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,12 +47,14 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.AnimeCard
-import com.miraeldev.presentation.ErrorAppendItem
-import com.miraeldev.presentation.shimmerList.ShimmerAnimeCard
-import com.miraeldev.presentation.shimmerList.ShimmerGrid
-import com.miraeldev.presentation.shimmerList.ShimmerItem
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.ErrorAppendItem
+import com.miraeldev.designsystem.ErrorAppendMessage
+import com.miraeldev.designsystem.ErrorRetryButton
+import com.miraeldev.designsystem.animation.WentWrongAnimation
+import com.miraeldev.designsystem.shimmerlist.ShimmerAnimeCard
+import com.miraeldev.designsystem.shimmerlist.ShimmerGrid
+import com.miraeldev.designsystem.shimmerlist.ShimmerItem
 import com.miraeldev.search.R
 import com.miraeldev.search.presentation.animeCard.LastSearchedAnime
 import com.miraeldev.search.presentation.animeCard.SearchAnimeCard
@@ -257,7 +260,7 @@ private fun InitialAnimeList(
                 loadState.refresh is LoadState.Error -> {
                     val e = initialList.loadState.refresh as LoadState.Error
                     if (e.error is IOException) {
-                        com.miraeldev.presentation.animation.WentWrongAnimation(
+                        WentWrongAnimation(
                             modifier = Modifier
                                 .fillMaxHeight(0.8f)
                                 .align(Alignment.Center),
@@ -265,7 +268,7 @@ private fun InitialAnimeList(
                             onClickRetry = onClickRetry
                         )
                     } else {
-                        com.miraeldev.presentation.animation.WentWrongAnimation(
+                        WentWrongAnimation(
                             modifier = Modifier
                                 .fillMaxHeight(0.8f)
                                 .align(Alignment.Center),
@@ -318,10 +321,10 @@ private fun InitialAnimeList(
 
                         if (initialList.loadState.append is LoadState.Error) {
                             item {
-                                com.miraeldev.presentation.ErrorAppendMessage(message = "Попробуйте снова")
+                                ErrorAppendMessage(message = "Попробуйте снова")
                             }
                             item {
-                                com.miraeldev.presentation.ErrorRetryButton(onClickRetry = onClickRetry)
+                                ErrorRetryButton(onClickRetry = onClickRetry)
                             }
                         }
                     }
@@ -361,13 +364,13 @@ private fun SearchResult(
                 loadState.refresh is LoadState.Error -> {
                     val e = searchResults.loadState.refresh as LoadState.Error
                     if (e.error is IOException) {
-                        com.miraeldev.presentation.animation.WentWrongAnimation(
+                        WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
                             onClickRetry = onRetry
                         )
                     } else {
-                        com.miraeldev.presentation.animation.WentWrongAnimation(
+                        WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.smth_went_wrong,
                             onClickRetry = onRetry

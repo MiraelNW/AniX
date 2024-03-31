@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
-import com.miraeldev.network.AuthNetworkClient
+import com.miraeldev.api.AuthNetworkClient
 import com.miraeldev.network.models.routes.AppNetworkRoutes
 import com.miraeldev.network.models.routes.AuthNetworkRoutes
 import com.miraeldev.user.User
@@ -40,7 +40,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 @Inject
-class AuthNetworkClientImpl(private val context: Context) : AuthNetworkClient {
+class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.AuthNetworkClient {
 
     override val client = HttpClient(CIO).config {
 

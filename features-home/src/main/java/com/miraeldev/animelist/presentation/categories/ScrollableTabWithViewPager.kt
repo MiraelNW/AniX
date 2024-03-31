@@ -1,5 +1,6 @@
 package com.miraeldev.animelist.presentation.categories
 
+import AnimeCard
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
@@ -39,14 +40,13 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.R
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.ErrorAppendMessage
+import com.miraeldev.designsystem.ErrorRetryButton
+import com.miraeldev.designsystem.animation.WentWrongAnimation
+import com.miraeldev.designsystem.shimmerlist.ShimmerAnimeCard
+import com.miraeldev.designsystem.shimmerlist.ShimmerGrid
 import com.miraeldev.extensions.NoRippleInteractionSource
-import com.miraeldev.imageloader.VaumaImageLoader
-import com.miraeldev.presentation.AnimeCard
-import com.miraeldev.presentation.ErrorAppendMessage
-import com.miraeldev.presentation.ErrorRetryButton
-import com.miraeldev.presentation.animation.WentWrongAnimation
-import com.miraeldev.presentation.shimmerList.ShimmerAnimeCard
-import com.miraeldev.presentation.shimmerList.ShimmerGrid
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay

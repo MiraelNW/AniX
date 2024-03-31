@@ -1,10 +1,10 @@
 package com.miraelDev.vauma.glue.main.repository
 
 import com.miraelDev.vauma.domain.repository.MainRepository
-import com.miraeldev.UserAuthDataRepository
-import com.miraeldev.UserDataRepository
-import com.miraeldev.dataStore.PreferenceClient
-import com.miraeldev.dataStore.userAuth.UserAuthRepository
+import com.miraeldev.api.PreferenceClient
+import com.miraeldev.api.UserAuthDataRepository
+import com.miraeldev.api.UserAuthRepository
+import com.miraeldev.api.UserDataRepository
 import com.miraeldev.models.auth.AuthState
 import com.miraeldev.models.di.scope.Singleton
 import com.miraeldev.user.UserEmail

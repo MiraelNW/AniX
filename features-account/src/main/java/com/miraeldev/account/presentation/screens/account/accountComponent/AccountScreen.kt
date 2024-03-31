@@ -43,9 +43,9 @@ import coil3.compose.AsyncImage
 import com.miraeldev.account.R
 import com.miraeldev.account.domain.UserModel
 import com.miraeldev.account.presentation.screens.notificationsScreen.Switcher
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.models.anime.Settings
-import com.miraeldev.presentation.Toolbar
 import com.miraeldev.theme.LocalTheme
 import kotlinx.collections.immutable.persistentListOf
 

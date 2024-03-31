@@ -1,6 +1,6 @@
 package com.miraelDev.vauma.glue.forgotPassword.repositories
 
-import com.miraeldev.ForgotPasswordDataRepository
+import com.miraeldev.api.ForgotPasswordDataRepository
 import com.miraeldev.forgotpassword.data.ForgotPasswordRepository
 import me.tatarka.inject.annotations.Inject
 

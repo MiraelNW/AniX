@@ -88,8 +88,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("io.coil-kt:coil-video:2.5.0")
 
-    implementation(project(":core-theme"))
-    implementation(project(":core-extensions"))
-    implementation(project(":core-designSystem"))
-    implementation(project(":core-models"))
+    implementation(project(":core:theme"))
+    implementation(project(":core:extensions"))
+    implementation(project(":core:models"))
 }

@@ -12,7 +12,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesComponent
-import com.miraeldev.imageloader.VaumaImageLoader
+import com.miraeldev.api.VaumaImageLoader
 
 @Composable
 fun AnimeCategoriesScreen(
