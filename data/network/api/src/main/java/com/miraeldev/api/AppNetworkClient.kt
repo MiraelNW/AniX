@@ -12,7 +12,7 @@ interface AppNetworkClient {
     suspend fun getPopularCategoryList(page: Int): HttpResponse
     suspend fun getNameCategoryList(page: Int): HttpResponse
     suspend fun getFilmCategoryList(page: Int): HttpResponse
-    suspend fun getInitialListCategoryList(page: Int): HttpResponse
+    suspend fun getInitialListCategoryList(page: Long): HttpResponse
     suspend fun getPagingFilteredList(
         name: String,
         yearCode: String?,

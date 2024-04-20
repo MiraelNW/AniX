@@ -1,6 +1,7 @@
 package com.miraeldev.anime
 
 import com.miraeldev.models.anime.Genre
+import com.miraeldev.models.anime.Similar
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

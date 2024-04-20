@@ -1,8 +1,13 @@
-CREATE TABLE InitialSearchPagingInfo (
+import com.miraeldev.local.animeDataModels.GenreDataModel;
+import com.miraeldev.local.models.user.ImageDbModel;
+import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel;
+import kotlin.collections.List;
+
+CREATE TABLE InitialSearchPagingInfoDbModel (
     id INTEGER  PRIMARY KEY NOT NULL,
     nameEn TEXT NOT NULL,
     nameRu TEXT NOT NULL,
-    image TEXT NOT NULL,
+    image TEXT AS ImageDbModel NOT NULL,
     kind TEXT NOT NULL,
     score REAL NOT NULL,
     status TEXT NOT NULL,
@@ -11,17 +16,31 @@ CREATE TABLE InitialSearchPagingInfo (
     episodes INTEGER NOT NULL,
     duration INTEGER NOT NULL,
     description TEXT NOT NULL,
-    videoUrls TEXT NOT NULL,
-    genres TEXT NOT NULL,
+    videoUrls TEXT AS VideoInfoDataModel NOT NULL,
+    genres TEXT AS List<GenreDataModel> NOT NULL,
     isFavourite INTEGER NOT NULL,
-    page INTEGER NOT NULL
+    page INTEGER NOT NULL,
+    isLast INTEGER NOT NULL,
+    createAt INTEGER NOT NULL
 );
 
-insertAll:
-INSERT OR REPLACE INTO InitialSearchPagingInfo VALUES (:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrls, :genres,:isFavourite,:page);
+insert:
+INSERT OR REPLACE
+INTO InitialSearchPagingInfoDbModel
+VALUES (:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrls,:genres,:isFavourite,:page,:isLast,:createTime);
 
 getPagingAnime:
-SELECT * FROM InitialSearchPagingInfo ORDER BY page, score DESC;
+SELECT *
+FROM InitialSearchPagingInfoDbModel
+WHERE page = :page
+ORDER BY score DESC;
 
 clearAllAnime:
-DELETE FROM InitialSearchPagingInfo;
+DELETE
+FROM InitialSearchPagingInfoDbModel;
+
+getLastNode:
+SELECT *
+FROM InitialSearchPagingInfoDbModel
+ORDER BY page DESC
+LIMIT 1;

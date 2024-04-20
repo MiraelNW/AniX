@@ -4,9 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.data.remote.dto.Response
+import com.miraeldev.impl.remote.dto.Response
 import com.miraeldev.data.remote.dto.toAnimeInfo
-import com.miraeldev.api.AppNetworkClient
 import io.ktor.client.call.body
 import io.ktor.utils.io.errors.IOException
 

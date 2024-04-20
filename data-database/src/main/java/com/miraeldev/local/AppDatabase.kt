@@ -8,8 +8,6 @@ import com.miraeldev.local.dao.SearchHistoryAnimeDao
 import com.miraeldev.local.dao.UserDao
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryPagingDao
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryRemoteKeysDao
-import com.miraeldev.local.dao.initialSearch.InitialSearchPagingDao
-import com.miraeldev.local.dao.initialSearch.InitialSearchRemoteKeysDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryPagingDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryRemoteKeysDao
 import com.miraeldev.local.dao.newCategory.api.NewCategoryPagingDao
@@ -20,8 +18,6 @@ import com.miraeldev.local.models.SearchHistoryDbModel
 import com.miraeldev.local.models.favourite.AnimeInfoDbModel
 import com.miraeldev.local.models.filmCategory.FilmCategoryRemoteKeys
 import com.miraeldev.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.initialSearch.InitialSearchRemoteKeys
-import com.miraeldev.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
 import com.miraeldev.local.models.nameCategory.NameCategoryRemoteKeys
 import com.miraeldev.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
 import com.miraeldev.local.models.newCategory.NewCategoryRemoteKeys
@@ -47,11 +43,9 @@ import com.miraeldev.local.models.user.UserDbModel
         PagingNameCategoryAnimeInfoDbModel::class,
         NameCategoryRemoteKeys::class,
 
-        PagingInitialSearchAnimeInfoDbModel::class,
-        InitialSearchRemoteKeys::class,
         UserDbModel::class,
     ],
-    version = 14,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -73,8 +67,4 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun nameCategoryPagingDao(): NameCategoryPagingDao
     abstract fun nameCategoryRemoteKeys(): NameCategoryRemoteKeysDao
-
-    abstract fun initialSearchPagingDao(): InitialSearchPagingDao
-    abstract fun initialSearchRemoteKeysDao(): InitialSearchRemoteKeysDao
-
 }

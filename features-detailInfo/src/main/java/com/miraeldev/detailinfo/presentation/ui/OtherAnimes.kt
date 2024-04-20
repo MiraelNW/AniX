@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.miraeldev.anime.Similar
+import com.miraeldev.models.anime.Similar
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.extensions.pressClickEffect
 import kotlinx.collections.immutable.ImmutableList

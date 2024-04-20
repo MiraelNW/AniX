@@ -1,4 +1,3 @@
-import com.miraeldev.data.remote.dto.VideoDto;
 import com.miraeldev.local.animeDataModels.GenreDataModel;
 import com.miraeldev.local.models.user.ImageDbModel;
 import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel;
@@ -23,14 +22,20 @@ CREATE TABLE FilmCategoryAnimeInfoDbModel (
 );
 
 insert:
-INSERT OR REPLACE INTO FilmCategoryAnimeInfoDbModel VALUES (:id, :nameEn, :nameRu, :image, :kind, :score, :status, :rating, :releasedOn, :episodes, :duration, :description, :videoUrls, :genres, :isFavourite);
+INSERT OR REPLACE
+INTO FilmCategoryAnimeInfoDbModel
+VALUES (:id, :nameEn, :nameRu, :image, :kind, :score, :status, :rating, :releasedOn, :episodes, :duration, :description, :videoUrls, :genres, :isFavourite);
 
 getAnimeList:
-SELECT * FROM FilmCategoryAnimeInfoDbModel LIMIT 15;
+SELECT *
+FROM FilmCategoryAnimeInfoDbModel
+LIMIT 15;
 
 isEmpty:
 SELECT (SELECT COUNT(*) FROM FilmCategoryAnimeInfoDbModel) == 0;
 
 getCreateTime:
-SELECT * FROM FilmCategoryAnimeInfoDbModel LIMIT 1;
+SELECT *
+FROM FilmCategoryAnimeInfoDbModel
+LIMIT 1;
 

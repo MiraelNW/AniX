@@ -1,26 +1,15 @@
 package com.miraeldev.local.mapper
 
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.VideoInfo
 import com.miraeldev.extensions.toBoolean
 import com.miraeldev.extensions.toLong
-import com.miraeldev.local.animeDataModels.GenreDataModel
 import com.miraeldev.local.animeDataModels.toGenre
-import com.miraeldev.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
-import com.miraeldev.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.user.ImageDbModel
 import com.miraeldev.local.models.user.toModel
-import com.miraeldev.models.anime.Genre
 import com.miraeldev.models.dto.AnimeInfoDto
-import com.miraeldev.models.dto.GenreDto
-import com.miraeldev.models.dto.ImageModelDto
-import com.miraeldev.models.dto.VideoDto
 import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
 import kotlinx.collections.immutable.toPersistentList
 import tables.filmcategory.FilmCategoryAnimeInfoDbModel
+import tables.initialsearch.InitialSearchPagingInfoDbModel
 import tables.namecategory.NameCategoryAnimeInfoDbModel
 import tables.newcategory.NewCategoryAnimeInfoDbModel
 import tables.popularcategory.PopularCategoryAnimeInfoDbModel

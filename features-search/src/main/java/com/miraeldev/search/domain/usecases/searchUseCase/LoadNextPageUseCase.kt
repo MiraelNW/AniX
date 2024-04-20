@@ -4,8 +4,8 @@ import com.miraeldev.search.data.repository.SearchAnimeRepository
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class SaveSearchTextUseCase(private val repository: SearchAnimeRepository) {
+class LoadNextPageUseCase(val repository: SearchAnimeRepository) {
 
-    operator fun invoke(searchText:String) = repository.saveSearchText(searchText)
+    suspend operator fun invoke() = repository.loadNextPage()
 
 }

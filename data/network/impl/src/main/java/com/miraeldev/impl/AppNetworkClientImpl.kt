@@ -128,7 +128,7 @@ class AppNetworkClientImpl(
             }
         }
 
-        install(PlutoKtorInterceptor)
+//        install(PlutoKtorInterceptor)
 
         install(Logging) {
             level = LogLevel.ALL
@@ -176,7 +176,7 @@ class AppNetworkClientImpl(
         url("${AppNetworkRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getInitialListCategoryList(page: Int): HttpResponse = client.get {
+    override suspend fun getInitialListCategoryList(page: Long): HttpResponse = client.get {
         url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page=$page&page_size=$PAGE_SIZE")
     }
 

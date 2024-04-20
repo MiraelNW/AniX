@@ -1,0 +1,22 @@
+
+package com.miraeldev.local.dao.initialSearch.api
+
+import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.dto.AnimeInfoDto
+import com.miraeldev.models.paging.LastDbNode
+import com.miraeldev.models.paging.PagingAnimeInfo
+
+interface InitialSearchPagingDao {
+    suspend fun insertAll(
+        anime: List<AnimeInfoDto>,
+        page: Long,
+        isLast: Boolean,
+        insertTime: Long
+    )
+
+    fun getLastNode() : LastDbNode
+
+    fun getAnimeByPage(page: Long): List<PagingAnimeInfo>
+
+    suspend fun clearAllAnime()
+}

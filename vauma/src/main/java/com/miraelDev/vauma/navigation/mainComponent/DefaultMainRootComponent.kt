@@ -12,12 +12,15 @@ import com.miraelDev.vauma.navigation.navigationUi.NavId
 import com.miraeldev.account.presentation.DefaultAccountRootComponentFactory
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.DefaultCategoriesComponentFactory
 import com.miraeldev.animelist.presentation.home.homeComponent.DefaultHomeComponentFactory
+import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.detailinfo.presentation.detailComponent.DefaultDetailComponentFactory
 import com.miraeldev.favourites.presentation.favouriteComponent.DefaultFavouriteComponentFactory
-import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
 import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponentFactory
-import com.miraeldev.search.presentation.searchComponent.DefaultSearchAnimeComponentFactory
+import com.miraeldev.search.presentation.initialSearchScreen.initialSearchComponent.DefaultInitialSearchComponentFactory
+import com.miraeldev.search.presentation.searchHistoryScreen.searchHistoryComponent.DefaultSearchHistoryComponentFactory
+import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.DefaultSearchResultsComponent
+import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.DefaultSearchResultsComponentFactory
 import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponentFactory
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
@@ -31,7 +34,9 @@ class DefaultMainRootComponent(
     @Assisted private val onLogOutComplete: () -> Unit,
     private val homeComponentFactory: DefaultHomeComponentFactory,
     private val categoriesComponentFactory: DefaultCategoriesComponentFactory,
-    private val searchComponentFactory: DefaultSearchAnimeComponentFactory,
+    private val initialSearchComponentFactory: DefaultInitialSearchComponentFactory,
+    private val searchHistoryComponentFactory: DefaultSearchHistoryComponentFactory,
+    private val searchResultsComponentFactory: DefaultSearchResultsComponentFactory,
     private val filterComponent: DefaultFilterComponentFactory,
     private val favouriteComponentFactory: DefaultFavouriteComponentFactory,
     private val accountRootComponentFactory: DefaultAccountRootComponentFactory,
@@ -57,7 +62,7 @@ class DefaultMainRootComponent(
             }
 
             NavId.SEARCH -> {
-                navigation.bringToFront(Config.Search())
+                navigation.bringToFront(Config.Search.InitialSearch)
             }
 
             NavId.FAVOURITE -> {
@@ -103,8 +108,37 @@ class DefaultMainRootComponent(
                 MainRootComponent.Child.Categories(component, config.id, imageLoader)
             }
 
-            is Config.Search -> {
-                val component = searchComponentFactory(
+            is Config.Search.InitialSearch -> {
+                val component = initialSearchComponentFactory(
+                    componentContext,
+                    {
+                        navigation.push(Config.DetailInfo(it))
+                    },
+                    {
+                        navigation.bringToFront(Config.Search.SearchHistory)
+                    }
+                )
+                MainRootComponent.Child.InitialSearch(component, imageLoader)
+            }
+
+            is Config.Search.SearchHistory -> {
+                val component = searchHistoryComponentFactory(
+                    componentContext,
+                    {
+                        navigation.push(Config.Filter)
+                    },
+                    {
+                        navigation.bringToFront(Config.Search.InitialSearch)
+                    },
+                    {
+                        navigation.bringToFront(Config.Search.SearchResults(it))
+                    }
+                )
+                MainRootComponent.Child.SearchHistory(component)
+            }
+
+            is Config.Search.SearchResults -> {
+                val component = searchResultsComponentFactory(
                     componentContext,
                     {
                         navigation.push(Config.DetailInfo(it))
@@ -112,8 +146,11 @@ class DefaultMainRootComponent(
                     {
                         navigation.push(Config.Filter)
                     },
+                    {
+                        navigation.bringToFront(Config.Search.SearchHistory)
+                    }
                 )
-                MainRootComponent.Child.Search(component, config.search, imageLoader)
+                MainRootComponent.Child.SearchResults(component, config.search, imageLoader)
             }
 
             is Config.Filter -> {
@@ -131,7 +168,7 @@ class DefaultMainRootComponent(
                         navigation.push(Config.DetailInfo(it))
                     },
                     {
-                        navigation.bringToFront(Config.Search(it))
+                        navigation.bringToFront(Config.Search.SearchResults(it))
                     }
                 )
                 MainRootComponent.Child.Favourite(component, imageLoader)
@@ -176,7 +213,14 @@ class DefaultMainRootComponent(
         data object Home : Config
 
         @Serializable
-        data class Search(val search: String = "") : Config
+        sealed class Search(val search: String = "") : Config {
+            @Serializable
+            data object InitialSearch : Search()
+            @Serializable
+            data object SearchHistory : Search()
+            @Serializable
+            data class SearchResults(val animeName: String) : Search(animeName)
+        }
 
         @Serializable
         data object Filter : Config

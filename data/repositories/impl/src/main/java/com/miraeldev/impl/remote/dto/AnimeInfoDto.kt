@@ -4,14 +4,12 @@ import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.initialSearch.PagingInitialSearchAnimeInfoDbModel
 import com.miraeldev.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
 import com.miraeldev.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
 import com.miraeldev.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import tables.newcategory.NewCategoryAnimeInfoDbModel
 
 @Serializable
 data class AnimeInfoDto(
@@ -149,26 +147,6 @@ fun AnimeInfoDto.mapToPagingFilmCategoryModel(): PagingFilmCategoryAnimeInfoDbMo
 
 fun AnimeInfoDto.mapToPagingNameCategoryModel(): PagingNameCategoryAnimeInfoDbModel {
     return PagingNameCategoryAnimeInfoDbModel(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenreDataModel() },
-        episodes = this.episodes,
-        image = this.image.toDbModel(),
-        duration = this.duration,
-        isFavourite = this.isFavourite,
-        page = 0
-    )
-}
-
-fun AnimeInfoDto.mapToInitialSearchModel(): PagingInitialSearchAnimeInfoDbModel {
-    return PagingInitialSearchAnimeInfoDbModel(
         id = this.id,
         nameRu = this.russianName,
         nameEn = this.name,

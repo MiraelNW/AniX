@@ -2,6 +2,7 @@ package com.miraeldev.search.data.repository
 
 import androidx.paging.PagingData
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.paging.PagingState
 import kotlinx.coroutines.flow.Flow
 
 interface SearchAnimeRepository {
@@ -18,16 +19,15 @@ interface SearchAnimeRepository {
 
     fun saveSearchText(searchText:String)
 
+    suspend fun loadNextPage()
+
     fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>>
-    fun getSearchInitialList(): Flow<Flow<PagingData<AnimeInfo>>>
+    fun getSearchInitialList(): Flow<PagingState>
 
     fun getSearchName():Flow<String>
 
     suspend fun saveNameInAnimeSearchHistory(name: String)
 
-
     fun getSearchHistoryListFlow():Flow<List<String>>
-
-    suspend fun loadInitialList()
 
 }

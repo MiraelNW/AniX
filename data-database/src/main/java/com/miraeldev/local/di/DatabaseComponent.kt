@@ -11,8 +11,8 @@ import com.miraeldev.local.dao.filmCategory.api.FilmCategoryDao
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryPagingDao
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryRemoteKeysDao
 import com.miraeldev.local.dao.filmCategory.impl.FilmCategoryDaoImpl
-import com.miraeldev.local.dao.initialSearch.InitialSearchPagingDao
-import com.miraeldev.local.dao.initialSearch.InitialSearchRemoteKeysDao
+import com.miraeldev.local.dao.initialSearch.api.InitialSearchPagingDao
+import com.miraeldev.local.dao.initialSearch.impl.InitialSearchPagingDaoImpl
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryPagingDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryRemoteKeysDao
@@ -31,6 +31,7 @@ import com.miraeldev.local.videoUrlsAdapter
 import com.miraeldev.models.di.scope.Singleton
 import me.tatarka.inject.annotations.Provides
 import tables.filmcategory.FilmCategoryAnimeInfoDbModel
+import tables.initialsearch.InitialSearchPagingInfoDbModel
 import tables.namecategory.NameCategoryAnimeInfoDbModel
 import tables.newcategory.NewCategoryAnimeInfoDbModel
 import tables.popularcategory.PopularCategoryAnimeInfoDbModel
@@ -43,6 +44,7 @@ interface DatabaseComponent {
         return Database(
             driver = AndroidSqliteDriver(Database.Schema, context, "Database"),
             FilmCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            InitialSearchPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             NameCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             NewCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             PopularCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
@@ -123,18 +125,6 @@ interface DatabaseComponent {
     fun provideNameCategoryRemoteKeysDao(database: AppDatabase): NameCategoryRemoteKeysDao =
         database.nameCategoryRemoteKeys()
 
-
-    @Provides
-    @Singleton
-    fun provideInitialSearchDao(database: AppDatabase): InitialSearchPagingDao =
-        database.initialSearchPagingDao()
-
-
-    @Provides
-    @Singleton
-    fun provideInitialSearchRemoteKeysDao(database: AppDatabase): InitialSearchRemoteKeysDao =
-        database.initialSearchRemoteKeysDao()
-
     @Provides
     @Singleton
     fun FilmCategoryDaoImpl.bind(): FilmCategoryDao = this
@@ -150,6 +140,10 @@ interface DatabaseComponent {
     @Provides
     @Singleton
     fun PopularCategoryDaoImpl.bind(): PopularCategoryDao = this
+
+    @Provides
+    @Singleton
+    fun InitialSearchPagingDaoImpl.bind(): InitialSearchPagingDao = this
 
     companion object {
         private const val DB_NAME = "main.db"

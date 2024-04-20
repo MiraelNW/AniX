@@ -1,4 +1,6 @@
-package com.miraeldev.anime
+package com.miraeldev.models.anime
+
+import com.miraeldev.anime.ImageModel
 
 data class Similar(
     val id: Int = 0,

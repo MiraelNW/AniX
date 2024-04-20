@@ -3,6 +3,7 @@ package com.miraelDev.vauma.glue.search.repositories
 import androidx.paging.PagingData
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.SearchAnimeDataRepository
+import com.miraeldev.models.paging.PagingState
 import com.miraeldev.search.data.repository.SearchAnimeRepository
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
@@ -35,11 +36,15 @@ class SearchRepositoryImpl(
         searchAnimeDataRepository.saveSearchText(searchText)
     }
 
+    override suspend fun loadNextPage() {
+        searchAnimeDataRepository.loadNextPage()
+    }
+
     override fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>> {
         return searchAnimeDataRepository.getSearchResults()
     }
 
-    override fun getSearchInitialList(): Flow<Flow<PagingData<AnimeInfo>>> {
+    override fun getSearchInitialList(): Flow<PagingState> {
         return searchAnimeDataRepository.getSearchInitialList()
     }
 
@@ -53,9 +58,5 @@ class SearchRepositoryImpl(
 
     override fun getSearchHistoryListFlow(): Flow<List<String>> {
         return searchAnimeDataRepository.getSearchHistoryListFlow()
-    }
-
-    override suspend fun loadInitialList() {
-        searchAnimeDataRepository.loadInitialList()
     }
 }

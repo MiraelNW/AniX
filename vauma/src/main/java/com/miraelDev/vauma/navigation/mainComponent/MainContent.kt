@@ -20,8 +20,10 @@ import com.miraeldev.animelist.presentation.categories.AnimeCategoriesScreen
 import com.miraeldev.animelist.presentation.home.HomeScreen
 import com.miraeldev.detailinfo.presentation.AnimeDetailScreen
 import com.miraeldev.favourites.presentation.FavouriteListScreen
-import com.miraeldev.search.presentation.SearchAnimeScreen
 import com.miraeldev.search.presentation.filterScreen.FilterScreen
+import com.miraeldev.search.presentation.initialSearchScreen.InitialSearchScreen
+import com.miraeldev.search.presentation.searchHistoryScreen.SearchHistoryScreen
+import com.miraeldev.search.presentation.searchResultsScreen.SearchResultsScreen
 import com.miraeldev.theme.LocalOrientation
 import com.miraeldev.video.presentation.VideoViewScreen
 
@@ -75,10 +77,27 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
                         )
                     }
 
-                    is MainRootComponent.Child.Search -> {
-                        SearchAnimeScreen(
+                    is MainRootComponent.Child.InitialSearch -> {
+                        InitialSearchScreen(
                             component = instance.component,
-                            search = instance.search,
+                            imageLoader = instance.imageLoader
+                        )
+                        shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
+                        shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
+                    }
+
+                    is MainRootComponent.Child.SearchHistory -> {
+                        SearchHistoryScreen(
+                            component = instance.component
+                        )
+                        shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
+                        shouldShowNavRail = orientation == Configuration.ORIENTATION_LANDSCAPE
+                    }
+
+                    is MainRootComponent.Child.SearchResults -> {
+                        SearchResultsScreen(
+                            component = instance.component,
+                            animeName = instance.search,
                             imageLoader = instance.imageLoader
                         )
                         shouldShowBottomBar = orientation == Configuration.ORIENTATION_PORTRAIT
