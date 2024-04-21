@@ -1,7 +1,7 @@
 package com.miraeldev.api
 
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface HomeDataRepository {

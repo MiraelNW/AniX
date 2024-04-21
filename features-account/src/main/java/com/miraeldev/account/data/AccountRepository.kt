@@ -1,13 +1,13 @@
 package com.miraeldev.account.data
 
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
 
     suspend fun logOutUser(): Boolean
 
-    suspend fun getUserInfo():User
+    suspend fun getUserInfo(): User
 
     suspend fun getUserEmail(): String
 

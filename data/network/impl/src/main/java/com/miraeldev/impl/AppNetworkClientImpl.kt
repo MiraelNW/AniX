@@ -5,14 +5,13 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthRepository
+import com.miraeldev.api.UserDao
 import com.miraeldev.impl.models.AccessTokenDataModel
 import com.miraeldev.impl.models.FavouriteAnimeSendRequest
 import com.miraeldev.impl.models.RefreshToken
 import com.miraeldev.impl.models.routes.AppNetworkRoutes
 import com.miraeldev.impl.models.routes.AuthNetworkRoutes
-import com.miraeldev.local.dao.user.UserDao
-import com.miraeldev.local.mapper.toModel
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -146,7 +145,7 @@ class AppNetworkClientImpl(
     }
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo): HttpResponse {
-        val user = userDao.getUser()?.toModel() ?: User()
+        val user = userDao.getUser() ?: User()
         return client.post {
             url(AppNetworkRoutes.SET_ANIME_FAV_STATUS)
             setBody(

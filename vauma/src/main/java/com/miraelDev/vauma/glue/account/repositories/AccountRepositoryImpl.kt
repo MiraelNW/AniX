@@ -4,7 +4,7 @@ import com.miraeldev.account.data.AccountRepository
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserDataRepository
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 

@@ -9,7 +9,7 @@ import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.OnAnimeItemClick
 import com.miraeldev.models.OnPlayClick
 import com.miraeldev.models.OnSeeAllClick
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

@@ -1,6 +1,5 @@
 package com.miraelDev.vauma.glue.home.repository
 
-import androidx.paging.PagingData
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeDetailInfo
@@ -10,7 +9,7 @@ import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.api.HomeDataRepository
 import com.miraeldev.api.VideoPlayerDataRepository
 import com.miraeldev.models.paging.PagingState
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 

@@ -38,9 +38,6 @@ dependencies {
     //kotlin
     implementation(libs.core.ktx)
 
-    implementation(libs.appcompat)
-    implementation(libs.com.google.android.material.material)
-
     //serialization
     implementation(libs.kotlinx.serialization.json)
 

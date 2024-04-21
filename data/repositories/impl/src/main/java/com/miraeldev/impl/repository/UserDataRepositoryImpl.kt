@@ -2,15 +2,13 @@ package com.miraeldev.impl.repository
 
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.api.LocalUserStoreApi
+import com.miraeldev.api.UserDao
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.data.mapper.UserModelsMapper
-import com.miraeldev.local.dao.user.UserDao
-import com.miraeldev.local.mapper.toDbModel
-import com.miraeldev.local.mapper.toModel
-import com.miraeldev.local.models.user.toDbModel
 import com.miraeldev.models.dto.UserDto
+import com.miraeldev.models.dto.toModel
 import com.miraeldev.models.models.userDataModels.toLocalUserEmail
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import com.miraeldev.user.UserEmail
 import io.ktor.client.call.body
 import io.ktor.http.isSuccess
@@ -28,7 +26,7 @@ class UserDataRepositoryImpl(
         val getUserResponse = appNetworkClient.saveRemoteUser()
 
         if (getUserResponse.status.isSuccess()) {
-            val userDbModel = getUserResponse.body<UserDto>().toDbModel()
+            val userDbModel = getUserResponse.body<UserDto>().toModel()
             userDao.insertUser(userDbModel)
         }
 
@@ -38,13 +36,13 @@ class UserDataRepositoryImpl(
     override suspend fun saveLastWatchedAnime(lastWatchedAnime: LastWatchedAnime) {
         var user = userDao.getUserFlow().first()
 
-        user = user.copy(lastWatchedAnimeDbModel = lastWatchedAnime.toDbModel())
+        user = user.copy(lastWatchedAnime = lastWatchedAnime)
 
         userDao.insertUser(user)
     }
 
     override suspend fun getUserInfo(): User {
-        return userDao.getUser()?.toModel() ?: User()
+        return userDao.getUser() ?: User()
     }
 
     override suspend fun getUserEmail(): UserEmail {

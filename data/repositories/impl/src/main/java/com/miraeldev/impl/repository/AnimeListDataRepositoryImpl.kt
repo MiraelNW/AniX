@@ -2,12 +2,12 @@ package com.miraeldev.impl.repository
 
 import com.miraeldev.api.AnimeListDataRepository
 import com.miraeldev.api.AppNetworkClient
+import com.miraeldev.api.filmCategory.FilmCategoryPagingDao
+import com.miraeldev.api.nameCategory.NameCategoryPagingDao
+import com.miraeldev.api.newCategory.NewCategoryPagingDao
+import com.miraeldev.api.popularCategory.PopularCategoryPagingDao
 import com.miraeldev.impl.mapper.mapToPagingModel
 import com.miraeldev.impl.pagingController.PagingController
-import com.miraeldev.local.dao.filmCategory.api.FilmCategoryPagingDao
-import com.miraeldev.local.dao.nameCategory.api.NameCategoryPagingDao
-import com.miraeldev.local.dao.newCategory.api.NewCategoryPagingDao
-import com.miraeldev.local.dao.popularCategory.api.PopularCategoryPagingDao
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.paging.PagingState
 import io.ktor.client.call.body

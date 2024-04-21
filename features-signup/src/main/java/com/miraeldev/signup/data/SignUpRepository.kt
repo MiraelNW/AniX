@@ -1,7 +1,6 @@
 package com.miraeldev.signup.data
 
-import com.miraeldev.user.User
-import kotlinx.coroutines.flow.Flow
+import com.miraeldev.models.user.User
 
 interface SignUpRepository {
 

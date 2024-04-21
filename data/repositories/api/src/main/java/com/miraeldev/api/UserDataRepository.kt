@@ -1,9 +1,8 @@
 package com.miraeldev.api
 
 import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import com.miraeldev.user.UserEmail
-import kotlinx.coroutines.flow.Flow
 
 interface UserDataRepository {
 

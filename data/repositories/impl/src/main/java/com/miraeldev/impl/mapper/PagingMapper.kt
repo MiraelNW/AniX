@@ -1,6 +1,5 @@
 package com.miraeldev.impl.mapper
 
-import android.util.Log
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.dto.toModel

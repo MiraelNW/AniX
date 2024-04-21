@@ -84,6 +84,6 @@ dependencies {
 
     implementation(project(":data:network:api"))
     implementation(project(":data:storeclient:api"))
-    implementation(project(":data-database"))
+    implementation(project(":data:database:api"))
     implementation(project(":data:repositories:api"))
 }

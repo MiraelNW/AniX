@@ -2,12 +2,12 @@ package com.miraeldev.impl.repository
 
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.SearchAnimeDataRepository
+import com.miraeldev.api.SearchHistoryAnimeDao
+import com.miraeldev.api.initialSearch.InitialSearchPagingDao
 import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.impl.mapper.mapToPagingModel
 import com.miraeldev.impl.pagingController.SearchResultsPagingController
 import com.miraeldev.impl.pagingController.PagingController
-import com.miraeldev.local.dao.searchHistoryDao.SearchHistoryAnimeDao
-import com.miraeldev.local.dao.initialSearch.api.InitialSearchPagingDao
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.paging.PagingState
 import io.ktor.client.call.body

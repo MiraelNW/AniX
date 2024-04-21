@@ -1,6 +1,6 @@
 package com.miraeldev.animelist.presentation.home
 
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 
 sealed class HomeScreenState {
 

@@ -1,4 +1,4 @@
-package com.miraeldev.user
+package com.miraeldev.models.user
 
 
 import com.miraeldev.anime.LastWatchedAnime

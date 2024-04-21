@@ -1,5 +1,7 @@
 package com.miraeldev.data.remote.dto
 
+import com.miraeldev.impl.remote.dto.ImageModelDto
+import com.miraeldev.impl.remote.dto.toModel
 import com.miraeldev.models.anime.Similar
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

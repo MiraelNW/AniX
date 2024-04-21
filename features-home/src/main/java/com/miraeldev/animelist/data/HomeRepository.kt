@@ -1,10 +1,9 @@
 package com.miraeldev.animelist.data
 
-import androidx.paging.PagingData
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.models.paging.PagingState
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {

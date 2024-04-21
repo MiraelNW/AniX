@@ -1,14 +1,14 @@
-package com.miraeldev.data.repository
+package com.miraeldev.impl.repository
 
 import com.miraeldev.api.AuthNetworkClient
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserAuthRepository
+import com.miraeldev.api.UserDao
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.extensions.sendRequest
-import com.miraeldev.local.dao.user.UserDao
 import com.miraeldev.models.models.auth.Token
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess

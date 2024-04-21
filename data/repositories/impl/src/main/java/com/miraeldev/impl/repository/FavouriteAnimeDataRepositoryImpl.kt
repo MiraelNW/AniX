@@ -3,10 +3,9 @@ package com.miraeldev.impl.repository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeInfo
+import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.extensions.mergeWith
-import com.miraeldev.impl.mapper.AnimeModelsMapper
-import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDao
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
@@ -16,8 +15,7 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class FavouriteAnimeDataRepositoryImpl(
-    private val favouriteAnimeDao: FavouriteAnimeDao,
-    private val animeModelsMapper: AnimeModelsMapper
+    private val favouriteAnimeDao: FavouriteAnimeDao
 ) : FavouriteAnimeDataRepository {
 
     private val searchResults = MutableSharedFlow<ResultAnimeInfo>()

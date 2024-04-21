@@ -3,12 +3,8 @@ package com.miraeldev.impl.remote.dto
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.data.remote.dto.GenreDto
-import com.miraeldev.data.remote.dto.ImageModelDto
 import com.miraeldev.data.remote.dto.SimilarDto
 import com.miraeldev.data.remote.dto.VideoDto
-import com.miraeldev.data.remote.dto.toGenre
-import com.miraeldev.data.remote.dto.toModel
 import com.miraeldev.data.remote.dto.toVideoInfo
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName

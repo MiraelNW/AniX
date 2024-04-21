@@ -1,6 +1,6 @@
 package com.miraeldev.api
 
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 

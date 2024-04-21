@@ -9,14 +9,16 @@ import com.miraelDev.vauma.glue.search.di.SearchFeatureComponent
 import com.miraelDev.vauma.glue.signIn.di.SignInFeatureComponent
 import com.miraelDev.vauma.glue.signUp.di.SignUpFeatureComponent
 import com.miraelDev.vauma.glue.video.di.VideoPlayerFeatureComponent
-import com.miraeldev.impl.di.DataComponent
+import com.miraeldev.impl.di.DatabaseComponent
 import com.miraeldev.impl.di.ImageLoaderComponent
 import com.miraeldev.impl.di.NetworkComponent
 import com.miraeldev.impl.di.PreferenceDataStoreComponent
+import com.miraeldev.impl.di.RepositoriesComponent
 
 interface GlueFeatureComponentComponentt :
     StoreFactoryComponent,
-    DataComponent,
+    RepositoriesComponent,
+    DatabaseComponent,
     PreferenceDataStoreComponent,
     NetworkComponent,
     HomeFeatureComponent,

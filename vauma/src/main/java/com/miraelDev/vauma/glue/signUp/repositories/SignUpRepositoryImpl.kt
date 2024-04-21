@@ -3,7 +3,7 @@ package com.miraelDev.vauma.glue.signUp.repositories
 import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.signup.data.SignUpRepository
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import me.tatarka.inject.annotations.Inject
 
 @Inject

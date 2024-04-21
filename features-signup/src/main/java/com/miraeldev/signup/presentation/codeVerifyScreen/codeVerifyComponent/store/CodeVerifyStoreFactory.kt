@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.miraeldev.signup.domain.useCases.UpdateUserUseCase
 import com.miraeldev.signup.domain.useCases.VerifyOtpCodeUseCase
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 

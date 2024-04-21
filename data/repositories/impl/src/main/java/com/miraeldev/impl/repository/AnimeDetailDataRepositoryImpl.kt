@@ -3,12 +3,11 @@ package com.miraeldev.impl.repository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AnimeDetailDataRepository
 import com.miraeldev.api.AppNetworkClient
+import com.miraeldev.api.FavouriteAnimeDao
+import com.miraeldev.api.UserDao
 import com.miraeldev.api.VideoPlayerDataRepository
-import com.miraeldev.impl.mapper.AnimeModelsMapper
 import com.miraeldev.impl.remote.dto.AnimeInfoDto
 import com.miraeldev.impl.remote.dto.toAnimeDetailInfo
-import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDao
-import com.miraeldev.local.dao.user.UserDao
 import com.miraeldev.models.result.ResultAnimeDetail
 import com.miraeldev.result.FailureCauses
 import io.ktor.client.call.body

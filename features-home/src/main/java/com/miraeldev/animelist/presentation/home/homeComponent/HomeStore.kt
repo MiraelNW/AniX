@@ -14,7 +14,7 @@ import com.miraeldev.animelist.domain.useCases.homeScreenUseCases.LoadDataUseCas
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.Intent
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.Label
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.State
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject

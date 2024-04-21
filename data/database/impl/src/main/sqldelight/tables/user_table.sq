@@ -1,0 +1,23 @@
+import com.miraeldev.impl.models.user.LastWatchedAnimeDbModel;
+
+
+CREATE TABLE UserDbModel (
+    id INTEGER PRIMARY KEY NOT NULL,
+    username TEXT NOT NULL,
+    name TEXT,
+    image TEXT,
+    email TEXT,
+    lastWatchedAnimeDbModel TEXT AS LastWatchedAnimeDbModel
+);
+
+getUserFlow:
+SELECT * FROM UserDbModel;
+
+getUser:
+SELECT * FROM UserDbModel;
+
+insertUser:
+INSERT OR REPLACE INTO UserDbModel VALUES (:id, :username, :name, :image, :email, :lastWatchedAnimeDbModel);
+
+deleteOldUser:
+DELETE FROM UserDbModel;

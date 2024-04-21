@@ -6,7 +6,7 @@ import android.provider.OpenableColumns
 import android.util.Log
 import com.miraeldev.impl.models.routes.AppNetworkRoutes
 import com.miraeldev.impl.models.routes.AuthNetworkRoutes
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO

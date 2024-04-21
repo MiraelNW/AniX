@@ -1,7 +1,7 @@
 package com.miraeldev.account.domain
 
 import androidx.compose.runtime.Stable
-import com.miraeldev.user.User
+import com.miraeldev.models.user.User
 
 @Stable
 data class UserModel(

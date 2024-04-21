@@ -151,7 +151,8 @@ dependencies {
     implementation(project(":data:network:impl"))
     implementation(project(":data:storeclient:api"))
     implementation(project(":data:storeclient:impl"))
-    implementation(project(":data-database"))
+    implementation(project(":data:database:api"))
+    implementation(project(":data:database:impl"))
 
     implementation(project(":logger"))
 

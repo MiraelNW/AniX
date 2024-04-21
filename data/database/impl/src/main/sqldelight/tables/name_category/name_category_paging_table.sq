@@ -1,0 +1,46 @@
+import com.miraeldev.impl.models.animeDataModels.GenreDataModel;
+import com.miraeldev.impl.models.animeDataModels.VideoInfoDataModel;
+import com.miraeldev.impl.models.user.ImageDbModel;
+import kotlin.collections.List;
+
+CREATE TABLE NameCategoryPagingInfoDbModel (
+    id INTEGER  PRIMARY KEY NOT NULL,
+    nameEn TEXT NOT NULL,
+    nameRu TEXT NOT NULL,
+    image TEXT AS ImageDbModel NOT NULL,
+    kind TEXT NOT NULL,
+    score REAL NOT NULL,
+    status TEXT NOT NULL,
+    rating TEXT NOT NULL,
+    releasedOn TEXT NOT NULL,
+    episodes INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    videoUrls TEXT AS VideoInfoDataModel NOT NULL,
+    genres TEXT AS List<GenreDataModel> NOT NULL,
+    isFavourite INTEGER NOT NULL,
+    page INTEGER NOT NULL,
+    isLast INTEGER NOT NULL,
+    createAt INTEGER NOT NULL
+);
+
+insert:
+INSERT OR REPLACE
+INTO NameCategoryPagingInfoDbModel
+VALUES (:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrls,:genres,:isFavourite,:page,:isLast,:createTime);
+
+getPagingAnime:
+SELECT *
+FROM NameCategoryPagingInfoDbModel
+WHERE page = :page
+ORDER BY score DESC;
+
+clearAllAnime:
+DELETE
+FROM NameCategoryPagingInfoDbModel;
+
+getLastNode:
+SELECT *
+FROM NameCategoryPagingInfoDbModel
+ORDER BY page DESC
+LIMIT 1;
