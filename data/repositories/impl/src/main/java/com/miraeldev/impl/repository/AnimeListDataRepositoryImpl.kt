@@ -1,95 +1,121 @@
 package com.miraeldev.impl.repository
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AnimeListDataRepository
 import com.miraeldev.api.AppNetworkClient
-import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.data.remoteMediator.categoriesLists.FilmCategoryRemoteMediator
-import com.miraeldev.data.remoteMediator.categoriesLists.NameCategoryRemoteMediator
-import com.miraeldev.data.remoteMediator.categoriesLists.NewCategoryRemoteMediator
-import com.miraeldev.data.remoteMediator.categoriesLists.PopularCategoryRemoteMediator
-import com.miraeldev.local.AppDatabase
+import com.miraeldev.impl.mapper.mapToPagingModel
+import com.miraeldev.impl.pagingController.PagingController
+import com.miraeldev.local.dao.filmCategory.api.FilmCategoryPagingDao
+import com.miraeldev.local.dao.nameCategory.api.NameCategoryPagingDao
+import com.miraeldev.local.dao.newCategory.api.NewCategoryPagingDao
+import com.miraeldev.local.dao.popularCategory.api.PopularCategoryPagingDao
+import com.miraeldev.models.dto.Response
+import com.miraeldev.models.paging.PagingState
+import io.ktor.client.call.body
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 
-@OptIn(ExperimentalPagingApi::class)
 @Inject
 class AnimeListDataRepositoryImpl(
-    private val networkHandler: NetworkHandler,
-    private val appDatabase: AppDatabase,
-    private val appNetworkClient: AppNetworkClient
+    private val appNetworkClient: AppNetworkClient,
+
+    private val newCategoryPagingDao: NewCategoryPagingDao,
+    private val popularCategoryPagingDao: PopularCategoryPagingDao,
+    private val nameCategoryPagingDao: NameCategoryPagingDao,
+    private val filmCategoryPagingDao: FilmCategoryPagingDao,
 ) : AnimeListDataRepository {
 
-
-    override fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 12,
-                enablePlaceholders = true
-            ),
-            pagingSourceFactory = { appDatabase.newCategoryPagingDao().getAnime() },
-            remoteMediator = NewCategoryRemoteMediator(
-                appNetworkClient = appNetworkClient,
-                appDatabase = appDatabase,
-                networkHandler = networkHandler
+    private val newPagingController = PagingController(
+        pagingRequest = {
+            appNetworkClient.getNewCategoryList(it).body<Response>().mapToPagingModel()
+        },
+        lastNodeInDb = { newCategoryPagingDao.getLastNode() },
+        getAnimeListByPage = { newCategoryPagingDao.getAnimeByPage(it) },
+        cashSuccessNetworkResult = { animeList, page, isLast ->
+            if (page == 0L) newCategoryPagingDao.clearAllAnime()
+            newCategoryPagingDao.insertAll(
+                anime = animeList,
+                insertTime = System.currentTimeMillis(),
+                page = page,
+                isLast = isLast
             )
-        )
-            .flow
+        },
+        currentTime = System.currentTimeMillis()
+    )
 
+    private val popularPagingController = PagingController(
+        pagingRequest = {
+            appNetworkClient.getPopularCategoryList(it).body<Response>().mapToPagingModel()
+        },
+        lastNodeInDb = { popularCategoryPagingDao.getLastNode() },
+        getAnimeListByPage = { popularCategoryPagingDao.getAnimeByPage(it) },
+        cashSuccessNetworkResult = { animeList, page, isLast ->
+            if (page == 0L) popularCategoryPagingDao.clearAllAnime()
+            popularCategoryPagingDao.insertAll(
+                anime = animeList,
+                insertTime = System.currentTimeMillis(),
+                page = page,
+                isLast = isLast
+            )
+        },
+        currentTime = System.currentTimeMillis()
+    )
+
+    private val namePagingController = PagingController(
+        pagingRequest = {
+            appNetworkClient.getNameCategoryList(it).body<Response>().mapToPagingModel()
+        },
+        lastNodeInDb = { nameCategoryPagingDao.getLastNode() },
+        getAnimeListByPage = { nameCategoryPagingDao.getAnimeByPage(it) },
+        cashSuccessNetworkResult = { animeList, page, isLast ->
+            if (page == 0L) nameCategoryPagingDao.clearAllAnime()
+            nameCategoryPagingDao.insertAll(
+                anime = animeList,
+                insertTime = System.currentTimeMillis(),
+                page = page,
+                isLast = isLast
+            )
+        },
+        currentTime = System.currentTimeMillis()
+    )
+
+    private val filmPagingController = PagingController(
+        pagingRequest = {
+            appNetworkClient.getFilmCategoryList(it).body<Response>().mapToPagingModel()
+        },
+        lastNodeInDb = { filmCategoryPagingDao.getLastNode() },
+        getAnimeListByPage = { filmCategoryPagingDao.getAnimeByPage(it) },
+        cashSuccessNetworkResult = { animeList, page, isLast ->
+            if (page == 0L) filmCategoryPagingDao.clearAllAnime()
+            filmCategoryPagingDao.insertAll(
+                anime = animeList,
+                insertTime = System.currentTimeMillis(),
+                page = page,
+                isLast = isLast
+            )
+        },
+        currentTime = System.currentTimeMillis()
+    )
+
+
+    override fun getPagingNewAnimeList(): Flow<PagingState> = newPagingController.flow
+    override fun getPagingPopularAnimeList(): Flow<PagingState> = popularPagingController.flow
+    override fun getPagingNameAnimeList(): Flow<PagingState> = namePagingController.flow
+    override fun getPagingFilmsAnimeList(): Flow<PagingState> = filmPagingController.flow
+
+    override suspend fun loadNewCategoryNextPage() {
+        newPagingController.loadNextPage()
     }
 
-
-    override fun getPagingPopularAnimeList(): Flow<PagingData<AnimeInfo>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 12,
-            ),
-            pagingSourceFactory = { appDatabase.popularCategoryPagingDao().getAnime() },
-            remoteMediator = PopularCategoryRemoteMediator(
-                appNetworkClient = appNetworkClient,
-                appDatabase = appDatabase,
-                networkHandler = networkHandler
-            )
-        ).flow
-
-
-
+    override suspend fun loadPopularCategoryNextPage() {
+        popularPagingController.loadNextPage()
     }
 
-    override fun getPagingNameAnimeList(): Flow<PagingData<AnimeInfo>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 12,
-                enablePlaceholders = true
-            ),
-            pagingSourceFactory = { appDatabase.nameCategoryPagingDao().getAnime() },
-            remoteMediator = NameCategoryRemoteMediator(
-                appNetworkClient = appNetworkClient,
-                appDatabase = appDatabase,
-                networkHandler = networkHandler
-            )
-        ).flow
-
+    override suspend fun loadNameCategoryNextPage() {
+        namePagingController.loadNextPage()
     }
 
-    override fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 12,
-                enablePlaceholders = true
-            ),
-            pagingSourceFactory = { appDatabase.filmCategoryPagingDao().getAnime() },
-            remoteMediator = FilmCategoryRemoteMediator(
-                appNetworkClient = appNetworkClient,
-                appDatabase = appDatabase,
-                networkHandler = networkHandler
-            )
-        ).flow
-
+    override suspend fun loadFilmCategoryNextPage() {
+        filmPagingController.loadNextPage()
     }
 
 }

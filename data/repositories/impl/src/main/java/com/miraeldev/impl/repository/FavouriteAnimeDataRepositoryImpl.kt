@@ -4,10 +4,9 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.api.FavouriteAnimeDataRepository
-import com.miraeldev.data.mapper.AnimeModelsMapper
 import com.miraeldev.extensions.mergeWith
-import com.miraeldev.local.dao.FavouriteAnimeDao
-import com.miraeldev.local.models.favourite.toAnimeInfo
+import com.miraeldev.impl.mapper.AnimeModelsMapper
+import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDao
 import com.miraeldev.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
@@ -32,13 +31,12 @@ class FavouriteAnimeDataRepositoryImpl(
     private val favouriteResult =
         favouriteAnimeDao.getFavouriteAnimeList()
             .map { list ->
-                val animeInfoList = list.map { it.toAnimeInfo() }
                 if (list.isEmpty()) {
                     ResultAnimeInfo.Failure(failureCause = FailureCauses.NotFound)
                 } else {
                     _initialList.removeAll(_initialList)
-                    _initialList.addAll(animeInfoList)
-                    ResultAnimeInfo.Success(animeList = animeInfoList)
+                    _initialList.addAll(list)
+                    ResultAnimeInfo.Success(animeList = list)
                 }
             }
             .mergeWith(searchResults)
@@ -48,9 +46,7 @@ class FavouriteAnimeDataRepositoryImpl(
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo) {
 
         if (isSelected) {
-            favouriteAnimeDao.insertFavouriteAnimeItem(
-                animeModelsMapper.mapAnimeInfoToAnimeDbModel(animeInfo)
-            )
+            favouriteAnimeDao.insertFavouriteAnimeItem(animeInfo)
         } else {
             favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
         }
@@ -61,9 +57,7 @@ class FavouriteAnimeDataRepositoryImpl(
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: LastWatchedAnime) {
 
         if (isSelected) {
-            favouriteAnimeDao.insertFavouriteAnimeItem(
-                animeModelsMapper.mapAnimeInfoToAnimeDbModel(animeInfo.toAnimeInfo())
-            )
+            favouriteAnimeDao.insertFavouriteAnimeItem(animeInfo.toAnimeInfo())
         } else {
             favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
         }
@@ -83,7 +77,7 @@ class FavouriteAnimeDataRepositoryImpl(
 
     override suspend fun searchAnimeItemInDatabase(name: String) {
 
-        val searchList = favouriteAnimeDao.searchAnimeItem(name).map { it.toAnimeInfo() }
+        val searchList = favouriteAnimeDao.searchAnimeItem(name)
         if (searchList.isEmpty()) {
             searchResults.emit(ResultAnimeInfo.Failure(failureCause = FailureCauses.NotFound))
         } else {

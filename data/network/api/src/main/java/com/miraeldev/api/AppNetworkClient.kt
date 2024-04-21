@@ -8,10 +8,10 @@ interface AppNetworkClient {
 
     val client: HttpClient
     suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo): HttpResponse
-    suspend fun getNewCategoryList(page: Int): HttpResponse
-    suspend fun getPopularCategoryList(page: Int): HttpResponse
-    suspend fun getNameCategoryList(page: Int): HttpResponse
-    suspend fun getFilmCategoryList(page: Int): HttpResponse
+    suspend fun getNewCategoryList(page: Long): HttpResponse
+    suspend fun getPopularCategoryList(page: Long): HttpResponse
+    suspend fun getNameCategoryList(page: Long): HttpResponse
+    suspend fun getFilmCategoryList(page: Long): HttpResponse
     suspend fun getInitialListCategoryList(page: Long): HttpResponse
     suspend fun getPagingFilteredList(
         name: String,

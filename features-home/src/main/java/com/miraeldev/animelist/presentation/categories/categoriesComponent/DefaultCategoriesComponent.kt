@@ -39,4 +39,20 @@ class DefaultCategoriesComponent(
     override fun onAnimeItemClick(id: Int) {
         store.accept(CategoriesStore.Intent.OnAnimeItemClick(id))
     }
+
+    override fun loadNewCategoryNextPage() {
+        store.accept(CategoriesStore.Intent.LoadNewCategoryNextPage)
+    }
+
+    override fun loadPopularCategoryNextPage() {
+        store.accept(CategoriesStore.Intent.LoadPopularCategoryNextPage)
+    }
+
+    override fun loadNameCategoryNextPage() {
+        store.accept(CategoriesStore.Intent.LoadNameCategoryNextPage)
+    }
+
+    override fun loadFilmCategoryNextPage() {
+        store.accept(CategoriesStore.Intent.LoadFilmCategoryNextPage)
+    }
 }

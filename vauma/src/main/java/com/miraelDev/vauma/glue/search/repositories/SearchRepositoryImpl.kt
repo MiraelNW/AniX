@@ -28,8 +28,12 @@ class SearchRepositoryImpl(
         searchAnimeDataRepository.clearAllFilters()
     }
 
-    override suspend fun searchAnimeByName(name: String): Flow<PagingData<AnimeInfo>> {
+    override suspend fun searchAnimeByName(name: String): Flow<PagingState> {
         return searchAnimeDataRepository.searchAnimeByName(name)
+    }
+
+    override suspend fun loadSearchResultsNextPage() {
+        searchAnimeDataRepository.loadSearchResultsNextPage()
     }
 
     override fun saveSearchText(searchText: String) {
@@ -38,10 +42,6 @@ class SearchRepositoryImpl(
 
     override suspend fun loadNextPage() {
         searchAnimeDataRepository.loadNextPage()
-    }
-
-    override fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>> {
-        return searchAnimeDataRepository.getSearchResults()
     }
 
     override fun getSearchInitialList(): Flow<PagingState> {

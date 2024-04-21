@@ -3,10 +3,9 @@ package com.miraeldev.local.dao.initialSearch.impl
 import com.miraeldev.Database
 import com.miraeldev.extensions.toLong
 import com.miraeldev.local.dao.initialSearch.api.InitialSearchPagingDao
-import com.miraeldev.local.mapper.mapToInitialSearchModel
+import com.miraeldev.local.mapper.mapToInitialSearchDbModel
 import com.miraeldev.local.mapper.toLastDbNode
 import com.miraeldev.local.mapper.toPagingAnimeInfo
-import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.paging.LastDbNode
 import com.miraeldev.models.paging.PagingAnimeInfo
 import me.tatarka.inject.annotations.Inject
@@ -17,12 +16,12 @@ class InitialSearchPagingDaoImpl(private val database: Database) : InitialSearch
     private val query = database.initial_search_paging_tableQueries
 
     override suspend fun insertAll(
-        anime: List<AnimeInfoDto>,
+        anime: List<PagingAnimeInfo>,
         page: Long,
         isLast: Boolean,
         insertTime: Long
     ) {
-        val insertList = anime.map { it.mapToInitialSearchModel() }
+        val insertList = anime.map { it.mapToInitialSearchDbModel() }
         query.transaction {
             insertList.forEach {
                 query.insert(

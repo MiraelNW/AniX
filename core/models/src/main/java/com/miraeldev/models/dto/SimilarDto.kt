@@ -20,7 +20,7 @@ data class SimilarDto(
     val nameRu: String,
 )
 
-internal fun SimilarDto.toVideoInfo(): Similar {
+internal fun SimilarDto.toModel(): Similar {
     return Similar(
         id = this.id,
         kind = this.kind,

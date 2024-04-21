@@ -3,18 +3,27 @@ package com.miraeldev.animelist.data
 import androidx.paging.PagingData
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.paging.PagingState
 import com.miraeldev.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
 
-    fun getPagingNewAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingNewAnimeList(): Flow<PagingState>
 
-    fun getPagingPopularAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingPopularAnimeList(): Flow<PagingState>
 
-    fun getPagingNameAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingNameAnimeList(): Flow<PagingState>
 
-    fun getPagingFilmsAnimeList(): Flow<PagingData<AnimeInfo>>
+    fun getPagingFilmsAnimeList(): Flow<PagingState>
+
+    suspend fun loadNewCategoryNextPage()
+
+    suspend fun loadPopularCategoryNextPage()
+
+    suspend fun loadNameCategoryNextPage()
+
+    suspend fun loadFilmCategoryNextPage()
 
 
     suspend fun loadData(): Map<Int, List<AnimeInfo>>

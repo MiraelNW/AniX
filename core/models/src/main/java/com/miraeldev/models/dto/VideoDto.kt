@@ -13,7 +13,7 @@ data class VideoDto(
     val videoUrl1080: String = "",
 )
 
-internal fun VideoDto.toVideoInfo(): VideoInfo {
+fun VideoDto.toModel(): VideoInfo {
     return VideoInfo(
         id = this.id,
         videoName = this.videoName,

@@ -1,18 +1,13 @@
 package com.miraeldev.impl.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.data.remote.NetworkHandler
-import com.miraeldev.data.remoteMediator.SearchPagingPagingSource
+import com.miraeldev.impl.mapper.mapToPagingModel
+import com.miraeldev.impl.pagingController.SearchResultsPagingController
 import com.miraeldev.impl.pagingController.PagingController
-import com.miraeldev.local.dao.SearchHistoryAnimeDao
+import com.miraeldev.local.dao.searchHistoryDao.SearchHistoryAnimeDao
 import com.miraeldev.local.dao.initialSearch.api.InitialSearchPagingDao
-import com.miraeldev.local.models.SearchHistoryDbModel
-import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.paging.PagingState
 import io.ktor.client.call.body
@@ -34,11 +29,23 @@ class SearchAnimeDataRepositoryImpl(
 ) : SearchAnimeDataRepository {
 
     private var _filterMap = mutableMapOf<Int, String>()
+    private val filterMap: Map<Int, String> get() = _filterMap.toMap()
+
+    private val _filterListFlow = MutableSharedFlow<List<String>>(replay = 1)
+
+    private val _searchTextFlow = MutableStateFlow("")
+
+    private val _searchName = MutableStateFlow("")
+    private var searchResultPagingController: SearchResultsPagingController? = null
+
     private val initialSearchPagingController = PagingController(
-        pagingRequest = { appNetworkClient.getInitialListCategoryList(it).body<Response>() },
+        pagingRequest = {
+            appNetworkClient.getInitialListCategoryList(it).body<Response>().mapToPagingModel()
+        },
         lastNodeInDb = { initialSearchPagingDao.getLastNode() },
         getAnimeListByPage = { initialSearchPagingDao.getAnimeByPage(it) },
         cashSuccessNetworkResult = { animeList, page, isLast ->
+            if (page == 0L) initialSearchPagingDao.clearAllAnime()
             initialSearchPagingDao.insertAll(
                 anime = animeList,
                 insertTime = System.currentTimeMillis(),
@@ -48,13 +55,6 @@ class SearchAnimeDataRepositoryImpl(
         },
         currentTime = System.currentTimeMillis()
     )
-    private val filterMap: Map<Int, String> get() = _filterMap.toMap()
-
-    private val _filterListFlow = MutableSharedFlow<List<String>>(replay = 1)
-
-    private val _searchTextFlow = MutableStateFlow("")
-
-    private val _searchName = MutableStateFlow("")
 
     override fun getFilterList(): Flow<List<String>> = _filterListFlow.asSharedFlow()
 
@@ -65,8 +65,6 @@ class SearchAnimeDataRepositoryImpl(
         }
         _filterListFlow.emit(filterList)
     }
-
-
     override suspend fun removeFromFilterList(categoryId: Int, category: String) {
         _filterMap.remove(categoryId, category)
         val filterList = mutableListOf<String>().apply {
@@ -74,13 +72,12 @@ class SearchAnimeDataRepositoryImpl(
         }
         _filterListFlow.emit(filterList)
     }
-
     override suspend fun clearAllFilters() {
         _filterMap = mutableMapOf()
         _filterListFlow.emit(emptyList())
     }
 
-    override suspend fun searchAnimeByName(name: String): Flow<PagingData<AnimeInfo>> {
+    override suspend fun searchAnimeByName(name: String): Flow<PagingState> {
 
         val yearFilter = filterMap[1]
         val sortFilter = filterMap[2]
@@ -91,32 +88,33 @@ class SearchAnimeDataRepositoryImpl(
             .filter { it != 1 && it != 2 }
             .forEach { filterMap[it]?.let { str -> genreListFilter.add(str) } }
 
-        return Pager(
-            config = PagingConfig(
-                pageSize = 12,
-                enablePlaceholders = true
-            ),
-            pagingSourceFactory =
-            {
-                SearchPagingPagingSource(
-                    name = name,
-                    yearFilter = yearFilter,
-                    sortFilter = sortFilter,
-                    genreListFilter = genreListFilter,
-                    appNetworkClient = appNetworkClient,
-                    networkHandler = networkHandler
-                )
+        searchResultPagingController = SearchResultsPagingController(
+            name = name,
+            yearFilter = yearFilter,
+            sortFilter = sortFilter,
+            genreListFilter = genreListFilter,
+            pagingRequest = { animeName, yearCode, sortCode, genreCode, page, pageSize ->
+                appNetworkClient.getPagingFilteredList(
+                    animeName,
+                    yearCode,
+                    sortCode,
+                    genreCode,
+                    page,
+                    pageSize
+                ).body<Response>().mapToPagingModel()
             }
-        ).flow
+        )
+        return searchResultPagingController?.flow ?: emptyFlow()
     }
 
-    override fun getSearchResults(): Flow<Flow<PagingData<AnimeInfo>>> = emptyFlow()
+    override suspend fun loadSearchResultsNextPage() {
+        searchResultPagingController?.loadNextPage()
+    }
 
-    override fun getSearchInitialList(): Flow<PagingState> =
-        initialSearchPagingController.getPagingState()
+    override fun getSearchInitialList(): Flow<PagingState> = initialSearchPagingController.flow
 
     override suspend fun loadNextPage() {
-        initialSearchPagingController.getNextPage()
+        initialSearchPagingController.loadNextPage()
     }
 
     override fun getSearchName(): Flow<String> = _searchTextFlow.asStateFlow()
@@ -125,18 +123,16 @@ class SearchAnimeDataRepositoryImpl(
 
         if (name.isEmpty()) return
 
-        val searchHistoryDbModel = SearchHistoryDbModel(name)
-
         val searchList = searchAnimeDao.getSearchHistoryList()
 
         val mutableSearchList = ArrayDeque(searchList)
-        mutableSearchList.remove(searchHistoryDbModel)
+        mutableSearchList.remove(name)
 
         if (searchList.size == 20) {
-            mutableSearchList.addFirst(searchHistoryDbModel)
+            mutableSearchList.addFirst(name)
             mutableSearchList.removeLast()
         } else {
-            mutableSearchList.addFirst(searchHistoryDbModel)
+            mutableSearchList.addFirst(name)
         }
 
         mutableSearchList.forEach {
@@ -150,9 +146,4 @@ class SearchAnimeDataRepositoryImpl(
 
     override fun getSearchHistoryListFlow(): Flow<List<String>> =
         searchAnimeDao.getSearchHistoryListFlow()
-            .map {
-                it.map { model ->
-                    model.searchHistoryItem
-                }
-            }
 }

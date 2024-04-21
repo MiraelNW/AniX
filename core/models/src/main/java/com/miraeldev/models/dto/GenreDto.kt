@@ -10,7 +10,7 @@ data class GenreDto(
     @SerialName("russian") val nameRu: String,
 )
 
-internal fun GenreDto.toGenre(): Genre {
+fun GenreDto.toModel(): Genre {
     return Genre(
         nameRu = this.nameRu,
         nameEn = this.nameEn

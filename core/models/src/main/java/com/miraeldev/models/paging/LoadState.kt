@@ -8,4 +8,5 @@ enum class LoadState {
     APPEND_ERROR,
     REACH_END,
     EMPTY,
+    INITIAL
 }

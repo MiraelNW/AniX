@@ -8,12 +8,11 @@ import com.miraeldev.api.UserAuthRepository
 import com.miraeldev.impl.models.AccessTokenDataModel
 import com.miraeldev.impl.models.FavouriteAnimeSendRequest
 import com.miraeldev.impl.models.RefreshToken
-import com.miraeldev.local.AppDatabase
-import com.miraeldev.local.models.user.toUserModel
 import com.miraeldev.impl.models.routes.AppNetworkRoutes
 import com.miraeldev.impl.models.routes.AuthNetworkRoutes
+import com.miraeldev.local.dao.user.UserDao
+import com.miraeldev.local.mapper.toModel
 import com.miraeldev.user.User
-import com.pluto.plugins.network.ktor.PlutoKtorInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -47,7 +46,7 @@ import me.tatarka.inject.annotations.Inject
 class AppNetworkClientImpl(
     private val preferenceClient: PreferenceClient,
     private val userAuthRepository: UserAuthRepository,
-    private val appDatabase: AppDatabase
+    private val userDao: UserDao
 ) : AppNetworkClient {
 
     override val client: HttpClient = HttpClient(CIO).config {
@@ -147,7 +146,7 @@ class AppNetworkClientImpl(
     }
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo): HttpResponse {
-        val user = appDatabase.userDao().getUser()?.toUserModel() ?: User()
+        val user = userDao.getUser()?.toModel() ?: User()
         return client.post {
             url(AppNetworkRoutes.SET_ANIME_FAV_STATUS)
             setBody(
@@ -160,19 +159,19 @@ class AppNetworkClientImpl(
         }
     }
 
-    override suspend fun getNewCategoryList(page: Int): HttpResponse = client.get {
+    override suspend fun getNewCategoryList(page: Long): HttpResponse = client.get {
         url("${AppNetworkRoutes.GET_NEW_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getPopularCategoryList(page: Int): HttpResponse = client.get {
+    override suspend fun getPopularCategoryList(page: Long): HttpResponse = client.get {
         url("${AppNetworkRoutes.GET_POPULAR_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getNameCategoryList(page: Int): HttpResponse = client.get {
+    override suspend fun getNameCategoryList(page: Long): HttpResponse = client.get {
         url("${AppNetworkRoutes.GET_NAME_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 
-    override suspend fun getFilmCategoryList(page: Int): HttpResponse = client.get {
+    override suspend fun getFilmCategoryList(page: Long): HttpResponse = client.get {
         url("${AppNetworkRoutes.GET_FILMS_CATEGORY_LIST_ROUTE}page=$page&page_size=$PAGE_SIZE")
     }
 

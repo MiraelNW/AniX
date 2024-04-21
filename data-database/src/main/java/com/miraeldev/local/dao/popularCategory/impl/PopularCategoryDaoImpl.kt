@@ -2,11 +2,18 @@ package com.miraeldev.local.dao.popularCategory.impl
 
 import com.miraeldev.Database
 import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.extensions.toLong
 import com.miraeldev.local.dao.popularCategory.api.PopularCategoryDao
-import com.miraeldev.local.mapper.mapToFilmCategoryModel
+import com.miraeldev.local.dao.popularCategory.api.PopularCategoryPagingDao
+import com.miraeldev.local.mapper.mapToNewCategoryDbModel
+import com.miraeldev.local.mapper.mapToNewCategoryModel
 import com.miraeldev.local.mapper.mapToPopularCategoryModel
 import com.miraeldev.local.mapper.toAnimeInfo
+import com.miraeldev.local.mapper.toLastDbNode
+import com.miraeldev.local.mapper.toPagingAnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
+import com.miraeldev.models.paging.LastDbNode
+import com.miraeldev.models.paging.PagingAnimeInfo
 import me.tatarka.inject.annotations.Inject
 
 @Inject

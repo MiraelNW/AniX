@@ -39,7 +39,7 @@ fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
         releasedOn = this.releasedOn,
         status = this.status,
         kind = this.kind,
-        genres = this.genres.map { it.toGenre() }.toPersistentList(),
+        genres = this.genres.map { it.toModel() }.toPersistentList(),
         episodes = this.episodes,
         image = this.image.toModel(),
         duration = this.duration,
@@ -71,13 +71,13 @@ fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
         releasedOn = this.releasedOn,
         status = this.status,
         kind = this.kind,
-        genres = this.genres.map { it.toGenre() }.toPersistentList(),
+        genres = this.genres.map { it.toModel() }.toPersistentList(),
         episodes = this.episodes,
         image = this.image.toModel(),
         duration = this.duration,
         isFavourite = this.isFavourite,
-        similar = this.similar.map { it.toVideoInfo() }.toPersistentList(),
-        videos = this.videos.map { it.toVideoInfo() }.toPersistentList()
+        similar = this.similar.map { it.toModel() }.toPersistentList(),
+        videos = this.videos.map { it.toModel() }.toPersistentList()
     )
 }
 

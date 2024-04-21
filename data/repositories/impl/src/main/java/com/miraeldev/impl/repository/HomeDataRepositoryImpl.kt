@@ -4,7 +4,7 @@ import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.HomeDataRepository
 import com.miraeldev.api.UserDataRepository
-import com.miraeldev.data.remote.dto.toLastWatched
+import com.miraeldev.impl.remote.dto.toLastWatched
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryDao
 import com.miraeldev.local.dao.newCategory.api.NewCategoryDao

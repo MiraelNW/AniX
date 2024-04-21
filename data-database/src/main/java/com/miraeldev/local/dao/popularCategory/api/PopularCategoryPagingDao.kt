@@ -1,23 +1,21 @@
 package com.miraeldev.local.dao.popularCategory.api
 
-import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
+import com.miraeldev.models.paging.LastDbNode
+import com.miraeldev.models.paging.PagingAnimeInfo
 
-@Dao
 interface PopularCategoryPagingDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(anime: List<PagingPopularCategoryAnimeInfoDbModel>)
+    suspend fun insertAll(
+        anime: List<PagingAnimeInfo>,
+        page: Long,
+        isLast: Boolean,
+        insertTime: Long
+    )
 
-    @Query("Select * From paging_popular_category_anime order By page, score desc")
-    fun getAnime(): PagingSource<Int, AnimeInfo>
+    fun getLastNode() : LastDbNode
 
-    @Query("Delete From paging_popular_category_anime")
+    fun getAnimeByPage(page: Long): List<PagingAnimeInfo>
+
     suspend fun clearAllAnime()
 
 }

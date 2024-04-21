@@ -1,10 +1,6 @@
 package com.miraeldev.impl.pagingController
 
 import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.extensions.toBoolean
-import com.miraeldev.models.dto.AnimeInfoDto
-import com.miraeldev.models.dto.Response
-import com.miraeldev.models.dto.toAnimeInfo
 import com.miraeldev.models.paging.LastDbNode
 import com.miraeldev.models.paging.LoadState
 import com.miraeldev.models.paging.PagingAnimeInfo
@@ -19,10 +15,10 @@ import java.util.concurrent.TimeUnit
 
 @Inject
 internal class PagingController(
-    val pagingRequest: suspend (Long) -> Response,
+    val pagingRequest: suspend (Long) -> List<PagingAnimeInfo>,
     val lastNodeInDb: suspend () -> LastDbNode,
     val getAnimeListByPage: suspend (Long) -> List<PagingAnimeInfo>,
-    val cashSuccessNetworkResult: suspend (List<AnimeInfoDto>, Long, Boolean) -> Unit,
+    val cashSuccessNetworkResult: suspend (List<PagingAnimeInfo>, Long, Boolean) -> Unit,
     val currentTime: Long
 ) {
 
@@ -34,31 +30,32 @@ internal class PagingController(
     private val _pagingState = MutableStateFlow(PagingState(emptyList(), LoadState.EMPTY))
     private val pagingState = _pagingState.asStateFlow()
 
-    fun getPagingState(): Flow<PagingState> = pagingState
+    val flow: Flow<PagingState> = pagingState
 
-    suspend fun getNextPage() {
-        loadNextPage()
-    }
-
-    private suspend fun loadNextPage() {
+    suspend fun loadNextPage() {
         if (page == INITIAL_PAGE || !endOfPaginationReached && _pagingState.value.loadState == LoadState.REQUEST_INACTIVE) {
             _pagingState.update {
                 if (page == INITIAL_PAGE) _pagingState.value.copy(loadState = LoadState.REFRESH_LOADING)
                 else _pagingState.value.copy(loadState = LoadState.APPEND_LOADING)
             }
-
         }
 
         try {
-            val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
-
+            val cacheTimeout = TimeUnit.MILLISECONDS.convert(12L, TimeUnit.HOURS)
             val lastDbNode = lastNodeInDb()
 
             val data =
-                if (currentTime - lastDbNode.createAt >= cacheTimeout || page >= lastDbNode.page) {
-                    val request = pagingRequest(page)
-                    cashSuccessNetworkResult(request.results, page, request.isLast)
-                    Pair(request.results.map { it.toAnimeInfo() }, request.isLast)
+                if (currentTime - lastDbNode.createAt >= cacheTimeout || page > lastDbNode.page) {
+                    val networkResults = pagingRequest(page)
+                    cashSuccessNetworkResult(
+                        networkResults,
+                        page,
+                        networkResults.last().isLast
+                    )
+                    Pair(
+                        networkResults.map { it.toAnimeInfo() },
+                        networkResults.last().isLast
+                    )
                 } else {
                     val response = getAnimeListByPage(page)
                     val lastItem = response.last()
@@ -83,7 +80,7 @@ internal class PagingController(
 
             _pagingState.update {
                 _pagingState.value.copy(
-                    list = resultList,
+                    list = resultList.toList(),
                     loadState = LoadState.REQUEST_INACTIVE
                 )
             }

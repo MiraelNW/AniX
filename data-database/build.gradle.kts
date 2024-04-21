@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("app.cash.sqldelight") version "2.0.0"
-    id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("kotlinx-serialization")
 }
@@ -60,13 +59,6 @@ dependencies {
     //sqlDelight
     implementation(libs.sqldelight.android.driver)
     implementation(libs.sqldelight.coroutine.exstension)
-    implementation("app.cash.sqldelight:androidx-paging3-extensions:2.0.0")
-
-    //room
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
-    implementation(libs.room.paging)
 
     implementation(project(":core:models"))
     implementation(project(":core:extensions"))

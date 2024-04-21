@@ -1,24 +1,21 @@
 package com.miraeldev.local.dao.newCategory.api
 
-import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
-import kotlinx.coroutines.flow.Flow
+import com.miraeldev.models.paging.LastDbNode
+import com.miraeldev.models.paging.PagingAnimeInfo
 
-@Dao
 interface NewCategoryPagingDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(anime: List<PagingNewCategoryAnimeInfoDbModel>)
+    suspend fun insertAll(
+        anime: List<PagingAnimeInfo>,
+        page: Long,
+        isLast: Boolean,
+        insertTime: Long
+    )
 
-    @Query("Select * From paging_new_category_anime Order By page, releasedOn desc")
-    fun getAnime(): PagingSource<Int, AnimeInfo>
+    fun getLastNode() : LastDbNode
 
-    @Query("Delete From paging_new_category_anime")
+    fun getAnimeByPage(page: Long): List<PagingAnimeInfo>
+
     suspend fun clearAllAnime()
 
 }

@@ -8,4 +8,9 @@ interface CategoriesComponent {
 
     fun onAnimeItemClick(id: Int)
 
+    fun loadNewCategoryNextPage()
+    fun loadPopularCategoryNextPage()
+    fun loadNameCategoryNextPage()
+    fun loadFilmCategoryNextPage()
+
 }

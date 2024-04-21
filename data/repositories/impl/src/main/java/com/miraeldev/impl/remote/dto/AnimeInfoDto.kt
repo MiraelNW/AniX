@@ -1,12 +1,15 @@
-package com.miraeldev.data.remote.dto
+package com.miraeldev.impl.remote.dto
 
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.local.models.filmCategory.PagingFilmCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.nameCategory.PagingNameCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.newCategory.PagingNewCategoryAnimeInfoDbModel
-import com.miraeldev.local.models.popularCategory.PagingPopularCategoryAnimeInfoDbModel
+import com.miraeldev.data.remote.dto.GenreDto
+import com.miraeldev.data.remote.dto.ImageModelDto
+import com.miraeldev.data.remote.dto.SimilarDto
+import com.miraeldev.data.remote.dto.VideoDto
+import com.miraeldev.data.remote.dto.toGenre
+import com.miraeldev.data.remote.dto.toModel
+import com.miraeldev.data.remote.dto.toVideoInfo
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -82,85 +85,5 @@ fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
         isFavourite = this.isFavourite,
         similar = this.similar.map { it.toVideoInfo() }.toPersistentList(),
         videos = this.videos.map { it.toVideoInfo() }.toPersistentList()
-    )
-}
-
-fun AnimeInfoDto.mapToPagingNewCategoryModel(): PagingNewCategoryAnimeInfoDbModel {
-    return PagingNewCategoryAnimeInfoDbModel(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenreDataModel() },
-        episodes = this.episodes,
-        image = this.image.toDbModel(),
-        duration = this.duration,
-        isFavourite = this.isFavourite,
-        page = 0
-    )
-}
-
-fun AnimeInfoDto.mapToPagingPopularCategoryModel(): PagingPopularCategoryAnimeInfoDbModel {
-    return PagingPopularCategoryAnimeInfoDbModel(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenreDataModel() },
-        episodes = this.episodes,
-        image = this.image.toDbModel(),
-        duration = this.duration,
-        isFavourite = this.isFavourite,
-        page = 0
-    )
-}
-
-fun AnimeInfoDto.mapToPagingFilmCategoryModel(): PagingFilmCategoryAnimeInfoDbModel {
-    return PagingFilmCategoryAnimeInfoDbModel(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenreDataModel() },
-        episodes = this.episodes,
-        image = this.image.toDbModel(),
-        duration = this.duration,
-        isFavourite = this.isFavourite,
-        page = 0
-    )
-}
-
-fun AnimeInfoDto.mapToPagingNameCategoryModel(): PagingNameCategoryAnimeInfoDbModel {
-    return PagingNameCategoryAnimeInfoDbModel(
-        id = this.id,
-        nameRu = this.russianName,
-        nameEn = this.name,
-        description = this.description ?: "",
-        rating = this.rating,
-        score = this.score,
-        releasedOn = this.releasedOn,
-        status = this.status,
-        kind = this.kind,
-        genres = this.genres.map { it.toGenreDataModel() },
-        episodes = this.episodes,
-        image = this.image.toDbModel(),
-        duration = this.duration,
-        isFavourite = this.isFavourite,
-        page = 0
     )
 }

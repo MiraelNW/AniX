@@ -63,10 +63,8 @@ fun InitialSearchScreen(
 
     val shouldPaginate by remember {
         derivedStateOf {
-            (
-                    lazyGridListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-                        ?: -5
-                    ) >= (lazyGridListState.layoutInfo.totalItemsCount - 3)
+            (lazyGridListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -5) >=
+                    (lazyGridListState.layoutInfo.totalItemsCount - 7)
         }
     }
 
@@ -122,7 +120,6 @@ private fun InitialAnimeList(
             2
         }
     }
-
     Box(Modifier.fillMaxSize()) {
         initialList.apply {
             when {

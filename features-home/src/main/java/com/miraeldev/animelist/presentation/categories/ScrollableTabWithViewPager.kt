@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
@@ -25,6 +26,7 @@ import androidx.compose.material.TabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,10 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import com.miraeldev.anime.AnimeInfo
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miraeldev.animelist.R
+import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesComponent
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.designsystem.ErrorAppendMessage
 import com.miraeldev.designsystem.ErrorRetryButton
@@ -47,25 +48,24 @@ import com.miraeldev.designsystem.animation.WentWrongAnimation
 import com.miraeldev.designsystem.shimmerlist.ShimmerAnimeCard
 import com.miraeldev.designsystem.shimmerlist.ShimmerGrid
 import com.miraeldev.extensions.NoRippleInteractionSource
+import com.miraeldev.models.paging.LoadState
+import com.miraeldev.models.paging.PagingState
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 private const val SMALL_ANIMATION = 1.015f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScrollableTabWithViewPager(
-    newCategoryList: LazyPagingItems<AnimeInfo>,
-    popularAnimeList: LazyPagingItems<AnimeInfo>,
-    nameAnimeList: LazyPagingItems<AnimeInfo>,
-    filmsAnimeList: LazyPagingItems<AnimeInfo>,
+    component: CategoriesComponent,
     imageLoader: VaumaImageLoader,
     categoryId: Int,
     onAnimeItemClick: (Int) -> Unit
 ) {
+    val model by component.model.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(
         initialPage = categoryId,
@@ -85,10 +85,10 @@ fun ScrollableTabWithViewPager(
 
     LaunchedEffect(key1 = shouldRetry) {
         if (shouldRetry) {
-            newCategoryList.retry()
-            popularAnimeList.retry()
-            filmsAnimeList.retry()
-            nameAnimeList.retry()
+//            newCategoryList.retry()
+//            popularAnimeList.retry()
+//            filmsAnimeList.retry()
+//            nameAnimeList.retry()
             shouldRetry = false
         }
     }
@@ -145,52 +145,49 @@ fun ScrollableTabWithViewPager(
 
                 0 -> {
                     AnimeList(
-                        categoryList = newCategoryList,
+                        categoryList = model.newListState,
                         imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
-                        onClickRetry = { shouldRetry = true }
+                        onClickRetry = { shouldRetry = true },
+                        loadNextPage = component::loadNewCategoryNextPage
                     )
                 }
+
                 1 -> {
                     AnimeList(
-                        categoryList = popularAnimeList,
+                        categoryList = model.popularListState,
                         imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
-                        onClickRetry = { shouldRetry = true }
+                        onClickRetry = { shouldRetry = true },
+                        loadNextPage = component::loadPopularCategoryNextPage
                     )
                 }
 
                 2 -> {
                     AnimeList(
-                        categoryList = nameAnimeList,
+                        categoryList = model.nameListState,
                         imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
-                        onClickRetry = { shouldRetry = true }
+                        onClickRetry = { shouldRetry = true },
+                        loadNextPage = component::loadNameCategoryNextPage
                     )
                 }
 
                 3 -> {
                     AnimeList(
-                        categoryList = filmsAnimeList,
+                        categoryList = model.filmsListState,
                         imageLoader = imageLoader,
                         onAnimeItemClick = onAnimeItemClick,
                         changeScrollPossibility = { scrollEnable = it },
-                        onClickRetry = { shouldRetry = true }
+                        onClickRetry = { shouldRetry = true },
+                        loadNextPage = component::loadFilmCategoryNextPage
                     )
                 }
 
-                else -> {
-                    AnimeList(
-                        categoryList = newCategoryList,
-                        imageLoader = imageLoader,
-                        onAnimeItemClick = onAnimeItemClick,
-                        changeScrollPossibility = { scrollEnable = it },
-                        onClickRetry = { shouldRetry = true }
-                    )
-                }
+                else -> Unit
             }
         }
     )
@@ -198,15 +195,31 @@ fun ScrollableTabWithViewPager(
 
 @Composable
 private fun AnimeList(
-    categoryList: LazyPagingItems<AnimeInfo>,
+    categoryList: PagingState,
     imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     changeScrollPossibility: (Boolean) -> Unit,
-    onClickRetry: () -> Unit
+    onClickRetry: () -> Unit,
+    loadNextPage: () -> Unit,
 ) {
 
     var shouldShowLoading by remember {
         mutableStateOf(false)
+    }
+
+    val lazyListListState = rememberLazyListState()
+
+    val shouldPaginate by remember {
+        derivedStateOf {
+            (lazyListListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -5) >=
+                    (lazyListListState.layoutInfo.totalItemsCount - 7)
+        }
+    }
+
+    LaunchedEffect(key1 = shouldPaginate) {
+        if (shouldPaginate && categoryList.loadState == LoadState.REQUEST_INACTIVE) {
+            loadNextPage()
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -214,7 +227,7 @@ private fun AnimeList(
         categoryList.apply {
             when {
 
-                loadState.refresh is LoadState.Loading -> {
+                loadState == LoadState.REFRESH_LOADING -> {
                     changeScrollPossibility(true)
                     LaunchedEffect(key1 = Unit) {
                         delay(300)
@@ -225,10 +238,9 @@ private fun AnimeList(
                     }
                 }
 
-                loadState.refresh is LoadState.Error -> {
+                loadState == LoadState.REFRESH_ERROR -> {
                     changeScrollPossibility(false)
-                    val e = categoryList.loadState.refresh as LoadState.Error
-                    if (e.error is IOException) {
+                    if (true) {
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
@@ -260,9 +272,7 @@ private fun AnimeList(
                                 .navigationBarsPadding(),
                             contentPadding = PaddingValues(
                                 top = 12.dp,
-                                bottom = if (loadState.append.endOfPaginationReached
-                                    || loadState.append is LoadState.Error
-                                ) 64.dp else 8.dp,
+                                bottom = 8.dp,
                                 start = 4.dp,
                                 end = 4.dp
                             ),
@@ -273,20 +283,18 @@ private fun AnimeList(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                             columns = GridCells.Fixed(cells)
                         ) {
-                            if (categoryList.itemCount > 0) {
-                                items(count = categoryList.itemCount) { index ->
+                            if (categoryList.list.isNotEmpty()) {
+                                items(count = categoryList.list.size) { index ->
                                     changeScrollPossibility(true)
-                                    categoryList[index]?.let {
-                                        AnimeCard(
-                                            animeItem = it,
-                                            imageLoader = imageLoader,
-                                            onAnimeItemClick = onAnimeItemClick,
-                                        )
-                                    }
+                                    AnimeCard(
+                                        animeItem = categoryList.list[index],
+                                        imageLoader = imageLoader,
+                                        onAnimeItemClick = onAnimeItemClick,
+                                    )
                                 }
                             }
 
-                            if (categoryList.loadState.append is LoadState.Loading) {
+                            if (categoryList.loadState == LoadState.APPEND_LOADING) {
                                 items(count = 6) {
                                     changeScrollPossibility(true)
                                     ShimmerAnimeCard(
@@ -296,7 +304,7 @@ private fun AnimeList(
                                 }
                             }
 
-                            if (categoryList.loadState.append is LoadState.Error) {
+                            if (categoryList.loadState == LoadState.APPEND_ERROR) {
                                 item {
                                     ErrorAppendMessage(
                                         message = stringResource(

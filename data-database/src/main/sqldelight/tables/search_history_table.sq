@@ -1,12 +1,12 @@
-CREATE TABLE SearchHistory(
+CREATE TABLE SearchHistoryDbModel(
     searchHistory TEXT PRIMARY KEY NOT NULL
 );
 
 getSearchHistoryListFlow:
-SELECT * FROM SearchHistory;
+SELECT * FROM SearchHistoryDbModel;
 
 getSearchHistoryList:
-SELECT * FROM SearchHistory;
+SELECT * FROM SearchHistoryDbModel;
 
 insertSearchItem:
-INSERT OR REPLACE INTO SearchHistory VALUES (:searchHistory);
+INSERT OR REPLACE INTO SearchHistoryDbModel VALUES (:searchHistory);

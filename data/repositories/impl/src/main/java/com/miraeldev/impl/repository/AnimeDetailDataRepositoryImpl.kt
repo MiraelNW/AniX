@@ -2,12 +2,13 @@ package com.miraeldev.impl.repository
 
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AnimeDetailDataRepository
+import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.VideoPlayerDataRepository
-import com.miraeldev.data.mapper.AnimeModelsMapper
-import com.miraeldev.data.remote.dto.AnimeInfoDto
-import com.miraeldev.data.remote.dto.toAnimeDetailInfo
-import com.miraeldev.local.AppDatabase
-import com.miraeldev.local.dao.FavouriteAnimeDao
+import com.miraeldev.impl.mapper.AnimeModelsMapper
+import com.miraeldev.impl.remote.dto.AnimeInfoDto
+import com.miraeldev.impl.remote.dto.toAnimeDetailInfo
+import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDao
+import com.miraeldev.local.dao.user.UserDao
 import com.miraeldev.models.result.ResultAnimeDetail
 import com.miraeldev.result.FailureCauses
 import io.ktor.client.call.body
@@ -21,9 +22,8 @@ import me.tatarka.inject.annotations.Inject
 class AnimeDetailDataRepositoryImpl(
     private val videoPlayerDataRepository: VideoPlayerDataRepository,
     private val favouriteAnimeDao: FavouriteAnimeDao,
-    private val animeModelsMapper: AnimeModelsMapper,
-    private val appNetworkClient: com.miraeldev.api.AppNetworkClient,
-    private val appDatabase: AppDatabase
+    private val appNetworkClient: AppNetworkClient,
+    private val userDao: UserDao
 ) : AnimeDetailDataRepository {
 
     private val _animeDetail = MutableSharedFlow<ResultAnimeDetail>()
@@ -31,7 +31,7 @@ class AnimeDetailDataRepositoryImpl(
     override fun getAnimeDetail(): SharedFlow<ResultAnimeDetail> = _animeDetail.asSharedFlow()
 
     override suspend fun loadAnimeDetail(animeId: Int) {
-        val userId = appDatabase.userDao().getUser()?.id ?: return
+        val userId = userDao.getUser()?.id ?: return
         val response = appNetworkClient.searchAnimeById(animeId, userId.toInt())
         if (response.status.isSuccess()) {
             val animeList = response.body<AnimeInfoDto>().toAnimeDetailInfo()
@@ -53,9 +53,7 @@ class AnimeDetailDataRepositoryImpl(
         if (!response.status.isSuccess()) return
 
         if (isSelected) {
-            favouriteAnimeDao.insertFavouriteAnimeItem(
-                animeModelsMapper.mapAnimeInfoToAnimeDbModel(animeInfo)
-            )
+            favouriteAnimeDao.insertFavouriteAnimeItem(animeInfo)
         } else {
             favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
         }

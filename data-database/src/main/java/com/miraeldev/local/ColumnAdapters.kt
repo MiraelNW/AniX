@@ -3,6 +3,7 @@ package com.miraeldev.local
 import app.cash.sqldelight.ColumnAdapter
 import com.miraeldev.local.animeDataModels.GenreDataModel
 import com.miraeldev.local.models.user.ImageDbModel
+import com.miraeldev.local.models.user.LastWatchedAnimeDbModel
 import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -34,5 +35,15 @@ val genresAdapter = object : ColumnAdapter<List<GenreDataModel>, String> {
 
     override fun decode(databaseValue: String): List<GenreDataModel> {
         return Json.decodeFromString<List<GenreDataModel>>(databaseValue)
+    }
+}
+
+val lastWatchedAnimeAdapter = object : ColumnAdapter<LastWatchedAnimeDbModel, String> {
+    override fun encode(value: LastWatchedAnimeDbModel): String {
+        return Json.encodeToString(value)
+    }
+
+    override fun decode(databaseValue: String): LastWatchedAnimeDbModel {
+        return Json.decodeFromString<LastWatchedAnimeDbModel>(databaseValue)
     }
 }

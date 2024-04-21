@@ -1,8 +1,13 @@
-CREATE TABLE FavouriteAnimeInfo (
+import com.miraeldev.local.animeDataModels.GenreDataModel;
+import com.miraeldev.local.models.user.ImageDbModel;
+import com.miraeldev.models.models.animeDataModels.VideoInfoDataModel;
+import kotlin.collections.List;
+
+CREATE TABLE FavouriteAnimeInfoDbModel (
     id INTEGER PRIMARY KEY NOT NULL,
     nameEn TEXT NOT NULL,
     nameRu TEXT NOT NULL,
-    image TEXT NOT NULL,
+    image TEXT AS ImageDbModel NOT NULL,
     kind TEXT NOT NULL,
     score REAL NOT NULL,
     status TEXT NOT NULL,
@@ -11,20 +16,20 @@ CREATE TABLE FavouriteAnimeInfo (
     episodes INTEGER NOT NULL,
     duration INTEGER NOT NULL,
     description TEXT NOT NULL,
-    videoUrls TEXT NOT NULL,
-    genres TEXT NOT NULL,
+    videoUrls TEXT AS VideoInfoDataModel NOT NULL,
+    genres TEXT AS List<GenreDataModel> NOT NULL,
     isFavourite INTEGER NOT NULL,
     page INTEGER NOT NULL
 );
 
 getFavouriteAnimeList:
-SELECT * FROM FavouriteAnimeInfo LIMIT 10 OFFSET :offset;
+SELECT * FROM FavouriteAnimeInfoDbModel LIMIT 10 OFFSET :offset;
 
 insertFavouriteAnimeItem:
-INSERT OR REPLACE INTO FavouriteAnimeInfo VALUES(:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrl,:genres,:isFavourite,:page);
+INSERT OR REPLACE INTO FavouriteAnimeInfoDbModel VALUES(:id,:nameEn,:nameRu,:image,:kind,:score,:status,:rating,:releasedOn,:episodes,:duration,:description,:videoUrl,:genres,:isFavourite,:page);
 
 deleteFavouriteAnimeItem:
-DELETE FROM FavouriteAnimeInfo WHERE id= :animeItemId;
+DELETE FROM FavouriteAnimeInfoDbModel WHERE id= :animeItemId;
 
 searchAnimeItem:
-SELECT * FROM FavouriteAnimeInfo WHERE nameEn LIKE ('%' || :name || '%') OR nameRu LIKE ('%' || :name || '%');
+SELECT * FROM FavouriteAnimeInfoDbModel WHERE nameEn LIKE ('%' || :name || '%') OR nameRu LIKE ('%' || :name || '%');

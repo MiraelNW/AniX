@@ -1,7 +1,5 @@
 package com.miraeldev.local.models.user
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.local.animeDataModels.GenreDataModel
@@ -11,11 +9,8 @@ import com.miraeldev.models.anime.Genre
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
-@Entity
 @Serializable
 data class LastWatchedAnimeDbModel(
-
-    @PrimaryKey
     val id: Int,
     val imageUrl: String,
     val nameEn: String,

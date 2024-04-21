@@ -1,6 +1,5 @@
 package com.miraeldev.impl.remote.dto
 
-import com.miraeldev.data.remote.dto.AnimeInfoDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,15 +1,15 @@
 package com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent
 
-import androidx.paging.PagingData
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.paging.LoadState
+import com.miraeldev.models.paging.PagingState
 import com.miraeldev.search.domain.usecases.filterUseCase.GetFilterListUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchNameUseCase
-import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchResultsUseCase
+import com.miraeldev.search.domain.usecases.searchUseCase.LoadSearchResultsNextPageUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.SaveNameInAnimeSearchHistoryUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.SaveSearchTextUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.SearchAnimeByNameUseCase
@@ -17,8 +17,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
@@ -34,7 +32,7 @@ interface SearchResultsStore :
     data class State(
         val canPaginate: Boolean,
         val filterList: ImmutableList<String>,
-        val searchResults: Flow<PagingData<AnimeInfo>>
+        val searchResults: PagingState
     )
 
     sealed interface Label {
@@ -50,6 +48,7 @@ class SearchResultsStoreFactory(
     private val searchAnimeByName: SearchAnimeByNameUseCase,
     private val saveNameInAnimeSearchHistory: SaveNameInAnimeSearchHistoryUseCase,
     private val getSearchName: GetSearchNameUseCase,
+    private val loadSearchResultsNextPageUseCase: LoadSearchResultsNextPageUseCase,
     private val saveSearchTextUseCase: SaveSearchTextUseCase,
     private val getFilterListUseCase: GetFilterListUseCase
 ) {
@@ -61,7 +60,7 @@ class SearchResultsStoreFactory(
                 initialState = SearchResultsStore.State(
                     false,
                     persistentListOf(),
-                    emptyFlow()
+                    PagingState(emptyList(), LoadState.INITIAL)
                 ),
                 bootstrapper = BootstrapperImpl(),
                 executorFactory = ::ExecutorImpl,
@@ -69,17 +68,17 @@ class SearchResultsStoreFactory(
             ) {}
 
     private sealed interface Action {
-        data class SearchNameLoaded(val name: String, val result: Flow<PagingData<AnimeInfo>>) :
+        data class SearchNameLoaded(val name: String, val result: Flow<PagingState>) :
             Action
 
         data class SearchFiltersLoaded(val filters: List<String>) : Action
-        data class SearchResultsLoaded(val results: Flow<PagingData<AnimeInfo>>) : Action
+        data class SearchResultsLoaded(val results: PagingState) : Action
     }
 
     private sealed interface Msg {
-        data class SearchNameLoaded(val name: String, val result: Flow<PagingData<AnimeInfo>>) : Msg
+        data class SearchNameLoaded(val name: String, val result: PagingState) : Msg
         data class SearchFiltersLoaded(val filters: List<String>) : Msg
-        data class SearchResultsLoaded(val results: Flow<PagingData<AnimeInfo>>) : Msg
+        data class SearchResultsLoaded(val results: PagingState) : Msg
     }
 
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
@@ -88,6 +87,7 @@ class SearchResultsStoreFactory(
                 getSearchName()
                     .collect {
                         val result = searchAnimeByName(it)
+                        loadSearchResultsNextPageUseCase()
                         dispatch(Action.SearchNameLoaded(it, result))
                         saveNameInAnimeSearchHistory(it)
                     }
@@ -110,6 +110,7 @@ class SearchResultsStoreFactory(
                 is SearchResultsStore.Intent.OnAnimeItemClick -> publish(
                     SearchResultsStore.Label.OnAnimeItemClick(intent.id)
                 )
+
                 is SearchResultsStore.Intent.OnFilterClick -> publish(SearchResultsStore.Label.OnFilterClick)
                 is SearchResultsStore.Intent.ShowSearchHistory -> {
                     saveSearchTextUseCase(intent.search)
@@ -120,12 +121,18 @@ class SearchResultsStoreFactory(
 
         override fun executeAction(action: Action, getState: () -> SearchResultsStore.State) {
             when (action) {
-                is Action.SearchNameLoaded -> dispatch(
-                    Msg.SearchNameLoaded(
-                        action.name,
-                        action.result
-                    )
-                )
+                is Action.SearchNameLoaded -> {
+                    scope.launch {
+                        action.result.collect {
+                            dispatch(
+                                Msg.SearchNameLoaded(
+                                    action.name,
+                                    it
+                                )
+                            )
+                        }
+                    }
+                }
 
                 is Action.SearchFiltersLoaded -> dispatch(Msg.SearchFiltersLoaded(action.filters))
                 is Action.SearchResultsLoaded -> dispatch(Msg.SearchResultsLoaded(action.results))

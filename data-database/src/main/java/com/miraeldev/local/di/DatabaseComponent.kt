@@ -1,40 +1,49 @@
 package com.miraeldev.local.di
 
 import android.content.Context
-import androidx.room.Room
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.miraeldev.Database
-import com.miraeldev.local.AppDatabase
-import com.miraeldev.local.dao.FavouriteAnimeDao
-import com.miraeldev.local.dao.SearchHistoryAnimeDao
+import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDao
+import com.miraeldev.local.dao.searchHistoryDao.SearchHistoryAnimeDao
+import com.miraeldev.local.dao.favouriteAnime.FavouriteAnimeDaoImpl
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryDao
 import com.miraeldev.local.dao.filmCategory.api.FilmCategoryPagingDao
-import com.miraeldev.local.dao.filmCategory.api.FilmCategoryRemoteKeysDao
 import com.miraeldev.local.dao.filmCategory.impl.FilmCategoryDaoImpl
+import com.miraeldev.local.dao.filmCategory.impl.FilmCategoryPagingDaoImpl
 import com.miraeldev.local.dao.initialSearch.api.InitialSearchPagingDao
 import com.miraeldev.local.dao.initialSearch.impl.InitialSearchPagingDaoImpl
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryDao
 import com.miraeldev.local.dao.nameCategory.api.NameCategoryPagingDao
-import com.miraeldev.local.dao.nameCategory.api.NameCategoryRemoteKeysDao
 import com.miraeldev.local.dao.nameCategory.impl.NameCategoryDaoImpl
+import com.miraeldev.local.dao.nameCategory.impl.NameCategoryPagingDaoImpl
 import com.miraeldev.local.dao.newCategory.api.NewCategoryDao
 import com.miraeldev.local.dao.newCategory.api.NewCategoryPagingDao
-import com.miraeldev.local.dao.newCategory.api.NewCategoryRemoteKeysDao
 import com.miraeldev.local.dao.newCategory.impl.NewCategoryDaoImpl
+import com.miraeldev.local.dao.newCategory.impl.NewCategoryPagingDaoImpl
 import com.miraeldev.local.dao.popularCategory.api.PopularCategoryDao
 import com.miraeldev.local.dao.popularCategory.api.PopularCategoryPagingDao
-import com.miraeldev.local.dao.popularCategory.api.PopularCategoryRemoteKeysDao
 import com.miraeldev.local.dao.popularCategory.impl.PopularCategoryDaoImpl
+import com.miraeldev.local.dao.popularCategory.impl.PopularCategoryPagingDaoImpl
+import com.miraeldev.local.dao.searchHistoryDao.SearchHistoryAnimeDaoImpl
+import com.miraeldev.local.dao.user.UserDao
+import com.miraeldev.local.dao.user.UserDaoImpl
 import com.miraeldev.local.genresAdapter
 import com.miraeldev.local.imageAdapter
+import com.miraeldev.local.lastWatchedAnimeAdapter
 import com.miraeldev.local.videoUrlsAdapter
 import com.miraeldev.models.di.scope.Singleton
 import me.tatarka.inject.annotations.Provides
+import tables.FavouriteAnimeInfoDbModel
+import tables.UserDbModel
 import tables.filmcategory.FilmCategoryAnimeInfoDbModel
+import tables.filmcategory.FilmCategoryPagingInfoDbModel
 import tables.initialsearch.InitialSearchPagingInfoDbModel
 import tables.namecategory.NameCategoryAnimeInfoDbModel
+import tables.namecategory.NameCategoryPagingInfoDbModel
 import tables.newcategory.NewCategoryAnimeInfoDbModel
+import tables.newcategory.NewCategoryPagingInfoDbModel
 import tables.popularcategory.PopularCategoryAnimeInfoDbModel
+import tables.popularcategory.PopularCategoryPagingInfoDbModel
 
 interface DatabaseComponent {
 
@@ -43,87 +52,47 @@ interface DatabaseComponent {
     fun provideDatabase(context: Context): Database {
         return Database(
             driver = AndroidSqliteDriver(Database.Schema, context, "Database"),
+            FavouriteAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             FilmCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            FilmCategoryPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             InitialSearchPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             NameCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            NameCategoryPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             NewCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            NewCategoryPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
             PopularCategoryAnimeInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            PopularCategoryPagingInfoDbModel.Adapter(imageAdapter, videoUrlsAdapter, genresAdapter),
+            UserDbModel.Adapter(lastWatchedAnimeAdapter),
         )
     }
 
     @Provides
     @Singleton
-    fun provideAppDatabase(context: Context): AppDatabase {
-        var db: AppDatabase? = null
-        val LOCK = Any()
-        synchronized(LOCK) {
-            db?.let { return it }
-            val instance =
-                Room.databaseBuilder(context, AppDatabase::class.java, DB_NAME)
-                    .fallbackToDestructiveMigration()
-                    .build()
-            db = instance
-            return instance
-        }
-    }
+    fun UserDaoImpl.bind(): UserDao = this
 
     @Provides
     @Singleton
-    fun provideSearchHistoryDao(database: AppDatabase): SearchHistoryAnimeDao =
-        database.searchAnimeDao()
+    fun SearchHistoryAnimeDaoImpl.bind(): SearchHistoryAnimeDao = this
 
     @Provides
     @Singleton
-    fun provideFavouriteAnimeDao(database: AppDatabase): FavouriteAnimeDao =
-        database.favouriteAnimeDao()
-
+    fun FavouriteAnimeDaoImpl.bind(): FavouriteAnimeDao = this
 
     @Provides
     @Singleton
-    fun provideNewCategoryDao(database: AppDatabase): NewCategoryPagingDao =
-        database.newCategoryPagingDao()
-
+    fun NewCategoryPagingDaoImpl.bind(): NewCategoryPagingDao = this
 
     @Provides
     @Singleton
-    fun provideNewCategoryRemoteKeysDao(database: AppDatabase): NewCategoryRemoteKeysDao =
-        database.newCategoryRemoteKeys()
-
+    fun PopularCategoryPagingDaoImpl.bind(): PopularCategoryPagingDao = this
 
     @Provides
     @Singleton
-    fun providePopularCategoryDao(database: AppDatabase): PopularCategoryPagingDao =
-        database.popularCategoryPagingDao()
-
+    fun NameCategoryPagingDaoImpl.bind(): NameCategoryPagingDao = this
 
     @Provides
     @Singleton
-    fun providePopularCategoryRemoteKeysDao(database: AppDatabase): PopularCategoryRemoteKeysDao =
-        database.popularCategoryRemoteKeysDao()
-
-
-    @Provides
-    @Singleton
-    fun provideFilmCategoryDao(database: AppDatabase): FilmCategoryPagingDao =
-        database.filmCategoryPagingDao()
-
-
-    @Provides
-    @Singleton
-    fun provideFilmCategoryRemoteKeysDao(database: AppDatabase): FilmCategoryRemoteKeysDao =
-        database.filmCategoryRemoteKeysDao()
-
-
-    @Provides
-    @Singleton
-    fun provideNameCategoryDao(database: AppDatabase): NameCategoryPagingDao =
-        database.nameCategoryPagingDao()
-
-
-    @Provides
-    @Singleton
-    fun provideNameCategoryRemoteKeysDao(database: AppDatabase): NameCategoryRemoteKeysDao =
-        database.nameCategoryRemoteKeys()
+    fun FilmCategoryPagingDaoImpl.bind(): FilmCategoryPagingDao = this
 
     @Provides
     @Singleton

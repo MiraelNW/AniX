@@ -36,21 +36,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.designsystem.ErrorAppendItem
 import com.miraeldev.designsystem.animation.WentWrongAnimation
 import com.miraeldev.designsystem.shimmerlist.ShimmerGrid
 import com.miraeldev.designsystem.shimmerlist.ShimmerItem
+import com.miraeldev.models.paging.LoadState
+import com.miraeldev.models.paging.PagingState
 import com.miraeldev.search.R
 import com.miraeldev.search.presentation.animeCard.SearchAnimeCard
-import com.miraeldev.search.presentation.searchHistoryScreen.searchHistoryComponent.SearchHistoryStore
 import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.SearchResultsComponent
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.ImmutableList
@@ -67,7 +64,6 @@ fun SearchResultsScreen(
 
     val open by rememberSaveable { mutableStateOf(true) }
 
-    val searchResults = model.searchResults.collectAsLazyPagingItems()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -81,10 +77,10 @@ fun SearchResultsScreen(
         )
         Filters(filterList = model.filterList)
         SearchResult(
-            searchResults = searchResults,
+            searchResults = model.searchResults,
             imageLoader = imageLoader,
             onAnimeItemClick = component::onAnimeItemClick,
-            onRetry = searchResults::retry
+            onRetry = {}
         )
     }
 }
@@ -133,7 +129,7 @@ private fun CategoryField(
 
 @Composable
 private fun SearchResult(
-    searchResults: LazyPagingItems<AnimeInfo>,
+    searchResults: PagingState,
     imageLoader: VaumaImageLoader,
     onAnimeItemClick: (Int) -> Unit,
     onRetry: () -> Unit,
@@ -147,8 +143,7 @@ private fun SearchResult(
 
         searchResults.apply {
             when {
-
-                loadState.refresh is LoadState.Loading -> {
+                loadState == LoadState.REFRESH_LOADING -> {
                     LaunchedEffect(key1 = Unit) {
                         delay(300)
                         shouldShowLoading = true
@@ -158,9 +153,8 @@ private fun SearchResult(
                     }
                 }
 
-                loadState.refresh is LoadState.Error -> {
-                    val e = searchResults.loadState.refresh as LoadState.Error
-                    if (e.error is IOException) {
+                loadState == LoadState.REFRESH_ERROR -> {
+                    if (true) {
                         WentWrongAnimation(
                             modifier = Modifier.fillMaxSize(),
                             res = R.raw.lost_internet,
@@ -183,7 +177,7 @@ private fun SearchResult(
                             .navigationBarsPadding(),
                         contentPadding = PaddingValues(
                             top = 4.dp,
-                            bottom = if (loadState.append.endOfPaginationReached) 64.dp else 8.dp,
+                            bottom = 8.dp,
                             start = 4.dp,
                             end = 4.dp
                         ),
@@ -193,22 +187,15 @@ private fun SearchResult(
                         )
                     ) {
 
-                        items(count = searchResults.itemCount) { index ->
-
-                            searchResults[index]?.let {
-                                SearchAnimeCard(
-                                    item = it,
-                                    imageLoader = imageLoader,
-                                    onAnimeItemClick = onAnimeItemClick
-                                )
-                            }
+                        items(count = searchResults.list.size) { index ->
+                            SearchAnimeCard(
+                                item = searchResults.list[index],
+                                imageLoader = imageLoader,
+                                onAnimeItemClick = onAnimeItemClick
+                            )
                         }
 
-                        if (
-                            searchResults.loadState.append.endOfPaginationReached &&
-                            searchResults.loadState.prepend.endOfPaginationReached &&
-                            searchResults.itemCount == 0
-                        ) {
+                        if (searchResults.loadState == LoadState.EMPTY) {
                             item {
                                 val composition by rememberLottieComposition(
                                     LottieCompositionSpec.RawRes(R.raw.search)
@@ -252,7 +239,7 @@ private fun SearchResult(
                             }
                         }
 
-                        if (searchResults.loadState.append is LoadState.Loading) {
+                        if (searchResults.loadState == LoadState.APPEND_LOADING) {
                             item {
                                 Column(
                                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -265,7 +252,7 @@ private fun SearchResult(
                             }
                         }
 
-                        if (searchResults.loadState.append is LoadState.Error) {
+                        if (searchResults.loadState == LoadState.APPEND_ERROR) {
                             item {
                                 ErrorAppendItem(
                                     modifier = Modifier.padding(bottom = 64.dp),

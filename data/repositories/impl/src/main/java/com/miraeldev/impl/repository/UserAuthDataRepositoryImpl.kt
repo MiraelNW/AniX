@@ -6,7 +6,7 @@ import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserAuthRepository
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.extensions.sendRequest
-import com.miraeldev.local.AppDatabase
+import com.miraeldev.local.dao.user.UserDao
 import com.miraeldev.models.models.auth.Token
 import com.miraeldev.user.User
 import io.ktor.client.call.body
@@ -20,7 +20,7 @@ class UserAuthDataRepositoryImpl(
     private val preferenceClient: PreferenceClient,
     private val userAuthRepository: UserAuthRepository,
     private val userDataRepository: UserDataRepository,
-    private val appDatabase: AppDatabase,
+    private val userDao: UserDao,
     private val authNetworkClient: AuthNetworkClient
 ) : UserAuthDataRepository {
 
@@ -94,7 +94,7 @@ class UserAuthDataRepositoryImpl(
 
             if (response.status.isSuccess()) {
                 userAuthRepository.setUserUnAuthorizedStatus()
-                appDatabase.userDao().deleteOldUser()
+                userDao.deleteOldUser()
             }
             response.status.isSuccess()
         }

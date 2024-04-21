@@ -11,24 +11,35 @@ import com.miraeldev.animelist.domain.useCases.paging.GetFilmsPagingAnimeListUse
 import com.miraeldev.animelist.domain.useCases.paging.GetNamePagingAnimeListUseCase
 import com.miraeldev.animelist.domain.useCases.paging.GetNewPagingAnimeListUseCase
 import com.miraeldev.animelist.domain.useCases.paging.GetPopularPagingAnimeListUseCase
+import com.miraeldev.animelist.domain.useCases.paging.LoadFilmCategoryNextPageUseCase
+import com.miraeldev.animelist.domain.useCases.paging.LoadNameCategoryNextPageUseCase
+import com.miraeldev.animelist.domain.useCases.paging.LoadNewCategoryNextPageUseCase
+import com.miraeldev.animelist.domain.useCases.paging.LoadPopularCategoryNextPageUseCase
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesStore.Intent
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesStore.Label
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesStore.State
+import com.miraeldev.models.paging.LoadState
+import com.miraeldev.models.paging.PagingState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
 interface CategoriesStore : Store<Intent, State, Label> {
 
     sealed interface Intent {
-        data class OnAnimeItemClick(val id: Int) : Intent
+        data class OnAnimeItemClick(val id: Int): Intent
+        data object LoadNewCategoryNextPage: Intent
+        data object LoadPopularCategoryNextPage: Intent
+        data object LoadNameCategoryNextPage: Intent
+        data object LoadFilmCategoryNextPage: Intent
     }
 
     data class State(
-        val newListState: Flow<PagingData<AnimeInfo>> = emptyFlow(),
-        val popularListState: Flow<PagingData<AnimeInfo>> = emptyFlow(),
-        val nameListState: Flow<PagingData<AnimeInfo>> = emptyFlow(),
-        val filmsListState: Flow<PagingData<AnimeInfo>> = emptyFlow()
+        val newListState: PagingState = PagingState(emptyList(), LoadState.EMPTY),
+        val popularListState: PagingState = PagingState(emptyList(), LoadState.EMPTY),
+        val nameListState: PagingState = PagingState(emptyList(), LoadState.EMPTY),
+        val filmsListState: PagingState = PagingState(emptyList(), LoadState.EMPTY)
     )
 
     sealed interface Label {
@@ -42,7 +53,12 @@ class CategoriesStoreFactory(
     private val getNewPagingAnimeListUseCase: GetNewPagingAnimeListUseCase,
     private val getFilmsPagingAnimeListUseCase: GetFilmsPagingAnimeListUseCase,
     private val getNamePagingAnimeListUseCase: GetNamePagingAnimeListUseCase,
-    private val getPopularPagingAnimeListUseCase: GetPopularPagingAnimeListUseCase
+    private val getPopularPagingAnimeListUseCase: GetPopularPagingAnimeListUseCase,
+
+    private val loadNewCategoryNextPageUseCase: LoadNewCategoryNextPageUseCase,
+    private val loadPopularCategoryNextPageUseCase: LoadPopularCategoryNextPageUseCase,
+    private val loadNameCategoryNextPageUseCase: LoadNameCategoryNextPageUseCase,
+    private val loadFilmCategoryNextPageUseCase: LoadFilmCategoryNextPageUseCase
 ) {
 
     fun create(): CategoriesStore =
@@ -55,34 +71,64 @@ class CategoriesStoreFactory(
         ) {}
 
     private sealed interface Action {
-        data class LoadNewPagingList(val list: Flow<PagingData<AnimeInfo>>) : Action
-        data class LoadPopularPagingList(val list: Flow<PagingData<AnimeInfo>>) : Action
-        data class LoadNamePagingList(val list: Flow<PagingData<AnimeInfo>>) : Action
-        data class LoadFilmsPagingList(val list: Flow<PagingData<AnimeInfo>>) : Action
+        data class LoadNewPagingList(val list:PagingState) : Action
+        data class LoadPopularPagingList(val list:PagingState) : Action
+        data class LoadNamePagingList(val list:PagingState) : Action
+        data class LoadFilmsPagingList(val list:PagingState) : Action
     }
 
     private sealed interface Msg {
-        data class LoadNewPagingList(val list: Flow<PagingData<AnimeInfo>>) : Msg
-        data class LoadPopularPagingList(val list: Flow<PagingData<AnimeInfo>>) : Msg
-        data class LoadNamePagingList(val list: Flow<PagingData<AnimeInfo>>) : Msg
-        data class LoadFilmsPagingList(val list: Flow<PagingData<AnimeInfo>>) : Msg
+        data class LoadNewPagingList(val list: PagingState) : Msg
+        data class LoadPopularPagingList(val list: PagingState) : Msg
+        data class LoadNamePagingList(val list: PagingState) : Msg
+        data class LoadFilmsPagingList(val list: PagingState) : Msg
 
     }
 
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
         override fun invoke() {
-            dispatch(Action.LoadNewPagingList(getNewPagingAnimeListUseCase()))
-            dispatch(Action.LoadPopularPagingList(getPopularPagingAnimeListUseCase()))
-            dispatch(Action.LoadNamePagingList(getNamePagingAnimeListUseCase()))
-            dispatch(Action.LoadFilmsPagingList(getFilmsPagingAnimeListUseCase()))
+            scope.launch {
+                loadNewCategoryNextPageUseCase()
+                getNewPagingAnimeListUseCase().collect {
+                    dispatch(Action.LoadNewPagingList(it))
+                }
+            }
+            scope.launch {
+                loadPopularCategoryNextPageUseCase()
+                getPopularPagingAnimeListUseCase().collect {
+                    dispatch(Action.LoadPopularPagingList(it))
+                }
+            }
+            scope.launch {
+                loadNameCategoryNextPageUseCase()
+                getNamePagingAnimeListUseCase().collect {
+                    dispatch(Action.LoadNamePagingList(it))
+                }
+            }
+            scope.launch {
+                loadFilmCategoryNextPageUseCase()
+                getFilmsPagingAnimeListUseCase().collect {
+                    dispatch(Action.LoadFilmsPagingList(it))
+                }
+            }
         }
     }
 
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
         override fun executeIntent(intent: Intent, getState: () -> State) {
             when (intent) {
-                is Intent.OnAnimeItemClick -> {
-                    publish(Label.OnAnimeItemClick(intent.id))
+                is Intent.OnAnimeItemClick -> publish(Label.OnAnimeItemClick(intent.id))
+                Intent.LoadFilmCategoryNextPage -> scope.launch {
+                    loadFilmCategoryNextPageUseCase()
+                }
+                Intent.LoadNameCategoryNextPage -> scope.launch {
+                    loadNameCategoryNextPageUseCase()
+                }
+                Intent.LoadNewCategoryNextPage -> scope.launch {
+                    loadNewCategoryNextPageUseCase()
+                }
+                Intent.LoadPopularCategoryNextPage -> scope.launch {
+                    loadPopularCategoryNextPageUseCase()
                 }
             }
         }
