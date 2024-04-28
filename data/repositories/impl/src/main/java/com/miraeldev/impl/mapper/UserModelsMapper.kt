@@ -1,4 +1,4 @@
-package com.miraeldev.data.mapper
+package com.miraeldev.impl.mapper
 
 import com.miraeldev.api.models.LocalUserEmailDataModel
 import com.miraeldev.user.UserEmail

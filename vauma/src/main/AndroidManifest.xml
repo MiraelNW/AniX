@@ -42,7 +42,7 @@
         </activity>
 
         <receiver
-            android:name="com.miraeldev.data.downloadMananger.DownloadCompletedReceiver"
+            android:name="com.miraeldev.impl.downloadMananger.DownloadCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

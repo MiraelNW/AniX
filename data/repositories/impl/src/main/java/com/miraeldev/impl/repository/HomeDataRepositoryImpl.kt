@@ -8,11 +8,11 @@ import com.miraeldev.api.filmCategory.FilmCategoryDao
 import com.miraeldev.api.nameCategory.NameCategoryDao
 import com.miraeldev.api.newCategory.NewCategoryDao
 import com.miraeldev.api.popularCategory.PopularCategoryDao
-import com.miraeldev.impl.remote.dto.toLastWatched
 import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.dto.toAnimeDetailInfo
 import com.miraeldev.models.dto.toAnimeInfo
+import com.miraeldev.models.dto.toLastWatched
 import com.miraeldev.models.user.User
 import io.ktor.client.call.body
 import io.ktor.http.isSuccess

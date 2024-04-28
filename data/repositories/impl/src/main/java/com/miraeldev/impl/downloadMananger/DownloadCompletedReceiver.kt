@@ -1,4 +1,4 @@
-package com.miraeldev.data.downloadMananger
+package com.miraeldev.impl.downloadMananger
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver

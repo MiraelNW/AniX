@@ -1,4 +1,4 @@
-package com.miraeldev.models.models.userDataModels
+package com.miraeldev.impl.models.userDataModels
 
 import com.miraeldev.api.models.LocalUserEmailDataModel
 import com.miraeldev.user.UserEmail

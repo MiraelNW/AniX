@@ -4,7 +4,7 @@ import com.miraeldev.api.ForgotPasswordDataRepository
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthRepository
 import com.miraeldev.extensions.sendRequest
-import com.miraeldev.models.models.auth.Token
+import com.miraeldev.impl.models.auth.Token
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess

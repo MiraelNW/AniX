@@ -7,7 +7,7 @@ import com.miraeldev.api.UserAuthRepository
 import com.miraeldev.api.UserDao
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.extensions.sendRequest
-import com.miraeldev.models.models.auth.Token
+import com.miraeldev.impl.models.auth.Token
 import com.miraeldev.models.user.User
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
