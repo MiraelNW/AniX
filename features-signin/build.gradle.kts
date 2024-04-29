@@ -82,11 +82,6 @@ dependencies {
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
 
-    //mockito
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
-
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.test.manifest)

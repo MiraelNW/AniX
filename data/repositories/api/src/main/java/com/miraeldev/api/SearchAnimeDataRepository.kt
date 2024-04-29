@@ -1,7 +1,5 @@
 package com.miraeldev.api
 
-import androidx.paging.PagingData
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.models.paging.PagingState
 import kotlinx.coroutines.flow.Flow
 

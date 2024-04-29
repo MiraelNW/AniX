@@ -1,12 +1,10 @@
 package com.miraeldev.animelist.presentation.categories.categoriesComponent
 
-import androidx.paging.PagingData
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.animelist.domain.useCases.paging.GetFilmsPagingAnimeListUseCase
 import com.miraeldev.animelist.domain.useCases.paging.GetNamePagingAnimeListUseCase
 import com.miraeldev.animelist.domain.useCases.paging.GetNewPagingAnimeListUseCase
@@ -20,8 +18,6 @@ import com.miraeldev.animelist.presentation.categories.categoriesComponent.Categ
 import com.miraeldev.animelist.presentation.categories.categoriesComponent.CategoriesStore.State
 import com.miraeldev.models.paging.LoadState
 import com.miraeldev.models.paging.PagingState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 

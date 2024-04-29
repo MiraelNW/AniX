@@ -2,6 +2,7 @@ package com.miraeldev.data.repository
 
 import com.miraeldev.anime.CategoryModel
 import com.miraeldev.api.FilterAnimeDataRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,11 +45,11 @@ class FilterDataRepositoryImpl: FilterAnimeDataRepository {
 
     private val _sortByFlow = MutableStateFlow("")
 
-    override fun getGenreList(): StateFlow<List<CategoryModel>> = _genreListFlow.asStateFlow()
+    override fun getGenreList(): Flow<List<CategoryModel>> = _genreListFlow.asStateFlow()
 
-    override fun getYearCategory(): StateFlow<String> = _yearFlow.asStateFlow()
+    override fun getYearCategory(): Flow<String> = _yearFlow.asStateFlow()
 
-    override fun getSortByCategory(): StateFlow<String> = _sortByFlow.asStateFlow()
+    override fun getSortByCategory(): Flow<String> = _sortByFlow.asStateFlow()
 
     override fun selectCategory(categoryId: Int, category: String) {
         when (categoryId) {

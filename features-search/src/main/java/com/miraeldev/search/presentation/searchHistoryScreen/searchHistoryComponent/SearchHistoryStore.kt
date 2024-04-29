@@ -1,22 +1,18 @@
 package com.miraeldev.search.presentation.searchHistoryScreen.searchHistoryComponent
 
-import androidx.paging.PagingData
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.search.domain.usecases.filterUseCase.GetFilterListUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchHistoryListUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.GetSearchNameUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.SaveNameInAnimeSearchHistoryUseCase
 import com.miraeldev.search.domain.usecases.searchUseCase.SaveSearchTextUseCase
-import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.SearchResultsStoreFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 

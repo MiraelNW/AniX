@@ -30,6 +30,7 @@ class HomeDataRepositoryImpl(
     private val popularCategoryDao: PopularCategoryDao,
     private val nameCategoryDao: NameCategoryDao,
     private val filmCategoryDao: FilmCategoryDao,
+    private val systemCurrentTime: Long = System.currentTimeMillis()
 ) : HomeDataRepository {
     override suspend fun loadData(): Map<Int, List<AnimeInfo>> {
         val isNewEmpty = newCategoryDao.isEmpty()
@@ -41,7 +42,7 @@ class HomeDataRepositoryImpl(
         val anyIsEmpty = isNewEmpty || isPopularEmpty || isNameEmpty || isFilmEmpty
 
         return when {
-            anyIsEmpty || System.currentTimeMillis() - createTime > FIVE_HOURS_IN_MILLIS -> {
+            anyIsEmpty || systemCurrentTime - createTime > FIVE_HOURS_IN_MILLIS -> {
                 val map = mutableMapOf<Int, List<AnimeInfo>>()
                 map[0] = loadNewAnimeList()
                 map[1] = loadPopularAnimeList()
@@ -50,9 +51,7 @@ class HomeDataRepositoryImpl(
                 map
             }
 
-            else -> {
-                getAnimeListForCategory()
-            }
+            else -> getAnimeListForCategory()
         }
     }
 
@@ -135,5 +134,4 @@ class HomeDataRepositoryImpl(
     companion object {
         private const val FIVE_HOURS_IN_MILLIS = 24 * 60 * 60 * 1000
     }
-
 }

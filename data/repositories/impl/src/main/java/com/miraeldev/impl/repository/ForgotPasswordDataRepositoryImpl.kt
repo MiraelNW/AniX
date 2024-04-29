@@ -1,5 +1,6 @@
 package com.miraeldev.impl.repository
 
+import com.miraeldev.api.AuthNetworkClient
 import com.miraeldev.api.ForgotPasswordDataRepository
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthRepository
@@ -13,9 +14,9 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class ForgotPasswordDataRepositoryImpl(
-    private val authNetworkClient: com.miraeldev.api.AuthNetworkClient,
-    private val preferenceClient: PreferenceClient,
-    private val userDataRepository: UserAuthRepository,
+        private val authNetworkClient: AuthNetworkClient,
+        private val preferenceClient: PreferenceClient,
+        private val userAuthRepository: UserAuthRepository,
 ) : ForgotPasswordDataRepository {
 
     override suspend fun saveNewPassword(email: String, newPassword: String): Boolean {
@@ -54,8 +55,6 @@ class ForgotPasswordDataRepositoryImpl(
         preferenceClient.saveBearerToken(token.bearerToken)
         preferenceClient.saveRefreshToken(token.refreshToken)
 
-        userDataRepository.setUserAuthorizedStatus()
+        userAuthRepository.setUserAuthorizedStatus()
     }
-
-
 }

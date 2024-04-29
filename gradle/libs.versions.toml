@@ -9,26 +9,27 @@ ui-tooling-preview = "1.6.4"
 ui-util = "1.6.4"
 material = "1.6.4"
 lifecycle-runtime-compose = "2.7.0"
+
 decompose = "2.2.2"
 mvi = "3.2.1"
 
 kotlin-inject = "0.6.3"
-
-kaspresso = "1.5.3"
 
 media3-exoplayer = "1.0.0-beta02"
 media3-ui = "1.0.0-beta02"
 
 coil = "3.0.0-alpha06"
 
+kaspresso = "1.5.3"
+
+mockk = "1.13.10"
+
+coroutines-test = "1.6.1"
+turbine = "1.1.0"
+
 junit4 = "4.13.2"
-kotlinx-coroutines-test = "1.5.2"
 ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-
-mockito-inline = "2.8.47"
-mockito-core = "4.0.0"
-mockito-kotlin = "4.0.0"
 
 ui-test-junit4 = "1.5.0"
 ui-test-manifest = "1.5.0"
@@ -45,15 +46,7 @@ play-services-auth = "20.7.0"
 android-sdk-core = "4.1.0"
 android-sdk-api = "4.1.0"
 
-room-runtime = "2.6.0"
-room-compiler = "2.6.0"
-room-ktx = "2.6.0"
-room-paging = "2.6.0"
-
 lottie-compose = "6.0.0"
-
-paging-runtime-ktx = "3.2.0"
-paging-compose = "3.2.0"
 
 firebase-bom = "32.7.0"
 
@@ -61,7 +54,6 @@ datastore-preferences = "1.0.0"
 
 agp = "8.2.0"
 org-jetbrains-kotlin-android = "1.9.0"
-kotlin-bom = "1.8.0"
 appcompat = "1.6.1"
 com-google-android-material-material = "1.10.0"
 
@@ -71,6 +63,8 @@ pluto = "2.2.1"
 jetbrains-kotlin-jvm = "1.9.0"
 
 sqldelight = "2.0.0"
+
+detekt = "1.22.0"
 
 [libraries]
 
@@ -93,25 +87,20 @@ coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-ktor", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-runtime" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-compiler" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-ktx" }
-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room-paging" }
-
 junit = { group = "junit", name = "junit", version.ref = "junit4" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-
-mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockito-inline" }
-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "ui-test-junit4" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "ui-test-manifest" }
 
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
+
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines-test" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
@@ -132,11 +121,8 @@ vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "androi
 
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
 
-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging-runtime-ktx" }
-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
-
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
-kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
+
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 com-google-android-material-material = { group = "com.google.android.material", name = "material", version.ref = "com-google-android-material-material" }
 
@@ -158,11 +144,13 @@ kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-run
 sqldelight-android-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
 sqldelight-coroutine-exstension = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
 
-
 pluto = { group = "com.plutolib", name = "pluto", version.ref = "pluto" }
 pluto-network = { group = "com.plutolib.plugins", name = "network", version.ref = "pluto" }
 pluto-datastore = { group = "com.plutolib.plugins", name = "datastore-pref", version.ref = "pluto" }
 pluto-ktor-intercepter = { group = "com.plutolib.plugins", name = "network-interceptor-ktor", version.ref = "pluto" }
+
+detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+
 [plugins]
 
 com-android-library = { id = "com.android.library", version.ref = "agp" }

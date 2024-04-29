@@ -1,7 +1,5 @@
 package com.miraelDev.vauma.glue.search.repositories
 
-import androidx.paging.PagingData
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.models.paging.PagingState
 import com.miraeldev.search.data.repository.SearchAnimeRepository

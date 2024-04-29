@@ -55,10 +55,6 @@ dependencies {
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 
-    //paging 3
-    implementation(libs.paging.runtime.ktx)
-    implementation(libs.paging.compose)
-
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
 
@@ -73,11 +69,17 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
 
-    //room
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
-    implementation(libs.room.paging)
+    //junit
+    testImplementation(libs.junit)
+
+    //mockk
+    testImplementation(libs.mockk)
+
+    //coroutine test
+    testImplementation (libs.kotlinx.coroutines.test)
+
+    //flow test
+    testImplementation(libs.turbine)
 
     implementation(project(":core:extensions"))
     implementation(project(":core:models"))

@@ -9,8 +9,6 @@ interface FavouriteAnimeDataRepository {
 
     suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo)
 
-    suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: LastWatchedAnime)
-
     fun getFavouriteAnimeList(): Flow<ResultAnimeInfo>
 
     suspend fun loadAnimeList()

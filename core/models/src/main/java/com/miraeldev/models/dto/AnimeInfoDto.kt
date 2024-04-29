@@ -3,6 +3,7 @@ package com.miraeldev.models.dto
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.anime.VideoInfo
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -55,7 +56,7 @@ fun AnimeDetailInfo.toLastWatched(): LastWatchedAnime {
         nameEn = this.nameEn,
         genres = this.genres,
         isFavourite = this.isFavourite,
-        video = this.videos[0],
+        video = this.videos.takeIf { it.isNotEmpty() }?.get(0) ?: VideoInfo(),
         episodeNumber = 0
     )
 }

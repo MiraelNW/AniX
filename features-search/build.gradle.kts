@@ -67,10 +67,6 @@ dependencies {
     //immutable list
     implementation(libs.kotlinx.collections.immutable)
 
-    //paging 3
-    implementation(libs.paging.runtime.ktx)
-    implementation(libs.paging.compose)
-
     //lottie animations
     implementation(libs.lottie.compose)
 
@@ -88,11 +84,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    //mockito
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
 
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)

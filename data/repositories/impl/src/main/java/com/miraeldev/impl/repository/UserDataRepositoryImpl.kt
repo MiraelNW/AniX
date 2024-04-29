@@ -64,5 +64,4 @@ class UserDataRepositoryImpl(
     override suspend fun updateUser(localUser: UserEmail) {
         localUserManager.updateUser(userModelsMapper.mapLocalUserToDataModel(localUser))
     }
-
 }

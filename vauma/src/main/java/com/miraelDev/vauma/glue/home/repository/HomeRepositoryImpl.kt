@@ -3,6 +3,7 @@ package com.miraelDev.vauma.glue.home.repository
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.toAnimeDetailInfo
+import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.animelist.data.HomeRepository
 import com.miraeldev.api.AnimeListDataRepository
 import com.miraeldev.api.FavouriteAnimeDataRepository
@@ -57,7 +58,7 @@ class HomeRepositoryImpl(
     }
 
     override suspend fun addAnimeToList(isSelected: Boolean, animeInfo: LastWatchedAnime) {
-        favouriteAnimeDataRepository.selectAnimeItem(isSelected, animeInfo)
+        favouriteAnimeDataRepository.selectAnimeItem(isSelected, animeInfo.toAnimeInfo())
     }
 
     override fun getUserInfo(): Flow<User> {

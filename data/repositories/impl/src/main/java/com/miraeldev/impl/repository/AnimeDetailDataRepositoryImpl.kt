@@ -1,5 +1,6 @@
 package com.miraeldev.impl.repository
 
+import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AnimeDetailDataRepository
 import com.miraeldev.api.AppNetworkClient

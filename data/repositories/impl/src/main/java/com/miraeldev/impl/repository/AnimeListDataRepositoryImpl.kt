@@ -17,7 +17,6 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AnimeListDataRepositoryImpl(
     private val appNetworkClient: AppNetworkClient,
-
     private val newCategoryPagingDao: NewCategoryPagingDao,
     private val popularCategoryPagingDao: PopularCategoryPagingDao,
     private val nameCategoryPagingDao: NameCategoryPagingDao,

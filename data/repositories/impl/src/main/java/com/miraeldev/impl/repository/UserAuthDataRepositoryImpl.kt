@@ -69,6 +69,14 @@ class UserAuthDataRepositoryImpl(
         }
     }
 
+    override suspend fun loginWithVk(accessToken: String, userId: String, email: String?) {
+        val logInWithVkResponse = authNetworkClient.loginWithVk(accessToken, userId, email)
+
+        if (logInWithVkResponse.status.isSuccess()) {
+            logIn(response = logInWithVkResponse)
+        }
+    }
+
     override suspend fun checkAuthState() {
         if (preferenceClient.getBearerToken().isEmpty() ||
             preferenceClient.getRefreshToken().isEmpty()
@@ -76,14 +84,6 @@ class UserAuthDataRepositoryImpl(
             userAuthRepository.setUserUnAuthorizedStatus()
         } else {
             userAuthRepository.setUserAuthorizedStatus()
-        }
-    }
-
-    override suspend fun loginWithVk(accessToken: String, userId: String, email: String?) {
-        val logInWithVkResponse = authNetworkClient.loginWithVk(accessToken, userId, email)
-
-        if (logInWithVkResponse.status.isSuccess()) {
-            logIn(response = logInWithVkResponse)
         }
     }
 

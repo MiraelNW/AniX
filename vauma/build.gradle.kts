@@ -82,11 +82,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    //mockito
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
-
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)
     androidTestImplementation(libs.kaspresso.compose)
@@ -109,9 +104,6 @@ dependencies {
 
     //accompanist system ui
     implementation(libs.accompanist.systemuicontroller)
-
-    //paging 3
-    implementation(libs.paging.runtime.ktx)
 
     //exoplayer
     implementation(libs.media3.exoplayer)

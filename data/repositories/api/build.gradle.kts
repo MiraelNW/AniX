@@ -35,8 +35,6 @@ android {
 dependencies {
     //kotlin
     implementation(libs.coroutine.ktx)
-    //paging 3
-    implementation(libs.paging.runtime.ktx)
 
     api(project(":core:models"))
 }

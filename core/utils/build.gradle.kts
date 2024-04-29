@@ -36,7 +36,6 @@ android {
 dependencies {
 
     implementation(libs.core.ktx)
-    implementation(platform(libs.kotlin.bom))
 
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
@@ -47,11 +46,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    //mockito
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
 
     //ui tests kaspresso
     androidTestImplementation(libs.kaspresso)

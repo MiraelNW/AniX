@@ -10,6 +10,7 @@ import com.miraeldev.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
@@ -52,17 +53,6 @@ class FavouriteAnimeDataRepositoryImpl(
         favouriteListIsNeeded.emit(Unit)
     }
 
-    override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: LastWatchedAnime) {
-
-        if (isSelected) {
-            favouriteAnimeDao.insertFavouriteAnimeItem(animeInfo.toAnimeInfo())
-        } else {
-            favouriteAnimeDao.deleteFavouriteAnimeItem(animeInfo.id)
-        }
-
-        favouriteListIsNeeded.emit(Unit)
-    }
-
     override fun getFavouriteAnimeList(): Flow<ResultAnimeInfo> = favouriteResult
 
     override suspend fun loadAnimeList() {
@@ -82,6 +72,4 @@ class FavouriteAnimeDataRepositoryImpl(
             searchResults.emit(ResultAnimeInfo.Success(animeList = searchList))
         }
     }
-
-
 }

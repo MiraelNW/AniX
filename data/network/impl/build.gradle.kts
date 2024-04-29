@@ -11,6 +11,10 @@ android {
     namespace = "com.miraeldev.network.impl"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk = 24
 
@@ -68,8 +72,6 @@ android {
 
         buildConfigField("String", "GET_USER_INFO", "${properties["GET_USER_INFO"]}")
         buildConfigField("String", "CHANGE_PASSWORD", "${properties["CHANGE_PASSWORD"]}")
-
-
     }
 
     buildTypes {

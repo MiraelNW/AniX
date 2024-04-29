@@ -1,15 +1,16 @@
 package com.miraeldev.api
 
 import com.miraeldev.anime.CategoryModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface FilterAnimeDataRepository {
 
-    fun getGenreList(): StateFlow<List<CategoryModel>>
+    fun getGenreList(): Flow<List<CategoryModel>>
 
-    fun getYearCategory(): StateFlow<String>
+    fun getYearCategory(): Flow<String>
 
-    fun getSortByCategory(): StateFlow<String>
+    fun getSortByCategory(): Flow<String>
 
     fun selectCategory(categoryId: Int, category: String)
 
