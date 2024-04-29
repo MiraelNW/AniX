@@ -17,8 +17,11 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Vauma"
+
 include ("vauma")
+
 include(":logger")
+
 include(":features-account")
 include(":features-detailInfo")
 include(":features-favourites")
@@ -28,16 +31,17 @@ include(":features-search")
 include(":features-signin")
 include(":features-signup")
 include(":features-video")
+
 include(":imageloader")
 include(":imageloader:api")
 include(":imageloader:impl")
-include(":core")
+
 include(":core:designsystem")
 include(":core:extensions")
 include(":core:models")
 include(":core:utils")
 include(":core:theme")
-include(":data")
+
 include(":data:storeclient")
 include(":data:storeclient:api")
 include(":data:storeclient:impl")
