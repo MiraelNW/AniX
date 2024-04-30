@@ -20,6 +20,4 @@ task preCommitCheck {
 }
 
 
-task prePushCheck {
-//    dependsOn 'testDebugUnitTest'
-}
+task prePushCheck {}
