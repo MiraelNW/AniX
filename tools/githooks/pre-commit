@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 echo "*******************************"
-echo   "Running git pre-commit"
+echo   "Running git pre-commit hook"
 echo "*******************************"
 OUTPUT="/tmp/pre-commit-check-$(date +%s)"
-./gradlew build > $OUTPUT
+./gradlew preCommitCheck > $OUTPUT
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 1 ]; then
   cat $OUTPUT
