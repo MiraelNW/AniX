@@ -1,7 +1,6 @@
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrainsKotlinJvm)
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("kotlinx-serialization")
 }
 
@@ -18,6 +17,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
 
     //kotlin-inject
-    ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
 }
