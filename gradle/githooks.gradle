@@ -17,11 +17,9 @@ tasks.getByPath(':vauma:preBuild').dependsOn installGitHooks
 
 task preCommitCheck {
     dependsOn 'detektRun'
-//    dependsOn ''
 }
 
 
 task prePushCheck {
-//    dependsOn 'detektRun'
-//    dependsOn ''
+//    dependsOn 'testDebugUnitTest'
 }

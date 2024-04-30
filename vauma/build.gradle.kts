@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("kotlinx-serialization")
     id("com.google.gms.google-services")
@@ -90,11 +89,6 @@ dependencies {
     debugImplementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.test.manifest)
 
-    //firebase crashlytics
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
-
     //kotlin-inject
     ksp(libs.kotlin.inject.ksp)
     implementation(libs.kotlin.inject.runtime)
@@ -105,11 +99,8 @@ dependencies {
     //accompanist system ui
     implementation(libs.accompanist.systemuicontroller)
 
-    //exoplayer
-    implementation(libs.media3.exoplayer)
-
-    //data store
-    implementation(libs.datastore.preferences)
+    //immutable list
+    implementation(libs.kotlinx.collections.immutable)
 
     //decompose
     implementation (libs.decompose)

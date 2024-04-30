@@ -27,20 +27,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.common.collect.ImmutableList
 import com.miraelDev.vauma.navigation.mainComponent.MainRootComponent
 import com.miraeldev.extensions.noRippleEffectClick
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun NavigationRailContent(component: MainRootComponent, screen: MainRootComponent.Child) {
 
-    val items =
-        ImmutableList.of(
-            NavigationItem.Home,
-            NavigationItem.Search,
-            NavigationItem.Favourite,
-            NavigationItem.Account,
-        )
+    val items = persistentListOf(
+        NavigationItem.Home,
+        NavigationItem.Search,
+        NavigationItem.Favourite,
+        NavigationItem.Account,
+    )
 
     Column(
         modifier = Modifier
