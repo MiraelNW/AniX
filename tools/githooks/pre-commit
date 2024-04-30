@@ -3,7 +3,7 @@ echo "*******************************"
 echo   "Running git pre-commit"
 echo "*******************************"
 OUTPUT="/tmp/pre-commit-check-$(date +%s)"
-./gradlew preCommitCheck > $OUTPUT
+./gradlew build > $OUTPUT
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 1 ]; then
   cat $OUTPUT
