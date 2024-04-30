@@ -2,12 +2,12 @@ task installGitHooks(type: Copy) {
     dependsOn 'installPreCommitHook'
     dependsOn 'installPrePushHook'
 }
-tasks.register('installPreCommitHook', Copy) {
+task installPreCommitHook(type: Copy) {
     from new File(rootProject.rootDir, 'tools/githooks/pre-commit')
     into { new File(rootProject.rootDir, '.git/hooks') }
     fileMode 0777
 }
-tasks.register('installPrePushHook', Copy) {
+task installPrePushHook(type: Copy) {
     from new File(rootProject.rootDir, 'tools/githooks/pre-push')
     into { new File(rootProject.rootDir, '.git/hooks') }
     fileMode 0777
@@ -15,7 +15,7 @@ tasks.register('installPrePushHook', Copy) {
 
 tasks.getByPath(':vauma:preBuild').dependsOn installGitHooks
 
-tasks.register('preCommitCheck') {
+task preCommitCheck {
     dependsOn 'detektRun'
 //    dependsOn ''
 }
