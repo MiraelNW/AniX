@@ -114,7 +114,7 @@ class AnimeDetailDataRepositoryImplTest {
         animeDetailDataRepositoryImpl.selectAnimeItem(true, animeInfo)
 
         coVerify() { favouriteAnimeDao.insertFavouriteAnimeItem(any()) }
-        coVerify(exactly = 1) { favouriteAnimeDao.deleteFavouriteAnimeItem(any()) }
+        coVerify(exactly = 0) { favouriteAnimeDao.deleteFavouriteAnimeItem(any()) }
     }
 
     @Test
