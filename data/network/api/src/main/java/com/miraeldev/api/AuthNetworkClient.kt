@@ -4,7 +4,6 @@ import com.miraeldev.models.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 
-
 interface AuthNetworkClient {
     val client: HttpClient
     suspend fun saveNewPassword(email: String, newPassword: String): HttpResponse

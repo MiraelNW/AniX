@@ -9,5 +9,4 @@ interface SignUpRepository {
     suspend fun updateUser(email: String)
 
     suspend fun verifyOtpCode(otpToken: String, user: User): Boolean
-
 }

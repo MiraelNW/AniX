@@ -14,14 +14,14 @@ class CodeVerifyStoreRPFactory(
     private val verifyOtpCodeUseCase: VerifyOtpUseCase
 ) {
 
-    fun create(): CodeVerifyRPStore = object : CodeVerifyRPStore,
+    fun create(): CodeVerifyRPStore = object :
+        CodeVerifyRPStore,
         Store<CodeVerifyRPStore.Intent, CodeVerifyRPStore.State, CodeVerifyRPStore.Label> by storeFactory.create(
             name = "CodeVerifyStoreFactory",
             initialState = CodeVerifyRPStore.State("", false),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
         ) {}
-
 
     private sealed interface Msg {
         data object SendNewOtp : Msg

@@ -6,6 +6,5 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class VerifyOtpUseCase(private val repository: ForgotPasswordRepository) {
 
-    suspend operator fun invoke(otp:String) = repository.verifyOtp(otp)
-
+    suspend operator fun invoke(otp: String) = repository.verifyOtp(otp)
 }

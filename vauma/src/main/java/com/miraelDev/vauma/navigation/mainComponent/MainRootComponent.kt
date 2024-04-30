@@ -27,7 +27,8 @@ interface MainRootComponent {
             Child(NavId.HOME)
         data class Categories(val component: CategoriesComponent, val id: Int, val imageLoader: Loader) :
             Child(NavId.UNDEFINED)
-        data class InitialSearch(val component: InitialSearchComponent, val imageLoader: VaumaImageLoader) : Child(NavId.SEARCH)
+        data class InitialSearch(val component: InitialSearchComponent, val imageLoader: VaumaImageLoader) :
+            Child(NavId.SEARCH)
         data class SearchHistory(val component: SearchHistoryComponent) : Child(NavId.SEARCH)
         data class SearchResults(
             val component: SearchResultsComponent,
@@ -43,6 +44,5 @@ interface MainRootComponent {
             val imageLoader: Loader,
         ) : Child(NavId.UNDEFINED)
         data class VideoScreen(val component: VideoComponent) : Child(NavId.UNDEFINED)
-
     }
 }

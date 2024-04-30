@@ -17,7 +17,7 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 typealias DefaultDetailComponentFactory =
-            (ComponentContext, OnBackPressed, OnSeriesClick, OnAnimeItemClick) -> DefaultDetailComponent
+    (ComponentContext, OnBackPressed, OnSeriesClick, OnAnimeItemClick) -> DefaultDetailComponent
 
 @Inject
 class DefaultDetailComponent(

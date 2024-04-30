@@ -1,4 +1,4 @@
-package com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore
+package com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.resetPasswordStore
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.miraeldev.signin.domain.model.ResetPasswordErrorModel
@@ -29,5 +29,4 @@ interface ResetPasswordStore :
     sealed interface Label {
         data object OnBackClicked : Label
     }
-
 }

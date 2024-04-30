@@ -23,7 +23,7 @@ class PopularCategoryPagingDaoImpl(private val database: Database) : PopularCate
         query.transaction {
             insertList.forEach {
                 query.insert(
-                    id =  it.id,
+                    id = it.id,
                     nameEn = it.nameEn,
                     nameRu = it.nameRu,
                     image = it.image,

@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class CheckEmailExistUseCase(private val repository: ForgotPasswordRepository) {
 
     suspend operator fun invoke(email: String) = repository.checkEmailExist(email)
-
 }

@@ -37,7 +37,6 @@ import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.forgotpassword.R
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.EmailChooseComponent
 
-
 @Composable
 fun EmailChooseScreen(component: EmailChooseComponent) {
 
@@ -114,7 +113,6 @@ fun EmailChooseScreen(component: EmailChooseComponent) {
             }
         )
     }
-
 }
 
 @Composable

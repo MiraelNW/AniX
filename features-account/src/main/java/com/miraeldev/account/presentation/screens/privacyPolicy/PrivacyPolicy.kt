@@ -18,9 +18,11 @@ import com.miraeldev.designsystem.Toolbar
 fun PrivacyPolicyScreen(onBackPressed: () -> Unit) {
     BackHandler { onBackPressed() }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .systemBarsPadding()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+    ) {
         Toolbar(
             onBackPressed = onBackPressed,
             text = R.string.privacy_policy
@@ -36,12 +38,9 @@ private fun PrivacyPolicyText() {
             .fillMaxWidth()
             .navigationBarsPadding()
     ) {
-
     }
     Text(
         modifier = Modifier.padding(8.dp),
         text = "lfkgsl;kg;gksl;gks;gks;gksl;gks;fks;lfks;lfks;lfksl;fksdl;fks;fksd;lfks;lfk;sfks;"
     )
 }
-
-

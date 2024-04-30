@@ -63,12 +63,12 @@ fun Modifier.shimmerEffect(targetValue: Float, initialValue: Float = 0.98f): Mod
         animationSpec = infiniteRepeatable(
             animation = tween(1200),
             repeatMode = RepeatMode.Reverse
-        ), label = ""
+        ),
+        label = ""
     )
 
     scale(scale)
 }
-
 
 fun Modifier.shimmerItem(): Modifier = composed {
     clip(RoundedCornerShape(24.dp))

@@ -1,6 +1,6 @@
 package com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent
 
-import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore.ResetPasswordStore
+import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.resetPasswordStore.ResetPasswordStore
 import kotlinx.coroutines.flow.StateFlow
 
 interface ResetPasswordComponent {
@@ -13,5 +13,4 @@ interface ResetPasswordComponent {
     fun onRepeatedPasswordChange(repeatedPassword: String)
     fun refreshPasswordError()
     fun refreshRepeatedPasswordError()
-
 }

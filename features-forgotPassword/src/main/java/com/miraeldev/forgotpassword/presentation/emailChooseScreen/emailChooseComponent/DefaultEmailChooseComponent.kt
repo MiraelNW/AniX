@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultEmailChooseComponentFactory = (ComponentContext, OnBackPressed, OnEmailExist) -> DefaultEmailChooseComponent
+typealias DefaultEmailChooseComponentFactory = (ComponentContext, OnBackPressed, OnEmailExist) ->
+DefaultEmailChooseComponent
 
 @Inject
 class DefaultEmailChooseComponent(

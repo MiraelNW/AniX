@@ -1,4 +1,4 @@
-package com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent
+package com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -6,14 +6,13 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.miraeldev.account.domain.ChangePasswordUseCase
-import com.miraeldev.account.domain.GetUserEmailUseCase
 import com.miraeldev.account.domain.GetUserInfoUseCase
 import com.miraeldev.account.domain.UserModel
 import com.miraeldev.account.domain.model.EditProfileErrorModel
 import com.miraeldev.account.domain.toUserModel
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileStore.Intent
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileStore.Label
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileStore.State
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.EditProfileStore.Intent
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.EditProfileStore.Label
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.EditProfileStore.State
 import com.miraeldev.utils.PasswordValidationState
 import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.launch
@@ -64,29 +63,30 @@ interface EditProfileStore : Store<Intent, State, Label> {
 class EditProfileStoreFactory(
     private val storeFactory: StoreFactory,
     private val validatePassword: ValidatePassword,
-    private val getUserEmailUseCase: GetUserEmailUseCase,
+//    private val getUserEmailUseCase: GetUserEmailUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val changePasswordUseCase: ChangePasswordUseCase,
-//    private val updateUserInfo
+    private val changePasswordUseCase: ChangePasswordUseCase
 ) {
 
     fun create(): EditProfileStore =
-        object : EditProfileStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "EditProfileStore",
-            initialState = State(
-                UserModel(),
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                EditProfileErrorModel()
-            ),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            EditProfileStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "EditProfileStore",
+                initialState = State(
+                    UserModel(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    EditProfileErrorModel()
+                ),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class UserLoaded(val userModel: UserModel) : Action
@@ -105,7 +105,6 @@ class EditProfileStoreFactory(
         data object RefreshPasswordError : Msg
         data object RefreshRepeatedPasswordError : Msg
         data object RefreshEmailError : Msg
-
     }
 
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
@@ -134,17 +133,14 @@ class EditProfileStoreFactory(
 
                 is Intent.OnChangeCurrentPassword -> {
                     dispatch(Msg.OnChangeCurrentPassword(intent.currentPassword))
-
                 }
 
                 is Intent.OnChangePassword -> {
                     dispatch(Msg.OnChangePassword(intent.password))
-
                 }
 
                 is Intent.OnChangeRepeatedPassword -> {
                     dispatch(Msg.OnChangeRepeatedPassword(intent.repeatedPassword))
-
                 }
 
                 is Intent.OnChangePasswordClick -> {
@@ -186,27 +182,22 @@ class EditProfileStoreFactory(
 
                 is Intent.OnBackClick -> {
                     publish(Label.OnBackClick)
-
                 }
 
                 is Intent.ResetAllChanges -> {
                     dispatch(Msg.ResetAllChanges)
-
                 }
 
                 is Intent.RefreshPasswordError -> {
                     dispatch(Msg.RefreshPasswordError)
-
                 }
 
                 is Intent.RefreshRepeatedPasswordError -> {
                     dispatch(Msg.RefreshRepeatedPasswordError)
-
                 }
 
                 is Intent.RefreshEmailError -> {
                     dispatch(Msg.RefreshEmailError)
-
                 }
             }
         }

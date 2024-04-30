@@ -29,23 +29,22 @@ class NotificationStoreFactory(
 ) {
 
     fun create(): NotificationStore =
-        object : NotificationStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "NotificationStore",
-            initialState = State(),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            NotificationStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "NotificationStore",
+                initialState = State(),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
-    private sealed interface Action {
-    }
+    private sealed interface Action
 
-    private sealed interface Msg {
-    }
+    private sealed interface Msg
 
     private class BootstrapperImpl : CoroutineBootstrapper<Action>() {
-        override fun invoke() {
-        }
+        override fun invoke() = Unit
     }
 
     private class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
@@ -55,8 +54,7 @@ class NotificationStoreFactory(
             }
         }
 
-        override fun executeAction(action: Action, getState: () -> State) {
-        }
+        override fun executeAction(action: Action, getState: () -> State) = Unit
     }
 
     private object ReducerImpl : Reducer<State, Msg> {

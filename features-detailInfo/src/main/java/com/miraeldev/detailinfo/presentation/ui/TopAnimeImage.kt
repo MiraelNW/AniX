@@ -58,7 +58,6 @@ fun TopAnimeImage(
                     contentDescription = "anime image preview"
                 )
             }
-
         }
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,7 +29,6 @@ private val LightMainColorPalette = lightColors(
     secondaryVariant = Color(0xFFA29C9C)
 )
 
-
 private val DarkMainColorPalette = darkColors(
     primary = DarkGreen,
     background = Black,
@@ -40,9 +38,7 @@ private val DarkMainColorPalette = darkColors(
     secondaryVariant = Color(0xFF818181)
 )
 
-
 val LocalOrientation = compositionLocalOf { Configuration.ORIENTATION_PORTRAIT }
-
 
 val LocalTheme = compositionLocalOf { false }
 
@@ -60,7 +56,6 @@ fun VaumaTheme(
         snapshotFlow { configuration.orientation }
             .collect { orientation = it }
     }
-
 
     MaterialTheme(
         colors = if (darkTheme) DarkMainColorPalette else LightMainColorPalette,

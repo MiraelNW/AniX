@@ -26,6 +26,4 @@ class LocalUserManager(context: Context) : LocalUserStoreApi {
     override suspend fun getUserEmail(): LocalUserEmailDataModel {
         return dataStore.data.first()
     }
-
-
 }

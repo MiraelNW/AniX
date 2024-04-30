@@ -64,12 +64,12 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
         install(PlutoKtorInterceptor)
 
         install(HttpRequestRetry) {
-            maxRetries = 1
+            maxRetries = MAX_TRIES
             retryIf { request, response ->
-                !response.status.isSuccess() && response.status.value != 401
+                !response.status.isSuccess() && response.status.value != UNAUTHORIZED
             }
             delayMillis {
-                500L
+                ONE_SECOND_IN_MILLIS
             }
         }
 
@@ -83,9 +83,9 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
         }
 
         install(HttpTimeout) {
-            requestTimeoutMillis = 2000L
-            connectTimeoutMillis = 10000L
-            socketTimeoutMillis = 5000L
+            requestTimeoutMillis = TIMEOUT
+            connectTimeoutMillis = TIMEOUT
+            socketTimeoutMillis = TIMEOUT
         }
     }
 
@@ -135,12 +135,14 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
                         val fileBytes = File(getRealPathFromURI(uri, context) ?: "")
                             .readBytes()
 
-                        append("file", fileBytes, Headers.build {
-                            append(HttpHeaders.ContentType, "image/png")
-                            append(HttpHeaders.ContentDisposition, "filename=ok")
-                        })
+                        append(
+                            "file", fileBytes,
+                            Headers.build {
+                                append(HttpHeaders.ContentType, "image/png")
+                                append(HttpHeaders.ContentDisposition, "filename=ok")
+                            }
+                        )
                     }
-
                 },
             )
         )
@@ -213,11 +215,9 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
             }
         }
 
-
     private fun getRealPathFromURI(uri: Uri, context: Context): String? {
         val returnCursor = context.contentResolver.query(uri, null, null, null, null)
         val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
         val file = File(context.filesDir, name)
@@ -225,25 +225,33 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             val outputStream = FileOutputStream(file)
             var read = 0
-            val maxBufferSize = 1 * 1024 * 1024
+            val maxBufferSize = BUFFER_SIZE
             val bytesAvailable: Int = inputStream?.available() ?: 0
-            //int bufferSize = 1024;
+            // int bufferSize = 1024;
             val bufferSize = bytesAvailable.coerceAtMost(maxBufferSize)
             val buffers = ByteArray(bufferSize)
             while (inputStream?.read(buffers).also {
-                    if (it != null) {
-                        read = it
-                    }
-                } != -1) {
+                if (it != null) {
+                    read = it
+                }
+            } != -1
+            ) {
                 outputStream.write(buffers, 0, read)
             }
 
             inputStream?.close()
             outputStream.close()
-
         } catch (e: java.lang.Exception) {
             Log.e("Exception", e.message!!)
         }
         return file.path
+    }
+
+    companion object {
+        private const val MAX_TRIES = 1
+        private const val TIMEOUT = 5000L
+        private const val UNAUTHORIZED = 401
+        private const val ONE_SECOND_IN_MILLIS = 1000L
+        private const val BUFFER_SIZE = 1 * 1024 * 1024
     }
 }

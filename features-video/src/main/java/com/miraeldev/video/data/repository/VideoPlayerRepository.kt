@@ -17,5 +17,4 @@ interface VideoPlayerRepository {
     suspend fun releasePlayer()
 
     fun loadSpecificEpisode(specificEpisode: Int)
-
 }

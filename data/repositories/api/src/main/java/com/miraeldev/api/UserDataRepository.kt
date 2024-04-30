@@ -1,6 +1,6 @@
 package com.miraeldev.api
 
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.user.User
 import com.miraeldev.user.UserEmail
 
@@ -18,8 +18,7 @@ interface UserDataRepository {
         currentPassword: String,
         newPassword: String,
         repeatedPassword: String
-    ):Boolean
+    ): Boolean
 
     suspend fun updateUser(localUser: UserEmail)
-
 }

@@ -1,6 +1,7 @@
+@file:Suppress("MaxLineLength")
 package com.miraeldev.impl.pagingController
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.paging.LastDbNode
 import com.miraeldev.models.paging.LoadState
 import com.miraeldev.models.paging.PagingAnimeInfo
@@ -41,7 +42,7 @@ internal class PagingController(
         }
 
         try {
-            val cacheTimeout = TimeUnit.MILLISECONDS.convert(12L, TimeUnit.HOURS)
+            val cacheTimeout = TimeUnit.MILLISECONDS.convert(TWELVE_HOURS, TimeUnit.HOURS)
             val lastDbNode = lastNodeInDb()
 
             val data =
@@ -98,11 +99,10 @@ internal class PagingController(
                 else _pagingState.value.copy(loadState = LoadState.APPEND_ERROR)
             }
         }
-
     }
 
     companion object {
         private const val INITIAL_PAGE = 0L
+        private const val TWELVE_HOURS = 12L
     }
-
 }

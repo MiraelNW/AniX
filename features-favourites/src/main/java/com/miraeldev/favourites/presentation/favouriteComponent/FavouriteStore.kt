@@ -5,7 +5,6 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.favourites.domain.useCases.GetFavouriteAnimeListUseCase
 import com.miraeldev.favourites.domain.useCases.LoadAnimeListUseCase
 import com.miraeldev.favourites.domain.useCases.SaveSearchTextUseCase
@@ -14,7 +13,8 @@ import com.miraeldev.favourites.domain.useCases.SelectAnimeItemUseCase
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.Intent
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.Label
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.State
-import com.miraeldev.result.FailureCauses
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -59,13 +59,15 @@ class FavouriteStoreFactory(
 ) {
 
     fun create(): FavouriteStore =
-        object : FavouriteStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "FavouriteStore",
-            initialState = State("", State.FavouriteListScreenState.Initial),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            FavouriteStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "FavouriteStore",
+                initialState = State("", State.FavouriteListScreenState.Initial),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data object FavouriteListLoading : Action
@@ -109,7 +111,6 @@ class FavouriteStoreFactory(
                         intent.name
                     )
                 }
-
 
                 is Intent.SearchAnimeByName -> scope.launch { saveSearchTextUseCase(intent.name) }
 

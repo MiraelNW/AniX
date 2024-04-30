@@ -50,10 +50,9 @@ import com.miraeldev.video.presentation.utilis.setPortrait
 import com.miraeldev.video.presentation.videoComponent.VideoComponent
 import kotlinx.coroutines.delay
 
-private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter","UnstableApi")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnstableApi")
 @Composable
 fun VideoViewScreen(component: VideoComponent) {
 
@@ -84,7 +83,6 @@ fun VideoViewScreen(component: VideoComponent) {
         onEpisodeItemClick = component::loadSpecificEpisode,
         loadVideoSelectedQuality = component::loadVideoSelectedQuality
     )
-
 
 //        }
 
@@ -151,7 +149,6 @@ private fun VideoView(
         }
     }
 
-
     if (onToggleButtonCLick) {
         LaunchedEffect(key1 = Unit) {
             delay(8000)
@@ -174,7 +171,6 @@ private fun VideoView(
                     bufferedPercentage = player.bufferedPercentage
                     isPlaying = player.isPlaying
                     playbackState = player.playbackState
-
                 }
             }
         exoPlayer.addListener(listener)
@@ -241,7 +237,7 @@ private fun VideoView(
                     }
 
                     exoPlayer.isPlaying.not() &&
-                            exoPlayer.playbackState == STATE_ENDED -> {
+                        exoPlayer.playbackState == STATE_ENDED -> {
                         exoPlayer.seekTo(0)
                         exoPlayer.playWhenReady = true
                     }
@@ -271,7 +267,6 @@ private fun VideoView(
                 } else {
                     context.setPortrait()
                 }
-
             },
             onBackIconClick = {
                 context.setAutoOrientation()
@@ -356,7 +351,6 @@ private fun VideoPlayer(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT
                         )
-
                 }
             },
             update = {
@@ -373,5 +367,3 @@ private fun VideoPlayer(
         )
     }
 }
-
-

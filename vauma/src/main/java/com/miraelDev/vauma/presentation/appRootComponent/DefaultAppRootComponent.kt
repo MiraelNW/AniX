@@ -11,8 +11,8 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraelDev.vauma.navigation.authComponent.DefaultAuthRootComponentFactory
 import com.miraelDev.vauma.navigation.mainComponent.DefaultMainRootComponentFactory
-import com.miraeldev.extensions.componentScope
 import com.miraeldev.api.VaumaImageLoader
+import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.auth.AuthState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -77,8 +77,7 @@ class DefaultAppRootComponent(
             }
 
             is Config.Main -> {
-                val component = mainRootComponent(componentContext, imageLoader)
-                { navigation.replaceAll(Config.Auth) }
+                val component = mainRootComponent(componentContext, imageLoader) { navigation.replaceAll(Config.Auth) }
                 AppRootComponent.Child.Main(component)
             }
 
@@ -98,4 +97,3 @@ class DefaultAppRootComponent(
         data object Initial : Config
     }
 }
-

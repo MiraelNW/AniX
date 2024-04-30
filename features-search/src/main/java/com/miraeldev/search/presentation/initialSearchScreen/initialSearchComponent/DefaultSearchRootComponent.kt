@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultInitialSearchComponentFactory = (ComponentContext, OnAnimeItemClick, ShowSearchHistory) -> DefaultInitialSearchComponent
+typealias DefaultInitialSearchComponentFactory = (ComponentContext, OnAnimeItemClick, ShowSearchHistory) ->
+DefaultInitialSearchComponent
 
 @Inject
 class DefaultInitialSearchComponent(

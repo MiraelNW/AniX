@@ -1,6 +1,6 @@
 package com.miraeldev.animelist.presentation.home.homeComponent
 
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,5 +13,4 @@ interface HomeComponent {
     fun onAnimeItemClick(id: Int)
     fun onSeeAllClick(id: Int)
     fun onPlayClick(id: Int)
-
 }

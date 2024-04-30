@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
@@ -143,7 +142,6 @@ fun AnimatedSearchView(
                         contentDescription = stringResource(R.string.close_icon),
                         tint = Color.Gray
                     )
-
                 }
             }
         }
@@ -172,5 +170,4 @@ private fun Filter(
             )
         }
     }
-
 }

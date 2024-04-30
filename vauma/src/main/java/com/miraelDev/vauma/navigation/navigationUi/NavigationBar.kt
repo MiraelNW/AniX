@@ -18,8 +18,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,8 +77,6 @@ fun BottomBar(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -106,7 +102,8 @@ private fun RowScope.AddItem(
                     if (!selected) {
                         onTabClick(item.id)
                     }
-                })
+                }
+            )
     ) {
         Row(
             modifier = Modifier

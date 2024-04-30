@@ -43,7 +43,7 @@ fun PlayButton(
             .padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        
+
         OutlinedButton(
             modifier = Modifier
                 .fillMaxWidth(0.8f)
@@ -93,6 +93,4 @@ fun PlayButton(
             )
         }
     }
-
-
 }

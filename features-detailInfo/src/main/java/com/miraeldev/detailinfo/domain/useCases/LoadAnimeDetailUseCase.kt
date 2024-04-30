@@ -5,5 +5,5 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class LoadAnimeDetailUseCase(val repository: AnimeDetailRepository) {
-    suspend operator fun invoke(id:Int) = repository.loadAnimeDetail(id)
+    suspend operator fun invoke(id: Int) = repository.loadAnimeDetail(id)
 }

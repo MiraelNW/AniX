@@ -47,11 +47,11 @@ class UserAuthDataRepositoryImplTest {
 
     private fun initRepository() {
         userAuthDataRepositoryImpl = UserAuthDataRepositoryImpl(
-                preferenceClient = preferenceClient,
-                userAuthRepository = userAuthRepository,
-                userDataRepository = userDataRepository,
-                userDao = userDao,
-                authNetworkClient = authNetworkClient
+            preferenceClient = preferenceClient,
+            userAuthRepository = userAuthRepository,
+            userDataRepository = userDataRepository,
+            userDao = userDao,
+            authNetworkClient = authNetworkClient
         )
     }
 

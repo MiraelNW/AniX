@@ -24,11 +24,11 @@ import me.tatarka.inject.annotations.Inject
 interface CategoriesStore : Store<Intent, State, Label> {
 
     sealed interface Intent {
-        data class OnAnimeItemClick(val id: Int): Intent
-        data object LoadNewCategoryNextPage: Intent
-        data object LoadPopularCategoryNextPage: Intent
-        data object LoadNameCategoryNextPage: Intent
-        data object LoadFilmCategoryNextPage: Intent
+        data class OnAnimeItemClick(val id: Int) : Intent
+        data object LoadNewCategoryNextPage : Intent
+        data object LoadPopularCategoryNextPage : Intent
+        data object LoadNameCategoryNextPage : Intent
+        data object LoadFilmCategoryNextPage : Intent
     }
 
     data class State(
@@ -58,19 +58,21 @@ class CategoriesStoreFactory(
 ) {
 
     fun create(): CategoriesStore =
-        object : CategoriesStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "CategoriesStore",
-            initialState = State(),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            CategoriesStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "CategoriesStore",
+                initialState = State(),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
-        data class LoadNewPagingList(val list:PagingState) : Action
-        data class LoadPopularPagingList(val list:PagingState) : Action
-        data class LoadNamePagingList(val list:PagingState) : Action
-        data class LoadFilmsPagingList(val list:PagingState) : Action
+        data class LoadNewPagingList(val list: PagingState) : Action
+        data class LoadPopularPagingList(val list: PagingState) : Action
+        data class LoadNamePagingList(val list: PagingState) : Action
+        data class LoadFilmsPagingList(val list: PagingState) : Action
     }
 
     private sealed interface Msg {
@@ -78,7 +80,6 @@ class CategoriesStoreFactory(
         data class LoadPopularPagingList(val list: PagingState) : Msg
         data class LoadNamePagingList(val list: PagingState) : Msg
         data class LoadFilmsPagingList(val list: PagingState) : Msg
-
     }
 
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {

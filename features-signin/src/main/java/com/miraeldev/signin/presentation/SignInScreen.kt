@@ -129,12 +129,9 @@ fun SignInScreen(component: SignInComponent) {
                             snackbarHostState.showSnackbar(context.getString(R.string.vk_auth_went_wrong))
                         }
                     }
-
                 }
-
             }
         )
-
 
         Scaffold(
             modifier = Modifier
@@ -208,7 +205,6 @@ fun SignInScreen(component: SignInComponent) {
                         )
                     }
 
-
                     Spacer(modifier = Modifier.height(14.dp))
 
                     Column(
@@ -247,8 +243,6 @@ fun SignInScreen(component: SignInComponent) {
                             error = stringResource(R.string.the_password_must_contain_capital_letters)
                         )
                     }
-
-
 
                     Spacer(modifier = Modifier.height(20.dp))
                     SignInAndSignUpButtons(
@@ -300,7 +294,6 @@ fun SignInScreen(component: SignInComponent) {
                         vkAuthResultLauncher = vkAuthResultLauncher
                     )
                 }
-
             }
         }
     }

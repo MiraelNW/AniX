@@ -4,10 +4,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.NavigateToSearchScreen
 import com.miraeldev.models.OnAnimeItemClick
+import com.miraeldev.models.anime.AnimeInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 typealias DefaultFavouriteComponentFactory =
-            (ComponentContext, OnAnimeItemClick, NavigateToSearchScreen) -> DefaultFavouriteComponent
+    (ComponentContext, OnAnimeItemClick, NavigateToSearchScreen) -> DefaultFavouriteComponent
 
 @Inject
 class DefaultFavouriteComponent(

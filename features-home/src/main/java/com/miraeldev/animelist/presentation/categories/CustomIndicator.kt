@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomIndicator(tabPositions: List<TabPosition>, pagerState: PagerState) {

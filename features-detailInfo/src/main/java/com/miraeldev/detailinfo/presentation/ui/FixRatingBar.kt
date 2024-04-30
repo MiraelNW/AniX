@@ -26,7 +26,7 @@ fun FixRatingBar(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier.wrapContentSize()) {
-        (1..5).forEach { step ->
+        for (step in 1..5) {
             val stepRating = when {
                 rating > step -> 1f
                 step.rem(rating) < 1 -> rating - (step - 1f)
@@ -78,6 +78,7 @@ private val starShape = GenericShape { size, _ ->
     addPath(starPath(size.height))
 }
 
+@Suppress("MagicNumber")
 private val starPath = { size: Float ->
     Path().apply {
         val outerRadius: Float = size / 1.8f

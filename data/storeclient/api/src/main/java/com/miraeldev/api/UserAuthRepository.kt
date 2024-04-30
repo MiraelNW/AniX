@@ -10,5 +10,4 @@ interface UserAuthRepository {
     suspend fun setUserUnAuthorizedStatus()
 
     suspend fun setUserAuthorizedStatus()
-
 }

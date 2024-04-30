@@ -8,5 +8,4 @@ class SaveNewPasswordUseCase(private val repository: ForgotPasswordRepository) {
 
     suspend operator fun invoke(email: String, password: String) =
         repository.saveNewPassword(email, password)
-
 }

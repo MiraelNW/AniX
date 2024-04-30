@@ -11,12 +11,11 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import me.tatarka.inject.annotations.Inject
 
-
 @Inject
 class ForgotPasswordDataRepositoryImpl(
-        private val authNetworkClient: AuthNetworkClient,
-        private val preferenceClient: PreferenceClient,
-        private val userAuthRepository: UserAuthRepository,
+    private val authNetworkClient: AuthNetworkClient,
+    private val preferenceClient: PreferenceClient,
+    private val userAuthRepository: UserAuthRepository,
 ) : ForgotPasswordDataRepository {
 
     override suspend fun saveNewPassword(email: String, newPassword: String): Boolean {
@@ -30,9 +29,7 @@ class ForgotPasswordDataRepositoryImpl(
         }
     }
 
-    override suspend fun sendNewOtp() {
-
-    }
+    override suspend fun sendNewOtp() = Unit
 
     override suspend fun verifyOtp(otp: String): Boolean {
         return sendRequest {

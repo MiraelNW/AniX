@@ -1,8 +1,8 @@
 package com.miraeldev.models.paging
 
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.ImageModel
 import com.miraeldev.anime.VideoInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.anime.Genre
 import kotlinx.collections.immutable.toPersistentList
 
@@ -45,4 +45,3 @@ fun PagingAnimeInfo.toAnimeInfo(): AnimeInfo {
         isFavourite = this.isFavourite
     )
 }
-

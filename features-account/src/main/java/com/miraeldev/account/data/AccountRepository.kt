@@ -12,14 +12,14 @@ interface AccountRepository {
     suspend fun getUserEmail(): String
 
     suspend fun changePassword(
-        currentPassword:String,
-        newPassword:String,
-        repeatedPassword:String
-    ):Boolean
+        currentPassword: String,
+        newPassword: String,
+        repeatedPassword: String
+    ): Boolean
 
     suspend fun setDarkTheme(isDarkTheme: Boolean)
 
-    suspend fun setIsWifiOnly(isWifi:Boolean)
+    suspend fun setIsWifiOnly(isWifi: Boolean)
 
-    suspend fun getIsWifiOnly() : Flow<Boolean>
+    suspend fun getIsWifiOnly(): Flow<Boolean>
 }

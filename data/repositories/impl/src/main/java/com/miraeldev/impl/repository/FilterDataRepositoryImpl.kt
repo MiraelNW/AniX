@@ -4,13 +4,11 @@ import com.miraeldev.anime.CategoryModel
 import com.miraeldev.api.FilterAnimeDataRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class FilterDataRepositoryImpl: FilterAnimeDataRepository {
-
+class FilterDataRepositoryImpl : FilterAnimeDataRepository {
 
     private val _filterCategoriesGenreList = mutableListOf(
         CategoryModel("shounen", false),
@@ -80,7 +78,6 @@ class FilterDataRepositoryImpl: FilterAnimeDataRepository {
                 _genreListFlow.value = filterCategoriesGenreList
             }
         }
-
     }
 
     override suspend fun clearAllFilters() {
@@ -93,5 +90,4 @@ class FilterDataRepositoryImpl: FilterAnimeDataRepository {
         }
         _genreListFlow.value = filterCategoriesGenreList
     }
-
 }

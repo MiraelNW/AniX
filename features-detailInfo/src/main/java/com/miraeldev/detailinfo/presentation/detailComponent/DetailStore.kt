@@ -14,8 +14,8 @@ import com.miraeldev.detailinfo.domain.useCases.SelectAnimeItemUseCase
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.Intent
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.Label
 import com.miraeldev.detailinfo.presentation.detailComponent.DetailStore.State
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.models.result.ResultAnimeDetail
-import com.miraeldev.result.FailureCauses
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
@@ -65,13 +65,15 @@ class DetailStoreFactory(
 ) {
 
     fun create(): DetailStore =
-        object : DetailStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "DetailStore",
-            initialState = State(State.AnimeDetailScreenState.Initial),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            DetailStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "DetailStore",
+                initialState = State(State.AnimeDetailScreenState.Initial),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class AnimeDetailLoaded(val state: State.AnimeDetailScreenState) : Action
@@ -90,17 +92,18 @@ class DetailStoreFactory(
                 getAnimeDetailUseCase().map {
                     when (val res = it) {
                         is ResultAnimeDetail.Success -> {
-                            State.AnimeDetailScreenState.SearchResult(result = res.animeList.toImmutableList()) as State.AnimeDetailScreenState
+                            State.AnimeDetailScreenState.SearchResult(result = res.animeList.toImmutableList())
+                                as State.AnimeDetailScreenState
                         }
 
                         is ResultAnimeDetail.Failure -> {
-                            State.AnimeDetailScreenState.SearchFailure(failure = res.failureCause) as State.AnimeDetailScreenState
+                            State.AnimeDetailScreenState.SearchFailure(failure = res.failureCause)
+                                as State.AnimeDetailScreenState
                         }
 
                         is ResultAnimeDetail.Initial -> {
                             State.AnimeDetailScreenState.Loading as State.AnimeDetailScreenState
                         }
-
                     }
                 }.collect {
                     dispatch(Action.AnimeDetailLoaded(it))

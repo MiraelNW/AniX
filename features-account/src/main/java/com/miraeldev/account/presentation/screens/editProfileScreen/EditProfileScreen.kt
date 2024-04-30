@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.miraeldev.account.R
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileComponent
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.EditProfileComponent
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.designsystem.EmailField
 import com.miraeldev.designsystem.ErrorValidField
@@ -80,7 +80,6 @@ fun EditProfileScreen(component: EditProfileComponent, imageLoader: VaumaImageLo
             uri?.let {
                 component.onChangeImage(it.toString())
             }
-
         }
     )
 
@@ -136,7 +135,6 @@ fun EditProfileScreen(component: EditProfileComponent, imageLoader: VaumaImageLo
                             contentDescription = stringResource(R.string.edit_icon)
                         )
                     }
-
 
                     NameField(
                         text = { model.username },
@@ -236,7 +234,7 @@ private fun ChangePassword(onChangePasswordClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.onSecondary,
 
-            )
+        )
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -244,7 +242,7 @@ private fun ChangePassword(onChangePasswordClick: () -> Unit) {
             contentDescription = "",
             tint = MaterialTheme.colors.primary,
 
-            )
+        )
         Text(
             modifier = Modifier.padding(6.dp),
             text = "Change password",

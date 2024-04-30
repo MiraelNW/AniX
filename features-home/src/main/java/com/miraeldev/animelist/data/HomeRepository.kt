@@ -1,7 +1,7 @@
 package com.miraeldev.animelist.data
 
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.paging.PagingState
 import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.Flow
@@ -24,13 +24,11 @@ interface HomeRepository {
 
     suspend fun loadFilmCategoryNextPage()
 
-
     suspend fun loadData(): Map<Int, List<AnimeInfo>>
 
     suspend fun addAnimeToList(isSelected: Boolean, animeInfo: LastWatchedAnime)
 
-    fun getUserInfo():Flow<User>
+    fun getUserInfo(): Flow<User>
 
     fun loadVideoId(animeItem: LastWatchedAnime)
-
 }

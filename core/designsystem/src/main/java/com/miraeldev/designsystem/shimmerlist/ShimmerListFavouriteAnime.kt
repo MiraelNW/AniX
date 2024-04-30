@@ -43,7 +43,6 @@ fun ShimmerListFavouriteAnime() {
             ShimmerAnimeCard()
         }
     }
-
 }
 
 @Composable

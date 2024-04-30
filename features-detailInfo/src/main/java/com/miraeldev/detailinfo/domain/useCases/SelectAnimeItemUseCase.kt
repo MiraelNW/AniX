@@ -9,5 +9,4 @@ class SelectAnimeItemUseCase(private val repository: AnimeDetailRepository) {
 
     suspend operator fun invoke(isSelected: Boolean, animeInfo: AnimeDetailInfo) =
         repository.selectAnimeItem(isSelected, animeInfo)
-
 }

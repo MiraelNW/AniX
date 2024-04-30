@@ -23,6 +23,4 @@ interface SignUpComponent {
     fun refreshPasswordError()
     fun refreshRepeatedPasswordError()
     fun refreshEmailError()
-
-
 }

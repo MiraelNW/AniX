@@ -24,7 +24,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.miraeldev.account.R
 import com.miraeldev.theme.LightGreen
 
-
 private const val DELETE_VIDEO = 1
 
 @Composable
@@ -36,11 +35,8 @@ fun DeleteDialog(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-
-        ),
+        properties = DialogProperties(),
         content = {
-
 
             Card(
                 shape = RoundedCornerShape(16.dp),

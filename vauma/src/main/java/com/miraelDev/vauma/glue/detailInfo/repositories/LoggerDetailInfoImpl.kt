@@ -11,7 +11,6 @@ class LoggerDetailInfoImpl(
 ) : Logger {
 
     override fun logError(msg: String, error: Throwable) {
-        logger.logError(LogError(msg,error))
+        logger.logError(LogError(msg, error))
     }
-
 }

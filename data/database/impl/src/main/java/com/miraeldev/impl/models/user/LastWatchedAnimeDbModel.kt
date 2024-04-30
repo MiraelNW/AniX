@@ -1,11 +1,11 @@
 package com.miraeldev.impl.models.user
 
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.impl.models.VideoDbModel
 import com.miraeldev.impl.models.animeDataModels.GenreDataModel
 import com.miraeldev.impl.models.animeDataModels.toGenre
 import com.miraeldev.models.anime.Genre
+import com.miraeldev.models.anime.LastWatchedAnime
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
@@ -54,7 +54,7 @@ fun Genre.toDbModel(): GenreDataModel {
     )
 }
 
-fun VideoDbModel.toVideoInfo():VideoInfo{
+fun VideoDbModel.toVideoInfo(): VideoInfo {
     return VideoInfo(
         id = this.id,
         videoName = this.videoName,
@@ -64,7 +64,7 @@ fun VideoDbModel.toVideoInfo():VideoInfo{
         videoUrl1080 = this.videoUrl1080
     )
 }
-fun VideoInfo.toVideoDbModel():VideoDbModel{
+fun VideoInfo.toVideoDbModel(): VideoDbModel {
     return VideoDbModel(
         id = this.id,
         videoName = this.videoName,

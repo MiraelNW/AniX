@@ -52,8 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.animelist.R
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeComponent
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore
@@ -62,6 +60,8 @@ import com.miraeldev.designsystem.shimmerlist.ShimmerHome
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.anime.LastWatchedAnime
 
 @Composable
 fun HomeScreen(component: HomeComponent, imageLoader: VaumaImageLoader) {
@@ -127,7 +127,6 @@ fun HomeScreen(component: HomeComponent, imageLoader: VaumaImageLoader) {
                     listName = "Films",
                     onSeeAllClick = { component.onSeeAllClick(3) }
                 )
-
             }
         }
 
@@ -233,7 +232,6 @@ private fun AnimeList(
                 AnimeCard(animeItem = it, imageLoader = imageLoader, onAnimeItemClick = onAnimeItemClick)
             }
         }
-
     }
 }
 
@@ -342,11 +340,13 @@ private fun AddToListButton(isFavourite: Boolean, addToList: (Boolean) -> Unit) 
         AnimatedContent(
             targetState = isSelected,
             transitionSpec = {
-                (fadeIn(animationSpec = tween(200, delayMillis = 100)) +
+                (
+                    fadeIn(animationSpec = tween(200, delayMillis = 100)) +
                         scaleIn(
                             initialScale = 0.92f,
                             animationSpec = tween(200, delayMillis = 100)
-                        ))
+                        )
+                    )
                     .togetherWith(fadeOut(animationSpec = tween(400)))
             },
             label = ""
@@ -361,16 +361,10 @@ private fun AddToListButton(isFavourite: Boolean, addToList: (Boolean) -> Unit) 
             )
         }
 
-
-
         Text(
             modifier = Modifier.padding(1.dp),
             text = stringResource(R.string.favourites),
             color = Color.White,
-            fontSize = 12.sp
         )
     }
 }
-
-
-

@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miraeldev.detailinfo.R
 
-
 @ExperimentalComposeUiApi
 @Composable
 fun UserRatingBar(

@@ -1,7 +1,6 @@
 package com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent
 
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.store.CodeVerifyStore
-import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.flow.StateFlow
 
 interface CodeVerifyComponent {
@@ -15,6 +14,4 @@ interface CodeVerifyComponent {
     fun refreshError()
 
     fun onBackClicked()
-
-
 }

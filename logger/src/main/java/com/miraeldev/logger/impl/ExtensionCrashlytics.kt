@@ -25,5 +25,4 @@ internal class ExtensionCrashlytics {
     companion object {
         fun getInstance() = ExtensionCrashlytics()
     }
-
 }

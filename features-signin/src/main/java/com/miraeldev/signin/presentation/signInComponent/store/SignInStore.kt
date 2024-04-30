@@ -20,16 +20,14 @@ interface SignInStore : Store<SignInStore.Intent, SignInStore.State, SignInStore
     }
 
     sealed interface Intent {
-        data class ChangeEmail(val email: String): Intent
-        data class ChangePassword(val password: String): Intent
-        data class AuthViaGoogle(val idToken: String): Intent
-        data class AuthViaVk(val accessToken: String, val userId: String, val email: String?): Intent
-        data class SignIn(val email: String, val password: String): Intent
-        data object SignUp: Intent
-        data object RefreshPasswordError: Intent
-        data object RefreshEmailError: Intent
-        data object ForgetPasswordClick: Intent
+        data class ChangeEmail(val email: String) : Intent
+        data class ChangePassword(val password: String) : Intent
+        data class AuthViaGoogle(val idToken: String) : Intent
+        data class AuthViaVk(val accessToken: String, val userId: String, val email: String?) : Intent
+        data class SignIn(val email: String, val password: String) : Intent
+        data object SignUp : Intent
+        data object RefreshPasswordError : Intent
+        data object RefreshEmailError : Intent
+        data object ForgetPasswordClick : Intent
     }
-
-
 }

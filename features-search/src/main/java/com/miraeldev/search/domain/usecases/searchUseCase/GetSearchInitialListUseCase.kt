@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class GetSearchInitialListUseCase(val repository: SearchAnimeRepository) {
 
     operator fun invoke() = repository.getSearchInitialList()
-
 }

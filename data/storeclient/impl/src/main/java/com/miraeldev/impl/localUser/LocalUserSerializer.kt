@@ -22,8 +22,7 @@ internal class LocalUserSerializer(
                 deserializer = LocalUserEmailDataModel.serializer(),
                 string = decryptedBytes.decodeToString()
             )
-        } catch(e: SerializationException) {
-            e.printStackTrace()
+        } catch (e: SerializationException) {
             defaultValue
         }
     }

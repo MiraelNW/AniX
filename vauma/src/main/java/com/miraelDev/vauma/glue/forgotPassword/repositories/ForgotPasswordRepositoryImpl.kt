@@ -24,6 +24,4 @@ class ForgotPasswordRepositoryImpl(
     override suspend fun checkEmailExist(email: String): Boolean {
         return forgotPasswordRepository.checkEmailExist(email)
     }
-
-
 }

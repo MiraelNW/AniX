@@ -113,8 +113,4 @@ interface DatabaseComponent {
     @Provides
     @Singleton
     fun InitialSearchPagingDaoImpl.bind(): InitialSearchPagingDao = this
-
-    companion object {
-        private const val DB_NAME = "main.db"
-    }
 }

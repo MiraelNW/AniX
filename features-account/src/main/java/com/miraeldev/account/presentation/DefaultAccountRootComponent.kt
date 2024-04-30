@@ -9,7 +9,7 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.miraeldev.account.presentation.screens.account.accountComponent.DefaultAccountComponentFactory
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DefaultDownloadComponentFactory
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.DefaultEditProfileComponentFactory
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.DefaultEditProfileComponentFactory
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.DefaultNotificationComponentFactory
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.models.OnLogOut
@@ -18,7 +18,8 @@ import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultAccountRootComponentFactory = (ComponentContext, VaumaImageLoader, OnLogOut) -> DefaultAccountRootComponent
+typealias DefaultAccountRootComponentFactory = (ComponentContext, VaumaImageLoader, OnLogOut) ->
+DefaultAccountRootComponent
 
 @Inject
 class DefaultAccountRootComponent(
@@ -102,7 +103,6 @@ class DefaultAccountRootComponent(
 //            }
         }
     }
-
 
     @Serializable
     private sealed interface Config {

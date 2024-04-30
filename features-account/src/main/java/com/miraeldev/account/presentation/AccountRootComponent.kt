@@ -4,12 +4,11 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.miraeldev.account.presentation.screens.account.accountComponent.AccountComponent
 import com.miraeldev.account.presentation.screens.downloadSettingsScreen.downloadComponent.DownloadComponent
-import com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent.EditProfileComponent
+import com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent.EditProfileComponent
 import com.miraeldev.account.presentation.screens.notificationsScreen.notificationComponent.NotificationComponent
 import com.miraeldev.api.VaumaImageLoader
 
 interface AccountRootComponent {
-
 
     val stack: Value<ChildStack<*, Child>>
 
@@ -19,6 +18,5 @@ interface AccountRootComponent {
         data class Notification(val component: NotificationComponent) : Child
         data class DownloadSettings(val component: DownloadComponent) : Child
 //        data class PrivacyPolicy(val component: FilterComponent) : Child
-
     }
 }

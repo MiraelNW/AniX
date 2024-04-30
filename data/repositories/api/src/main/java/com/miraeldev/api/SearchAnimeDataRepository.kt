@@ -16,14 +16,14 @@ interface SearchAnimeDataRepository {
     suspend fun searchAnimeByName(name: String): Flow<PagingState>
     suspend fun loadSearchResultsNextPage()
 
-    fun saveSearchText(searchText:String)
+    fun saveSearchText(searchText: String)
     suspend fun loadNextPage()
 
     fun getSearchInitialList(): Flow<PagingState>
 
-    fun getSearchName():Flow<String>
+    fun getSearchName(): Flow<String>
 
     suspend fun saveNameInAnimeSearchHistory(name: String)
 
-    fun getSearchHistoryListFlow():Flow<List<String>>
+    fun getSearchHistoryListFlow(): Flow<List<String>>
 }

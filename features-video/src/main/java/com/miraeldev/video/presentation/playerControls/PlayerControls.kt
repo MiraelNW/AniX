@@ -1,6 +1,5 @@
 package com.miraeldev.video.presentation.playerControls
 
-
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -38,11 +37,12 @@ import androidx.media3.common.Player.STATE_BUFFERING
 import androidx.media3.common.Player.STATE_ENDED
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.theme.DirtyWhite
-import com.miraeldev.videoscreen.R
 import com.miraeldev.video.presentation.DropItem
+import com.miraeldev.videoscreen.R
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationApi::class)
+@Suppress("UnusedPrivateMember")
 @Composable
 internal fun PlayerControls(
     modifier: Modifier,
@@ -73,7 +73,6 @@ internal fun PlayerControls(
     onOpenQualityMenu: () -> Unit,
     onAutoNextVideoClick: (Boolean) -> Unit,
 ) {
-
 
     val visible = remember(isVisible) { true }
 
@@ -177,7 +176,6 @@ internal fun PlayerControls(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(0.5f)
-
                                 .align(Alignment.BottomCenter)
                                 .padding(bottom = 24.dp),
                             horizontalArrangement = Arrangement.Center,
@@ -245,8 +243,6 @@ internal fun PlayerControls(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_next_video),
                                 contentDescription = "next video"
                             )
-
-
                         }
                     } else {
                         PortraitBottomControls(
@@ -293,8 +289,6 @@ internal fun PlayerControls(
                             onOpenQualityMenu = onOpenQualityMenu
                         )
                     }
-
-
                 }
             }
         }
@@ -323,7 +317,6 @@ internal fun PlayerControls(
             changeVisibleState = changeVisibleState
         )
 
-
         EpisodeList(
             modifier = modifier,
             shouldShowEpisodeList = shouldShowEpisodeList,
@@ -339,8 +332,3 @@ internal fun PlayerControls(
         )
     }
 }
-
-
-
-
-

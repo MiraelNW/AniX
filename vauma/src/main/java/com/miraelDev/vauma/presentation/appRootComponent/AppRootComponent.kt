@@ -10,7 +10,6 @@ interface AppRootComponent {
 
     val stack: Value<ChildStack<*, Child>>
 
-
     val model: StateFlow<MainStore.State>
     sealed interface Child {
 

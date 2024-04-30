@@ -7,6 +7,5 @@ import me.tatarka.inject.annotations.Inject
 class LogInWithGoogleUseCase(
     private val repository: SignInRepository
 ) {
-    suspend operator fun invoke(idToken:String) = repository.logInWithGoogle(idToken)
-
+    suspend operator fun invoke(idToken: String) = repository.logInWithGoogle(idToken)
 }

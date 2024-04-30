@@ -11,17 +11,17 @@ import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.api.VideoPlayerDataRepository
+import com.miraeldev.data.repository.FilterDataRepositoryImpl
+import com.miraeldev.data.repository.VideoPlayerRepositoryImpl
+import com.miraeldev.impl.downloadMananger.AndroidDownloader
 import com.miraeldev.impl.repository.AnimeDetailDataRepositoryImpl
 import com.miraeldev.impl.repository.AnimeListDataRepositoryImpl
 import com.miraeldev.impl.repository.FavouriteAnimeDataRepositoryImpl
-import com.miraeldev.data.repository.FilterDataRepositoryImpl
 import com.miraeldev.impl.repository.ForgotPasswordDataRepositoryImpl
 import com.miraeldev.impl.repository.HomeDataRepositoryImpl
 import com.miraeldev.impl.repository.SearchAnimeDataRepositoryImpl
 import com.miraeldev.impl.repository.UserAuthDataRepositoryImpl
 import com.miraeldev.impl.repository.UserDataRepositoryImpl
-import com.miraeldev.data.repository.VideoPlayerRepositoryImpl
-import com.miraeldev.impl.downloadMananger.AndroidDownloader
 import com.miraeldev.models.di.scope.Singleton
 import me.tatarka.inject.annotations.Provides
 

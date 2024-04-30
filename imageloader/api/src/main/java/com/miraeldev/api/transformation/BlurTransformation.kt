@@ -18,6 +18,7 @@ class BlurTransformation @JvmOverloads constructor(
 
     override suspend fun transform(input: Bitmap, size: Size): Bitmap = input.blur(scale, radius) ?: input
 
+    @Suppress("LongMethod", "MagicNumber")
     private suspend fun Bitmap.blur(
         scale: Float,
         radius: Int

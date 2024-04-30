@@ -25,7 +25,7 @@ class InitialSearchPagingDaoImpl(private val database: Database) : InitialSearch
         query.transaction {
             insertList.forEach {
                 query.insert(
-                    id =  it.id,
+                    id = it.id,
                     nameEn = it.nameEn,
                     nameRu = it.nameRu,
                     image = it.image,

@@ -1,4 +1,4 @@
-package com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent
+package com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
@@ -28,7 +28,6 @@ class DefaultEditProfileComponent(
             store.labels.collect {
                 when (it) {
                     is EditProfileStore.Label.OnBackClick -> onBackClicked()
-
                 }
             }
         }
@@ -95,7 +94,7 @@ class DefaultEditProfileComponent(
         store.accept(EditProfileStore.Intent.RefreshEmailError)
     }
 
-    override fun updateUserInfo(image: String,email: String,username: String) {
+    override fun updateUserInfo(image: String, email: String, username: String) {
         store.accept(EditProfileStore.Intent.UpdateUserInfo(image, email, username))
     }
 }

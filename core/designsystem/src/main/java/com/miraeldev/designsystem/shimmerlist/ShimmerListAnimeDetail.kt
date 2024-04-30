@@ -55,7 +55,6 @@ fun ShimmerListAnimeDetail() {
 
         ShimmerOtherAnimes()
     }
-
 }
 
 @Composable
@@ -76,7 +75,6 @@ private fun ShimmerAnimeImage() {
     }
 }
 
-
 @Composable
 private fun ShimmerAnimeNameAndShareButton() {
     Row(
@@ -87,7 +85,6 @@ private fun ShimmerAnimeNameAndShareButton() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
 
         Column(modifier = Modifier.fillMaxWidth(0.8f)) {
             Spacer(
@@ -103,7 +100,6 @@ private fun ShimmerAnimeNameAndShareButton() {
                     .fillMaxWidth(0.8f)
                     .shimmerItem()
             )
-
         }
 
         Spacer(
@@ -131,8 +127,6 @@ private fun ShimmerPlayButton() {
                 .shimmerItem()
         )
     }
-
-
 }
 
 @Composable
@@ -156,7 +150,6 @@ private fun ShimmerRatingAndCategoriesRow() {
                     .height(24.dp)
                     .shimmerItem()
             )
-
         }
 
         Row(
@@ -171,7 +164,6 @@ private fun ShimmerRatingAndCategoriesRow() {
                     .shimmerItem()
             )
         }
-
     }
 }
 
@@ -238,7 +230,6 @@ private fun ShimmerOtherAnimes() {
         }
     }
 }
-
 
 @Composable
 private fun AnimeCard() {

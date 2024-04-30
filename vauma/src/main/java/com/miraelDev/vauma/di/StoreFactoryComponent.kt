@@ -5,7 +5,6 @@ import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import me.tatarka.inject.annotations.Provides
 
-
 interface StoreFactoryComponent {
     @Provides
     fun provideStoreFactory(): StoreFactory = LoggingStoreFactory(DefaultStoreFactory())

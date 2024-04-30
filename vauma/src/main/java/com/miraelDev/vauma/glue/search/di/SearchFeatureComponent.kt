@@ -6,7 +6,6 @@ import com.miraeldev.search.data.repository.FilterAnimeRepository
 import com.miraeldev.search.data.repository.SearchAnimeRepository
 import me.tatarka.inject.annotations.Provides
 
-
 interface SearchFeatureComponent {
 
     @Provides

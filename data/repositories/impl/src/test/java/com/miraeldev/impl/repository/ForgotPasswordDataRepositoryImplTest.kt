@@ -10,9 +10,7 @@ import io.ktor.util.InternalAPI
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
-import io.mockk.verify
 import junit.framework.TestCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -33,14 +31,13 @@ class ForgotPasswordDataRepositoryImplTest {
     @MockK
     lateinit var userAuthRepository: UserAuthRepository
 
-
     private lateinit var forgotPasswordDataRepositoryImpl: ForgotPasswordDataRepositoryImpl
 
     private fun initRepository() {
         forgotPasswordDataRepositoryImpl = ForgotPasswordDataRepositoryImpl(
-                authNetworkClient,
-                preferenceClient,
-                userAuthRepository
+            authNetworkClient,
+            preferenceClient,
+            userAuthRepository
         )
     }
 

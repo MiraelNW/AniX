@@ -27,34 +27,34 @@ import com.miraeldev.theme.DarkWhite700
 
 @Composable
 fun FavouriteIcon(
-        modifier: Modifier,
-        size: Int = 42,
-        selected: Boolean = false,
-        onFavouriteIconClick: (Boolean) -> Unit
+    modifier: Modifier,
+    size: Int = 42,
+    selected: Boolean = false,
+    onFavouriteIconClick: (Boolean) -> Unit
 ) {
     var isSelected by rememberSaveable { mutableStateOf(selected) }
 
     var scaleForIconFloat by rememberSaveable { mutableFloatStateOf(0f) }
 
     val scaleForIcon by animateFloatAsState(
-            targetValue = scaleForIconFloat,
-            tween(
-                    durationMillis = 450,
-                    easing = LinearEasing
-            ),
-            label = ""
+        targetValue = scaleForIconFloat,
+        tween(
+            durationMillis = 450,
+            easing = LinearEasing
+        ),
+        label = ""
     )
 
     var scaleForIconBorderFloat by rememberSaveable { mutableFloatStateOf(1f) }
 
     val scaleForIconBorder by animateFloatAsState(
-            targetValue = scaleForIconBorderFloat,
-            tween(
-                    delayMillis = 250,
-                    durationMillis = 400,
-                    easing = LinearEasing
-            ),
-            label = ""
+        targetValue = scaleForIconBorderFloat,
+        tween(
+            delayMillis = 250,
+            durationMillis = 400,
+            easing = LinearEasing
+        ),
+        label = ""
     )
 
     LaunchedEffect(key1 = isSelected) {
@@ -68,31 +68,29 @@ fun FavouriteIcon(
     }
 
     IconButton(
-            modifier = modifier.size(size.dp),
-            onClick = {
-                isSelected = !isSelected
-                onFavouriteIconClick(isSelected)
-            }
+        modifier = modifier.size(size.dp),
+        onClick = {
+            isSelected = !isSelected
+            onFavouriteIconClick(isSelected)
+        }
     ) {
 
         Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .scale(scaleForIconBorder),
-                tint = DarkWhite700,
-                imageVector = Icons.Filled.FavoriteBorder,
-                contentDescription = stringResource(R.string.favourite_icon)
+            modifier = Modifier
+                .fillMaxSize()
+                .scale(scaleForIconBorder),
+            tint = DarkWhite700,
+            imageVector = Icons.Filled.FavoriteBorder,
+            contentDescription = stringResource(R.string.favourite_icon)
         )
 
         Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .scale(scaleForIcon),
-                tint = Color.Red,
-                imageVector = Icons.Filled.Favorite,
-                contentDescription = stringResource(R.string.selected_favourite_icon)
+            modifier = Modifier
+                .fillMaxSize()
+                .scale(scaleForIcon),
+            tint = Color.Red,
+            imageVector = Icons.Filled.Favorite,
+            contentDescription = stringResource(R.string.selected_favourite_icon)
         )
-
-
     }
 }

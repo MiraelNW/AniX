@@ -5,7 +5,6 @@ import com.arkivanov.mvikotlin.core.store.Store
 interface CodeVerifyRPStore :
     Store<CodeVerifyRPStore.Intent, CodeVerifyRPStore.State, CodeVerifyRPStore.Label> {
 
-
     data class State(val otpText: String, val verifyOtpError: Boolean)
 
     sealed interface Intent {
@@ -20,6 +19,4 @@ interface CodeVerifyRPStore :
         data object OnBackClicked : Label
         data object OtpVerified : Label
     }
-
-
 }

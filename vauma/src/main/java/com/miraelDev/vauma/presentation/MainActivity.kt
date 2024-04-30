@@ -24,7 +24,6 @@ import com.miraelDev.vauma.di.create
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.coroutines.launch
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -66,7 +65,6 @@ class MainActivity : ComponentActivity() {
 //                        )
 //                    }
 
-
             observeState(
                 isFullScreen = LocalOrientation.current,
                 shouldShowSystemBars = shouldShowSystemBars
@@ -82,7 +80,6 @@ class MainActivity : ComponentActivity() {
                 } else {
                     showSystemBars()
                 }
-
             }
         }
     }
@@ -101,6 +98,7 @@ class MainActivity : ComponentActivity() {
         windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
     }
 
+    @Suppress("UnusedPrivateMember")
     companion object {
         private const val BACK = 0
         private const val ON_VIDEO_VIEW = 1

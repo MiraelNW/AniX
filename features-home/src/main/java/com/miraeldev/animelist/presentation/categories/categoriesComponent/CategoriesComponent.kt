@@ -12,5 +12,4 @@ interface CategoriesComponent {
     fun loadPopularCategoryNextPage()
     fun loadNameCategoryNextPage()
     fun loadFilmCategoryNextPage()
-
 }

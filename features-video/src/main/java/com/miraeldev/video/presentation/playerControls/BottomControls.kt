@@ -25,10 +25,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.common.collect.ImmutableList
 import com.miraeldev.theme.DirtyWhite
-import com.miraeldev.videoscreen.R
 import com.miraeldev.video.presentation.DropItem
 import com.miraeldev.video.presentation.QualityItems
 import com.miraeldev.video.presentation.utilis.formatMinSec
+import com.miraeldev.videoscreen.R
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
@@ -103,7 +103,6 @@ internal fun BottomControls(
                 onMenuItemClick = onMenuItemClick,
                 onOpenQualityMenu = onOpenQualityMenu
             )
-
         }
     }
 }

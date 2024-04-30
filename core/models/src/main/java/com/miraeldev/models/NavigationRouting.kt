@@ -21,4 +21,3 @@ typealias OnSeriesClick = () -> Unit
 typealias NavigateToSearchScreen = (String) -> Unit
 typealias OnEmailExist = (String) -> Unit
 typealias OnSettingClick = (Settings) -> Unit
-

@@ -13,5 +13,4 @@ class LoggerAccountImpl(
     override fun logError(msg: String, error: Throwable) {
         logger.logError(LogError(msg, error))
     }
-
 }

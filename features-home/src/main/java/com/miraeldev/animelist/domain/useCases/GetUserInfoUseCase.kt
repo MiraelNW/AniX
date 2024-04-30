@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class GetUserInfoUseCase(private val homeRepository: HomeRepository) {
 
     operator fun invoke() = homeRepository.getUserInfo()
-
 }

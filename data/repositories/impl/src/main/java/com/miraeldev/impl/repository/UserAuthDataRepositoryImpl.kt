@@ -14,7 +14,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import me.tatarka.inject.annotations.Inject
 
-
 @Inject
 class UserAuthDataRepositoryImpl(
     private val preferenceClient: PreferenceClient,
@@ -106,7 +105,6 @@ class UserAuthDataRepositoryImpl(
 
         preferenceClient.saveBearerToken(token.bearerToken)
         preferenceClient.saveRefreshToken(token.refreshToken)
-
 
         val isSuccess = userDataRepository.saveRemoteUser()
 

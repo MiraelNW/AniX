@@ -34,5 +34,4 @@ class VideoPlayerRepositoryImpl(
     override fun loadSpecificEpisode(specificEpisode: Int) {
         videoPlayerDataRepository.loadSpecificEpisode(specificEpisode)
     }
-
 }

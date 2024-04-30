@@ -7,5 +7,4 @@ interface NotificationComponent {
     val model: StateFlow<NotificationStore.State>
 
     fun onBackPressed()
-
 }

@@ -17,5 +17,4 @@ interface UserAuthDataRepository {
     suspend fun loginWithVk(accessToken: String, userId: String, email: String?)
 
     suspend fun logOutUser(): Boolean
-
 }

@@ -1,10 +1,10 @@
 package com.miraeldev.impl.dao.filmCategory
 
 import com.miraeldev.Database
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.filmCategory.FilmCategoryDao
 import com.miraeldev.impl.mapper.mapToFilmCategoryModel
 import com.miraeldev.impl.mapper.toAnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import me.tatarka.inject.annotations.Inject
 
@@ -17,7 +17,7 @@ class FilmCategoryDaoImpl(private val database: Database) : FilmCategoryDao {
         query.transaction {
             insertList.forEach {
                 query.insert(
-                    id =  it.id,
+                    id = it.id,
                     nameEn = it.nameEn,
                     nameRu = it.nameRu,
                     image = it.image,

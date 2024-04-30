@@ -41,14 +41,15 @@ fun ExpandableDescription(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     var clickable by remember { mutableStateOf(false) }
     var lastCharIndex by remember { mutableStateOf(0) }
-    Box(modifier = Modifier
-        .padding(8.dp)
-        .noRippleEffectClick(
-            enabled = clickable
-        ) {
-            isExpanded = !isExpanded
-        }
-        .then(modifier)
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .noRippleEffectClick(
+                enabled = clickable
+            ) {
+                isExpanded = !isExpanded
+            }
+            .then(modifier)
     ) {
         Text(
             modifier = textModifier
@@ -90,5 +91,4 @@ fun ExpandableDescription(
             textAlign = textAlign
         )
     }
-
 }

@@ -30,9 +30,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.miraeldev.models.anime.Similar
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.extensions.pressClickEffect
+import com.miraeldev.models.anime.Similar
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -97,7 +97,6 @@ private fun AnimeCard(
                 contentDescription = "anime image preview",
                 contentScale = ContentScale.FillBounds
             )
-
         }
         Text(
             modifier = Modifier

@@ -4,11 +4,11 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.OnAnimeItemClick
 import com.miraeldev.models.OnPlayClick
 import com.miraeldev.models.OnSeeAllClick
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.user.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-
-typealias DefaultHomeComponentFactory = (ComponentContext, OnAnimeItemClick, OnSeeAllClick, OnPlayClick) -> DefaultHomeComponent
+typealias DefaultHomeComponentFactory = (ComponentContext, OnAnimeItemClick, OnSeeAllClick, OnPlayClick) ->
+DefaultHomeComponent
 
 @Inject
 class DefaultHomeComponent(

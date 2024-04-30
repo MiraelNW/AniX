@@ -3,8 +3,8 @@ package com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store
 import com.arkivanov.mvikotlin.core.store.Store
 import com.miraeldev.signin.domain.model.SignUpErrorModel
 
-interface SignUpStore
-    : Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> {
+interface SignUpStore :
+    Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> {
 
     data class State(
         val image: String,
@@ -39,5 +39,4 @@ interface SignUpStore
             val repeatedPassword: String
         ) : Intent
     }
-
 }

@@ -1,3 +1,4 @@
+@file:Suppress("MaxLineLength")
 package com.miraeldev.search.presentation.searchHistoryScreen.searchHistoryComponent
 
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -51,7 +52,8 @@ class SearchHistoryStoreFactory(
 ) {
 
     fun create(): SearchHistoryStore =
-        object : SearchHistoryStore,
+        object :
+            SearchHistoryStore,
             Store<SearchHistoryStore.Intent, SearchHistoryStore.State, SearchHistoryStore.Label> by storeFactory.create(
                 name = "SearchHistoryStore",
                 initialState = SearchHistoryStore.State(

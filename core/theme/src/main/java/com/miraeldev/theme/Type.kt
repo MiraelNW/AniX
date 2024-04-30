@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
-
 val Montserrat = FontFamily(
     Font(R.font.montserrat_bold, FontWeight.Bold),
     Font(R.font.montserrat_bold_italic, FontWeight.Bold, FontStyle.Italic),
@@ -22,6 +21,3 @@ val Montserrat = FontFamily(
 // Set of Material typography styles to start with
 
 val Typography = Typography()
-
-
-

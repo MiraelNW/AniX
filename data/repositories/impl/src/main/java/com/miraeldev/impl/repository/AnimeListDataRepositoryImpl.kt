@@ -95,7 +95,6 @@ class AnimeListDataRepositoryImpl(
         currentTime = System.currentTimeMillis()
     )
 
-
     override fun getPagingNewAnimeList(): Flow<PagingState> = newPagingController.flow
     override fun getPagingPopularAnimeList(): Flow<PagingState> = popularPagingController.flow
     override fun getPagingNameAnimeList(): Flow<PagingState> = namePagingController.flow
@@ -116,5 +115,4 @@ class AnimeListDataRepositoryImpl(
     override suspend fun loadFilmCategoryNextPage() {
         filmPagingController.loadNextPage()
     }
-
 }

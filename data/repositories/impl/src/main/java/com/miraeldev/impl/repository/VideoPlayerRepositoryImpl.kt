@@ -1,10 +1,10 @@
 package com.miraeldev.data.repository
 
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.api.VideoPlayerDataRepository
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.video.PlayerWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

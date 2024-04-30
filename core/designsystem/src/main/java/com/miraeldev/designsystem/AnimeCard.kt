@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.extensions.NoRippleInteractionSource
 import com.miraeldev.extensions.pressClickEffect
+import com.miraeldev.models.anime.AnimeInfo
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -71,12 +71,10 @@ fun AnimeCard(animeItem: AnimeInfo, imageLoader: VaumaImageLoader, onAnimeItemCl
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center
                 )
-
             }
         }
     }
 }
-
 
 @Composable
 private fun Rating(animeItem: AnimeInfo) {

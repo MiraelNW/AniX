@@ -32,7 +32,6 @@ import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.extensions.pressClickEffect
 
-
 private const val DELETE_VIDEO = 1
 private const val CLEAR_CACHE = 2
 
@@ -62,7 +61,6 @@ fun DownloadSettings(component: DownloadComponent) {
                     } else {
                         component.deleteAllVideos()
                     }
-
                 }
             )
         }
@@ -78,7 +76,8 @@ fun DownloadSettings(component: DownloadComponent) {
             )
             WifiSettingItem(
                 isWifiOnly = model.isSelected,
-                onWifiClick = { component.changeStatus(model.isSelected) })
+                onWifiClick = { component.changeStatus(model.isSelected) }
+            )
             DeleteVideos(
                 onDeleteVideosClick = {
                     deleteVideosText = true
@@ -93,7 +92,6 @@ fun DownloadSettings(component: DownloadComponent) {
             )
         }
     }
-
 }
 
 @Composable

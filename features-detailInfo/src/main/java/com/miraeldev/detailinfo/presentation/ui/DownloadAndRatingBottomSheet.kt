@@ -90,7 +90,6 @@ fun BottomSheet(
                     )
                 }
             }
-
         }
     ) {
         bottomSheetContent()
@@ -98,6 +97,7 @@ fun BottomSheet(
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
+@Suppress("UnusedPrivateMember")
 @Composable
 private fun RatingScreen(
     animeDetailInfo: AnimeDetailInfo,
@@ -177,7 +177,7 @@ private fun RatingScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "${5 - it}",color = MaterialTheme.colors.onBackground)
+                            Text(text = "${5 - it}", color = MaterialTheme.colors.onBackground)
                             Box() {
                                 Spacer(
                                     modifier = Modifier

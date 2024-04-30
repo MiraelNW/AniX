@@ -1,9 +1,8 @@
-package com.miraeldev.anime
+package com.miraeldev.impl.models
 
 import kotlinx.serialization.Serializable
-
 @Serializable
-data class VideoInfo(
+data class VideoDbModel(
     val id: Int = 0,
     val videoName: String = "",
     val videoImage: String = "",

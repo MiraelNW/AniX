@@ -1,9 +1,9 @@
 package com.miraelDev.vauma.glue.favourites.repository
 
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.favourites.data.FavouriteAnimeRepository
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
@@ -36,5 +36,4 @@ class FavouriteAnimeRepositoryImpl(
     override fun saveSearchText(searchText: String) {
         searchAnimeDataRepository.saveSearchText(searchText)
     }
-
 }

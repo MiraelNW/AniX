@@ -8,7 +8,7 @@ interface VideoPlayerDataRepository {
 
     fun getVideoInfo(): StateFlow<PlayerWrapper>
 
-    fun loadVideoId(animeItem: AnimeDetailInfo, videoId :Int)
+    fun loadVideoId(animeItem: AnimeDetailInfo, videoId: Int)
 
     fun loadVideoPlayer(animeInfo: AnimeDetailInfo)
 
@@ -19,5 +19,4 @@ interface VideoPlayerDataRepository {
     suspend fun releasePlayer()
 
     fun loadSpecificEpisode(specificEpisode: Int)
-
 }

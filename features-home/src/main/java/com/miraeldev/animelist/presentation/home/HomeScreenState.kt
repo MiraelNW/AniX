@@ -9,5 +9,4 @@ sealed class HomeScreenState {
     data object Initial : HomeScreenState()
 
     data class Success(val result: User) : HomeScreenState()
-
 }

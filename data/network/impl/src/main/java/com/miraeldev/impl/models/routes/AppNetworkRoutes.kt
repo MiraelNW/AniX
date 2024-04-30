@@ -2,7 +2,6 @@ package com.miraeldev.impl.models.routes
 
 import com.miraeldev.network.impl.BuildConfig
 
-
 internal object AppNetworkRoutes {
 
     const val SEARCH_URL_ANIME_LIST_ROUTE = BuildConfig.SEARCH_URL

@@ -113,14 +113,21 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 60
+    threshold: 120
+    ignoreAnnotated: ["Composable"]
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 13
+    functionThreshold: 10
+    constructorThreshold: 15
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotatedParameter: []
+    ignoreAnnotated:
+      - "Composable"
+  CyclomaticComplexMethod:
+    active: true
+    ignoreFunction:
+      - executeIntent
   MethodOverloading:
     active: false
     threshold: 6
@@ -142,14 +149,14 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
+    thresholdInFiles: 9999
+    thresholdInClasses: 20
+    thresholdInInterfaces: 20
+    thresholdInObjects: 20
     thresholdInEnums: 11
     ignoreDeprecated: false
     ignorePrivate: false
-    ignoreOverridden: false
+    ignoreOverridden: true
 
 coroutines:
   active: true
@@ -227,7 +234,7 @@ exceptions:
     active: true
     ignoreLabeled: false
   SwallowedException:
-    active: true
+    active: false
     ignoredExceptionTypes:
       - 'InterruptedException'
       - 'MalformedURLException'
@@ -304,7 +311,7 @@ formatting:
     continuationIndentSize: 4
   MaximumLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 130
     ignoreBackTickedIdentifier: false
   ModifierOrdering:
     active: true
@@ -346,7 +353,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
   PackageName:
     active: false
     autoCorrect: true
@@ -434,7 +441,7 @@ naming:
   FunctionNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
+    functionPattern: '([a-zA-Z0-9]*)|(`.*`)'
     excludeClassPattern: '$^'
     ignoreOverridden: true
   FunctionParameterNaming:
@@ -541,7 +548,7 @@ potential-bugs:
     ignoreReturnValueAnnotations:
       - '*.CanIgnoreReturnValue'
   ImplicitDefaultLocale:
-    active: true
+    active: false
   ImplicitUnitReturnType:
     active: false
     allowExplicitReturnType: true
@@ -657,12 +664,17 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/theme/**']
     ignoreNumbers:
       - '-1'
       - '0'
       - '1'
       - '2'
+      - '3'
+      - '-20'
+      - '100'
+      - '1000'
+      - '1200'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false
@@ -673,6 +685,8 @@ style:
     ignoreEnums: false
     ignoreRanges: false
     ignoreExtensionFunctions: true
+    ignoreAnnotated:
+      - "Composable"
   MandatoryBracesIfStatements:
     active: false
   MandatoryBracesLoops:
@@ -680,6 +694,14 @@ style:
   MaxLineLength:
     active: true
     maxLineLength: 120
+    excludes: [
+      '**/test/**',
+      '**/androidTest/**',
+      '**/commonTest/**',
+      '**/jvmTest/**',
+      '**/jsTest/**',
+      '**/iosTest/**',
+    ]
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false

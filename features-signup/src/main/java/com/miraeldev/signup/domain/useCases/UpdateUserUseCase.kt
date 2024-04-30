@@ -5,5 +5,5 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class UpdateUserUseCase(private val repository: SignUpRepository) {
-    suspend operator fun invoke(email:String) = repository.updateUser(email)
+    suspend operator fun invoke(email: String) = repository.updateUser(email)
 }

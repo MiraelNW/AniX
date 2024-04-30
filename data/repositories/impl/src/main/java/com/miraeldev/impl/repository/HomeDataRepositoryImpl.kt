@@ -1,6 +1,5 @@
 package com.miraeldev.impl.repository
 
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.HomeDataRepository
 import com.miraeldev.api.UserDataRepository
@@ -8,6 +7,7 @@ import com.miraeldev.api.filmCategory.FilmCategoryDao
 import com.miraeldev.api.nameCategory.NameCategoryDao
 import com.miraeldev.api.newCategory.NewCategoryDao
 import com.miraeldev.api.popularCategory.PopularCategoryDao
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.dto.toAnimeDetailInfo
@@ -95,7 +95,6 @@ class HomeDataRepositoryImpl(
         return apiResponse.results.map { it.toAnimeInfo() }
     }
 
-
     private suspend fun getAnimeListForCategory(): Map<Int, List<AnimeInfo>> {
 
         val newAnimeList = newCategoryDao.getAnimeList()
@@ -129,7 +128,6 @@ class HomeDataRepositoryImpl(
                 }
             }
     }
-
 
     companion object {
         private const val FIVE_HOURS_IN_MILLIS = 24 * 60 * 60 * 1000

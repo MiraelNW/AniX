@@ -1,11 +1,11 @@
 package com.miraeldev.impl.mapper
 
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.extensions.toBoolean
 import com.miraeldev.extensions.toLong
 import com.miraeldev.impl.models.animeDataModels.VideoInfoDataModel
 import com.miraeldev.impl.models.animeDataModels.toGenre
 import com.miraeldev.impl.models.user.toModel
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import kotlinx.collections.immutable.toPersistentList
 import tables.filmcategory.FilmCategoryAnimeInfoDbModel

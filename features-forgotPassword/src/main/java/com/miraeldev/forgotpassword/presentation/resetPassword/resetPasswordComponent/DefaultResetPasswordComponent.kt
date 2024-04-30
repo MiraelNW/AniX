@@ -5,8 +5,8 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
-import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore.ResetPasswordStore
-import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore.ResetPasswordStoreFactory
+import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.resetPasswordStore.ResetPasswordStore
+import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.resetPasswordStore.ResetPasswordStoreFactory
 import com.miraeldev.models.OnBackPressed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow

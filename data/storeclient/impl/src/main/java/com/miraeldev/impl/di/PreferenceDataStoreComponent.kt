@@ -20,5 +20,4 @@ interface PreferenceDataStoreComponent {
     @Provides
     @Singleton
     fun LocalUserManager.bind(): LocalUserStoreApi = this
-
 }

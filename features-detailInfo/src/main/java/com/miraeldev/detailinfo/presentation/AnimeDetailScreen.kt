@@ -50,7 +50,6 @@ import com.miraeldev.detailinfo.presentation.ui.ZoomableImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 private const val CLOSE_BOTTOM_SHEET = 0
 private const val RATING_SCREEN = 1
 private const val DOWNLOAD_SCREEN = 2
@@ -111,8 +110,6 @@ fun AnimeDetailScreen(
             is DetailStore.State.AnimeDetailScreenState.Initial -> {}
         }
     }
-
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -181,7 +178,8 @@ private fun DetailScreen(
                     TopAnimeImage(
                         imageLoader = imageLoader,
                         animeItem = animeDetail,
-                        onImageClick = { showZoomableImage = true })
+                        onImageClick = { showZoomableImage = true }
+                    )
                 }
 
                 item {
@@ -194,10 +192,11 @@ private fun DetailScreen(
                             intent.putExtra(
                                 Intent.EXTRA_TEXT,
                                 "Привет! \n" +
-                                        "Смотри какое аниме я нашел:\n " +
-                                        "${animeDetail.nameRu} \n" +
-                                        "в нем ${animeDetail.episodes} серий \n" +
-                                        "обязательно посмотри его в приложении Vauma https://vauma.com/anime-detail/${animeDetail.id}"
+                                    "Смотри какое аниме я нашел:\n " +
+                                    "${animeDetail.nameRu} \n" +
+                                    "в нем ${animeDetail.episodes} серий \n" +
+                                    "обязательно посмотри его в приложении Vauma" +
+                                    " https://vauma.com/anime-detail/${animeDetail.id}"
                             )
                             intent.type = "text/plain"
                             startActivity(
@@ -287,13 +286,4 @@ private fun DetailScreen(
             }
         }
     }
-
-
 }
-
-
-
-
-
-
-

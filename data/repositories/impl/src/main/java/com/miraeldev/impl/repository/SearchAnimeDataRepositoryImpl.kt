@@ -4,10 +4,9 @@ import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.api.SearchHistoryAnimeDao
 import com.miraeldev.api.initialSearch.InitialSearchPagingDao
-import com.miraeldev.data.remote.NetworkHandler
 import com.miraeldev.impl.mapper.mapToPagingModel
-import com.miraeldev.impl.pagingController.SearchResultsPagingController
 import com.miraeldev.impl.pagingController.PagingController
+import com.miraeldev.impl.pagingController.SearchResultsPagingController
 import com.miraeldev.models.dto.Response
 import com.miraeldev.models.paging.PagingState
 import io.ktor.client.call.body
@@ -17,13 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class SearchAnimeDataRepositoryImpl(
     private val initialSearchPagingDao: InitialSearchPagingDao,
-    private val networkHandler: NetworkHandler,
     private val searchAnimeDao: SearchHistoryAnimeDao,
     private val appNetworkClient: AppNetworkClient
 ) : SearchAnimeDataRepository {
@@ -128,7 +125,7 @@ class SearchAnimeDataRepositoryImpl(
         val mutableSearchList = ArrayDeque(searchList)
         mutableSearchList.remove(name)
 
-        if (searchList.size == 20) {
+        if (searchList.size == SEARCH_HISTORY_MAX_SIZE) {
             mutableSearchList.addFirst(name)
             mutableSearchList.removeLast()
         } else {
@@ -146,4 +143,8 @@ class SearchAnimeDataRepositoryImpl(
 
     override fun getSearchHistoryListFlow(): Flow<List<String>> =
         searchAnimeDao.getSearchHistoryListFlow()
+
+    companion object {
+        private const val SEARCH_HISTORY_MAX_SIZE = 20
+    }
 }

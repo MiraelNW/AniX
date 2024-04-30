@@ -32,7 +32,7 @@ class AnimeDetailInfoRepositoryImpl(
         downloader.downloadVideo(url, videoName)
     }
 
-    override fun loadVideoId(animeItem:AnimeDetailInfo, videoId: Int) {
-        videoPlayerDataRepository.loadVideoId(animeItem,videoId)
+    override fun loadVideoId(animeItem: AnimeDetailInfo, videoId: Int) {
+        videoPlayerDataRepository.loadVideoId(animeItem, videoId)
     }
 }

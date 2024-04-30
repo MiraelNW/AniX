@@ -2,8 +2,8 @@ package com.miraelDev.vauma.glue.signUp.repositories
 
 import com.miraeldev.api.UserAuthDataRepository
 import com.miraeldev.api.UserDataRepository
-import com.miraeldev.signup.data.SignUpRepository
 import com.miraeldev.models.user.User
+import com.miraeldev.signup.data.SignUpRepository
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -23,5 +23,4 @@ class SignUpRepositoryImpl(
     override suspend fun verifyOtpCode(otpToken: String, user: User): Boolean {
         return userAuthDataRepository.verifyOtpCode(user = user, otpToken = otpToken)
     }
-
 }

@@ -5,5 +5,5 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class DownloadAnimeEpisodeUseCase(private val repository: AnimeDetailRepository) {
-    suspend operator fun invoke(url:String, videoName:String) = repository.downloadVideo(url,videoName)
+    suspend operator fun invoke(url: String, videoName: String) = repository.downloadVideo(url, videoName)
 }

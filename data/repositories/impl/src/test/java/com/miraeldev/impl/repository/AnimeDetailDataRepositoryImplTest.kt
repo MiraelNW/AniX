@@ -2,17 +2,17 @@ package com.miraeldev.impl.repository
 
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.api.UserDao
 import com.miraeldev.api.VideoPlayerDataRepository
 import com.miraeldev.impl.repository.utils.getDefaultHttpResponse
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.toAnimeDetailInfo
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.models.result.ResultAnimeDetail
 import com.miraeldev.models.user.User
-import com.miraeldev.result.FailureCauses
 import io.ktor.client.call.body
 import io.ktor.util.InternalAPI
 import io.mockk.called
@@ -54,10 +54,10 @@ class AnimeDetailDataRepositoryImplTest {
     @Before
     fun beforeTest() {
         animeDetailDataRepositoryImpl = AnimeDetailDataRepositoryImpl(
-                videoPlayerDataRepository,
-                favouriteAnimeDao,
-                appNetworkClient,
-                userDao
+            videoPlayerDataRepository,
+            favouriteAnimeDao,
+            appNetworkClient,
+            userDao
         )
     }
 
@@ -103,7 +103,7 @@ class AnimeDetailDataRepositoryImplTest {
 
         animeDetailDataRepositoryImpl.loadAnimeDetail(-1)
 
-        coVerify { appNetworkClient.searchAnimeById(any(), any()) wasNot called}
+        coVerify { appNetworkClient.searchAnimeById(any(), any()) wasNot called }
     }
 
     @Test

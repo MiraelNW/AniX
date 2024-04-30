@@ -54,7 +54,7 @@ fun ShimmerGrid(targetValue: Float) {
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         columns = GridCells.Fixed(cells)
     ) {
-        items(count = 6){
+        items(count = 6) {
             ShimmerAnimeCard(targetValue = targetValue, Modifier.fillMaxWidth(0.5f))
         }
     }
@@ -85,6 +85,7 @@ fun ShimmerAnimeCard(targetValue: Float, modifier: Modifier) {
 }
 
 @Composable
+@Suppress("UnusedPrivateMember")
 private fun AnimePreview() {
     Column(
         Modifier

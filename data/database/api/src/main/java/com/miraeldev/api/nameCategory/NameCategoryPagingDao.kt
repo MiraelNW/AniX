@@ -12,10 +12,9 @@ interface NameCategoryPagingDao {
         insertTime: Long
     )
 
-    fun getLastNode() : LastDbNode
+    fun getLastNode(): LastDbNode
 
     fun getAnimeByPage(page: Long): List<PagingAnimeInfo>
 
     suspend fun clearAllAnime()
-
 }

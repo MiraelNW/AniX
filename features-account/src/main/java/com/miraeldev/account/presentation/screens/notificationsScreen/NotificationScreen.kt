@@ -66,7 +66,6 @@ fun NotificationScreen(component: NotificationComponent) {
     }
 }
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun NotificationsList() {
@@ -82,7 +81,7 @@ private fun NotificationsList() {
                 targetState = isSelectedTitles,
                 transitionSpec = {
                     fadeIn(animationSpec = tween(durationMillis = 150)) with
-                            fadeOut(animationSpec = tween(durationMillis = 150))
+                        fadeOut(animationSpec = tween(durationMillis = 150))
                 }, label = ""
             ) { isSelected ->
                 Column() {
@@ -95,7 +94,6 @@ private fun NotificationsList() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
 
                         Text(
                             text = stringResource(R.string.notification_of_released_titles),
@@ -112,7 +110,6 @@ private fun NotificationsList() {
                 }
             }
 
-
             var isSelectedEpisodes by remember { mutableStateOf(false) }
 
             Row(
@@ -124,7 +121,6 @@ private fun NotificationsList() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
 
                 Text(
                     modifier = Modifier.fillMaxWidth(0.7f),
@@ -149,7 +145,6 @@ private fun NotificationsList() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-
                 Text(
                     modifier = Modifier.fillMaxWidth(0.7f),
                     text = stringResource(R.string.notification_of_released_update),
@@ -159,9 +154,7 @@ private fun NotificationsList() {
                 Switcher(isSelectedFun = { isSelectedUpdate })
             }
         }
-
     }
-
 }
 
 @Composable
@@ -197,7 +190,8 @@ private fun CheckBoxesWithText() {
                 onCheckedChange = {
                     allTitlesIsChecked = !allTitlesIsChecked
                     titlesInWishListIsChecked = false
-                })
+                }
+            )
             Text(modifier = Modifier.fillMaxWidth(), text = stringResource(R.string.all_titles))
         }
         Row(
@@ -224,14 +218,14 @@ private fun CheckBoxesWithText() {
                 onCheckedChange = {
                     titlesInWishListIsChecked = !titlesInWishListIsChecked
                     allTitlesIsChecked = false
-                })
+                }
+            )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.titles_you_want_to_watch)
             )
         }
     }
-
 }
 
 @Composable

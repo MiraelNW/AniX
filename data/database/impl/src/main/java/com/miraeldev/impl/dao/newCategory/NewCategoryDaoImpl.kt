@@ -1,10 +1,10 @@
 package com.miraeldev.impl.dao.newCategory
 
 import com.miraeldev.Database
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.newCategory.NewCategoryDao
 import com.miraeldev.impl.mapper.mapToNewCategoryModel
 import com.miraeldev.impl.mapper.toAnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import me.tatarka.inject.annotations.Inject
 
@@ -17,7 +17,7 @@ class NewCategoryDaoImpl(private val database: Database) : NewCategoryDao {
         query.transaction {
             insertList.forEach {
                 query.insert(
-                    id =  it.id,
+                    id = it.id,
                     nameEn = it.nameEn,
                     nameRu = it.nameRu,
                     image = it.image,

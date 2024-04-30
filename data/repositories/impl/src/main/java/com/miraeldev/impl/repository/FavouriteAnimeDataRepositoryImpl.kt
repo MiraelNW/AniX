@@ -1,16 +1,13 @@
 package com.miraeldev.impl.repository
 
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
-import com.miraeldev.anime.toAnimeInfo
 import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.extensions.mergeWith
-import com.miraeldev.result.FailureCauses
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
@@ -40,7 +37,6 @@ class FavouriteAnimeDataRepositoryImpl(
             }
             .mergeWith(searchResults)
             .mergeWith(initialListFlow)
-
 
     override suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeInfo) {
 

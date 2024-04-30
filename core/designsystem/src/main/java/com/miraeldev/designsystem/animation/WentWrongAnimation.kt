@@ -47,5 +47,4 @@ fun WentWrongAnimation(
             ErrorRefreshItem(onClickRetry = onClickRetry)
         }
     }
-
 }

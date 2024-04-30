@@ -8,5 +8,4 @@ interface ForgotPasswordRepository {
     suspend fun verifyOtp(otp: String): Boolean
 
     suspend fun checkEmailExist(email: String): Boolean
-
 }

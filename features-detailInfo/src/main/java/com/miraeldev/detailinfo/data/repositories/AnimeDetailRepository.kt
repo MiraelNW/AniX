@@ -11,8 +11,7 @@ interface AnimeDetailRepository {
 
     suspend fun selectAnimeItem(isSelected: Boolean, animeInfo: AnimeDetailInfo)
 
-    suspend fun downloadVideo(url:String, videoName:String)
+    suspend fun downloadVideo(url: String, videoName: String)
 
-    fun loadVideoId(animeItem:AnimeDetailInfo, videoId:Int)
-
+    fun loadVideoId(animeItem: AnimeDetailInfo, videoId: Int)
 }

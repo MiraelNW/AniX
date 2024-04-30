@@ -10,5 +10,4 @@ interface AccountComponent {
     fun logOut()
     fun onSettingItemClick(settings: Settings)
     fun onDarkThemeClick(isDarkTheme: Boolean)
-
 }

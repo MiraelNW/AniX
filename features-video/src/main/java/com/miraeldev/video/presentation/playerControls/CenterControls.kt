@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.miraeldev.videoscreen.R
 import kotlinx.coroutines.delay
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CenterControls(
@@ -94,23 +93,23 @@ internal fun CenterControls(
                         tint = MaterialTheme.colors.primary
                     )
                 }
-
             }
         }
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .combinedClickable(
-                interactionSource = MutableInteractionSource(),
-                indication = null,
-                onClick = changeVisibleState,
-                onDoubleClick = {
-                    onForwardClick()
-                    forwardVisible = true
-                },
-                onLongClick = {}
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .combinedClickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                    onClick = changeVisibleState,
+                    onDoubleClick = {
+                        onForwardClick()
+                        forwardVisible = true
+                    },
+                    onLongClick = {}
+                )
         ) {
 
             Row(
@@ -130,11 +129,7 @@ internal fun CenterControls(
                         tint = MaterialTheme.colors.primary
                     )
                 }
-
             }
         }
     }
 }
-
-
-

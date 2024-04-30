@@ -16,7 +16,8 @@ class EmailChooseStoreFactory(
     private val checkEmailExistUseCase: CheckEmailExistUseCase
 ) {
 
-    fun create(): EmailChooseStore = object : EmailChooseStore,
+    fun create(): EmailChooseStore = object :
+        EmailChooseStore,
         Store<EmailChooseStore.Intent, EmailChooseStore.State, EmailChooseStore.Label> by storeFactory.create(
             name = "EmailChooseStoreFactory",
             initialState = EmailChooseStore.State("", EmailChooseErrorModel()),
@@ -102,6 +103,4 @@ class EmailChooseStoreFactory(
             }
         }
     }
-
-
 }

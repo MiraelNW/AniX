@@ -1,16 +1,15 @@
 package com.miraeldev.impl.repository
 
-import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AnimeDetailDataRepository
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.api.UserDao
 import com.miraeldev.api.VideoPlayerDataRepository
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.toAnimeDetailInfo
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.models.result.ResultAnimeDetail
-import com.miraeldev.result.FailureCauses
 import io.ktor.client.call.body
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -6,6 +6,5 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class SaveSearchTextUseCase(private val repository: FavouriteAnimeRepository) {
 
-    operator fun invoke(searchText:String) = repository.saveSearchText(searchText)
-
+    operator fun invoke(searchText: String) = repository.saveSearchText(searchText)
 }

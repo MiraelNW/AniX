@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class GetFavouriteAnimeListUseCase(private val repository: FavouriteAnimeRepository) {
 
     operator fun invoke() = repository.getFavouriteAnimeList()
-
 }

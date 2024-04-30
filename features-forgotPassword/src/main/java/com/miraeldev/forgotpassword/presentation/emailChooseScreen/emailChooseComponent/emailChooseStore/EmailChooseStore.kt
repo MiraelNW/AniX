@@ -3,8 +3,8 @@ package com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseC
 import com.arkivanov.mvikotlin.core.store.Store
 import com.miraeldev.forgotpassword.domain.models.EmailChooseErrorModel
 
-interface EmailChooseStore
-    : Store<EmailChooseStore.Intent, EmailChooseStore.State, EmailChooseStore.Label> {
+interface EmailChooseStore :
+    Store<EmailChooseStore.Intent, EmailChooseStore.State, EmailChooseStore.Label> {
 
     data class State(val email: String, val emailChooseErrorModel: EmailChooseErrorModel)
 

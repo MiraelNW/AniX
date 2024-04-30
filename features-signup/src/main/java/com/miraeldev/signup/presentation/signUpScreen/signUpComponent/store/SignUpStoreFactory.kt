@@ -5,9 +5,9 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.miraeldev.models.user.User
 import com.miraeldev.signin.domain.model.SignUpErrorModel
 import com.miraeldev.signup.domain.useCases.SignUpUseCase
-import com.miraeldev.models.user.User
 import com.miraeldev.utils.ValidatePassword
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
@@ -19,7 +19,8 @@ class SignUpStoreFactory(
     private val validatePassword: ValidatePassword
 ) {
 
-    fun create(): SignUpStore = object : SignUpStore,
+    fun create(): SignUpStore = object :
+        SignUpStore,
         Store<SignUpStore.Intent, SignUpStore.State, SignUpStore.Label> by storeFactory.create(
             name = "SignUpStoreFactory",
             initialState = SignUpStore.State("", "", "", "", "", SignUpErrorModel()),
@@ -27,10 +28,7 @@ class SignUpStoreFactory(
             executorFactory = ::ExecutorImpl
         ) {}
 
-
-    private sealed interface Action {
-
-    }
+    private sealed interface Action
 
     private sealed interface Msg {
         data class ChangeImage(val image: String) : Msg
@@ -173,7 +171,5 @@ class SignUpStoreFactory(
                 copy(signUpError = msg.signUpErrorModel)
             }
         }
-
     }
-
 }

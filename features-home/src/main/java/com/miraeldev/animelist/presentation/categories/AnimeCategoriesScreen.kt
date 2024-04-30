@@ -28,6 +28,3 @@ fun AnimeCategoriesScreen(
         )
     }
 }
-
-
-

@@ -63,7 +63,8 @@ internal fun EpisodeList(
                     .fillMaxWidth(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0.35f else 1f)
                     .navigationBarsPadding()
                     .align(
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) Alignment.CenterEnd else Alignment.BottomCenter
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) Alignment.CenterEnd
+                        else Alignment.BottomCenter
                     )
                     .noRippleEffectClick() { },
                 elevation = 0.dp,
@@ -128,9 +129,7 @@ internal fun EpisodeList(
                         }
                     }
                 }
-
             }
-
         }
     }
 }
@@ -158,4 +157,3 @@ private fun EpisodeNameItem(
         Divider(startIndent = 8.dp, color = DarkWhite.copy(alpha = 0.8f), thickness = 1.dp)
     }
 }
-

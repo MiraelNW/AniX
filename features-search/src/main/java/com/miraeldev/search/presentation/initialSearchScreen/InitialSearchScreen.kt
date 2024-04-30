@@ -1,6 +1,5 @@
 package com.miraeldev.search.presentation.initialSearchScreen
 
-
 import AnimeCard
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -48,9 +47,7 @@ import com.miraeldev.theme.LocalOrientation
 import kotlinx.coroutines.delay
 import java.io.IOException
 
-
 private const val SMALL_ANIMATION = 1.015f
-
 
 @Composable
 fun InitialSearchScreen(
@@ -64,7 +61,7 @@ fun InitialSearchScreen(
     val shouldPaginate by remember {
         derivedStateOf {
             (lazyGridListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -5) >=
-                    (lazyGridListState.layoutInfo.totalItemsCount - 7)
+                (lazyGridListState.layoutInfo.totalItemsCount - 7)
         }
     }
 
@@ -132,7 +129,6 @@ private fun InitialAnimeList(
                     if (shouldShowLoading) {
                         ShimmerGrid(SMALL_ANIMATION)
                     }
-
                 }
 
                 loadState == LoadState.REFRESH_ERROR -> {
@@ -154,7 +150,6 @@ private fun InitialAnimeList(
                             onClickRetry = onClickRetry
                         )
                     }
-
                 }
 
                 else -> {
@@ -211,13 +206,3 @@ private fun InitialAnimeList(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,5 @@
-package com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordStore
+@file:Suppress("MaxLineLength")
+package com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.resetPasswordStore
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -17,7 +18,8 @@ class ResetPasswordStoreFactory(
     private val saveNewPasswordUseCase: SaveNewPasswordUseCase
 ) {
 
-    fun create(): ResetPasswordStore = object : ResetPasswordStore,
+    fun create(): ResetPasswordStore = object :
+        ResetPasswordStore,
         Store<ResetPasswordStore.Intent, ResetPasswordStore.State, ResetPasswordStore.Label> by storeFactory.create(
             name = "ResetPasswordStoreFactory",
             initialState = ResetPasswordStore.State("", "", ResetPasswordErrorModel()),
@@ -33,9 +35,7 @@ class ResetPasswordStoreFactory(
         data class ResetPasswordError(val resetPasswordErrorModel: ResetPasswordErrorModel) : Msg
     }
 
-    private sealed interface Action {
-
-    }
+    private sealed interface Action
 
     private inner class ExecutorImpl :
         CoroutineExecutor<ResetPasswordStore.Intent, Action, ResetPasswordStore.State, Msg, ResetPasswordStore.Label>() {
@@ -129,7 +129,5 @@ class ResetPasswordStoreFactory(
                     copy(resetPasswordErrorModel = msg.resetPasswordErrorModel)
                 }
             }
-
     }
-
 }

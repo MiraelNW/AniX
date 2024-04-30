@@ -43,13 +43,15 @@ class VideoStoreFactory(
 ) {
 
     fun create(): VideoStore =
-        object : VideoStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "VideoStore",
-            initialState = State(PlayerWrapper("")),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            VideoStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "VideoStore",
+                initialState = State(PlayerWrapper("")),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class VideoInfoLoaded(val playerWrapper: PlayerWrapper) : Action

@@ -1,7 +1,7 @@
+@file:Suppress("MaxLineLength")
 package com.miraeldev.impl
 
 import android.util.Log
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.PreferenceClient
 import com.miraeldev.api.UserAuthRepository
@@ -11,6 +11,7 @@ import com.miraeldev.impl.models.FavouriteAnimeSendRequest
 import com.miraeldev.impl.models.RefreshToken
 import com.miraeldev.impl.models.routes.AppNetworkRoutes
 import com.miraeldev.impl.models.routes.AuthNetworkRoutes
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.user.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -117,12 +118,12 @@ class AppNetworkClientImpl(
         }
 
         install(HttpRequestRetry) {
-            maxRetries = 5
+            maxRetries = MAX_TRIES
             retryIf { request, response ->
-                !response.status.isSuccess() && response.status.value != 401
+                !response.status.isSuccess() && response.status.value != UNAUTHORIZED
             }
             delayMillis { retry ->
-                retry * 1000L
+                retry * ONE_SECOND_IN_MILLIS
             }
         }
 
@@ -138,9 +139,9 @@ class AppNetworkClientImpl(
         }
 
         install(HttpTimeout) {
-            requestTimeoutMillis = 10000L
-            connectTimeoutMillis = 10000L
-            socketTimeoutMillis = 10000L
+            requestTimeoutMillis = TIMEOUT
+            connectTimeoutMillis = TIMEOUT
+            socketTimeoutMillis = TIMEOUT
         }
     }
 
@@ -178,6 +179,7 @@ class AppNetworkClientImpl(
         url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}&page=$page&page_size=$PAGE_SIZE")
     }
 
+    @Suppress("CyclomaticComplexMethod")
     override suspend fun getPagingFilteredList(
         name: String,
         yearCode: String?,
@@ -188,35 +190,35 @@ class AppNetworkClientImpl(
     ): HttpResponse = when {
         yearCode != null && sortCode != null && genreCode.isNotEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&sort=$sortCode&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
             }
         yearCode != null && sortCode != null && genreCode.isEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&date=$yearCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&sort=$sortCode&date=$yearCode&page=$page&page_size=$pageSize")
             }
         yearCode != null && sortCode == null && genreCode.isNotEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&date=$yearCode&genres=$genreCode&page=$page&page_size=$pageSize")
             }
         yearCode == null && sortCode != null && genreCode.isNotEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&genres=$genreCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&sort=$sortCode&genres=$genreCode&page=$page&page_size=$pageSize")
             }
         yearCode != null && sortCode == null && genreCode.isEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&date=$yearCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&date=$yearCode&page=$page&page_size=$pageSize")
             }
         yearCode == null && sortCode != null && genreCode.isEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&sort=$sortCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&sort=$sortCode&page=$page&page_size=$pageSize")
             }
         yearCode == null && sortCode == null && genreCode.isNotEmpty() ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&genres=$genreCode&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&genres=$genreCode&page=$page&page_size=$pageSize")
             }
         else ->
             client.get {
-                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=${name}&page=$page&page_size=$pageSize")
+                url("${AppNetworkRoutes.SEARCH_URL_ANIME_LIST_ROUTE}name=$name&page=$page&page_size=$pageSize")
             }
     }
 
@@ -240,10 +242,14 @@ class AppNetworkClientImpl(
     }
 
     override suspend fun searchAnimeById(id: Int, userId: Int): HttpResponse = client.get {
-        url("${AppNetworkRoutes.SEARCH_URL_ANIME_ID_ROUTE}?anime_id=$id&user_id=${userId}")
+        url("${AppNetworkRoutes.SEARCH_URL_ANIME_ID_ROUTE}?anime_id=$id&user_id=$userId")
     }
 
     companion object {
         private const val PAGE_SIZE = 20
+        private const val MAX_TRIES = 5
+        private const val TIMEOUT = 10000L
+        private const val UNAUTHORIZED = 401
+        private const val ONE_SECOND_IN_MILLIS = 1000L
     }
 }

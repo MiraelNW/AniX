@@ -3,10 +3,10 @@ package com.miraeldev.impl.dao
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.miraeldev.Database
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.impl.mapper.toAnimeInfo
 import com.miraeldev.impl.mapper.toFavouriteAnimeDbModel
+import com.miraeldev.models.anime.AnimeInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +19,12 @@ class FavouriteAnimeDaoImpl(private val database: Database) : FavouriteAnimeDao 
     private val ioDispatcher = Dispatchers.IO
 
     override fun getFavouriteAnimeList(offset: Int): Flow<List<AnimeInfo>> {
-        return query.getFavouriteAnimeList(offset.toLong()).asFlow().mapToList(ioDispatcher).map { list -> list.map { it.toAnimeInfo() } }
+        return query.getFavouriteAnimeList(offset.toLong())
+            .asFlow()
+            .mapToList(ioDispatcher)
+            .map { list ->
+                list.map { it.toAnimeInfo() }
+            }
     }
 
     override suspend fun insertFavouriteAnimeItem(animeItem: AnimeInfo) {

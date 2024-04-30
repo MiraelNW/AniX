@@ -1,6 +1,8 @@
-package com.miraeldev.anime
+package com.miraeldev.models.anime
 
-import com.miraeldev.models.anime.Genre
+import com.miraeldev.anime.AnimeDetailInfo
+import com.miraeldev.anime.ImageModel
+import com.miraeldev.anime.VideoInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
@@ -13,14 +15,14 @@ data class LastWatchedAnime(
     val nameRu: String = "",
     val genres: ImmutableList<Genre> = persistentListOf(Genre("", "")),
     val isFavourite: Boolean = false,
-    val episodeNumber :Int = -1,
-    val video : VideoInfo = VideoInfo()
+    val episodeNumber: Int = -1,
+    val video: VideoInfo = VideoInfo()
 )
 
-fun LastWatchedAnime.toAnimeInfo():AnimeInfo{
+fun LastWatchedAnime.toAnimeInfo(): AnimeInfo {
     return AnimeInfo(
-        id= this.id,
-        image = ImageModel(imageUrl,imageUrl),
+        id = this.id,
+        image = ImageModel(imageUrl, imageUrl),
         nameRu = this.nameRu,
         nameEn = this.nameEn,
         genres = this.genres,
@@ -28,10 +30,10 @@ fun LastWatchedAnime.toAnimeInfo():AnimeInfo{
     )
 }
 
-fun LastWatchedAnime.toAnimeDetailInfo():AnimeDetailInfo{
+fun LastWatchedAnime.toAnimeDetailInfo(): AnimeDetailInfo {
     return AnimeDetailInfo(
-        id= this.id,
-        image = ImageModel(imageUrl,imageUrl),
+        id = this.id,
+        image = ImageModel(imageUrl, imageUrl),
         nameRu = this.nameRu,
         nameEn = this.nameEn,
         genres = this.genres,

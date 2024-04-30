@@ -5,5 +5,5 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class GetUserAuthStateUseCase(private val repository: MainRepository) {
-   operator fun invoke() = repository.getUserStatus()
+    operator fun invoke() = repository.getUserStatus()
 }

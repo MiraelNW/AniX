@@ -10,7 +10,8 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class NetworkHandler(private val context: Context) {
 
-    private val connectivityManager: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager: ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private lateinit var networkConnectionCallback: ConnectivityManager.NetworkCallback
 
@@ -35,7 +36,6 @@ class NetworkHandler(private val context: Context) {
                 super.onAvailable(network)
                 _isConnected.value = true
             }
-
         }
 
         return networkConnectionCallback
@@ -44,8 +44,5 @@ class NetworkHandler(private val context: Context) {
     private fun updateNetworkConnection() {
         val activeNetworkConnection = connectivityManager.activeNetworkInfo
         _isConnected.value = activeNetworkConnection?.isConnected == true
-
     }
-
-
 }

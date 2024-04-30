@@ -38,13 +38,15 @@ class DownloadStoreFactory(
 ) {
 
     fun create(): DownloadStore =
-        object : DownloadStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "DownloadStore",
-            initialState = State(false),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            DownloadStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "DownloadStore",
+                initialState = State(false),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class PreferenceLoaded(val isSelected: Boolean) : Action
@@ -95,9 +97,5 @@ class DownloadStoreFactory(
             when (msg) {
                 is Msg.PreferenceLoaded -> copy(isSelected = msg.isSelected)
             }
-    }
-
-    companion object {
-        private const val IS_WIFI_ONLY_KEY = "is_wifi_only_key"
     }
 }

@@ -1,6 +1,7 @@
+@file:Suppress("MaxLineLength")
 package com.miraeldev.impl.pagingController
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.paging.LoadState
 import com.miraeldev.models.paging.PagingAnimeInfo
 import com.miraeldev.models.paging.PagingState
@@ -81,11 +82,9 @@ internal class SearchResultsPagingController(
                 else _pagingState.value.copy(loadState = LoadState.APPEND_ERROR)
             }
         }
-
     }
 
-
-
+    @Suppress("CyclomaticComplexMethod")
     private fun getGenreCodeFromList(genreList: List<String>): String {
         var codeResult = ""
         genreList.forEach { genre ->
@@ -170,5 +169,4 @@ internal class SearchResultsPagingController(
         private const val INITIAL_PAGE = 0
         private const val PAGE_SIZE = 20
     }
-
 }

@@ -1,10 +1,10 @@
 package com.miraeldev.impl.dao.popularCategory
 
 import com.miraeldev.Database
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.popularCategory.PopularCategoryDao
 import com.miraeldev.impl.mapper.mapToPopularCategoryModel
 import com.miraeldev.impl.mapper.toAnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 import me.tatarka.inject.annotations.Inject
 
@@ -17,7 +17,7 @@ class PopularCategoryDaoImpl(private val database: Database) : PopularCategoryDa
         query.transaction {
             insertList.forEach {
                 query.insert(
-                    id =  it.id,
+                    id = it.id,
                     nameEn = it.nameEn,
                     nameRu = it.nameRu,
                     image = it.image,

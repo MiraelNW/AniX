@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class LoadAnimeListUseCase(private val repository: FavouriteAnimeRepository) {
 
     suspend operator fun invoke() = repository.loadAnimeList()
-
 }

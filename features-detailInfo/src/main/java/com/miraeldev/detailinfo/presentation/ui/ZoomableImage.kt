@@ -39,7 +39,6 @@ fun ZoomableImage(
     onDismiss: () -> Unit,
 ) {
 
-
     val angle by remember { mutableFloatStateOf(0f) }
     var zoom by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -68,7 +67,7 @@ fun ZoomableImage(
     ) {
         AsyncImage(
             modifier = Modifier
-                .noRippleEffectClick {  }
+                .noRippleEffectClick { }
                 .align(Alignment.Center)
                 .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                 .graphicsLayer(

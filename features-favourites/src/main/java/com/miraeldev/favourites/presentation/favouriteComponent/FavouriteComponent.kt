@@ -1,6 +1,6 @@
 package com.miraeldev.favourites.presentation.favouriteComponent
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import kotlinx.coroutines.flow.StateFlow
 
 interface FavouriteComponent {
@@ -14,5 +14,4 @@ interface FavouriteComponent {
     fun searchAnimeItemInDatabase(name: String)
     fun searchAnimeByName(name: String)
     fun loadAnimeList()
-
 }

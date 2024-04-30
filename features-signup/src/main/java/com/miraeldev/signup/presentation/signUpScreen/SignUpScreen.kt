@@ -262,8 +262,6 @@ fun SignUpScreen(component: SignUpComponent, imageLoader: VaumaImageLoader) {
                 }
             )
         }
-
-
     }
 }
 

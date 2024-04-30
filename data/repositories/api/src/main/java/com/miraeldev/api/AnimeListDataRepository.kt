@@ -20,5 +20,4 @@ interface AnimeListDataRepository {
     suspend fun loadNameCategoryNextPage()
 
     suspend fun loadFilmCategoryNextPage()
-
 }

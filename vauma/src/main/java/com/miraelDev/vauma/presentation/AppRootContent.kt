@@ -31,7 +31,6 @@ fun AppRootContent(
         onDispose {}
     }
 
-
     VaumaTheme(darkTheme = model.isDarkTheme) {
         Children(stack = component.stack) {
             when (val instance = it.instance) {
@@ -47,4 +46,3 @@ fun AppRootContent(
         }
     }
 }
-

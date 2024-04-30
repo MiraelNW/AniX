@@ -2,9 +2,9 @@ package com.miraeldev.impl.repository
 
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.FavouriteAnimeDao
-import com.miraeldev.result.FailureCauses
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.result.FailureCauses
 import com.miraeldev.result.ResultAnimeInfo
 import io.mockk.coEvery
 import io.mockk.coVerify

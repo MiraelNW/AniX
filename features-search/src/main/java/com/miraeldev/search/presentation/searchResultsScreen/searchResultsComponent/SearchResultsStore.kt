@@ -1,3 +1,4 @@
+@file:Suppress("MaxLineLength")
 package com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent
 
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -54,7 +55,8 @@ class SearchResultsStoreFactory(
 ) {
 
     fun create(): SearchResultsStore =
-        object : SearchResultsStore,
+        object :
+            SearchResultsStore,
             Store<SearchResultsStore.Intent, SearchResultsStore.State, SearchResultsStore.Label> by storeFactory.create(
                 name = "SearchResultsStore",
                 initialState = SearchResultsStore.State(

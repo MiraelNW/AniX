@@ -31,8 +31,8 @@ class AccountRepositoryImpl(
         currentPassword: String,
         newPassword: String,
         repeatedPassword: String
-    ) :Boolean{
-       return userDataRepository.changePassword(currentPassword, newPassword, repeatedPassword)
+    ): Boolean {
+        return userDataRepository.changePassword(currentPassword, newPassword, repeatedPassword)
     }
 
     override suspend fun setDarkTheme(isDarkTheme: Boolean) {

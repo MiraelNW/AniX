@@ -2,7 +2,6 @@ package com.miraeldev.utils
 
 import me.tatarka.inject.annotations.Inject
 
-
 @Inject
 class ValidatePassword {
 

@@ -1,11 +1,11 @@
 package com.miraeldev.impl.repository
 
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.LocalUserStoreApi
 import com.miraeldev.api.UserDao
 import com.miraeldev.impl.mapper.UserModelsMapper
 import com.miraeldev.impl.repository.utils.getDefaultHttpResponse
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.dto.UserDto
 import com.miraeldev.models.dto.toModel
 import com.miraeldev.models.user.User
@@ -41,15 +41,15 @@ class UserDataRepositoryImplTest {
 
     private lateinit var userDataRepositoryImpl: UserDataRepositoryImpl
 
-    private val userDto = UserDto(1,"","","","")
+    private val userDto = UserDto(1, "", "", "", "")
     private val lastWatchedAnime = LastWatchedAnime(123)
 
     private fun initRepository() {
         userDataRepositoryImpl = UserDataRepositoryImpl(
-                appNetworkClient = appNetworkClient,
-                userDao = userDao,
-                localUserManager = localUserManager,
-                userModelsMapper = userModelsMapper
+            appNetworkClient = appNetworkClient,
+            userDao = userDao,
+            localUserManager = localUserManager,
+            userModelsMapper = userModelsMapper
         )
     }
 
@@ -98,5 +98,4 @@ class UserDataRepositoryImplTest {
         coVerify(exactly = 0) { userDao.insertUser(userDto.toModel()) }
         TestCase.assertEquals(false, saveRemoteUser)
     }
-
 }

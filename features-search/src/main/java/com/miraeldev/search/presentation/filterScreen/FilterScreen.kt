@@ -45,7 +45,6 @@ import com.miraeldev.theme.LightGreen700
 import com.miraeldev.theme.LocalTheme
 import kotlinx.collections.immutable.persistentListOf
 
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -192,11 +191,9 @@ fun FilterScreen(component: FilterComponent) {
                         fontSize = 14.sp
                     )
                 }
-
             }
         }
     }
-
 }
 
 @Composable
@@ -233,4 +230,3 @@ private fun CategoryField(
 
 private const val YEAR_CATEGORIES_ID = 1
 private const val SORT_CATEGORIES_ID = 2
-private const val INITIAL = ""

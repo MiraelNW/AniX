@@ -1,6 +1,5 @@
 package com.miraeldev.impl.mapper
 
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.anime.VideoInfo
 import com.miraeldev.extensions.toBoolean
 import com.miraeldev.extensions.toLong
@@ -10,13 +9,13 @@ import com.miraeldev.impl.models.animeDataModels.toGenre
 import com.miraeldev.impl.models.user.ImageDbModel
 import com.miraeldev.impl.models.user.toDbModel
 import com.miraeldev.impl.models.user.toModel
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.anime.Genre
 import com.miraeldev.models.dto.GenreDto
 import com.miraeldev.models.dto.ImageModelDto
 import com.miraeldev.models.dto.VideoDto
 import kotlinx.collections.immutable.toImmutableList
 import tables.FavouriteAnimeInfoDbModel
-
 
 internal fun GenreDto.toGenre(): Genre {
     return Genre(
@@ -38,8 +37,6 @@ internal fun GenreDto.toGenreDataModel(): GenreDataModel {
         nameEn = this.nameEn
     )
 }
-
-
 
 internal fun VideoDto.toDataModel(): VideoInfoDataModel {
     return VideoInfoDataModel(

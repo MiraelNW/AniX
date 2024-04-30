@@ -1,7 +1,6 @@
 package com.miraeldev.api
 
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 
@@ -14,5 +13,4 @@ interface FavouriteAnimeDataRepository {
     suspend fun loadAnimeList()
 
     suspend fun searchAnimeItemInDatabase(name: String)
-
 }

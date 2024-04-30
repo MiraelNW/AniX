@@ -1,6 +1,5 @@
 package com.miraeldev.impl.repository.utils
 
-import com.miraeldev.anime.AnimeDetailInfo
 import io.ktor.client.call.HttpClientCall
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.request.HttpResponseData
@@ -22,7 +21,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-
 
 @OptIn(InternalAPI::class)
 fun getDefaultHttpResponse(statusCode: Int) = DefaultHttpResponse(call, getHttpResponseData(statusCode))
@@ -56,11 +54,11 @@ private val call = mockk<HttpClientCall> {
 
 private fun getHttpResponseData(statusCode: Int): HttpResponseData {
     return HttpResponseData(
-            statusCode = HttpStatusCode(statusCode,"ok"),
-            requestTime = GMTDate(),
-            headers = Headers.Empty,
-            version = HttpProtocolVersion.HTTP_1_1,
-            body = "body",
-            callContext = EmptyCoroutineContext
+        statusCode = HttpStatusCode(statusCode, "ok"),
+        requestTime = GMTDate(),
+        headers = Headers.Empty,
+        version = HttpProtocolVersion.HTTP_1_1,
+        body = "body",
+        callContext = EmptyCoroutineContext
     )
 }

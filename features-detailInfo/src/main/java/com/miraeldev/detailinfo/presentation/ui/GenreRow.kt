@@ -16,7 +16,6 @@ import com.miraeldev.detailinfo.R
 @Composable
 fun GenreRow(animeItem: AnimeDetailInfo) {
 
-
     Row(
         modifier = Modifier.padding(8.dp)
     ) {

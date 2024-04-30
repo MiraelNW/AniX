@@ -1,9 +1,9 @@
 package com.miraeldev.models.dto
 
 import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.anime.VideoInfo
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.anime.LastWatchedAnime
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -50,7 +50,7 @@ fun AnimeInfoDto.toAnimeInfo(): AnimeInfo {
 
 fun AnimeDetailInfo.toLastWatched(): LastWatchedAnime {
     return LastWatchedAnime(
-        id= this.id,
+        id = this.id,
         imageUrl = this.image.original,
         nameRu = this.nameRu,
         nameEn = this.nameEn,
@@ -81,4 +81,3 @@ fun AnimeInfoDto.toAnimeDetailInfo(): AnimeDetailInfo {
         videos = this.videos.map { it.toModel() }.toPersistentList()
     )
 }
-

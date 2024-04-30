@@ -1,5 +1,6 @@
-package com.miraeldev.result
+package com.miraeldev.models.result
 
+@Suppress("UnusedPrivateMember")
 sealed class FailureCauses {
 
     data object NoInternet : FailureCauses()
@@ -15,5 +16,4 @@ sealed class FailureCauses {
     class UnknownProblem(e: Exception) : FailureCauses()
 
     data object NoFail : FailureCauses()
-
 }

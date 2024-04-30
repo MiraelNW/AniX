@@ -8,5 +8,4 @@ interface VideoPlayerFeatureComponent {
 
     @Provides
     fun VideoPlayerRepositoryImpl.bind(): VideoPlayerRepository = this
-
 }

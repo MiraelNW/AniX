@@ -1,6 +1,6 @@
 package com.miraeldev.api.nameCategory
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
 
 interface NameCategoryDao {
@@ -10,5 +10,4 @@ interface NameCategoryDao {
     suspend fun getAnimeList(): List<AnimeInfo>
 
     suspend fun isEmpty(): Boolean
-
 }

@@ -1,6 +1,5 @@
 package com.miraeldev.search.presentation.searchResultsScreen
 
-
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +51,6 @@ import com.miraeldev.search.presentation.searchResultsScreen.searchResultsCompon
 import com.miraeldev.theme.LocalOrientation
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
-import java.io.IOException
 
 @Composable
 fun SearchResultsScreen(
@@ -84,7 +82,6 @@ fun SearchResultsScreen(
         )
     }
 }
-
 
 @Composable
 private fun Filters(filterList: ImmutableList<String>) {
@@ -126,7 +123,6 @@ private fun CategoryField(
     }
 }
 
-
 @Composable
 private fun SearchResult(
     searchResults: PagingState,
@@ -167,7 +163,6 @@ private fun SearchResult(
                             onClickRetry = onRetry
                         )
                     }
-
                 }
 
                 else -> {
@@ -233,8 +228,6 @@ private fun SearchResult(
                                             color = Color.White
                                         )
                                     }
-
-
                                 }
                             }
                         }
@@ -267,13 +260,3 @@ private fun SearchResult(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-

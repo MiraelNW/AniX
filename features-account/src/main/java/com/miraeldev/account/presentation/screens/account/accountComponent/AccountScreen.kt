@@ -204,7 +204,6 @@ private fun SettingItem(
             contentDescription = stringResource(R.string.show),
             tint = MaterialTheme.colors.onBackground
         )
-
     }
 }
 
@@ -245,7 +244,6 @@ private fun PrivacyPolicyItem(
             contentDescription = stringResource(R.string.show),
             tint = MaterialTheme.colors.onBackground
         )
-
     }
 }
 
@@ -274,11 +272,11 @@ private fun DarkTheme(
                 targetState = isDarkTheme,
                 transitionSpec = {
                     fadeIn(animationSpec = tween(150)) +
-                            scaleIn(
-                                initialScale = 0.4f,
-                                animationSpec = tween(300)
-                            ) togetherWith
-                            fadeOut(animationSpec = tween(150))
+                        scaleIn(
+                            initialScale = 0.4f,
+                            animationSpec = tween(300)
+                        ) togetherWith
+                        fadeOut(animationSpec = tween(150))
                 }, label = ""
             ) { darkTheme ->
 
@@ -293,7 +291,6 @@ private fun DarkTheme(
                     tint = MaterialTheme.colors.primary,
                     contentDescription = "Change theme"
                 )
-
             }
             Spacer(modifier = Modifier.width(12.dp))
             Text(
@@ -304,7 +301,6 @@ private fun DarkTheme(
         }
 
         Switcher(isSelectedFun = { isDarkTheme })
-
     }
 }
 
@@ -342,6 +338,3 @@ private fun LogOut(
         }
     }
 }
-
-
-

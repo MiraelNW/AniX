@@ -1,7 +1,6 @@
 package com.miraeldev.api
 
-
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import kotlinx.coroutines.flow.Flow
 
 interface FavouriteAnimeDao {

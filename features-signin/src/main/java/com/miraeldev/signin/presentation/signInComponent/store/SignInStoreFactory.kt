@@ -26,7 +26,8 @@ class SignInStoreFactory(
     private val validatePassword: ValidatePassword
 ) {
 
-    fun create(): SignInStore = object : SignInStore,
+    fun create(): SignInStore = object :
+        SignInStore,
         Store<SignInStore.Intent, SignInStore.State, SignInStore.Label> by storeFactory.create(
             name = "SignInStoreFactory",
             initialState = SignInStore.State(
@@ -39,7 +40,7 @@ class SignInStoreFactory(
             executorFactory = ::ExecutorImpl
         ) {}
 
-    private inner class BootstrapperImpl() : CoroutineBootstrapper<Action>() {
+    private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
         override fun invoke() {
             scope.launch {
                 val savedEmail = getUserEmailUseCase()
@@ -47,7 +48,6 @@ class SignInStoreFactory(
             }
         }
     }
-
 
     private sealed interface Action {
         data class SavedEmailLoaded(val email: String) : Action
@@ -103,7 +103,6 @@ class SignInStoreFactory(
                                     Msg.SignInError(signInError = SignInErrorModel(networkError = true))
                                 )
                             }
-
                         }
                     } else {
                         dispatch(

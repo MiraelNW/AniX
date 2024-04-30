@@ -154,4 +154,3 @@ fun MainContent(component: MainRootComponent, onReadyToDrawStartScreen: () -> Un
         }
     }
 }
-

@@ -7,5 +7,4 @@ import me.tatarka.inject.annotations.Inject
 class LoadSearchResultsNextPageUseCase(val repository: SearchAnimeRepository) {
 
     suspend operator fun invoke() = repository.loadSearchResultsNextPage()
-
 }

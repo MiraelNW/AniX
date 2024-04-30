@@ -28,7 +28,6 @@ import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.theme.LocalOrientation
 import com.miraeldev.theme.LocalTheme
 
-
 @Composable
 fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo, onRatingClick: () -> Unit) {
     Row(
@@ -61,7 +60,6 @@ fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo, onRatingClick: () -> Unit
                 contentDescription = stringResource(R.string.rating_star),
                 tint = MaterialTheme.colors.primary
             )
-
         }
 
         Row(
@@ -122,6 +120,5 @@ fun RatingAndCategoriesRow(animeItem: AnimeDetailInfo, onRatingClick: () -> Unit
                 )
             }
         }
-
     }
 }

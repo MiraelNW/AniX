@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import com.miraeldev.anime.AnimeDetailInfo
 import com.miraeldev.detailinfo.R
 
-
 @Composable
 fun AnimeNameAndShareButton(
     animeItem: AnimeDetailInfo,

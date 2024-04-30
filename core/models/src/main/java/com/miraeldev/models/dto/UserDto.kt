@@ -23,5 +23,3 @@ fun UserDto.toModel(): User {
         lastWatchedAnime = null
     )
 }
-
-

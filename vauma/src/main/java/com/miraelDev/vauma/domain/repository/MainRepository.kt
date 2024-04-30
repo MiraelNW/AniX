@@ -13,5 +13,4 @@ interface MainRepository {
     fun getUserStatus(): Flow<AuthState>
 
     suspend fun getLocalUser(): UserEmail
-
 }

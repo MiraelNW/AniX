@@ -14,8 +14,6 @@ import com.miraeldev.search.presentation.initialSearchScreen.initialSearchCompon
 import com.miraeldev.search.presentation.initialSearchScreen.initialSearchComponent.InitialSearchStore.State
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
@@ -47,17 +45,19 @@ class InitialSearchStoreFactory(
 ) {
 
     fun create(): InitialSearchStore =
-        object : InitialSearchStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "SearchAnimeStore",
-            initialState = State(
-                "",
-                persistentListOf(),
-                PagingState(emptyList(), LoadState.EMPTY)
-            ),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            InitialSearchStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "SearchAnimeStore",
+                initialState = State(
+                    "",
+                    persistentListOf(),
+                    PagingState(emptyList(), LoadState.EMPTY)
+                ),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class InitialListLoaded(val pagingState: PagingState) : Action

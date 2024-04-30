@@ -30,10 +30,10 @@ import androidx.media3.common.Player
 import com.google.common.collect.ImmutableList
 import com.miraeldev.extensions.noRippleEffectClick
 import com.miraeldev.theme.DirtyWhite
-import com.miraeldev.videoscreen.R
 import com.miraeldev.video.presentation.DropItem
 import com.miraeldev.video.presentation.QualityItems
 import com.miraeldev.video.presentation.utilis.formatMinSec
+import com.miraeldev.videoscreen.R
 
 private const val PORTRAIT = 0
 private const val LANDSCAPE = 1
@@ -64,54 +64,54 @@ internal fun PortraitBottomControls(
     val onFullScreenToggleSaved: (Int) -> Unit = remember { { onFullScreenToggle(it) } }
 
     Column(
-            modifier = modifier
-                    .padding(bottom = 16.dp, start = 24.dp, end = 16.dp)
-                    .navigationBarsPadding()
+        modifier = modifier
+            .padding(bottom = 16.dp, start = 24.dp, end = 16.dp)
+            .navigationBarsPadding()
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Slider(
-                    value = buffer.toFloat(),
-                    enabled = false,
-                    onValueChange = { /*do nothing*/ },
-                    valueRange = 0f..100f,
-                    colors =
-                    SliderDefaults.colors(
-                            disabledThumbColor = Color.Transparent,
-                            disabledActiveTrackColor = Color.Gray
-                    )
+                value = buffer.toFloat(),
+                enabled = false,
+                onValueChange = { /*do nothing*/ },
+                valueRange = 0f..100f,
+                colors =
+                SliderDefaults.colors(
+                    disabledThumbColor = Color.Transparent,
+                    disabledActiveTrackColor = Color.Gray
+                )
             )
 
             Slider(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = currentTime.toFloat(),
-                    onValueChange = onSeekChanged,
-                    onValueChangeFinished = onValueChangeFinished,
-                    valueRange = 0f..duration.toFloat(),
-                    colors =
-                    SliderDefaults.colors(
-                            thumbColor = MaterialTheme.colors.primary,
-                            inactiveTrackColor = DirtyWhite.copy(alpha = 0.5f),
-                            activeTickColor = MaterialTheme.colors.primary
-                    )
+                modifier = Modifier.fillMaxWidth(),
+                value = currentTime.toFloat(),
+                onValueChange = onSeekChanged,
+                onValueChangeFinished = onValueChangeFinished,
+                valueRange = 0f..duration.toFloat(),
+                colors =
+                SliderDefaults.colors(
+                    thumbColor = MaterialTheme.colors.primary,
+                    inactiveTrackColor = DirtyWhite.copy(alpha = 0.5f),
+                    activeTickColor = MaterialTheme.colors.primary
+                )
             )
         }
 
         Row(
-                modifier = Modifier
-                        .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Row(
                 modifier = Modifier.wrapContentWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ){
+            ) {
                 Icon(
                     modifier = Modifier
                         .size(24.dp)
                         .noRippleEffectClick(
-                            enabled = playerState != Player.STATE_BUFFERING ,
+                            enabled = playerState != Player.STATE_BUFFERING,
                             onClick = {
                                 if (isVideoPlaying.not() && playerState == Player.STATE_ENDED) {
                                     resetTime()
@@ -141,13 +141,12 @@ internal fun PortraitBottomControls(
             }
 
             QualityButtonWithFullScreenButton(
-                    isFullScreen = isFullScreen,
-                    onFullScreenToggle = onFullScreenToggleSaved,
-                    quality = quality,
-                    onMenuItemClick = onMenuItemClick,
-                    onOpenQualityMenu = onOpenQualityMenu
+                isFullScreen = isFullScreen,
+                onFullScreenToggle = onFullScreenToggleSaved,
+                quality = quality,
+                onMenuItemClick = onMenuItemClick,
+                onOpenQualityMenu = onOpenQualityMenu
             )
-
         }
     }
 }
@@ -163,29 +162,29 @@ private fun QualityButtonWithFullScreenButton(
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         QualityItems(
-                quality = quality,
-                dropdownItems = ImmutableList.of(
-                        DropItem("480"),
-                        DropItem("720"),
-                        DropItem("1080")
-                ),
-                onOpenQualityMenu = onOpenQualityMenu,
-                onMenuItemClick = onMenuItemClick
+            quality = quality,
+            dropdownItems = ImmutableList.of(
+                DropItem("480"),
+                DropItem("720"),
+                DropItem("1080")
+            ),
+            onOpenQualityMenu = onOpenQualityMenu,
+            onMenuItemClick = onMenuItemClick
         )
 
         IconButton(
-                modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .size(24.dp),
-                onClick = {
-                    onFullScreenToggle(if (isFullScreen == Configuration.ORIENTATION_LANDSCAPE) PORTRAIT else LANDSCAPE)
-                }
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .size(24.dp),
+            onClick = {
+                onFullScreenToggle(if (isFullScreen == Configuration.ORIENTATION_LANDSCAPE) PORTRAIT else LANDSCAPE)
+            }
         ) {
             Icon(
-                    modifier = Modifier.fillMaxSize(),
-                    painter = painterResource(id = R.drawable.ic_fullscreen),
-                    contentDescription = "Enter/Exit fullscreen",
-                    tint = DirtyWhite
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(id = R.drawable.ic_fullscreen),
+                contentDescription = "Enter/Exit fullscreen",
+                tint = DirtyWhite
             )
         }
     }
@@ -193,23 +192,23 @@ private fun QualityButtonWithFullScreenButton(
 
 @Composable
 private fun TimeLineRow(
-        duration: Long,
-        currTime: String,
+    duration: Long,
+    currTime: String,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = currTime,
-                color = DirtyWhite
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = currTime,
+            color = DirtyWhite
         )
         Text(
-                text = "/",
-                color = DirtyWhite
+            text = "/",
+            color = DirtyWhite
         )
         Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = duration.formatMinSec(),
-                color = DirtyWhite
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = duration.formatMinSec(),
+            color = DirtyWhite
         )
     }
 }

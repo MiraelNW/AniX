@@ -1,4 +1,4 @@
-package com.miraeldev.account.presentation.screens.editProfileScreen.EditProfileComponent
+package com.miraeldev.account.presentation.screens.editProfileScreen.editProfileComponent
 
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,6 +22,5 @@ interface EditProfileComponent {
     fun refreshPasswordError()
     fun refreshRepeatedPasswordError()
     fun refreshEmailError()
-    fun updateUserInfo(image: String,email: String,username: String)
-
+    fun updateUserInfo(image: String, email: String, username: String)
 }

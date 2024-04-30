@@ -49,13 +49,15 @@ class AccountStoreFactory(
     }
 
     fun create(): AccountStore =
-        object : AccountStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "AccountStore",
-            initialState = State(UserModel(), false),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            AccountStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "AccountStore",
+                initialState = State(UserModel(), false),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class UserLoaded(val user: UserModel) : Action
@@ -81,7 +83,7 @@ class AccountStoreFactory(
                 is Intent.LogOut -> {
                     scope.launch {
                         val isSuccess = logOutUseCase()
-                        if (isSuccess) publish(Label.OnLogOutComplete) else  dispatch(Msg.LogOutError)
+                        if (isSuccess) publish(Label.OnLogOutComplete) else dispatch(Msg.LogOutError)
                     }
                 }
 

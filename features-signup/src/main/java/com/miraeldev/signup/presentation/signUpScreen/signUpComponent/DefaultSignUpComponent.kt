@@ -17,7 +17,7 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 typealias DefaultSignUpComponentFactory =
-            (ComponentContext, OnBackPressed, OnSignUp) -> DefaultSignUpComponent
+    (ComponentContext, OnBackPressed, OnSignUp) -> DefaultSignUpComponent
 
 @Inject
 class DefaultSignUpComponent(

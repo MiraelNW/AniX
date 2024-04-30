@@ -37,8 +37,6 @@ class DefaultAccountComponent(
         }
     }
 
-
-
     @OptIn(ExperimentalCoroutinesApi::class)
     override val model: StateFlow<AccountStore.State> = store.stateFlow
 

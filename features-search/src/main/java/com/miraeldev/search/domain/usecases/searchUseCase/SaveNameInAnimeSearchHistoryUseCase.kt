@@ -6,6 +6,5 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class SaveNameInAnimeSearchHistoryUseCase(val repository: SearchAnimeRepository) {
 
-    suspend operator fun invoke(name:String) = repository.saveNameInAnimeSearchHistory(name)
-
+    suspend operator fun invoke(name: String) = repository.saveNameInAnimeSearchHistory(name)
 }

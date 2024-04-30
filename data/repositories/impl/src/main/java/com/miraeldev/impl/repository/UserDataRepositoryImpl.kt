@@ -1,14 +1,14 @@
 package com.miraeldev.impl.repository
 
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.LocalUserStoreApi
 import com.miraeldev.api.UserDao
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.impl.mapper.UserModelsMapper
+import com.miraeldev.impl.models.userDataModels.toLocalUserEmail
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.dto.UserDto
 import com.miraeldev.models.dto.toModel
-import com.miraeldev.impl.models.userDataModels.toLocalUserEmail
 import com.miraeldev.models.user.User
 import com.miraeldev.user.UserEmail
 import io.ktor.client.call.body

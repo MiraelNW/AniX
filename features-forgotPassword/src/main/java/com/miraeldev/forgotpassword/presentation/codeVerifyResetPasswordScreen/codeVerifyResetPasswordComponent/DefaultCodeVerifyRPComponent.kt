@@ -17,7 +17,7 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 typealias DefaultCodeVerifyRPComponentFactory =
-            (ComponentContext, OnBackPressed, OnOtpVerified) -> DefaultCodeVerifyRPComponent
+    (ComponentContext, OnBackPressed, OnOtpVerified) -> DefaultCodeVerifyRPComponent
 
 @Inject
 class DefaultCodeVerifyRPComponent(

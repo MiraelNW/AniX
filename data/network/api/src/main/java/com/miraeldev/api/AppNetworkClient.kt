@@ -1,6 +1,6 @@
 package com.miraeldev.api
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 
@@ -21,11 +21,13 @@ interface AppNetworkClient {
         page: Int,
         pageSize: Int
     ): HttpResponse
+
     suspend fun saveRemoteUser(): HttpResponse
     suspend fun changePassword(
         currentPassword: String,
         newPassword: String,
         repeatedPassword: String
     ): HttpResponse
-    suspend fun searchAnimeById(id: Int,userId: Int): HttpResponse
+
+    suspend fun searchAnimeById(id: Int, userId: Int): HttpResponse
 }

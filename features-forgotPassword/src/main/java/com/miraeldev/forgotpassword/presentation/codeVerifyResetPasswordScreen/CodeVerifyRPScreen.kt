@@ -99,7 +99,6 @@ private fun CodeRecent(sendNewCode: () -> Unit) {
                     delay(1000)
                     timer -= 1
                 }
-
             }
     }
 
@@ -115,7 +114,6 @@ private fun CodeRecent(sendNewCode: () -> Unit) {
                 color = MaterialTheme.colors.primary,
                 fontSize = 18.sp
             )
-
         } else {
 
             Text(
@@ -127,7 +125,6 @@ private fun CodeRecent(sendNewCode: () -> Unit) {
                 fontSize = 18.sp,
                 color = MaterialTheme.colors.primary
             )
-
         }
     }
 }

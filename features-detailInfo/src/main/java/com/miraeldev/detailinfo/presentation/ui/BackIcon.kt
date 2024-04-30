@@ -20,35 +20,32 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.miraeldev.detailinfo.R
 
-
 @Composable
 fun BackIcon(onBackPressed: () -> Unit) {
     Box() {
         IconButton(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(start = 8.dp, top = 8.dp)
-                    .size(35.dp)
-                    .align(Alignment.TopStart),
-                onClick = onBackPressed
+            modifier = Modifier
+                .statusBarsPadding()
+                .padding(start = 8.dp, top = 8.dp)
+                .size(35.dp)
+                .align(Alignment.TopStart),
+            onClick = onBackPressed
         ) {
             Box(
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(0.9f)),
+                modifier = Modifier
+                    .size(35.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(0.9f)),
             ) {
                 Icon(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(4.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                        contentDescription = stringResource(R.string.arrow_back),
-                        tint = Color.Gray
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                    contentDescription = stringResource(R.string.arrow_back),
+                    tint = Color.Gray
                 )
             }
-
         }
     }
-
 }

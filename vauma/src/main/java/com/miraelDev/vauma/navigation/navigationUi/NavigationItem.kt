@@ -22,7 +22,7 @@ sealed class NavigationItem(
     data object Favourite : NavigationItem(
         id = NavId.FAVOURITE,
         title = R.string.favourite,
-        icon =  R.drawable.ic_heart
+        icon = R.drawable.ic_heart
     )
 
     data object Account : NavigationItem(

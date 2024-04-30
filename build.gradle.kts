@@ -46,7 +46,7 @@ tasks.register<Detekt>("detektRun") {
     description = "DETEKT for all modules"
     parallel = true
     ignoreFailures = false
-    autoCorrect = autoFix
+    autoCorrect = true
     buildUponDefaultConfig = true
     setSource(projectSource)
 //    baseline.set(baselineFile)

@@ -5,8 +5,6 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.miraeldev.anime.AnimeInfo
-import com.miraeldev.anime.LastWatchedAnime
 import com.miraeldev.animelist.domain.useCases.AddAnimeToListUseCase
 import com.miraeldev.animelist.domain.useCases.GetUserInfoUseCase
 import com.miraeldev.animelist.domain.useCases.LoadVideoIdUseCase
@@ -14,6 +12,8 @@ import com.miraeldev.animelist.domain.useCases.homeScreenUseCases.LoadDataUseCas
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.Intent
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.Label
 import com.miraeldev.animelist.presentation.home.homeComponent.HomeStore.State
+import com.miraeldev.models.anime.AnimeInfo
+import com.miraeldev.models.anime.LastWatchedAnime
 import com.miraeldev.models.user.User
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,7 +34,6 @@ interface HomeStore : Store<Intent, State, Label> {
         data class OnPlayClick(val id: Int) : Intent
     }
 
-
     data class State(val screenState: HomeScreenState) {
         sealed interface HomeScreenState {
             data object Loading : HomeScreenState
@@ -49,7 +48,6 @@ interface HomeStore : Store<Intent, State, Label> {
             data object Initial : HomeScreenState
         }
     }
-
 
     sealed interface Label {
         data class OnAnimeItemClick(val id: Int) : Label
@@ -68,13 +66,15 @@ class HomeStoreFactory(
 ) {
 
     fun create(): HomeStore =
-        object : HomeStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "HomeStore",
-            initialState = State(screenState = State.HomeScreenState.Initial),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            HomeStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "HomeStore",
+                initialState = State(screenState = State.HomeScreenState.Initial),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class AnimeListForCategory(val animeMap: Map<Int, List<AnimeInfo>>, val user: User) :

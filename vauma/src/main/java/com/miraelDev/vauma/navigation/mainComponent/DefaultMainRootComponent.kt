@@ -19,7 +19,6 @@ import com.miraeldev.models.OnLogOut
 import com.miraeldev.search.presentation.filterScreen.filterComponent.DefaultFilterComponentFactory
 import com.miraeldev.search.presentation.initialSearchScreen.initialSearchComponent.DefaultInitialSearchComponentFactory
 import com.miraeldev.search.presentation.searchHistoryScreen.searchHistoryComponent.DefaultSearchHistoryComponentFactory
-import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.DefaultSearchResultsComponent
 import com.miraeldev.search.presentation.searchResultsScreen.searchResultsComponent.DefaultSearchResultsComponentFactory
 import com.miraeldev.video.presentation.videoComponent.DefaultVideoComponentFactory
 import kotlinx.serialization.Serializable
@@ -239,9 +238,5 @@ class DefaultMainRootComponent(
 
         @Serializable
         data object VideoScreen : Config
-
     }
-
-
 }
-

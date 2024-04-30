@@ -1,10 +1,10 @@
 package com.miraeldev.anime
 
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.anime.Genre
 import com.miraeldev.models.anime.Similar
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-
 
 data class AnimeDetailInfo(
     val id: Int = 0,
@@ -44,4 +44,3 @@ fun AnimeDetailInfo.toAnimeInfo(): AnimeInfo {
         isFavourite = this.isFavourite
     )
 }
-

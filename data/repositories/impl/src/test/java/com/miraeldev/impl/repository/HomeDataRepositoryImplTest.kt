@@ -2,8 +2,6 @@ package com.miraeldev.impl.repository
 
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.miraeldev.anime.AnimeDetailInfo
-import com.miraeldev.anime.AnimeInfo
 import com.miraeldev.api.AppNetworkClient
 import com.miraeldev.api.UserDataRepository
 import com.miraeldev.api.filmCategory.FilmCategoryDao
@@ -13,7 +11,6 @@ import com.miraeldev.api.popularCategory.PopularCategoryDao
 import com.miraeldev.impl.repository.utils.getDefaultHttpResponse
 import com.miraeldev.models.dto.AnimeInfoDto
 import com.miraeldev.models.dto.Response
-import com.miraeldev.models.dto.VideoDto
 import com.miraeldev.models.dto.toAnimeDetailInfo
 import com.miraeldev.models.dto.toLastWatched
 import com.miraeldev.models.user.User
@@ -26,7 +23,6 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
 import junit.framework.TestCase
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -61,13 +57,13 @@ class HomeDataRepositoryImplTest {
 
     private fun initRepository() {
         homeDataRepositoryImpl = HomeDataRepositoryImpl(
-                appNetworkClient = appNetworkClient,
-                userDataRepository = userDataRepository,
-                newCategoryDao = newCategoryDao,
-                popularCategoryDao = popularCategoryDao,
-                nameCategoryDao = nameCategoryDao,
-                filmCategoryDao = filmCategoryDao,
-                systemCurrentTime = 0L
+            appNetworkClient = appNetworkClient,
+            userDataRepository = userDataRepository,
+            newCategoryDao = newCategoryDao,
+            popularCategoryDao = popularCategoryDao,
+            nameCategoryDao = nameCategoryDao,
+            filmCategoryDao = filmCategoryDao,
+            systemCurrentTime = 0L
         )
     }
 
@@ -75,13 +71,13 @@ class HomeDataRepositoryImplTest {
     fun loadNewAnimeListTest() = runTest {
         initRepository()
         coEvery { appNetworkClient.getNewCategoryList(0).body<Response>() } returns
-                Response(false, listOf())
+            Response(false, listOf())
         coEvery { appNetworkClient.getPopularCategoryList(0).body<Response>() } returns
-                Response(false, listOf())
+            Response(false, listOf())
         coEvery { appNetworkClient.getNameCategoryList(0).body<Response>() } returns
-                Response(false, listOf())
+            Response(false, listOf())
         coEvery { appNetworkClient.getFilmCategoryList(0).body<Response>() } returns
-                Response(false, listOf())
+            Response(false, listOf())
         coEvery { homeDataRepositoryImpl.loadData() } returns mapOf()
         coEvery { newCategoryDao.isEmpty() } returns true
         coEvery { popularCategoryDao.isEmpty() } returns false

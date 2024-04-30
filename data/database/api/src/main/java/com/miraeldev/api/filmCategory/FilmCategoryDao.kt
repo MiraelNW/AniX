@@ -1,8 +1,7 @@
 package com.miraeldev.api.filmCategory
 
-import com.miraeldev.anime.AnimeInfo
+import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.dto.AnimeInfoDto
-
 
 interface FilmCategoryDao {
 
@@ -11,5 +10,4 @@ interface FilmCategoryDao {
     suspend fun getAnimeList(): List<AnimeInfo>
 
     suspend fun isEmpty(): Boolean
-
 }

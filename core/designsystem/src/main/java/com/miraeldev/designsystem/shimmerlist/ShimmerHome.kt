@@ -46,7 +46,6 @@ fun ShimmerHome() {
         ShimmerCategoryAnime()
         ShimmerCategoryAnime()
     }
-
 }
 
 @Composable
@@ -108,9 +107,7 @@ private fun ShimmerCategoryAnime() {
             }
         }
     }
-
 }
-
 
 @Composable
 private fun AnimeCard() {

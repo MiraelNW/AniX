@@ -14,8 +14,8 @@ class SignInRepositoryImpl(
         return userAuthDataRepository.signIn(email, password)
     }
 
-    override suspend fun loginWithVk(accessToken:String, userId:String,email:String?) {
-        userAuthDataRepository.loginWithVk(accessToken,userId,email)
+    override suspend fun loginWithVk(accessToken: String, userId: String, email: String?) {
+        userAuthDataRepository.loginWithVk(accessToken, userId, email)
     }
 
     override suspend fun getUserEmail(): String {
@@ -25,5 +25,4 @@ class SignInRepositoryImpl(
     override suspend fun logInWithGoogle(idToken: String) {
         userAuthDataRepository.logInWithGoogle(idToken)
     }
-
 }

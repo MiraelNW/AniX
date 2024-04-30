@@ -6,15 +6,20 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.OnAnimeItemClick
-import com.miraeldev.models.OnShowSearchHistory
 import com.miraeldev.models.OnFilterClick
+import com.miraeldev.models.OnShowSearchHistory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias DefaultSearchResultsComponentFactory = (ComponentContext, OnAnimeItemClick, OnFilterClick, OnShowSearchHistory) -> DefaultSearchResultsComponent
+typealias DefaultSearchResultsComponentFactory = (
+    ComponentContext,
+    OnAnimeItemClick,
+    OnFilterClick,
+    OnShowSearchHistory
+) -> DefaultSearchResultsComponent
 
 @Inject
 class DefaultSearchResultsComponent(

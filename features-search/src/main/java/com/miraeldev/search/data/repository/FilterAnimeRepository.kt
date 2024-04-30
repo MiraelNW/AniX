@@ -2,7 +2,6 @@ package com.miraeldev.search.data.repository
 
 import com.miraeldev.anime.CategoryModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface FilterAnimeRepository {
 

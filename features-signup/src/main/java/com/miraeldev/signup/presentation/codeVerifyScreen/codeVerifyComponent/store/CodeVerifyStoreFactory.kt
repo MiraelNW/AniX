@@ -4,9 +4,9 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.miraeldev.models.user.User
 import com.miraeldev.signup.domain.useCases.UpdateUserUseCase
 import com.miraeldev.signup.domain.useCases.VerifyOtpCodeUseCase
-import com.miraeldev.models.user.User
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
@@ -17,14 +17,14 @@ class CodeVerifyStoreFactory(
     private val verifyOtpCodeUseCase: VerifyOtpCodeUseCase
 ) {
 
-    fun create(): CodeVerifyStore = object : CodeVerifyStore,
+    fun create(): CodeVerifyStore = object :
+        CodeVerifyStore,
         Store<CodeVerifyStore.Intent, CodeVerifyStore.State, CodeVerifyStore.Label> by storeFactory.create(
             name = "CodeVerifyStoreFactory",
             initialState = CodeVerifyStore.State("", false),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
         ) {}
-
 
     private sealed interface Msg {
         data object SendNewOtp : Msg

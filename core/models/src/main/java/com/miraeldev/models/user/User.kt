@@ -1,9 +1,7 @@
 package com.miraeldev.models.user
 
-
-import com.miraeldev.anime.LastWatchedAnime
+import com.miraeldev.models.anime.LastWatchedAnime
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class User(
@@ -15,4 +13,3 @@ data class User(
     val email: String = "",
     val lastWatchedAnime: LastWatchedAnime? = LastWatchedAnime(-1)
 )
-

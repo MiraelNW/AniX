@@ -1,7 +1,5 @@
 package com.miraelDev.vauma.presentation.appRootComponent
 
-
-import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -30,7 +28,6 @@ interface MainStore : Store<Intent, State, Label> {
     }
 }
 
-
 @Inject
 class MainStoreFactory(
     private val storeFactory: StoreFactory,
@@ -40,13 +37,15 @@ class MainStoreFactory(
 ) {
 
     fun create(): MainStore =
-        object : MainStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "MainStore",
-            initialState = State(false),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            MainStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "MainStore",
+                initialState = State(false),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class UserAuthStateChecked(val authState: AuthState) : Action

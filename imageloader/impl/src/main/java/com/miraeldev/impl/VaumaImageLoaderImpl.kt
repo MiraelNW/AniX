@@ -4,8 +4,8 @@ import android.content.Context
 import coil3.network.ktor.KtorNetworkFetcherFactory
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.api.AppNetworkClient
+import com.miraeldev.api.VaumaImageLoader
 import me.tatarka.inject.annotations.Inject
 
 @Inject

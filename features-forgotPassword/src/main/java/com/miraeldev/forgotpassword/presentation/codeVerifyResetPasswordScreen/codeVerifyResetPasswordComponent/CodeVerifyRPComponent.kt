@@ -13,6 +13,4 @@ interface CodeVerifyRPComponent {
     fun refreshError()
 
     fun onBackClicked()
-
-
 }

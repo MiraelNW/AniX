@@ -5,14 +5,15 @@ import com.miraeldev.logger.LoggerApi
 import com.miraeldev.logger.impl.CrashlyticsLogTracker
 import com.miraeldev.logger.impl.LoggerImpl
 import me.tatarka.inject.annotations.Provides
+import javax.inject.Singleton
 
 interface LoggerFeature {
 
-//    @Singleton
+    @Singleton
     @Provides
     fun LoggerImpl.bind(): LoggerApi = this
 
     @Provides
-//    @Singleton
+    @Singleton
     fun provideLogTracker(): LogTracker = CrashlyticsLogTracker()
 }

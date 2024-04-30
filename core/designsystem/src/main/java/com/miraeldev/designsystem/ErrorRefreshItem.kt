@@ -26,6 +26,7 @@ fun ErrorRefreshItem(
     val orientationLandscape = LocalOrientation.current == Configuration.ORIENTATION_LANDSCAPE
 
     OutlinedButton(
+        modifier = modifier,
         onClick = onClickRetry,
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(

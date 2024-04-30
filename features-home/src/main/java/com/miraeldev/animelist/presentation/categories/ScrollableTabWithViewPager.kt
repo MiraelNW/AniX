@@ -212,7 +212,7 @@ private fun AnimeList(
     val shouldPaginate by remember {
         derivedStateOf {
             (lazyListListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -5) >=
-                    (lazyListListState.layoutInfo.totalItemsCount - 7)
+                (lazyListListState.layoutInfo.totalItemsCount - 7)
         }
     }
 
@@ -253,7 +253,6 @@ private fun AnimeList(
                             onClickRetry = onClickRetry
                         )
                     }
-
                 }
 
                 else -> {

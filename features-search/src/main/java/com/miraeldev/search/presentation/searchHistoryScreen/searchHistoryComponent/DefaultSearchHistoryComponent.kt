@@ -15,7 +15,7 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 typealias DefaultSearchHistoryComponentFactory =
-            (ComponentContext, OnFilterClick, ShowInitialList, SearchAnimeByName) -> DefaultSearchHistoryComponent
+    (ComponentContext, OnFilterClick, ShowInitialList, SearchAnimeByName) -> DefaultSearchHistoryComponent
 @Inject
 class DefaultSearchHistoryComponent(
     private val storeFactory: SearchHistoryStoreFactory,

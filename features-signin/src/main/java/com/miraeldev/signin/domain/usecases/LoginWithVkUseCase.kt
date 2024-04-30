@@ -7,7 +7,6 @@ import me.tatarka.inject.annotations.Inject
 class LoginWithVkUseCase(
     private val repository: SignInRepository
 ) {
-    suspend operator fun invoke(accessToken: String, userId: String,email:String?) =
-        repository.loginWithVk(accessToken, userId,email)
-
+    suspend operator fun invoke(accessToken: String, userId: String, email: String?) =
+        repository.loginWithVk(accessToken, userId, email)
 }

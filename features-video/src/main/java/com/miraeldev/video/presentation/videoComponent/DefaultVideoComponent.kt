@@ -21,7 +21,6 @@ class DefaultVideoComponent(
     @Assisted onBackClicked: () -> Unit,
 ) : VideoComponent, ComponentContext by componentContext {
 
-
     private val store: VideoStore = instanceKeeper.getStore { storeFactory.create() }
     init {
         componentScope().launch {

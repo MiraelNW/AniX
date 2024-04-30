@@ -56,13 +56,15 @@ class FilterStoreFactory(
 ) {
 
     fun create(): FilterStore =
-        object : FilterStore, Store<Intent, State, Label> by storeFactory.create(
-            name = "FilterStore",
-            initialState = State(listOf(), "", ""),
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = ::ExecutorImpl,
-            reducer = ReducerImpl
-        ) {}
+        object :
+            FilterStore,
+            Store<Intent, State, Label> by storeFactory.create(
+                name = "FilterStore",
+                initialState = State(listOf(), "", ""),
+                bootstrapper = BootstrapperImpl(),
+                executorFactory = ::ExecutorImpl,
+                reducer = ReducerImpl
+            ) {}
 
     private sealed interface Action {
         data class GenreListLoaded(val genreList: List<CategoryModel>) : Action

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Toolbar(
     onBackPressed: () -> Unit,
-    text : Int
+    text: Int
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
@@ -48,13 +48,12 @@ fun Toolbar(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(id =text),
+                    text = stringResource(id = text),
                     fontSize = 24.sp,
                     color = MaterialTheme.colors.onBackground,
 
-                    )
+                )
             }
-
         }
     }
 }

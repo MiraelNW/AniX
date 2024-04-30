@@ -14,9 +14,7 @@ import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import java.io.IOException
 
-
 private val Context.dataStore by preferencesDataStore(name = PreferenceClientImpl.PREF_NAME)
-
 
 @Inject
 class PreferenceClientImpl(context: Context) : PreferenceClient {
@@ -27,7 +25,7 @@ class PreferenceClientImpl(context: Context) : PreferenceClient {
     }
 
     private fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T):
-            Flow<T> = dataStore.data.catch { exception ->
+        Flow<T> = dataStore.data.catch { exception ->
         if (exception is IOException) {
             emit(emptyPreferences())
         } else {
@@ -77,8 +75,7 @@ class PreferenceClientImpl(context: Context) : PreferenceClient {
         putPreference(PreferencesConstants.darkTheme, isDarkTheme)
     }
 
-    companion object{
+    companion object {
         const val PREF_NAME = "preference"
     }
-
 }

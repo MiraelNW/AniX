@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.miraeldev.search.R
 
 @Composable
-fun LastSearchedAnime(searchName: String,onSearchItemClick: (String) -> Unit) {
+fun LastSearchedAnime(searchName: String, onSearchItemClick: (String) -> Unit) {
 
     val animatedProgress = remember { Animatable(initialValue = 300f) }
     val opacityProgress = remember { Animatable(initialValue = 0f) }
