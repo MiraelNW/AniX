@@ -52,7 +52,7 @@ firebase-bom = "32.7.0"
 
 datastore-preferences = "1.0.0"
 
-agp = "8.2.0"
+agp = "8.3.0"
 org-jetbrains-kotlin-android = "1.9.0"
 appcompat = "1.6.1"
 com-google-android-material-material = "1.10.0"
@@ -66,7 +66,12 @@ sqldelight = "2.0.0"
 
 detekt = "1.22.0"
 
+androidGradlePlugin = "8.1.0"
+
 [libraries]
+
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "core-ktx" }
 
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 coroutine-ktx = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine-ktx" }
@@ -156,3 +161,15 @@ detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", ve
 com-android-library = { id = "com.android.library", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
+
+devtools-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
+sql-delight = { id = "app.cash.sqldelight", version = "2.0.0" }
+
+vauma-android-library = { id = "vauma.android.library", version = "unspecified" }
+vauma-android-application = { id = "vauma.android.application", version = "unspecified" }
+vauma-compose-library = { id = "vauma.compose.library", version = "unspecified" }
+vauma-test-library = { id = "vauma.test.library", version = "unspecified" }
+vauma-mvi-decompose-library = { id = "vauma.mvi.decompose.library", version = "unspecified" }
+vauma-coil-library = { id = "vauma.coil.library", version = "unspecified" }
+vauma-kotlin-inject-library = { id = "vauma.kotlin.inject.library", version = "unspecified" }
+vauma-app-flavor-library = { id = "vauma.app.flavor.library", version = "unspecified" }

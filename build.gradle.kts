@@ -2,17 +2,24 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 buildscript {
-
     dependencies {
-        classpath ("com.android.tools.build:gradle:8.2.0")
+        classpath ("com.android.tools.build:gradle:8.3.0")
         classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
         classpath ("org.jetbrains.kotlin:kotlin-serialization:1.7.0")
     }
 
-}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+    buildscript {
+        extra.apply {
+            set("minSdk", 24)
+            set("targetSdk", 34)
+            set("jvmTarget", "17")
+        }
+    }
+}
+
 plugins {
-    id("com.android.application") version "8.2.0" apply false
-    id("com.android.library") version "8.2.0" apply false
+    id("com.android.application") version "8.3.0" apply false
+    id("com.android.library") version "8.3.0" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
     id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
@@ -74,6 +81,6 @@ tasks.register<DetektCreateBaselineTask>("detektGenerateBaseline") {
 }
 
 //apply(from = "gradle/jacoco.gradle")
-apply(from = "gradle/githooks.gradle") 
+apply(from = "gradle/githooks.gradle")
 
 
