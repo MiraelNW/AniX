@@ -36,6 +36,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 
+private const val NEGATIVE_TRANSLATION = -20f
 fun <T> Flow<T>.mergeWith(another: Flow<T>): Flow<T> {
     return merge(this, another)
 }
@@ -79,7 +80,7 @@ enum class ButtonState { Pressed, Idle }
 
 fun Modifier.pressClickEffect(onClick: (() -> Unit)? = null) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
-    val ty by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0f else -20f)
+    val ty by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0f else NEGATIVE_TRANSLATION)
 
     this
         .graphicsLayer {
