@@ -1,4 +1,8 @@
 [versions]
+min-sdk = "24"
+target-sdk = "34"
+compile-sdk = "34"
+
 core-ktx = "1.9.0"
 coroutine-ktx = "1.8.0"
 ktx-serialization = "1.5.1"

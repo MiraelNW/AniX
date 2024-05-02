@@ -23,7 +23,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 configureFlavors(this)
-                defaultConfig.targetSdk = 34
+                defaultConfig.targetSdk = TARGET_SDK
             }
 
             dependencies {
@@ -55,10 +55,10 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         commonExtension: CommonExtension<*, *, *, *, *>,
     ) {
         commonExtension.apply {
-            compileSdk = 34
+            compileSdk = COMPILE_SDK
 
             defaultConfig {
-                minSdk = 24
+                minSdk = MIN_SDK
             }
 
             compileOptions {
@@ -98,5 +98,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 )
             }
         }
+    }
+
+    companion object {
+        private const val MIN_SDK = 24
+        private const val TARGET_SDK = 34
+        private const val COMPILE_SDK = 34
     }
 }

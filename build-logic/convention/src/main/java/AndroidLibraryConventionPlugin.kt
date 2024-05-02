@@ -20,7 +20,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
             }
 
             dependencies {
@@ -33,10 +32,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         commonExtension: CommonExtension<*, *, *, *, *>,
     ) {
         commonExtension.apply {
-            compileSdk = 34
+            compileSdk = COMPILE_SDK
 
             defaultConfig {
-                minSdk = 24
+                minSdk = MIN_SDK
             }
 
             compileOptions {
@@ -49,11 +48,15 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     }
 
     private fun Project.configureKotlin() {
-
         tasks.withType<KotlinCompile>().configureEach {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_17.toString()
             }
         }
+    }
+
+    companion object {
+        private const val MIN_SDK = 24
+        private const val COMPILE_SDK = 34
     }
 }

@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 
 private const val NEGATIVE_TRANSLATION = -20f
+private const val SCALE_ANIMATION_DURATION = 1200
 fun <T> Flow<T>.mergeWith(another: Flow<T>): Flow<T> {
     return merge(this, another)
 }
@@ -62,7 +63,7 @@ fun Modifier.shimmerEffect(targetValue: Float, initialValue: Float = 0.98f): Mod
         initialValue = initialValue,
         targetValue = targetValue,
         animationSpec = infiniteRepeatable(
-            animation = tween(1200),
+            animation = tween(SCALE_ANIMATION_DURATION),
             repeatMode = RepeatMode.Reverse
         ),
         label = ""

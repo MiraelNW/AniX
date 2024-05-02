@@ -671,9 +671,7 @@ style:
       - '1'
       - '2'
       - '3'
-      - '34'
-      - '24'
-      - '1200'
+      - '100'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false
@@ -685,7 +683,7 @@ style:
     ignoreRanges: false
     ignoreExtensionFunctions: true
     ignoreAnnotated:
-      - "Composable"
+      - 'Composable'
   MandatoryBracesIfStatements:
     active: false
   MandatoryBracesLoops:
