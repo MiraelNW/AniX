@@ -40,5 +40,5 @@ dependencies {
     //kotlin
     implementation(libs.coroutine.ktx)
 
-    api(project(":core:models"))
+    implementation(project(":core:models"))
 }

@@ -21,7 +21,6 @@ rootProject.name = "Vauma"
 
 include ("vauma")
 
-include(":features")
 include(":features:account")
 include(":features:detailInfo")
 include(":features:favourites")
@@ -31,10 +30,6 @@ include(":features:search")
 include(":features:signin")
 include(":features:signup")
 include(":features:video")
-
-include(":imageloader")
-include(":imageloader:api")
-include(":imageloader:impl")
 
 include(":core:designsystem")
 include(":core:extensions")

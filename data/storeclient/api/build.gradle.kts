@@ -19,5 +19,5 @@ dependencies {
     //serialization
     implementation(libs.kotlinx.serialization.json)
 
-    api(project(":core:models"))
+    implementation(project(":core:models"))
 }
