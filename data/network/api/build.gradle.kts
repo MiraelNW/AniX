@@ -20,4 +20,5 @@ dependencies {
     implementation(libs.ktor.client.cio)
 
     implementation(project(":data:storeclient:api"))
+    implementation(project(":core:models"))
 }
