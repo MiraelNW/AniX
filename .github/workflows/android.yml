@@ -2,15 +2,13 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
   pull_request:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  run-test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: set up JDK 17
@@ -23,3 +21,9 @@ jobs:
       run: chmod +x gradlew
     - name: run unit test
       run: ./gradlew testGmsDebugUnitTest
+
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+    - name: run unit test
+      run: ./gradlew detektRun
