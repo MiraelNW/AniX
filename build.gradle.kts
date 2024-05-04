@@ -7,14 +7,6 @@ buildscript {
         classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
         classpath ("org.jetbrains.kotlin:kotlin-serialization:1.7.0")
     }
-
-    buildscript {
-        extra.apply {
-            set("minSdk", 24)
-            set("targetSdk", 34)
-            set("jvmTarget", "17")
-        }
-    }
 }
 
 plugins {
@@ -26,6 +18,7 @@ plugins {
     id("com.google.firebase.crashlytics") version "2.9.9" apply false
     id("com.google.gms.google-services") version "4.4.0" apply false
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("com.savvasdalkitsis.module-dependency-graph") version "0.10"
 }
 
 tasks.register("clean",Delete::class){
@@ -81,6 +74,7 @@ tasks.register<DetektCreateBaselineTask>("detektGenerateBaseline") {
 }
 
 //apply(from = "gradle/jacoco.gradle")
-apply(from = "gradle/githooks.gradle")
+apply(from = "gradle/tasks/githooks.gradle")
+apply(from = "gradle/tasks/moduleDependencyGraph.gradle")
 
 

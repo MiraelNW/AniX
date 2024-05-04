@@ -1,5 +1,3 @@
-import com.android.builder.model.proto.ide.SigningConfig
-
 plugins {
     id("kotlinx-serialization")
     id("com.google.gms.google-services")
@@ -52,15 +50,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":features-signin"))
-    implementation(project(":features-signup"))
-    implementation(project(":features-forgotPassword"))
-    implementation(project(":features-account"))
-    implementation(project(":features-home"))
-    implementation(project(":features-favourites"))
-    implementation(project(":features-detailInfo"))
-    implementation(project(":features-search"))
-    implementation(project(":features-video"))
+    implementation(project(":features:signin"))
+    implementation(project(":features:signup"))
+    implementation(project(":features:forgotpassword"))
+    implementation(project(":features:account"))
+    implementation(project(":features:home"))
+    implementation(project(":features:favourites"))
+    implementation(project(":features:detailInfo"))
+    implementation(project(":features:search"))
+    implementation(project(":features:video"))
 
     implementation(project(":data:repositories:api"))
     implementation(project(":data:repositories:impl"))
@@ -71,15 +69,14 @@ dependencies {
     implementation(project(":data:database:api"))
     implementation(project(":data:database:impl"))
 
-    implementation(project(":logger"))
-
     implementation(project(":core:theme"))
     implementation(project(":core:utils"))
     implementation(project(":core:extensions"))
     implementation(project(":core:models"))
 
-    implementation(project(":imageloader:api"))
-    implementation(project(":imageloader:impl"))
+    implementation(project(":utils:logger"))
+    implementation(project(":utils:imageloader:api"))
+    implementation(project(":utils:imageloader:impl"))
 }
 
 tasks.withType<Test> {
