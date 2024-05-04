@@ -1,0 +1,165 @@
+digraph {
+  graph [label="Vauma\n ",labelloc=t,fontsize=30,ranksep=1.4];
+  node [style=filled, fillcolor="#bbbbbb"];
+  rankdir=TB;
+
+  # Projects
+
+  ":core:designsystem" [fillcolor="#baffc9"];
+  ":core:extensions" [fillcolor="#baffc9"];
+  ":core:models" [fillcolor="#ffb3ba"];
+  ":core:theme" [fillcolor="#baffc9"];
+  ":core:utils" [fillcolor="#baffc9"];
+  ":data:database:api" [fillcolor="#ffb3ba"];
+  ":data:database:impl" [fillcolor="#baffc9"];
+  ":data:network:api" [fillcolor="#ffb3ba"];
+  ":data:network:impl" [fillcolor="#baffc9"];
+  ":data:repositories:api" [fillcolor="#baffc9"];
+  ":data:repositories:impl" [fillcolor="#baffc9"];
+  ":data:storeclient:api" [fillcolor="#ffb3ba"];
+  ":data:storeclient:impl" [fillcolor="#baffc9"];
+  ":features:account" [fillcolor="#baffc9"];
+  ":features:detailInfo" [fillcolor="#baffc9"];
+  ":features:favourites" [fillcolor="#baffc9"];
+  ":features:forgotpassword" [fillcolor="#baffc9"];
+  ":features:home" [fillcolor="#baffc9"];
+  ":features:search" [fillcolor="#baffc9"];
+  ":features:signin" [fillcolor="#baffc9"];
+  ":features:signup" [fillcolor="#baffc9"];
+  ":features:video" [fillcolor="#baffc9"];
+  ":utils:imageloader:api" [fillcolor="#baffc9"];
+  ":utils:imageloader:impl" [fillcolor="#baffc9"];
+  ":utils:logger" [fillcolor="#baffc9"];
+  ":vauma" [fillcolor="#baffc9"];
+
+  {rank = same;}
+
+  # Dependencies
+
+  ":vauma" -> ":vauma"
+  ":vauma" -> ":features:signin" [style=dotted]
+  ":vauma" -> ":features:signup" [style=dotted]
+  ":vauma" -> ":features:forgotpassword" [style=dotted]
+  ":vauma" -> ":features:account" [style=dotted]
+  ":vauma" -> ":features:home" [style=dotted]
+  ":vauma" -> ":features:favourites" [style=dotted]
+  ":vauma" -> ":features:detailInfo" [style=dotted]
+  ":vauma" -> ":features:search" [style=dotted]
+  ":vauma" -> ":features:video" [style=dotted]
+  ":vauma" -> ":data:repositories:api" [style=dotted]
+  ":vauma" -> ":data:repositories:impl" [style=dotted]
+  ":vauma" -> ":data:network:api" [style=dotted]
+  ":vauma" -> ":data:network:impl" [style=dotted]
+  ":vauma" -> ":data:storeclient:api" [style=dotted]
+  ":vauma" -> ":data:storeclient:impl" [style=dotted]
+  ":vauma" -> ":data:database:api" [style=dotted]
+  ":vauma" -> ":data:database:impl" [style=dotted]
+  ":vauma" -> ":core:theme" [style=dotted]
+  ":vauma" -> ":core:utils" [style=dotted]
+  ":vauma" -> ":core:extensions" [style=dotted]
+  ":vauma" -> ":core:models" [style=dotted]
+  ":vauma" -> ":utils:logger" [style=dotted]
+  ":vauma" -> ":utils:imageloader:api" [style=dotted]
+  ":vauma" -> ":utils:imageloader:impl" [style=dotted]
+  ":core:extensions" -> ":core:extensions"
+  ":core:extensions" -> ":core:models" [style=dotted]
+  ":core:extensions" -> ":core:utils" [style=dotted]
+  ":core:utils" -> ":core:utils"
+  ":core:theme" -> ":core:theme"
+  ":core:theme" -> ":core:models" [style=dotted]
+  ":core:theme" -> ":core:utils" [style=dotted]
+  ":core:designsystem" -> ":core:designsystem"
+  ":core:designsystem" -> ":core:models" [style=dotted]
+  ":core:designsystem" -> ":core:utils" [style=dotted]
+  ":core:designsystem" -> ":core:extensions" [style=dotted]
+  ":core:designsystem" -> ":core:theme" [style=dotted]
+  ":core:designsystem" -> ":utils:imageloader:api" [style=dotted]
+  ":features:search" -> ":features:search"
+  ":features:search" -> ":core:models" [style=dotted]
+  ":features:search" -> ":core:utils" [style=dotted]
+  ":features:search" -> ":core:theme" [style=dotted]
+  ":features:search" -> ":core:extensions" [style=dotted]
+  ":features:search" -> ":core:designsystem" [style=dotted]
+  ":features:search" -> ":utils:imageloader:api" [style=dotted]
+  ":features:favourites" -> ":features:favourites"
+  ":features:favourites" -> ":core:models" [style=dotted]
+  ":features:favourites" -> ":core:utils" [style=dotted]
+  ":features:favourites" -> ":core:designsystem" [style=dotted]
+  ":features:favourites" -> ":core:theme" [style=dotted]
+  ":features:favourites" -> ":core:extensions" [style=dotted]
+  ":features:favourites" -> ":utils:imageloader:api" [style=dotted]
+  ":features:signin" -> ":features:signin"
+  ":features:signin" -> ":core:models" [style=dotted]
+  ":features:signin" -> ":core:utils" [style=dotted]
+  ":features:signin" -> ":core:extensions" [style=dotted]
+  ":features:signin" -> ":core:designsystem" [style=dotted]
+  ":features:detailInfo" -> ":features:detailInfo"
+  ":features:detailInfo" -> ":core:models" [style=dotted]
+  ":features:detailInfo" -> ":core:utils" [style=dotted]
+  ":features:detailInfo" -> ":core:theme" [style=dotted]
+  ":features:detailInfo" -> ":core:extensions" [style=dotted]
+  ":features:detailInfo" -> ":core:designsystem" [style=dotted]
+  ":features:detailInfo" -> ":utils:imageloader:api" [style=dotted]
+  ":features:detailInfo" -> ":data:storeclient:api" [style=dotted]
+  ":features:detailInfo" -> ":data:network:api" [style=dotted]
+  ":features:video" -> ":features:video"
+  ":features:video" -> ":core:models" [style=dotted]
+  ":features:video" -> ":core:utils" [style=dotted]
+  ":features:video" -> ":core:theme" [style=dotted]
+  ":features:video" -> ":core:extensions" [style=dotted]
+  ":features:signup" -> ":features:signup"
+  ":features:signup" -> ":core:models" [style=dotted]
+  ":features:signup" -> ":core:utils" [style=dotted]
+  ":features:signup" -> ":core:extensions" [style=dotted]
+  ":features:signup" -> ":core:designsystem" [style=dotted]
+  ":features:signup" -> ":utils:imageloader:api" [style=dotted]
+  ":features:account" -> ":features:account"
+  ":features:account" -> ":core:models" [style=dotted]
+  ":features:account" -> ":core:utils" [style=dotted]
+  ":features:account" -> ":core:theme" [style=dotted]
+  ":features:account" -> ":core:extensions" [style=dotted]
+  ":features:account" -> ":core:designsystem" [style=dotted]
+  ":features:account" -> ":utils:imageloader:api" [style=dotted]
+  ":features:forgotpassword" -> ":features:forgotpassword"
+  ":features:forgotpassword" -> ":core:models" [style=dotted]
+  ":features:forgotpassword" -> ":core:utils" [style=dotted]
+  ":features:forgotpassword" -> ":core:extensions" [style=dotted]
+  ":features:forgotpassword" -> ":core:designsystem" [style=dotted]
+  ":features:home" -> ":features:home"
+  ":features:home" -> ":core:models" [style=dotted]
+  ":features:home" -> ":core:utils" [style=dotted]
+  ":features:home" -> ":core:theme" [style=dotted]
+  ":features:home" -> ":core:extensions" [style=dotted]
+  ":features:home" -> ":core:designsystem" [style=dotted]
+  ":features:home" -> ":utils:imageloader:api" [style=dotted]
+  ":utils:logger" -> ":utils:logger"
+  ":data:storeclient:impl" -> ":data:storeclient:impl"
+  ":data:storeclient:impl" -> ":core:models" [style=dotted]
+  ":data:storeclient:impl" -> ":data:storeclient:api" [style=dotted]
+  ":data:storeclient:api" -> ":core:models" [style=dotted]
+  ":data:database:impl" -> ":data:database:impl"
+  ":data:database:impl" -> ":core:models" [style=dotted]
+  ":data:database:impl" -> ":core:extensions" [style=dotted]
+  ":data:database:impl" -> ":data:database:api" [style=dotted]
+  ":data:database:api" -> ":core:models" [style=dotted]
+  ":data:repositories:impl" -> ":data:repositories:impl"
+  ":data:repositories:impl" -> ":core:extensions" [style=dotted]
+  ":data:repositories:impl" -> ":core:models" [style=dotted]
+  ":data:repositories:impl" -> ":data:network:api" [style=dotted]
+  ":data:repositories:impl" -> ":data:storeclient:api" [style=dotted]
+  ":data:repositories:impl" -> ":data:database:api" [style=dotted]
+  ":data:repositories:impl" -> ":data:repositories:api" [style=dotted]
+  ":data:repositories:api" -> ":data:repositories:api"
+  ":data:repositories:api" -> ":core:models" [style=dotted]
+  ":data:network:impl" -> ":data:network:impl"
+  ":data:network:impl" -> ":core:extensions" [style=dotted]
+  ":data:network:impl" -> ":core:models" [style=dotted]
+  ":data:network:impl" -> ":data:storeclient:api" [style=dotted]
+  ":data:network:impl" -> ":data:network:api" [style=dotted]
+  ":data:network:impl" -> ":data:database:api" [style=dotted]
+  ":data:network:api" -> ":data:storeclient:api" [style=dotted]
+  ":utils:imageloader:impl" -> ":utils:imageloader:impl"
+  ":utils:imageloader:impl" -> ":data:network:api" [style=dotted]
+  ":utils:imageloader:impl" -> ":utils:imageloader:api" [style=dotted]
+  ":utils:imageloader:api" -> ":utils:imageloader:api"
+}
