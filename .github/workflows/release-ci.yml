@@ -68,6 +68,6 @@ jobs:
           git config --local user.name 'GitHub Action'
           git diff --quiet && git diff --staged --quiet || git commit -am 'Update dependency graph'
       - name: Push modules dependency praph
-        uses: ad-m/github-push-action@release
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
