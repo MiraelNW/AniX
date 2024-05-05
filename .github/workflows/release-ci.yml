@@ -56,7 +56,7 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Run tests and build release artifacts
+      - name: build release artifacts
         run: |
           ./gradlew assembleRelease
           ./gradlew bundleRelease
