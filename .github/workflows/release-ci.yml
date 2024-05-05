@@ -70,5 +70,5 @@ jobs:
       - name: Push modules dependency praph
         uses: ad-m/github-push-action@master
         with:
-          ref: release
+          branch: release
           github_token: ${{ secrets.ACCESS_TOKEN }}
