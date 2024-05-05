@@ -73,7 +73,7 @@ internal fun PlayerControls(
     onOpenQualityMenu: () -> Unit,
     onAutoNextVideoClick: (Boolean) -> Unit,
 ) {
-
+    val p = currentTime
     val visible = remember(isVisible) { true }
 
     var quality by rememberSaveable {

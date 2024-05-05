@@ -87,7 +87,6 @@ fun SignInScreen(component: SignInComponent) {
         val clearFocus = remember { { focusManager.clearFocus() } }
         val moveFocusDown: KeyboardActionScope.() -> Unit =
             remember { { focusManager.moveFocus(FocusDirection.Down) } }
-        val freeFocus = remember { { loginFocusRequester.freeFocus() } }
 
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()

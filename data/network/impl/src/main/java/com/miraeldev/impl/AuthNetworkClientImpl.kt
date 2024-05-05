@@ -65,7 +65,7 @@ class AuthNetworkClientImpl(private val context: Context) : com.miraeldev.api.Au
 
         install(HttpRequestRetry) {
             maxRetries = MAX_TRIES
-            retryIf { request, response ->
+            retryIf { _, response ->
                 !response.status.isSuccess() && response.status.value != UNAUTHORIZED
             }
             delayMillis {

@@ -1,4 +1,4 @@
-package com.miraeldev.data.remote
+package com.miraeldev.impl.networkHandler
 
 import android.content.Context
 import android.net.ConnectivityManager

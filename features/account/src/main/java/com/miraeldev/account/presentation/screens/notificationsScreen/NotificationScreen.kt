@@ -7,7 +7,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -80,7 +80,7 @@ private fun NotificationsList() {
             AnimatedContent(
                 targetState = isSelectedTitles,
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(durationMillis = 150)) with
+                    fadeIn(animationSpec = tween(durationMillis = 150)) togetherWith
                         fadeOut(animationSpec = tween(durationMillis = 150))
                 }, label = ""
             ) { isSelected ->

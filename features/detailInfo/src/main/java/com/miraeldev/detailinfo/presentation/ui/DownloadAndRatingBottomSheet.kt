@@ -104,7 +104,7 @@ private fun RatingScreen(
     onDownloadClick: (List<Int>) -> Unit,
     onCloseDownloadSheet: () -> Unit,
 ) {
-
+    val p = animeDetailInfo
     val selectedList = remember { mutableStateListOf<Int>() }
 
     Column(

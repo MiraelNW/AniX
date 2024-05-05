@@ -18,7 +18,6 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
         }
         create("debugR8") {
             isMinifyEnabled = true
@@ -27,7 +26,6 @@ android {
                     "proguard-rules.pro"
             )
             multiDexEnabled = true
-            signingConfig = signingConfigs.getByName("debug")
         }
         release {
             isMinifyEnabled = true
@@ -35,7 +33,6 @@ android {
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
             multiDexEnabled = true
         }
     }
