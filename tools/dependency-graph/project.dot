@@ -158,6 +158,7 @@ digraph {
   ":data:network:impl" -> ":data:network:api" [style=dotted]
   ":data:network:impl" -> ":data:database:api" [style=dotted]
   ":data:network:api" -> ":data:storeclient:api" [style=dotted]
+  ":data:network:api" -> ":core:models" [style=dotted]
   ":utils:imageloader:impl" -> ":utils:imageloader:impl"
   ":utils:imageloader:impl" -> ":data:network:api" [style=dotted]
   ":utils:imageloader:impl" -> ":utils:imageloader:api" [style=dotted]
