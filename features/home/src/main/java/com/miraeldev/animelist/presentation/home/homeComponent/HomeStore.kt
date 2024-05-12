@@ -24,7 +24,6 @@ interface HomeStore : Store<Intent, State, Label> {
     sealed interface Intent {
         data class LoadAnimeVideo(val anime: LastWatchedAnime) : Intent
         data class AddAnimeToList(
-            val user: User,
             val isSelected: Boolean,
             val animeItem: LastWatchedAnime
         ) : Intent

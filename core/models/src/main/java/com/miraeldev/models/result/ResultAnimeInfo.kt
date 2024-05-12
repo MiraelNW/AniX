@@ -1,7 +1,6 @@
-package com.miraeldev.result
+package com.miraeldev.models.result
 
 import com.miraeldev.models.anime.AnimeInfo
-import com.miraeldev.models.result.FailureCauses
 
 sealed class ResultAnimeInfo {
 

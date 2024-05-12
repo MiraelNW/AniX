@@ -9,7 +9,6 @@ import com.miraeldev.models.OnAnimeItemClick
 import com.miraeldev.models.OnPlayClick
 import com.miraeldev.models.OnSeeAllClick
 import com.miraeldev.models.anime.LastWatchedAnime
-import com.miraeldev.models.user.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -50,8 +49,8 @@ class DefaultHomeComponent(
         store.accept(HomeStore.Intent.LoadAnimeVideo(anime))
     }
 
-    override fun addAnimeToList(user: User, isSelected: Boolean, animeItem: LastWatchedAnime) {
-        store.accept(HomeStore.Intent.AddAnimeToList(user, isSelected, animeItem))
+    override fun addAnimeToList(isSelected: Boolean, animeItem: LastWatchedAnime) {
+        store.accept(HomeStore.Intent.AddAnimeToList(isSelected, animeItem))
     }
 
     override fun onAnimeItemClick(id: Int) {

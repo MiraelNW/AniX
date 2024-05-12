@@ -5,7 +5,7 @@ import app.cash.turbine.turbineScope
 import com.miraeldev.api.FavouriteAnimeDao
 import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.result.FailureCauses
-import com.miraeldev.result.ResultAnimeInfo
+import com.miraeldev.models.result.ResultAnimeInfo
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

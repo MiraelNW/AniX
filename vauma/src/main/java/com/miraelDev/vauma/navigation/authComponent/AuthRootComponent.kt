@@ -5,10 +5,10 @@ import com.arkivanov.decompose.value.Value
 import com.miraeldev.api.VaumaImageLoader
 import com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.EmailChooseComponent
 import com.miraeldev.forgotpassword.presentation.resetPassword.resetPasswordComponent.ResetPasswordComponent
-import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.signin.presentation.signInComponent.SignInComponent
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyComponent
 import com.miraeldev.signup.presentation.codeVerifyScreen.codeVerifyComponent.CodeVerifyRPComponent
+import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.SignUpComponent
 
 interface AuthRootComponent {
 

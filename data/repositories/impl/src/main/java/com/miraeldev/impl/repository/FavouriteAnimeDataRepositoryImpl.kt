@@ -5,7 +5,7 @@ import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.extensions.mergeWith
 import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.result.FailureCauses
-import com.miraeldev.result.ResultAnimeInfo
+import com.miraeldev.models.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
