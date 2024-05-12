@@ -1,6 +1,6 @@
 package com.miraeldev.forgotpassword.presentation.emailChooseScreen.emailChooseComponent.emailChooseStore
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -45,7 +45,7 @@ class EmailChooseStoreFactory(
                 }
 
                 is EmailChooseStore.Intent.CheckEmailExist -> {
-                    val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
+                    val isEmailValid = PatternsCompat.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
                     if (isEmailValid) {
                         scope.launch {
                             val isSuccess = checkEmailExistUseCase(intent.email)

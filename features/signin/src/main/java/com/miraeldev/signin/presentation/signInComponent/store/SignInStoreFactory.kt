@@ -1,6 +1,6 @@
 package com.miraeldev.signin.presentation.signInComponent.store
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -91,7 +91,7 @@ class SignInStoreFactory(
                 is SignInStore.Intent.SignIn -> {
                     val passwordState = validatePassword.execute(intent.password.trim())
 
-                    val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
+                    val isEmailValid = PatternsCompat.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
 
                     if (passwordState.successful && isEmailValid) {
                         scope.launch {
@@ -109,9 +109,9 @@ class SignInStoreFactory(
                             Msg.SignInError(
                                 SignInErrorModel(
                                     emailError = !isEmailValid,
-                                    passwordError = passwordState.hasMinimum || passwordState.hasCapitalizedLetter,
-                                    passwordLengthError = passwordState.hasMinimum,
-                                    passwordHasCapitalizedLetterError = passwordState.hasCapitalizedLetter,
+                                    passwordError = !passwordState.hasMinimum || !passwordState.hasCapitalizedLetter,
+                                    passwordLengthError = !passwordState.hasMinimum,
+                                    passwordHasCapitalizedLetterError = !passwordState.hasCapitalizedLetter,
                                 )
                             )
                         )

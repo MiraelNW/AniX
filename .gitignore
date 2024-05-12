@@ -7,3 +7,5 @@
 .externalNativeBuild
 .cxx
 .idea
+vauma/vauma.keystore
+vauma/keystore.properties

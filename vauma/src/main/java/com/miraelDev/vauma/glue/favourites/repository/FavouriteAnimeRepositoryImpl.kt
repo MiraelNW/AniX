@@ -4,7 +4,7 @@ import com.miraeldev.api.FavouriteAnimeDataRepository
 import com.miraeldev.api.SearchAnimeDataRepository
 import com.miraeldev.favourites.data.FavouriteAnimeRepository
 import com.miraeldev.models.anime.AnimeInfo
-import com.miraeldev.result.ResultAnimeInfo
+import com.miraeldev.models.result.ResultAnimeInfo
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
 

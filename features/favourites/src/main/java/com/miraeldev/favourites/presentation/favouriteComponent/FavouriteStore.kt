@@ -15,7 +15,7 @@ import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.L
 import com.miraeldev.favourites.presentation.favouriteComponent.FavouriteStore.State
 import com.miraeldev.models.anime.AnimeInfo
 import com.miraeldev.models.result.FailureCauses
-import com.miraeldev.result.ResultAnimeInfo
+import com.miraeldev.models.result.ResultAnimeInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch

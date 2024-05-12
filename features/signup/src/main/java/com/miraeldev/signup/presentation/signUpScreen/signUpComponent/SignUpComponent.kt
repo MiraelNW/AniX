@@ -1,4 +1,4 @@
-package com.miraeldev.navigation.decompose.authComponent.signUpComponent
+package com.miraeldev.signup.presentation.signUpScreen.signUpComponent
 
 import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store.SignUpStore
 import kotlinx.coroutines.flow.StateFlow

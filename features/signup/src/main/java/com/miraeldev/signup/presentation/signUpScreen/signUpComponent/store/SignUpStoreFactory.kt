@@ -1,6 +1,6 @@
 package com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -52,7 +52,7 @@ class SignUpStoreFactory(
 
                 is SignUpStore.Intent.OnSignUpClick -> {
                     val passwordState = validatePassword.execute(intent.password.trim())
-                    val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
+                    val isEmailValid = PatternsCompat.EMAIL_ADDRESS.matcher(intent.email.trim()).matches()
                     val isPasswordsTheSame =
                         intent.password.trim() == intent.repeatedPassword.trim()
                     if (isEmailValid && isPasswordsTheSame && passwordState.successful) {

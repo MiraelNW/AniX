@@ -88,7 +88,6 @@ fun HomeScreen(component: HomeComponent, imageLoader: VaumaImageLoader) {
                     },
                     addToList = {
                         component.addAnimeToList(
-                            state.user,
                             it,
                             state.user.lastWatchedAnime ?: LastWatchedAnime(-1)
                         )

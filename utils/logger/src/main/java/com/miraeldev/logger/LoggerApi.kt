@@ -1,5 +1,5 @@
 package com.miraeldev.logger
 
 interface LoggerApi {
-    fun logError(logErrorType: LogError)
+    fun logError(logError: LogError)
 }

@@ -5,43 +5,25 @@ on:
     branches: [ "release" ]
 
 jobs:
-#  run-test:
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v4
-#
-#    - name: set up JDK 17
-#      uses: actions/setup-java@v3
-#      with:
-#        java-version: '17'
-#        distribution: 'temurin'
-#        cache: gradle
-#
-#    - name: Grant execute permission for gradlew
-#      run: chmod +x gradlew
-#
-#    - name: run unit test
-#      run: ./gradlew testGmsDebugUnitTest
-#
-#  detekt:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#          cache: gradle
-#
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#
-#      - name: run detekt
-#        run: ./gradlew detektRun
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
-  print-modules-graph:
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: run unit test
+      run: ./gradlew testGmsDebugUnitTest
+
+  detekt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,22 +35,40 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v1
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: print module graph
-        run: ./gradlew projectDependencyGraph
+      - name: run detekt
+        run: ./gradlew detektRun
 
-      - name: Commmit modules dependency praph
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git diff --quiet && git diff --staged --quiet || git commit -am 'Update dependency graph'
-      - name: Push modules dependency praph
-        uses: ad-m/github-push-action@master
+
+  build_apk_aab:
+    name: Build release artifacts
+    runs-on: ubuntu-20.04
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          branch: release
-          github_token: ${{ secrets.ACCESS_TOKEN }}
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: build release artifacts
+        run: |
+          ./gradlew assembleRelease
+          ./gradlew bundleRelease
+
+      - name: Upload signed APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: vauma.apk
+          path: vauma/build/outputs/apk/release/vauma.apk
+
+      - name: Upload AAB Bundle
+        uses: actions/upload-artifact@v2
+        with:
+          name: vauma.aab
+          path: vauma/build/outputs/bundle/release/vauma.aab

@@ -58,6 +58,6 @@ class NotificationStoreFactory(
     }
 
     private object ReducerImpl : Reducer<State, Msg> {
-        override fun State.reduce(message: Msg): State = State()
+        override fun State.reduce(msg: Msg): State = State()
     }
 }

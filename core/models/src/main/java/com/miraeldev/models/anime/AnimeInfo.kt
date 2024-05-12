@@ -32,5 +32,5 @@ data class AnimeInfo(
         Genre("en5", "ru"),
         Genre("en6", "ru"),
     ),
-    val isFavourite: Boolean
+    val isFavourite: Boolean = false
 )

@@ -7,7 +7,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.miraeldev.extensions.componentScope
 import com.miraeldev.models.OnBackPressed
 import com.miraeldev.models.OnSignUp
-import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store.SignUpStore
 import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.store.SignUpStoreFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi

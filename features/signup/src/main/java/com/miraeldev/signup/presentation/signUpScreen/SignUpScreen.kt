@@ -60,8 +60,8 @@ import com.miraeldev.designsystem.ErrorValidField
 import com.miraeldev.designsystem.PasswordField
 import com.miraeldev.designsystem.Toolbar
 import com.miraeldev.extensions.noRippleEffectClick
-import com.miraeldev.navigation.decompose.authComponent.signUpComponent.SignUpComponent
 import com.miraeldev.signup.R
+import com.miraeldev.signup.presentation.signUpScreen.signUpComponent.SignUpComponent
 
 @Composable
 fun SignUpScreen(component: SignUpComponent, imageLoader: VaumaImageLoader) {

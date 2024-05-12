@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -64,7 +65,7 @@ internal fun CenterControls(
                 .fillMaxWidth(0.5f)
                 .fillMaxHeight()
                 .combinedClickable(
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = changeVisibleState,
                     onDoubleClick = {
@@ -101,7 +102,7 @@ internal fun CenterControls(
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .combinedClickable(
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = changeVisibleState,
                     onDoubleClick = {

@@ -2,7 +2,6 @@ package com.miraeldev.impl.mapper
 
 import com.miraeldev.extensions.toBoolean
 import com.miraeldev.extensions.toLong
-import com.miraeldev.impl.models.animeDataModels.VideoInfoDataModel
 import com.miraeldev.impl.models.animeDataModels.toGenre
 import com.miraeldev.impl.models.user.toDbModel
 import com.miraeldev.impl.models.user.toModel
@@ -53,7 +52,7 @@ internal fun PagingAnimeInfo.mapToNewCategoryDbModel(): NewCategoryPagingInfoDbM
         episodes = this.episodes.toLong(),
         image = this.image.toDbModel(),
         duration = this.duration.toLong(),
-        videoUrls = this.videos.toDataModel() ?: VideoInfoDataModel(),
+        videoUrls = this.videos.toDataModel(),
         isFavourite = this.isFavourite.toLong(),
         page = 0,
         isLast = 0,
@@ -76,7 +75,7 @@ internal fun PagingAnimeInfo.mapToPopularCategoryDbModel(): PopularCategoryPagin
         episodes = this.episodes.toLong(),
         image = this.image.toDbModel(),
         duration = this.duration.toLong(),
-        videoUrls = this.videos.toDataModel() ?: VideoInfoDataModel(),
+        videoUrls = this.videos.toDataModel(),
         isFavourite = this.isFavourite.toLong(),
         page = 0,
         isLast = 0,
@@ -99,7 +98,7 @@ internal fun PagingAnimeInfo.mapToNameCategoryDbModel(): NameCategoryPagingInfoD
         episodes = this.episodes.toLong(),
         image = this.image.toDbModel(),
         duration = this.duration.toLong(),
-        videoUrls = this.videos.toDataModel() ?: VideoInfoDataModel(),
+        videoUrls = this.videos.toDataModel(),
         isFavourite = this.isFavourite.toLong(),
         page = 0,
         isLast = 0,
@@ -122,7 +121,7 @@ internal fun PagingAnimeInfo.mapToFilmCategoryDbModel(): FilmCategoryPagingInfoD
         episodes = this.episodes.toLong(),
         image = this.image.toDbModel(),
         duration = this.duration.toLong(),
-        videoUrls = this.videos.toDataModel() ?: VideoInfoDataModel(),
+        videoUrls = this.videos.toDataModel(),
         isFavourite = this.isFavourite.toLong(),
         page = 0,
         isLast = 0,

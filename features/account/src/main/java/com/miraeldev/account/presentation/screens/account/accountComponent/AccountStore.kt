@@ -44,7 +44,7 @@ class AccountStoreFactory(
     private val logger: Logger
 ) {
 
-    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         logger.logError(throwable.message.toString(), throwable)
     }
 

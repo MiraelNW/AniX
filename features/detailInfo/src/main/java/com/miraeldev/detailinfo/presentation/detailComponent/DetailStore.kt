@@ -93,16 +93,14 @@ class DetailStoreFactory(
                     when (val res = it) {
                         is ResultAnimeDetail.Success -> {
                             State.AnimeDetailScreenState.SearchResult(result = res.animeList.toImmutableList())
-                                as State.AnimeDetailScreenState
                         }
 
                         is ResultAnimeDetail.Failure -> {
                             State.AnimeDetailScreenState.SearchFailure(failure = res.failureCause)
-                                as State.AnimeDetailScreenState
                         }
 
                         is ResultAnimeDetail.Initial -> {
-                            State.AnimeDetailScreenState.Loading as State.AnimeDetailScreenState
+                            State.AnimeDetailScreenState.Loading
                         }
                     }
                 }.collect {
